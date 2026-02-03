@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte de WeightSnap - AllNew</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #333; line-height: 1.7; }
+        .header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #eee; }
+        .header a { color: inherit; text-decoration: none; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #1a1a1a; }
+        .app-name { color: #666; margin-top: 4px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        h1 { font-size: 1.6rem; margin-bottom: 24px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 40px; }
+        .card { background: #f9f9f9; padding: 24px; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s; border: 1px solid transparent; }
+        .card:hover { border-color: #007aff; background: #f5f8ff; }
+        .card h2 { font-size: 1.1rem; margin-bottom: 8px; color: #007aff; }
+        .card p { font-size: 0.9rem; color: #666; }
+        .contact-section { background: #f9f9f9; padding: 32px; border-radius: 12px; }
+        .contact-section h2 { font-size: 1.2rem; margin-bottom: 16px; }
+        .contact-info { color: #666; line-height: 2; }
+        .contact-info a { color: #007aff; }
+        .lang-select { margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; }
+        .lang-select h3 { font-size: 0.9rem; color: #999; margin-bottom: 12px; }
+        .lang-links { display: flex; flex-wrap: wrap; gap: 8px; }
+        .lang-link { padding: 6px 14px; background: white; color: #333; text-decoration: none; border-radius: 6px; font-size: 0.85rem; border: 1px solid #ddd; }
+        .lang-link:hover { border-color: #007aff; color: #007aff; }
+        .lang-link.active { background: #007aff; color: white; border-color: #007aff; }
+        footer { text-align: center; padding: 40px 20px; color: #999; font-size: 0.85rem; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../">
+            <div class="logo">AllNew</div>
+            <p class="app-name">Soporte de WeightSnap</p>
+        </a>
+    </header>
+
+    <main class="container">
+        <h1>Soporte</h1>
+
+        <div class="card-grid">
+            <a href="faq.html" class="card">
+                <h2>Preguntas Frecuentes</h2>
+                <p>Respuestas a preguntas comunes</p>
+            </a>
+            <a href="terms.html" class="card">
+                <h2>Términos de Servicio</h2>
+                <p>Condiciones de uso</p>
+            </a>
+            <a href="privacy.html" class="card">
+                <h2>Política de Privacidad</h2>
+                <p>Cómo manejamos tus datos</p>
+            </a>
+        </div>
+
+        <section class="contact-section">
+            <h2>Contacto</h2>
+            <div class="contact-info">
+                <p><strong>Empresa:</strong> AllNew LLC</p>
+                <p><strong>Representante:</strong> Masanori Ueno</p>
+                <p><strong>Dirección:</strong> Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokio 107-0052, Japón</p>
+                <p><strong>Número corporativo:</strong> 8020003014806</p>
+                <p><strong>Correo:</strong> <a href="mailto:weightsnap-support@allnew.work">weightsnap-support@allnew.work</a></p>
+                <p><strong>Horario:</strong> 10:00-17:00 JST (Solo días laborables)</p>
+            </div>
+        </section>
+
+        <div class="lang-select">
+            <h3>Idioma</h3>
+            <div class="lang-links">
+                <a href="../ja/" class="lang-link">日本語</a>
+                <a href="../en/" class="lang-link">English</a>
+                <a href="../es/" class="lang-link active">Español</a>
+                <a href="../zh-Hans/" class="lang-link">简体中文</a>
+                <a href="../ko/" class="lang-link">한국어</a>
+                <a href="../pt-BR/" class="lang-link">Português</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 AllNew LLC</p>
+    </footer>
+</body>
+</html>

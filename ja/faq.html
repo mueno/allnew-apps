@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問 - WeightSnap</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.7;
+        }
+        .header {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .header a { color: inherit; text-decoration: none; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: #1a1a1a; }
+        .app-name { color: #666; margin-top: 4px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .back-link { display: inline-block; margin-bottom: 24px; color: #007aff; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        h1 { font-size: 1.6rem; margin-bottom: 32px; }
+        .faq-item {
+            background: #f9f9f9;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: #007aff;
+            transition: transform 0.3s;
+        }
+        .faq-item.open .faq-question::after {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0 24px 20px;
+            color: #666;
+            display: none;
+        }
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+        .faq-answer p { margin-bottom: 12px; }
+        .faq-answer ul { padding-left: 1.5rem; }
+        .faq-answer li { margin-bottom: 8px; }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../">
+            <div class="logo">AllNew</div>
+            <p class="app-name">WeightSnap サポート</p>
+        </a>
+    </header>
+
+    <main class="container">
+        <a href="index.html" class="back-link">← サポートに戻る</a>
+        <h1>よくある質問</h1>
+
+        <div class="faq-item open">
+            <div class="faq-question">どんな体重計に対応していますか？</div>
+            <div class="faq-answer">
+                <p>デジタル表示の体重計に対応しています。</p>
+                <ul>
+                    <li><strong>対応:</strong> 7セグメントLED、液晶ディスプレイなどのデジタル表示</li>
+                    <li><strong>非対応:</strong> アナログ体重計（針式メーター、回転式ダイヤル）</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">認識できる体重の範囲は？</div>
+            <div class="faq-answer">
+                <p><strong>30.0kg〜200.0kg</strong>の範囲に対応しています。この範囲外の数値は認識されません。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">対応しているiPhoneは？</div>
+            <div class="faq-answer">
+                <p><strong>iOS 17.0以降</strong>を搭載し、カメラ機能およびApple HealthKitに対応したiPhoneで動作します。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">無料で使えますか？</div>
+            <div class="faq-answer">
+                <p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p>
+                <p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">データはどこに保存されますか？</div>
+            <div class="faq-answer">
+                <p>体重データは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）にのみ</strong>保存されます。</p>
+                <p>外部サーバーへの送信は一切ありません。撮影した画像もOCR処理後に即時破棄され、保存されません。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">認識結果が間違っていた場合は？</div>
+            <div class="faq-answer">
+                <p>高信頼度の認識結果は自動でヘルスケアに保存されます。誤った数値が保存された場合は、iOSの<strong>ヘルスケアアプリから削除</strong>してください。</p>
+                <p><strong>削除手順:</strong></p>
+                <ul>
+                    <li>ヘルスケアアプリを開く</li>
+                    <li>「ブラウズ」→「体の測定値」→「体重」を選択</li>
+                    <li>該当するデータを左にスワイプして「削除」</li>
+                </ul>
+                <p>※HealthKitの仕様上、保存されたデータの編集はできません。削除のみ可能です。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">アプリを削除するとデータは消えますか？</div>
+            <div class="faq-answer">
+                <p>アプリを削除する際、iOSが<strong>「ヘルスケアデータを削除しますか？」</strong>と確認します。</p>
+                <ul>
+                    <li>「削除」を選択 → ヘルスケアのデータも削除されます</li>
+                    <li>「削除しない」を選択 → データはヘルスケアアプリに保持されます</li>
+                </ul>
+                <p>データを完全に削除したい場合は、削除確認で「削除」を選択するか、事前にヘルスケアアプリから手動で削除してください。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">購入を復元したい</div>
+            <div class="faq-answer">
+                <p>過去に購入された方は、再購入の必要はありません。</p>
+                <p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">認識精度を上げるコツは？</div>
+            <div class="faq-answer">
+                <ul>
+                    <li>体重計のディスプレイが明るく表示されている状態で撮影</li>
+                    <li>ガイド枠内に数字が収まるように位置を調整</li>
+                    <li>手ブレを避け、できるだけ静止した状態で撮影</li>
+                    <li>ディスプレイの汚れや劣化がないか確認</li>
+                    <li>直射日光や強い照明の反射を避ける</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 合同会社AllNew</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                q.parentElement.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>
