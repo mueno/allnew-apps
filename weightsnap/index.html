@@ -1276,10 +1276,11 @@
         </div>
 
         <!-- ==================== OTHER LANGUAGES (fr, es, zh-Hans, ko, pt-BR) ==================== -->
-        <!-- These use English content with translation notice -->
+        <!-- Structure: Local language requirements + Full English content -->
 
-        <!-- FRENCH -->
+        <!-- FRENCH (Quebec/GDPR) -->
         <div class="lang-content" data-lang="fr">
+            <!-- FAQ -->
             <section id="faq-fr" class="section">
                 <div class="section-header">
                     <div class="section-icon">💡</div>
@@ -1288,152 +1289,399 @@
                         <div class="section-subtitle">Réponses sur les fonctionnalités et l'utilisation</div>
                     </div>
                 </div>
-                <div class="translation-notice"><strong>Ce document est en anglais.</strong> La version traduite en français sera disponible prochainement.</div>
+
+                <!-- Local language section -->
+                <div class="highlight-box" style="margin-bottom: 24px;">
+                    <p><strong>🇫🇷 Information en français :</strong> Cette application enregistre votre poids dans Apple HealthKit sur votre appareil. Aucune donnée n'est transmise à nos serveurs. 15 utilisations gratuites, puis achat unique (pas d'abonnement).</p>
+                </div>
+
+                <!-- Full English FAQ -->
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="faq-item open"><div class="faq-question">What scales are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Digital display scales are supported.</p><ul><li><strong>Supported:</strong> 7-segment LED, LCD displays</li><li><strong>Not Supported:</strong> Analog scales (needle meters, rotating dials)</li></ul></div></div>
+                <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong> (approximately 66–440 lbs). Values outside this range won't be recognized.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>iPhones running <strong>iOS 17.0 or later</strong> with camera and Apple HealthKit support.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Weight data is stored in <strong>Apple HealthKit on your device</strong>.</p><p>We do not transmit data to servers operated by us. Camera images are discarded immediately after OCR processing. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</p></div></div>
+                <div class="faq-item"><div class="faq-question">What happens when recognition confidence is low?<span class="faq-icon">+</span></div><div class="faq-answer"><p>The app automatically evaluates recognition confidence.</p><ul><li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li><li><strong>Low confidence:</strong> A confirmation screen is shown. "Record this value" saves it; "Don't Record" prompts retake.</li></ul></div></div>
+                <div class="faq-item"><div class="faq-question">What if the recognition is wrong?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Before saving:</strong> Choose "Don't Record" and retake the photo.</p><p><strong>After saving:</strong> Delete it from the iOS Health app (Browse → Body Measurements → Weight → Swipe left → Delete).</p><p>Note: HealthKit data <strong>cannot be edited</strong>, only deleted.</p></div></div>
+                <div class="faq-item"><div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Open the app → Settings → About → Restore Purchase</p></div></div>
+                <div class="faq-item"><div class="faq-question">Tips for better recognition<span class="faq-icon">+</span></div><div class="faq-answer"><ul><li>Ensure the scale display is brightly lit</li><li>Position numbers within the guide frame</li><li>Hold the phone steady to avoid blur</li><li>Avoid direct sunlight or strong reflections</li></ul></div></div>
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-fr" class="section">
+                <div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">Politique de confidentialité</div><div class="section-subtitle">Comment nous traitons vos données</div></div></div>
+                <span class="updated-badge">Last Updated: February 4, 2026</span>
+
+                <!-- Local language requirements (Quebec/GDPR) -->
+                <div class="highlight-box">
+                    <p><strong>🇫🇷 Résumé en français :</strong></p>
+                    <p>Cette application ne transmet ni ne stocke vos données de poids sur nos serveurs externes. Toutes les données sont stockées sur votre appareil et dans Apple HealthKit.</p>
+                    <p><strong>Vos droits (RGPD/Québec) :</strong> Droit d'accès, de rectification, de suppression, de portabilité des données et de retrait du consentement. Pour exercer ces droits : weightsnap-support@allnew.work</p>
+                </div>
+
+                <!-- Full English Privacy Policy -->
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section">
+                    <h3>1. Information We Collect</h3>
+                    <ul>
+                        <li><strong>Camera Images:</strong> Discarded immediately after OCR processing. Not transmitted to servers operated by us.</li>
+                        <li><strong>Health Data (HealthKit):</strong> Weight data read/write. Stored on your device and in Apple HealthKit. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</li>
+                        <li><strong>Device Info:</strong> iPhone model identification (for weight subtraction feature). Processed on your device; not transmitted to servers operated by us.</li>
+                        <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
+                        <li><strong>What We Don't Collect:</strong> We do not use advertising SDKs, analytics services, or user registration in this App.</li>
+                    </ul>
+                </div>
+                <div class="legal-section"><h3>2. How We Use Information</h3><p>Weight recording, health management support, displaying weight trends, wellness messages, and iPhone weight subtraction. No other purposes.</p></div>
+                <div class="legal-section"><h3>3. Third-Party Sharing</h3><p>We do not provide, sell, or share image data or HealthKit data with third parties.</p></div>
+                <div class="legal-section">
+                    <h3>4. Apple HealthKit</h3>
+                    <ul>
+                        <li>HealthKit data is not used for advertising, marketing, or data mining</li>
+                        <li>HealthKit data is not sold to data brokers</li>
+                        <li>We do not transmit or store HealthKit data on our own external servers</li>
+                        <li>HealthKit access can be revoked anytime in iOS Settings</li>
+                    </ul>
+                </div>
+                <div class="legal-section"><h3>5. Apple Intelligence (On-Device AI)</h3><p>The App may use Apple Intelligence for wellness messages. Processing typically occurs on-device; however, depending on Apple's system behavior, some requests may be processed via Private Cloud Compute. We do not transmit or store your data on our own external servers for this processing.</p></div>
+                <div class="legal-section"><h3>6. Security</h3><p>We employ data minimization, on-device processing, Keychain protection, and HealthKit encryption.</p></div>
+                <div class="legal-section"><h3>7. Children's Privacy</h3><p>This App is not intended for children under 13. We do not collect personal information through the App's functionality.</p></div>
+                <div class="legal-section">
+                    <h3>8. Your Rights</h3>
+                    <ul>
+                        <li><strong>All Users:</strong> Manage/delete HealthKit data via Settings > Health.</li>
+                        <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
+                        <li><strong>Quebec (Law 25):</strong> Right to access, rectify, delete personal information.</li>
+                    </ul>
+                </div>
+                <div class="legal-section"><h3>9. When You Contact Us</h3><p>If you contact us, we may receive your email address and the contents of your message to respond to your inquiry. We use this information solely for customer support.</p></div>
+                <div class="legal-section"><h3>10. Governing Law</h3><p>This policy is governed by Japanese law. Regional laws (GDPR, Quebec Law 25) apply to respective residents.</p></div>
+                <div class="legal-section"><h3>11. Translations</h3><p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region.</p></div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-fr" class="section">
+                <div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">Conditions d'utilisation</div><div class="section-subtitle">Conditions d'utilisation de l'application</div></div></div>
+                <span class="updated-badge">Last Updated: February 4, 2026</span>
+
+                <!-- Local language requirements -->
+                <div class="highlight-box">
+                    <p><strong>🇫🇷 Résumé en français :</strong></p>
+                    <p>En utilisant cette application, vous acceptez ces conditions. L'application est gratuite pour les 15 premières utilisations, puis un achat unique est requis (pas d'abonnement). La précision OCR n'est pas garantie à 100%.</p>
+                </div>
+
+                <!-- Full English Terms -->
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1. Acceptance of Terms</h3><p>These Terms of Service govern your use of "WeightSnap" (the "App"), provided by AllNew LLC. By using the App, you agree to these terms.</p></div>
+                <div class="legal-section"><h3>2. Agreement to Terms</h3><p>By downloading, installing, or using the App, you agree to be bound by these Terms. If you do not agree, do not use the App.</p></div>
+                <div class="legal-section"><h3>3. App Description and Compatibility</h3><p>The App captures weight scale displays using your camera, reads the numbers using AI-OCR technology, and records them to Apple HealthKit.</p><ul><li><strong>Supported Scales:</strong> Digital displays (7-segment LED, LCD). Analog scales are not supported.</li><li><strong>Weight Range:</strong> 30.0kg–200.0kg (66–440 lbs)</li><li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</li></ul></div>
+                <div class="legal-section"><h3>4. Privacy Policy and HealthKit Data Handling</h3><p>Your use of the App is also governed by our Privacy Policy.</p><ul><li>We do not use HealthKit data for advertising, marketing, or data mining purposes</li><li>We do not sell or provide HealthKit data to data brokers or third parties</li><li>We do not transmit or store HealthKit data on servers operated by us</li></ul></div>
+                <div class="legal-section"><h3>5. Prohibited Activities</h3><ul><li>Using the App for purposes other than weight tracking</li><li>Violating any laws or third-party rights</li><li>Reverse engineering or decompiling the App</li><li>Recording third parties' weight data without consent</li></ul></div>
+                <div class="legal-section"><h3>6. Health Disclaimer</h3><p>This App is for general wellness and fitness purposes only. It is not a medical device. Consult a healthcare professional for medical advice.</p></div>
+                <div class="legal-section"><h3>7. OCR Accuracy</h3><ul><li><strong>No Guarantee:</strong> OCR accuracy is not 100%.</li><li><strong>High-Confidence Auto-Save:</strong> High confidence results are automatically saved without confirmation.</li><li><strong>Low-Confidence Confirmation:</strong> Low confidence results require explicit confirmation.</li><li><strong>How to Correct:</strong> Delete incorrect entries in iOS Health app, then re-scan.</li></ul></div>
+                <div class="legal-section"><h3>8. Intellectual Property</h3><p>All intellectual property rights in the App belong to us or our licensors.</p></div>
+                <div class="legal-section"><h3>9. Disclaimer of Warranties</h3><p>The App is provided "as is" without warranties of any kind.</p></div>
+                <div class="legal-section"><h3>10. Pricing</h3><p>Free for the first 15 uses. After that, a one-time purchase is required. No subscription. Use "Restore Purchase" if you've previously purchased.</p></div>
+                <div class="legal-section"><h3>11. Changes to Terms</h3><p>We may modify these Terms at any time. Continued use constitutes acceptance.</p></div>
+                <div class="legal-section"><h3>12. Governing Law</h3><p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p></div>
+                <div class="legal-section"><h3>13. Translations</h3><p>The Japanese version is the authoritative text. This does not limit your rights under consumer protection laws in your country.</p></div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-fr" class="section">
+                <div class="contact-card">
+                    <h2>Contactez-nous</h2>
+                    <p>Pour toute question ou commentaire, n'hésitez pas à nous contacter.</p>
+                    <a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ Envoyer un email</a>
+                    <dl class="contact-details">
+                        <div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div>
+                        <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+                        <div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div>
+                        <div class="contact-item"><dt>Hours</dt><dd>10:00-17:00 JST (Weekdays)</dd></div>
+                        <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+
+        <!-- SPANISH (GDPR for Spain) -->
+        <div class="lang-content" data-lang="es">
+            <!-- FAQ -->
+            <section id="faq-es" class="section">
+                <div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">Preguntas frecuentes</div><div class="section-subtitle">Respuestas sobre funciones y uso</div></div></div>
+
+                <div class="highlight-box" style="margin-bottom: 24px;">
+                    <p><strong>🇪🇸 Información en español:</strong> Esta aplicación registra su peso en Apple HealthKit en su dispositivo. No se transmiten datos a nuestros servidores. 15 usos gratuitos, luego compra única (sin suscripción).</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
                 <div class="faq-item open"><div class="faq-question">What scales are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Digital display scales are supported.</p><ul><li><strong>Supported:</strong> 7-segment LED, LCD displays</li><li><strong>Not Supported:</strong> Analog scales (needle meters, rotating dials)</li></ul></div></div>
                 <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong> (approximately 66–440 lbs).</p></div></div>
                 <div class="faq-item"><div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>iPhones running <strong>iOS 17.0 or later</strong> with camera and Apple HealthKit support.</p></div></div>
                 <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> After that, a one-time purchase is required. No subscription.</p></div></div>
                 <div class="faq-item"><div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Weight data is stored in <strong>Apple HealthKit on your device</strong>. We do not transmit data to servers operated by us.</p></div></div>
+                <div class="faq-item"><div class="faq-question">What if the recognition is wrong?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Delete incorrect entries in the iOS Health app (Browse → Body Measurements → Weight → Swipe left → Delete).</p></div></div>
+                <div class="faq-item"><div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Open the app → Settings → About → Restore Purchase</p></div></div>
             </section>
-            <section id="privacy-fr" class="section">
-                <div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">Politique de confidentialité</div><div class="section-subtitle">Comment nous traitons vos données</div></div></div>
-                <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>Ce document est en anglais.</strong> La version traduite en français sera disponible prochainement.</div>
-                <div class="highlight-box"><p><strong>Important:</strong> This app does not send or store your weight data on our external servers. All data is stored on your device and in Apple HealthKit.</p></div>
-                <div class="legal-section"><h3>1. Information We Collect</h3><ul><li><strong>Camera Images:</strong> Discarded immediately after OCR processing.</li><li><strong>Health Data (HealthKit):</strong> Weight data read/write. Stored on your device.</li><li><strong>What We Don't Collect:</strong> No advertising SDKs, no analytics, no user registration.</li></ul></div>
-                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>HealthKit data is not used for advertising or marketing</li><li>HealthKit data is not sold to data brokers</li><li>We do not transmit HealthKit data to our servers</li></ul></div>
-                <div class="legal-section"><h3>11. Translations</h3><p>The Japanese version of this Privacy Policy is the authoritative text. This does not limit your rights under consumer protection laws in your country.</p></div>
-            </section>
-            <section id="terms-fr" class="section">
-                <div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">Conditions d'utilisation</div><div class="section-subtitle">Conditions d'utilisation de l'application</div></div></div>
-                <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>Ce document est en anglais.</strong> La version traduite en français sera disponible prochainement.</div>
-                <div class="legal-section"><h3>1. Acceptance of Terms</h3><p>These Terms of Service govern your use of "WeightSnap", provided by AllNew LLC.</p></div>
-                <div class="legal-section"><h3>10. Pricing</h3><p>Free for the first 15 uses. After that, a one-time purchase is required. No subscription.</p></div>
-                <div class="legal-section"><h3>13. Translations</h3><p>The Japanese version is the authoritative text. This does not limit your rights under consumer protection laws in your country.</p></div>
-            </section>
-            <section id="contact-fr" class="section">
-                <div class="contact-card"><h2>Contactez-nous</h2><p>Pour toute question ou commentaire, n'hésitez pas à nous contacter.</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ Envoyer un email</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div>
-            </section>
-        </div>
 
-        <!-- SPANISH -->
-        <div class="lang-content" data-lang="es">
-            <section id="faq-es" class="section">
-                <div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">Preguntas frecuentes</div><div class="section-subtitle">Respuestas sobre funciones y uso</div></div></div>
-                <div class="translation-notice"><strong>Este documento está en inglés.</strong> La versión traducida al español estará disponible próximamente.</div>
-                <div class="faq-item open"><div class="faq-question">What scales are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Digital display scales are supported.</p><ul><li><strong>Supported:</strong> 7-segment LED, LCD displays</li><li><strong>Not Supported:</strong> Analog scales</li></ul></div></div>
-                <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong> (approximately 66–440 lbs).</p></div></div>
-                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> No subscription.</p></div></div>
-                <div class="faq-item"><div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Weight data is stored in <strong>Apple HealthKit on your device</strong>.</p></div></div>
-            </section>
+            <!-- Privacy Policy -->
             <section id="privacy-es" class="section">
                 <div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">Política de privacidad</div><div class="section-subtitle">Cómo manejamos tus datos</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>Este documento está en inglés.</strong> La versión traducida al español estará disponible próximamente.</div>
-                <div class="highlight-box"><p><strong>Important:</strong> This app does not send or store your weight data on our external servers.</p></div>
-                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>HealthKit data is not used for advertising or marketing</li><li>We do not transmit HealthKit data to our servers</li></ul></div>
+
+                <div class="highlight-box">
+                    <p><strong>🇪🇸 Resumen en español:</strong></p>
+                    <p>Esta aplicación no transmite ni almacena sus datos de peso en nuestros servidores externos. Todos los datos se almacenan en su dispositivo y en Apple HealthKit.</p>
+                    <p><strong>Sus derechos (RGPD):</strong> Derecho de acceso, rectificación, supresión, portabilidad y retirada del consentimiento. Contacto: weightsnap-support@allnew.work</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1. Information We Collect</h3><ul><li><strong>Camera Images:</strong> Discarded immediately after OCR processing.</li><li><strong>Health Data (HealthKit):</strong> Weight data read/write. Stored on your device.</li><li><strong>What We Don't Collect:</strong> No advertising SDKs, no analytics, no user registration.</li></ul></div>
+                <div class="legal-section"><h3>2. How We Use Information</h3><p>Weight recording, health management support, displaying weight trends, wellness messages.</p></div>
+                <div class="legal-section"><h3>3. Third-Party Sharing</h3><p>We do not provide, sell, or share image data or HealthKit data with third parties.</p></div>
+                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>HealthKit data is not used for advertising, marketing, or data mining</li><li>HealthKit data is not sold to data brokers</li><li>We do not transmit HealthKit data to our servers</li><li>HealthKit access can be revoked anytime in iOS Settings</li></ul></div>
+                <div class="legal-section"><h3>5. Apple Intelligence</h3><p>The App may use Apple Intelligence for wellness messages. Processing typically occurs on-device.</p></div>
+                <div class="legal-section"><h3>6. Security</h3><p>Data minimization, on-device processing, Keychain protection, HealthKit encryption.</p></div>
+                <div class="legal-section"><h3>7. Children's Privacy</h3><p>This App is not intended for children under 13.</p></div>
+                <div class="legal-section"><h3>8. Your Rights (GDPR)</h3><ul><li>Right to access, rectify, delete your data</li><li>Right to data portability</li><li>Right to withdraw consent</li><li>Right to lodge complaints with supervisory authority</li></ul></div>
+                <div class="legal-section"><h3>9. Contact</h3><p>Email: weightsnap-support@allnew.work</p></div>
+                <div class="legal-section"><h3>10. Governing Law</h3><p>Japanese law governs. GDPR applies to EU/EEA residents.</p></div>
                 <div class="legal-section"><h3>11. Translations</h3><p>The Japanese version is the authoritative text. This does not limit your rights under consumer protection laws.</p></div>
             </section>
+
+            <!-- Terms -->
             <section id="terms-es" class="section">
                 <div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">Términos de servicio</div><div class="section-subtitle">Condiciones de uso de la aplicación</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>Este documento está en inglés.</strong> La versión traducida al español estará disponible próximamente.</div>
+
+                <div class="highlight-box">
+                    <p><strong>🇪🇸 Resumen en español:</strong> Al usar esta aplicación, acepta estos términos. Gratuita para los primeros 15 usos, luego compra única. La precisión del OCR no está garantizada al 100%.</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
                 <div class="legal-section"><h3>1. Acceptance of Terms</h3><p>These Terms govern your use of "WeightSnap", provided by AllNew LLC.</p></div>
-                <div class="legal-section"><h3>10. Pricing</h3><p>Free for the first 15 uses. One-time purchase after. No subscription.</p></div>
+                <div class="legal-section"><h3>2. Agreement</h3><p>By using the App, you agree to these Terms.</p></div>
+                <div class="legal-section"><h3>3. App Description</h3><p>AI-OCR weight tracking app. Supported: Digital scales, 30-200kg, iOS 17.0+.</p></div>
+                <div class="legal-section"><h3>4. HealthKit Data</h3><p>Not used for advertising. Not sold. Not transmitted to our servers.</p></div>
+                <div class="legal-section"><h3>5. Prohibited Activities</h3><p>Non-weight purposes, reverse engineering, recording others' data without consent.</p></div>
+                <div class="legal-section"><h3>6. Health Disclaimer</h3><p>Not a medical device. Consult professionals for health advice.</p></div>
+                <div class="legal-section"><h3>7. OCR Accuracy</h3><p>Not 100% guaranteed. High-confidence auto-saves; low-confidence requires confirmation.</p></div>
+                <div class="legal-section"><h3>8-9. IP & Warranty</h3><p>IP belongs to us. App provided "as is".</p></div>
+                <div class="legal-section"><h3>10. Pricing</h3><p>15 free uses, then one-time purchase. No subscription.</p></div>
+                <div class="legal-section"><h3>11-13. Changes, Law, Translations</h3><p>May modify terms. Japanese law governs. Japanese version is authoritative.</p></div>
             </section>
+
+            <!-- Contact -->
             <section id="contact-es" class="section">
-                <div class="contact-card"><h2>Contáctenos</h2><p>Para preguntas o comentarios, no dude en contactarnos.</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ Enviar email</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div></dl></div>
+                <div class="contact-card"><h2>Contáctenos</h2><p>Para preguntas o comentarios, contáctenos.</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ Enviar email</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div>
             </section>
         </div>
 
-        <!-- CHINESE SIMPLIFIED -->
+        <!-- CHINESE SIMPLIFIED (PIPL) -->
         <div class="lang-content" data-lang="zh-Hans">
+            <!-- FAQ -->
             <section id="faq-zh-Hans" class="section">
                 <div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">常见问题</div><div class="section-subtitle">关于功能和使用的解答</div></div></div>
-                <div class="translation-notice"><strong>本文档为英文版。</strong>中文翻译版本即将推出。</div>
+
+                <div class="highlight-box" style="margin-bottom: 24px;">
+                    <p><strong>🇨🇳 中文说明：</strong>本应用将您的体重数据存储在您设备上的Apple HealthKit中。我们不会将数据传输到我们运营的服务器。前15次使用免费，之后需一次性购买（无订阅）。</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
                 <div class="faq-item open"><div class="faq-question">What scales are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Digital display scales are supported.</p><ul><li><strong>Supported:</strong> 7-segment LED, LCD displays</li><li><strong>Not Supported:</strong> Analog scales</li></ul></div></div>
                 <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong> (approximately 66–440 lbs).</p></div></div>
-                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> No subscription.</p></div></div>
-                <div class="faq-item"><div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Weight data is stored in <strong>Apple HealthKit on your device</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>iPhones running <strong>iOS 17.0 or later</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> One-time purchase after. No subscription.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Weight data is stored in <strong>Apple HealthKit on your device</strong>. No cross-border data transfer.</p></div></div>
+                <div class="faq-item"><div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Settings → About → Restore Purchase</p></div></div>
             </section>
+
+            <!-- Privacy Policy -->
             <section id="privacy-zh-Hans" class="section">
                 <div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">隐私政策</div><div class="section-subtitle">我们如何处理您的数据</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>本文档为英文版。</strong>中文翻译版本即将推出。</div>
-                <div class="highlight-box"><p><strong>Important:</strong> This app does not send or store your weight data on our external servers.</p></div>
-                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>HealthKit data is not used for advertising or marketing</li><li>We do not transmit HealthKit data to our servers</li></ul></div>
-                <div class="legal-section"><h3>8. Your Rights (China PIPL)</h3><p>Right to know, access, correct, delete. No cross-border transfer.</p></div>
+
+                <div class="highlight-box">
+                    <p><strong>🇨🇳 中文摘要：</strong></p>
+                    <p>本应用不会将您的体重数据传输或存储到我们的外部服务器。所有数据仅存储在您的设备和Apple HealthKit中。</p>
+                    <p><strong>您的权利（个人信息保护法）：</strong>知情权、查阅复制权、更正补充权、删除权。无跨境数据传输。联系方式：weightsnap-support@allnew.work</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1. Information We Collect</h3><ul><li><strong>Camera Images:</strong> Discarded immediately after OCR processing.</li><li><strong>Health Data:</strong> Stored on your device and in Apple HealthKit only.</li><li><strong>What We Don't Collect:</strong> No advertising SDKs, no analytics, no user registration.</li></ul></div>
+                <div class="legal-section"><h3>2-3. Use & Sharing</h3><p>Weight recording only. No third-party sharing.</p></div>
+                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>Not used for advertising or marketing</li><li>Not sold to data brokers</li><li>Not transmitted to our servers</li></ul></div>
+                <div class="legal-section"><h3>5. Apple Intelligence</h3><p>On-device AI processing. No external server transmission by us.</p></div>
+                <div class="legal-section"><h3>6-7. Security & Children</h3><p>Data minimization, encryption. Not for children under 13.</p></div>
+                <div class="legal-section"><h3>8. Your Rights (China PIPL)</h3><ul><li><strong>知情权:</strong> Right to know about data processing</li><li><strong>查阅复制权:</strong> Right to access and copy your data</li><li><strong>更正补充权:</strong> Right to correct your data</li><li><strong>删除权:</strong> Right to delete your data</li><li><strong>无跨境传输:</strong> No cross-border data transfer</li></ul></div>
+                <div class="legal-section"><h3>9-11. Contact, Law, Translations</h3><p>Email: weightsnap-support@allnew.work. Japanese law governs. Japanese version is authoritative.</p></div>
             </section>
+
+            <!-- Terms -->
             <section id="terms-zh-Hans" class="section">
                 <div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">服务条款</div><div class="section-subtitle">应用使用条款</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>本文档为英文版。</strong>中文翻译版本即将推出。</div>
-                <div class="legal-section"><h3>1. Acceptance of Terms</h3><p>These Terms govern your use of "WeightSnap", provided by AllNew LLC.</p></div>
-                <div class="legal-section"><h3>10. Pricing</h3><p>Free for the first 15 uses. One-time purchase after. No subscription.</p></div>
+
+                <div class="highlight-box">
+                    <p><strong>🇨🇳 中文摘要：</strong>使用本应用即表示您同意这些条款。前15次免费使用，之后需一次性购买（无订阅）。OCR识别精度不保证100%准确。</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1-2. Terms Acceptance</h3><p>By using WeightSnap, you agree to these Terms.</p></div>
+                <div class="legal-section"><h3>3. App Description</h3><p>AI-OCR weight tracking. Digital scales only, 30-200kg, iOS 17.0+.</p></div>
+                <div class="legal-section"><h3>4. HealthKit</h3><p>Not used for advertising. Not sold. Not transmitted to our servers.</p></div>
+                <div class="legal-section"><h3>5-6. Prohibited & Disclaimer</h3><p>Weight tracking only. Not a medical device.</p></div>
+                <div class="legal-section"><h3>7. OCR Accuracy</h3><p>Not 100% guaranteed. High-confidence auto-saves; low-confidence requires confirmation.</p></div>
+                <div class="legal-section"><h3>8-10. IP, Warranty, Pricing</h3><p>IP belongs to us. As-is. 15 free, then one-time purchase.</p></div>
+                <div class="legal-section"><h3>11-13. Changes, Law, Translations</h3><p>May modify. Japanese law. Japanese version authoritative.</p></div>
             </section>
+
+            <!-- Contact -->
             <section id="contact-zh-Hans" class="section">
-                <div class="contact-card"><h2>联系我们</h2><p>如有任何问题或反馈，请随时联系我们。</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ 发送邮件</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div></dl></div>
+                <div class="contact-card"><h2>联系我们</h2><p>如有问题或反馈，请联系我们。</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ 发送邮件</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC (合同会社AllNew)</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div>
             </section>
         </div>
 
-        <!-- KOREAN -->
+        <!-- KOREAN (PIPA) -->
         <div class="lang-content" data-lang="ko">
+            <!-- FAQ -->
             <section id="faq-ko" class="section">
                 <div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">자주 묻는 질문</div><div class="section-subtitle">기능 및 사용에 대한 답변</div></div></div>
-                <div class="translation-notice"><strong>이 문서는 영어로 작성되었습니다.</strong> 한국어 번역본이 곧 제공될 예정입니다.</div>
+
+                <div class="highlight-box" style="margin-bottom: 24px;">
+                    <p><strong>🇰🇷 한국어 안내:</strong> 이 앱은 체중 데이터를 기기의 Apple HealthKit에 저장합니다. 당사 서버로 데이터를 전송하지 않습니다. 15회 무료 사용 후 일회성 구매 (구독 없음).</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
                 <div class="faq-item open"><div class="faq-question">What scales are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Digital display scales are supported.</p><ul><li><strong>Supported:</strong> 7-segment LED, LCD displays</li><li><strong>Not Supported:</strong> Analog scales</li></ul></div></div>
-                <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong> (approximately 66–440 lbs).</p></div></div>
-                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> No subscription.</p></div></div>
+                <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>iPhones running <strong>iOS 17.0 or later</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> One-time purchase after. No subscription.</p></div></div>
                 <div class="faq-item"><div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Weight data is stored in <strong>Apple HealthKit on your device</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Settings → About → Restore Purchase</p></div></div>
             </section>
+
+            <!-- Privacy Policy -->
             <section id="privacy-ko" class="section">
                 <div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">개인정보 처리방침</div><div class="section-subtitle">데이터 처리 방법</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>이 문서는 영어로 작성되었습니다.</strong> 한국어 번역본이 곧 제공될 예정입니다.</div>
-                <div class="highlight-box"><p><strong>Important:</strong> This app does not send or store your weight data on our external servers.</p></div>
-                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>HealthKit data is not used for advertising or marketing</li><li>We do not transmit HealthKit data to our servers</li></ul></div>
-                <div class="legal-section"><h3>8. Your Rights (South Korea PIPA)</h3><p>Right to request processing suspension.</p></div>
+
+                <div class="highlight-box">
+                    <p><strong>🇰🇷 한국어 요약:</strong></p>
+                    <p>이 앱은 체중 데이터를 당사의 외부 서버에 전송하거나 저장하지 않습니다. 모든 데이터는 기기와 Apple HealthKit에만 저장됩니다.</p>
+                    <p><strong>귀하의 권리 (개인정보보호법):</strong> 처리정지요구권, 열람권, 정정·삭제권. 연락처: weightsnap-support@allnew.work</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1. Information We Collect</h3><ul><li><strong>Camera Images:</strong> Discarded immediately after OCR.</li><li><strong>Health Data:</strong> Stored on device and HealthKit only.</li><li><strong>What We Don't Collect:</strong> No ads, no analytics, no registration.</li></ul></div>
+                <div class="legal-section"><h3>2-3. Use & Sharing</h3><p>Weight recording only. No third-party sharing.</p></div>
+                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>Not used for advertising or marketing</li><li>Not sold to data brokers</li><li>Not transmitted to our servers</li></ul></div>
+                <div class="legal-section"><h3>5-7. AI, Security, Children</h3><p>On-device AI. Data minimization. Not for under 13.</p></div>
+                <div class="legal-section"><h3>8. Your Rights (South Korea PIPA)</h3><ul><li><strong>처리정지요구권:</strong> Right to request suspension of processing</li><li><strong>열람권:</strong> Right to access your data</li><li><strong>정정·삭제권:</strong> Right to correct or delete your data</li></ul></div>
+                <div class="legal-section"><h3>9-11. Contact, Law, Translations</h3><p>Email: weightsnap-support@allnew.work. Japanese law governs. Japanese version authoritative.</p></div>
             </section>
+
+            <!-- Terms -->
             <section id="terms-ko" class="section">
                 <div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">이용약관</div><div class="section-subtitle">앱 사용 조건</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>이 문서는 영어로 작성되었습니다.</strong> 한국어 번역본이 곧 제공될 예정입니다.</div>
-                <div class="legal-section"><h3>1. Acceptance of Terms</h3><p>These Terms govern your use of "WeightSnap", provided by AllNew LLC.</p></div>
-                <div class="legal-section"><h3>10. Pricing</h3><p>Free for the first 15 uses. One-time purchase after. No subscription.</p></div>
+
+                <div class="highlight-box">
+                    <p><strong>🇰🇷 한국어 요약:</strong> 이 앱을 사용하면 이 약관에 동의하는 것입니다. 15회 무료 사용 후 일회성 구매 (구독 없음). OCR 인식 정확도는 100% 보장되지 않습니다.</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1-2. Terms Acceptance</h3><p>By using WeightSnap, you agree to these Terms.</p></div>
+                <div class="legal-section"><h3>3. App Description</h3><p>AI-OCR weight tracking. Digital scales, 30-200kg, iOS 17.0+.</p></div>
+                <div class="legal-section"><h3>4. HealthKit</h3><p>Not for ads. Not sold. Not transmitted to our servers.</p></div>
+                <div class="legal-section"><h3>5-6. Prohibited & Disclaimer</h3><p>Weight tracking only. Not a medical device.</p></div>
+                <div class="legal-section"><h3>7. OCR Accuracy</h3><p>Not 100% guaranteed.</p></div>
+                <div class="legal-section"><h3>8-10. IP, Warranty, Pricing</h3><p>IP ours. As-is. 15 free, then one-time purchase.</p></div>
+                <div class="legal-section"><h3>11-13. Changes, Law, Translations</h3><p>May modify. Japanese law. Japanese version authoritative.</p></div>
             </section>
+
+            <!-- Contact -->
             <section id="contact-ko" class="section">
-                <div class="contact-card"><h2>문의하기</h2><p>질문이나 피드백이 있으시면 언제든지 연락해 주세요.</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ 이메일 보내기</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div></dl></div>
+                <div class="contact-card"><h2>문의하기</h2><p>질문이나 피드백이 있으시면 연락해 주세요.</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ 이메일 보내기</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div>
             </section>
         </div>
 
-        <!-- PORTUGUESE (BRAZIL) -->
+        <!-- PORTUGUESE BRAZIL (LGPD) -->
         <div class="lang-content" data-lang="pt-BR">
+            <!-- FAQ -->
             <section id="faq-pt-BR" class="section">
                 <div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">Perguntas frequentes</div><div class="section-subtitle">Respostas sobre recursos e uso</div></div></div>
-                <div class="translation-notice"><strong>Este documento está em inglês.</strong> A versão traduzida para o português estará disponível em breve.</div>
+
+                <div class="highlight-box" style="margin-bottom: 24px;">
+                    <p><strong>🇧🇷 Informação em português:</strong> Este aplicativo armazena seus dados de peso no Apple HealthKit do seu dispositivo. Nenhum dado é transmitido aos nossos servidores. 15 usos gratuitos, depois compra única (sem assinatura).</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
                 <div class="faq-item open"><div class="faq-question">What scales are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Digital display scales are supported.</p><ul><li><strong>Supported:</strong> 7-segment LED, LCD displays</li><li><strong>Not Supported:</strong> Analog scales</li></ul></div></div>
-                <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong> (approximately 66–440 lbs).</p></div></div>
-                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> No subscription.</p></div></div>
+                <div class="faq-item"><div class="faq-question">What weight range is recognized?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>30.0kg–200.0kg</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div><div class="faq-answer"><p>iPhones running <strong>iOS 17.0 or later</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">Is it free?<span class="faq-icon">+</span></div><div class="faq-answer"><p><strong>Free for the first 15 uses.</strong> One-time purchase after. No subscription.</p></div></div>
                 <div class="faq-item"><div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Weight data is stored in <strong>Apple HealthKit on your device</strong>.</p></div></div>
+                <div class="faq-item"><div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Settings → About → Restore Purchase</p></div></div>
             </section>
+
+            <!-- Privacy Policy -->
             <section id="privacy-pt-BR" class="section">
                 <div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">Política de privacidade</div><div class="section-subtitle">Como tratamos seus dados</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>Este documento está em inglês.</strong> A versão traduzida para o português estará disponível em breve.</div>
-                <div class="highlight-box"><p><strong>Important:</strong> This app does not send or store your weight data on our external servers.</p></div>
-                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>HealthKit data is not used for advertising or marketing</li><li>We do not transmit HealthKit data to our servers</li></ul></div>
-                <div class="legal-section"><h3>8. Your Rights (Brazil LGPD)</h3><p>Right to data portability.</p></div>
+
+                <div class="highlight-box">
+                    <p><strong>🇧🇷 Resumo em português:</strong></p>
+                    <p>Este aplicativo não transmite nem armazena seus dados de peso em nossos servidores externos. Todos os dados são armazenados em seu dispositivo e no Apple HealthKit.</p>
+                    <p><strong>Seus direitos (LGPD):</strong> Direito de acesso, correção, exclusão, portabilidade de dados e revogação do consentimento. Contato: weightsnap-support@allnew.work</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1. Information We Collect</h3><ul><li><strong>Camera Images:</strong> Discarded immediately after OCR.</li><li><strong>Health Data:</strong> Stored on device and HealthKit only.</li><li><strong>What We Don't Collect:</strong> No ads, no analytics, no registration.</li></ul></div>
+                <div class="legal-section"><h3>2-3. Use & Sharing</h3><p>Weight recording only. No third-party sharing.</p></div>
+                <div class="legal-section"><h3>4. Apple HealthKit</h3><ul><li>Not used for advertising or marketing</li><li>Not sold to data brokers</li><li>Not transmitted to our servers</li></ul></div>
+                <div class="legal-section"><h3>5-7. AI, Security, Children</h3><p>On-device AI. Data minimization. Not for under 13.</p></div>
+                <div class="legal-section"><h3>8. Your Rights (Brazil LGPD)</h3><ul><li><strong>Direito de acesso:</strong> Right to access your data</li><li><strong>Direito de correção:</strong> Right to correct your data</li><li><strong>Direito de exclusão:</strong> Right to delete your data</li><li><strong>Direito à portabilidade:</strong> Right to data portability</li><li><strong>Revogação do consentimento:</strong> Right to withdraw consent</li></ul></div>
+                <div class="legal-section"><h3>9-11. Contact, Law, Translations</h3><p>Email: weightsnap-support@allnew.work. Japanese law governs. Japanese version authoritative.</p></div>
             </section>
+
+            <!-- Terms -->
             <section id="terms-pt-BR" class="section">
                 <div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">Termos de serviço</div><div class="section-subtitle">Condições de uso do aplicativo</div></div></div>
                 <span class="updated-badge">Last Updated: February 4, 2026</span>
-                <div class="translation-notice"><strong>Este documento está em inglês.</strong> A versão traduzida para o português estará disponível em breve.</div>
-                <div class="legal-section"><h3>1. Acceptance of Terms</h3><p>These Terms govern your use of "WeightSnap", provided by AllNew LLC.</p></div>
-                <div class="legal-section"><h3>10. Pricing</h3><p>Free for the first 15 uses. One-time purchase after. No subscription.</p></div>
+
+                <div class="highlight-box">
+                    <p><strong>🇧🇷 Resumo em português:</strong> Ao usar este aplicativo, você concorda com estes termos. 15 usos gratuitos, depois compra única (sem assinatura). A precisão do OCR não é garantida em 100%.</p>
+                </div>
+
+                <div class="legal-section"><h3>📋 Full Version (English)</h3></div>
+
+                <div class="legal-section"><h3>1-2. Terms Acceptance</h3><p>By using WeightSnap, you agree to these Terms.</p></div>
+                <div class="legal-section"><h3>3. App Description</h3><p>AI-OCR weight tracking. Digital scales, 30-200kg, iOS 17.0+.</p></div>
+                <div class="legal-section"><h3>4. HealthKit</h3><p>Not for ads. Not sold. Not transmitted to our servers.</p></div>
+                <div class="legal-section"><h3>5-6. Prohibited & Disclaimer</h3><p>Weight tracking only. Not a medical device.</p></div>
+                <div class="legal-section"><h3>7. OCR Accuracy</h3><p>Not 100% guaranteed.</p></div>
+                <div class="legal-section"><h3>8-10. IP, Warranty, Pricing</h3><p>IP ours. As-is. 15 free, then one-time purchase.</p></div>
+                <div class="legal-section"><h3>11-13. Changes, Law, Translations</h3><p>May modify. Japanese law. Japanese version authoritative.</p></div>
             </section>
+
+            <!-- Contact -->
             <section id="contact-pt-BR" class="section">
-                <div class="contact-card"><h2>Entre em contato</h2><p>Se tiver dúvidas ou comentários, entre em contato conosco.</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ Enviar email</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div></dl></div>
+                <div class="contact-card"><h2>Entre em contato</h2><p>Se tiver dúvidas ou comentários, entre em contato.</p><a href="mailto:weightsnap-support@allnew.work" class="contact-email">✉️ Enviar email</a><dl class="contact-details"><div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Email</dt><dd>weightsnap-support@allnew.work</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div>
             </section>
         </div>
     </main>
