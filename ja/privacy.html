@@ -65,7 +65,7 @@
         <p class="updated">最終更新日: 2026年2月4日</p>
 
         <div class="important">
-            <strong>重要:</strong> 本アプリは、ユーザーの体重データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。
+            <strong>重要:</strong> 本アプリは、体重データおよび撮影画像等を当社の外部サーバーに送信・保存しません。体重データは端末内およびApple HealthKitに保存されます。撮影画像はOCR処理後に即時破棄されます。HealthKitの保存・同期（iCloud等）やApple側の処理挙動は、ユーザーの端末設定およびAppleの仕様に従います。
         </div>
 
         <div class="content">
@@ -96,7 +96,7 @@
             <p>本アプリはApple Intelligenceを使用してウェルネスメッセージを生成する場合があります。処理は原則として端末内で行われますが、Appleの仕様によりPrivate Cloud Compute等で処理される場合があります。当社は、当該処理のために独自の外部サーバーへデータを送信・保存しません。</p>
 
             <h2>6. セキュリティ対策</h2>
-            <p>データ最小化設計、全処理の端末内完結、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。</p>
+            <p>データ最小化設計、可能な限り端末内での処理、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。Apple Intelligenceを利用する処理は、Appleの仕様によりPrivate Cloud Compute等で処理される場合があります。</p>
 
             <h2>7. 子供のプライバシー</h2>
             <p>本アプリは13歳未満のお子様を対象としていません。アプリの機能利用において、当社は個人情報を収集しません。</p>
@@ -106,7 +106,7 @@
                 <li><strong>すべてのユーザー:</strong> HealthKitデータの管理・削除は「設定」>「ヘルスケア」から可能。アプリ削除時、iOSがヘルスケアデータの削除を確認します。</li>
                 <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
                 <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
-                <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。国外への情報移転なし。</li>
+                <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社はユーザーデータを当社の外部サーバーへ移転しません。ただし、HealthKitの同期（iCloud等）やApple IntelligenceのPrivate Cloud Compute等、Appleのサービスにより、ユーザーの国・地域外で処理／保存される可能性があります。</li>
                 <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
                 <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
             </ul>
@@ -131,11 +131,12 @@
             <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
 
             <hr>
-            <p class="company-info">© 2026 合同会社AllNew</p>
+            <p class="company-info">運営: 合同会社AllNew</p>
         </div>
     </main>
 
     <footer>
+        <p class="trademark">Apple、iPhone、iOS、HealthKitは、米国およびその他の国で登録されたApple Inc.の商標です。その他の会社名・製品名は各社の商標または登録商標です。</p>
         <p>© 2026 合同会社AllNew</p>
     </footer>
 </body>
