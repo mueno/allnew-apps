@@ -75,22 +75,40 @@
         <div class="faq-item">
             <div class="faq-question">Where is my data stored?</div>
             <div class="faq-answer">
-                <p>Weight data is stored <strong>only in Apple HealthKit on your device</strong>.</p>
-                <p>No data is sent to external servers. Camera images are discarded immediately after OCR processing.</p>
+                <p>Weight data is stored in <strong>Apple HealthKit on your device</strong>.</p>
+                <p>We do not transmit data to servers operated by us. Camera images are discarded immediately after OCR processing. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">What happens when recognition confidence is low?</div>
+            <div class="faq-answer">
+                <p>The app automatically evaluates recognition confidence.</p>
+                <ul>
+                    <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
+                    <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value
+                        <ul>
+                            <li>"Record this value" → Saves to HealthKit</li>
+                            <li>"Don't Record" → Does not save, prompts you to retake and retry</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>When the app determines confidence is low, data will not be saved unless you explicitly approve it.</p>
             </div>
         </div>
 
         <div class="faq-item">
             <div class="faq-question">What if the recognition is wrong?</div>
             <div class="faq-answer">
-                <p>High-confidence readings are automatically saved to HealthKit. If incorrect data was saved, <strong>delete it from the iOS Health app</strong>.</p>
+                <p><strong>Before saving:</strong> If the recognition confidence is low, the app will show a confirmation screen. If the value looks incorrect, choose "Don't Record" and retake the photo.</p>
+                <p><strong>After saving:</strong> High-confidence readings are automatically saved without confirmation. If incorrect data was saved, <strong>delete it from the iOS Health app</strong>.</p>
                 <p><strong>How to delete:</strong></p>
                 <ul>
                     <li>Open the Health app</li>
                     <li>Go to Browse → Body Measurements → Weight</li>
                     <li>Swipe left on the incorrect entry and tap "Delete"</li>
                 </ul>
-                <p>Note: HealthKit data can only be deleted, not edited.</p>
+                <p>Note: HealthKit data <strong>cannot be edited</strong>, only deleted. You must delete and re-scan with the App to correct a value.</p>
             </div>
         </div>
 

@@ -115,22 +115,40 @@
         <div class="faq-item">
             <div class="faq-question">データはどこに保存されますか？</div>
             <div class="faq-answer">
-                <p>体重データは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）にのみ</strong>保存されます。</p>
-                <p>外部サーバーへの送信は一切ありません。撮影した画像もOCR処理後に即時破棄され、保存されません。</p>
+                <p>体重データは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。</p>
+                <p>当社が運用するサーバーへの送信はありません。撮影した画像もOCR処理後に即時破棄されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">認識精度が低い場合はどうなりますか？</div>
+            <div class="faq-answer">
+                <p>アプリが認識結果の精度（信頼度）を自動判定します。</p>
+                <ul>
+                    <li><strong>高信頼度の場合:</strong> 確認画面なしで自動的にヘルスケアに記録されます</li>
+                    <li><strong>低信頼度の場合:</strong> 認識した値を確認画面で表示します
+                        <ul>
+                            <li>「この値で記録する」→ ヘルスケアに保存されます</li>
+                            <li>「記録しない」→ 保存せず、再度撮影・認識を行います</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>低信頼度と判定された場合、ユーザーが明示的に許可しない限り記録されることはありません。</p>
             </div>
         </div>
 
         <div class="faq-item">
             <div class="faq-question">認識結果が間違っていた場合は？</div>
             <div class="faq-answer">
-                <p>高信頼度の認識結果は自動でヘルスケアに保存されます。誤った数値が保存された場合は、iOSの<strong>ヘルスケアアプリから削除</strong>してください。</p>
+                <p><strong>保存前の場合:</strong> 認識精度が低い場合は、アプリが確認画面を表示します。正しくないと思ったら「記録しない」を選択し、再度撮影してください。</p>
+                <p><strong>保存後の場合:</strong> 高信頼度の認識結果は確認なしで自動保存されます。誤った数値が保存された場合は、iOSの<strong>ヘルスケアアプリから削除</strong>してください。</p>
                 <p><strong>削除手順:</strong></p>
                 <ul>
                     <li>ヘルスケアアプリを開く</li>
                     <li>「ブラウズ」→「体の測定値」→「体重」を選択</li>
                     <li>該当するデータを左にスワイプして「削除」</li>
                 </ul>
-                <p>※HealthKitの仕様上、保存されたデータの編集はできません。削除のみ可能です。</p>
+                <p>※HealthKitの仕様上、保存されたデータの<strong>編集はできません</strong>。削除して、本アプリで再認識・再登録する必要があります。</p>
             </div>
         </div>
 

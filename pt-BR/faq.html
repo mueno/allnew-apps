@@ -39,6 +39,10 @@
         <a href="index.html" class="back-link">← Back to Support</a>
         <h1>Frequently Asked Questions</h1>
 
+        <div style="background: #fff3cd; padding: 12px 16px; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #ffc107; color: #856404;">
+            <strong>Este documento está em inglês.</strong> A versão traduzida para o português estará disponível em breve.
+        </div>
+
         <div class="faq-item open">
             <div class="faq-question">What scales are supported?</div>
             <div class="faq-answer">
@@ -81,16 +85,34 @@
         </div>
 
         <div class="faq-item">
+            <div class="faq-question">What happens when recognition confidence is low?</div>
+            <div class="faq-answer">
+                <p>The app automatically evaluates recognition confidence.</p>
+                <ul>
+                    <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
+                    <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value
+                        <ul>
+                            <li>"Record this value" → Saves to HealthKit</li>
+                            <li>"Don't Record" → Does not save, prompts you to retake and retry</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>When the app determines confidence is low, data will not be saved unless you explicitly approve it.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
             <div class="faq-question">What if the recognition is wrong?</div>
             <div class="faq-answer">
-                <p>High-confidence readings are automatically saved to HealthKit. If incorrect data was saved, <strong>delete it from the iOS Health app</strong>.</p>
+                <p><strong>Before saving:</strong> If the recognition confidence is low, the app will show a confirmation screen. If the value looks incorrect, select "Don't Save" and try scanning again.</p>
+                <p><strong>After saving:</strong> High-confidence results are automatically saved without confirmation. If an incorrect value was saved, you must <strong>delete it from the iOS Health app</strong>.</p>
                 <p><strong>How to delete:</strong></p>
                 <ul>
                     <li>Open the Health app</li>
                     <li>Go to Browse → Body Measurements → Weight</li>
                     <li>Swipe left on the incorrect entry and tap "Delete"</li>
                 </ul>
-                <p>Note: HealthKit data can only be deleted, not edited.</p>
+                <p>Note: Due to HealthKit limitations, saved data <strong>cannot be edited</strong>. You must delete the incorrect entry and re-scan to save the correct value.</p>
             </div>
         </div>
 

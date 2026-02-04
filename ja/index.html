@@ -5,173 +5,1012 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeightSnap サポート - AllNew</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.72);
+            --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.12);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #2997ff;
+                --accent-hover: #4da8ff;
+                --border: rgba(255,255,255,0.1);
+                --glass: rgba(28,28,30,0.72);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+                --shadow-hover: 0 8px 32px rgba(0,0,0,0.5);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
-            background: #ffffff;
-            color: #333;
-            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
+
+        /* Floating Header */
         .header {
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
         }
-        .header a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-        .app-name {
-            color: #666;
-            margin-top: 4px;
-        }
-        .container {
-            max-width: 800px;
+
+        .header-inner {
+            max-width: 980px;
             margin: 0 auto;
-            padding: 40px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        h1 {
-            font-size: 1.6rem;
-            margin-bottom: 24px;
-        }
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 40px;
-        }
-        .card {
-            background: #f9f9f9;
-            padding: 24px;
-            border-radius: 12px;
+
+        .logo-link {
             text-decoration: none;
-            color: inherit;
-            transition: all 0.2s;
-            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .card:hover {
-            border-color: #007aff;
-            background: #f5f8ff;
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
         }
-        .card h2 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            color: #007aff;
+
+        .logo-divider {
+            width: 1px;
+            height: 20px;
+            background: var(--border);
         }
-        .card p {
+
+        .app-name {
             font-size: 0.9rem;
-            color: #666;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
-        .contact-section {
-            background: #f9f9f9;
-            padding: 32px;
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-tertiary);
+            padding: 4px;
             border-radius: 12px;
         }
-        .contact-section h2 {
-            font-size: 1.2rem;
-            margin-bottom: 16px;
+
+        .tab-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
         }
-        .contact-info {
-            color: #666;
-            line-height: 2;
+
+        .tab-btn:hover {
+            color: var(--text-primary);
         }
-        .contact-info a {
-            color: #007aff;
+
+        .tab-btn.active {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .lang-select {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid #eee;
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
         }
-        .lang-select h3 {
-            font-size: 0.9rem;
-            color: #999;
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 22px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
             margin-bottom: 12px;
         }
-        .lang-links {
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        /* Section Panels */
+        .section-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-soft);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Privacy Highlight Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0,113,227,0.08) 0%, rgba(102,126,234,0.08) 100%);
+            border: 1px solid rgba(0,113,227,0.2);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .highlight-box p {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(0,113,227,0.3);
+        }
+
+        .faq-question {
+            padding: 18px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 800px;
+            padding: 0 24px 24px;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .faq-answer p:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-answer ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* Legal Document Sections */
+        .legal-section {
+            margin-bottom: 32px;
+        }
+
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legal-section h3::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .legal-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .legal-section li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .legal-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .legal-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .contact-card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .contact-card > p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .contact-email:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .contact-details {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .contact-item {
+            font-size: 0.85rem;
+        }
+
+        .contact-item dt {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .contact-item dd {
+            color: var(--text-primary);
+        }
+
+        /* Language Selector */
+        .lang-section {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .lang-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+        }
+
+        .lang-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
+
         .lang-link {
-            padding: 6px 14px;
-            background: white;
-            color: #333;
+            padding: 10px 18px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 980px;
             font-size: 0.85rem;
-            border: 1px solid #ddd;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
         }
+
         .lang-link:hover {
-            border-color: #007aff;
-            color: #007aff;
+            border-color: var(--accent);
+            color: var(--accent);
         }
+
         .lang-link.active {
-            background: #007aff;
+            background: var(--accent);
             color: white;
-            border-color: #007aff;
+            border-color: var(--accent);
         }
-        footer {
+
+        /* Footer */
+        .footer {
             text-align: center;
             padding: 40px 20px;
-            color: #999;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
             font-size: 0.85rem;
-            border-top: 1px solid #eee;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Updated Badge */
+        .updated-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-tertiary);
+            padding: 6px 12px;
+            border-radius: 980px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .updated-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #34c759;
+            border-radius: 50%;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-inner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .tab-nav {
+                width: 100%;
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+
+            .hero {
+                padding: 60px 20px 40px;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .contact-card {
+                padding: 28px;
+            }
+
+            .contact-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Fun Easter Egg */
+        .hero-icon:hover {
+            animation: wiggle 0.5s ease;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+        }
+
+        /* Smooth scroll anchor offset */
+        :target {
+            scroll-margin-top: 80px;
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <a href="../">
-            <div class="logo">AllNew</div>
-            <p class="app-name">WeightSnap サポート</p>
-        </a>
+        <div class="header-inner">
+            <a href="../" class="logo-link">
+                <span class="logo">AllNew</span>
+                <span class="logo-divider"></span>
+                <span class="app-name">WeightSnap</span>
+            </a>
+            <nav class="tab-nav">
+                <button class="tab-btn active" data-tab="faq">FAQ</button>
+                <button class="tab-btn" data-tab="privacy">プライバシー</button>
+                <button class="tab-btn" data-tab="terms">利用規約</button>
+                <button class="tab-btn" data-tab="contact">お問い合わせ</button>
+            </nav>
+        </div>
     </header>
 
-    <main class="container">
-        <h1>サポート</h1>
+    <section class="hero">
+        <div class="hero-icon">⚖️</div>
+        <h1>WeightSnap サポート</h1>
+        <p class="hero-subtitle">撮るだけで体重記録。シンプルで、プライバシーを大切にしたアプリです。</p>
+    </section>
 
-        <div class="card-grid">
-            <a href="faq.html" class="card">
-                <h2>よくある質問</h2>
-                <p>使い方や機能についてのFAQ</p>
-            </a>
-            <a href="terms.html" class="card">
-                <h2>利用規約</h2>
-                <p>サービスのご利用条件</p>
-            </a>
-            <a href="privacy.html" class="card">
-                <h2>プライバシーポリシー</h2>
-                <p>個人情報の取り扱いについて</p>
-            </a>
+    <main class="main">
+        <!-- FAQ Section -->
+        <div id="faq" class="section-panel active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">💡</div>
+                    <div>
+                        <div class="card-title">よくある質問</div>
+                        <div class="card-subtitle">使い方や機能についてお答えします</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">
+                        どんな体重計に対応していますか？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>デジタル表示の体重計に対応しています。</p>
+                        <ul>
+                            <li><strong>対応:</strong> 7セグメントLED、液晶ディスプレイなどのデジタル表示</li>
+                            <li><strong>非対応:</strong> アナログ体重計（針式メーター、回転式ダイヤル）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        認識できる体重の範囲は？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>30.0kg〜200.0kg</strong>の範囲に対応しています。この範囲外の数値は認識されません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        対応しているiPhoneは？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>iOS 17.0以降</strong>を搭載し、カメラ機能およびApple HealthKitに対応したiPhoneで動作します。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        無料で使えますか？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p>
+                        <p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        データはどこに保存されますか？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>体重データは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。</p>
+                        <p>当社が運用するサーバーへの送信はありません。撮影した画像もOCR処理後に即時破棄されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        認識精度が低い場合はどうなりますか？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>アプリが認識結果の精度（信頼度）を自動判定します。</p>
+                        <ul>
+                            <li><strong>高信頼度の場合:</strong> 確認画面なしで自動的にヘルスケアに記録されます</li>
+                            <li><strong>低信頼度の場合:</strong> 認識した値を確認画面で表示し、「この値で記録する」を選択した場合のみ保存されます。「記録しない」を選ぶと、再度撮影・認識を行います。</li>
+                        </ul>
+                        <p>低信頼度と判定された場合、ユーザーが明示的に許可しない限り記録されることはありません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        認識結果が間違っていた場合は？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p><strong>保存前の場合:</strong> 認識精度が低い場合は、アプリが確認画面を表示します。正しくないと思ったら「記録しない」を選択し、再度撮影してください。</p>
+                        <p><strong>保存後の場合:</strong> 高信頼度の認識結果は確認なしで自動保存されます。誤った数値が保存された場合は、iOSの<strong>ヘルスケアアプリから削除</strong>してください。</p>
+                        <p><strong>削除手順:</strong></p>
+                        <ul>
+                            <li>ヘルスケアアプリを開く</li>
+                            <li>「ブラウズ」→「体の測定値」→「体重」を選択</li>
+                            <li>該当するデータを左にスワイプして「削除」</li>
+                        </ul>
+                        <p>※HealthKitの仕様上、保存されたデータの<strong>編集はできません</strong>。削除して、本アプリで再認識・再登録する必要があります。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        アプリを削除するとデータは消えますか？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>アプリを削除する際、iOSが<strong>「ヘルスケアデータを削除しますか？」</strong>と確認します。</p>
+                        <ul>
+                            <li>「削除」を選択 → ヘルスケアのデータも削除されます</li>
+                            <li>「削除しない」を選択 → データはヘルスケアアプリに保持されます</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        購入を復元したい
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>過去に購入された方は、再購入の必要はありません。</p>
+                        <p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        認識精度を上げるコツは？
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>体重計のディスプレイが明るく表示されている状態で撮影</li>
+                            <li>ガイド枠内に数字が収まるように位置を調整</li>
+                            <li>手ブレを避け、できるだけ静止した状態で撮影</li>
+                            <li>ディスプレイの汚れや劣化がないか確認</li>
+                            <li>直射日光や強い照明の反射を避ける</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <section class="contact-section">
-            <h2>お問い合わせ</h2>
-            <div class="contact-info">
-                <p><strong>運営者:</strong> 合同会社AllNew</p>
-                <p><strong>代表者:</strong> 植野 正徳</p>
-                <p><strong>所在地:</strong> 〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</p>
-                <p><strong>法人番号:</strong> 8020003014806</p>
-                <p><strong>メール:</strong> <a href="mailto:weightsnap-support@allnew.work">weightsnap-support@allnew.work</a></p>
-                <p><strong>受付時間:</strong> 10:00〜17:00（土・日・祝祭日を除く）</p>
-                <p style="margin-top: 16px; padding: 12px; background: #e8f4fd; border-radius: 8px; font-size: 0.9rem;">
-                    <strong>対応言語:</strong> 日本語・英語<br>
-                    <span style="color: #666;">Please contact us in Japanese or English.</span>
-                </p>
-            </div>
-        </section>
+        <!-- Privacy Section -->
+        <div id="privacy" class="section-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🔒</div>
+                    <div>
+                        <div class="card-title">プライバシーポリシー</div>
+                        <div class="card-subtitle">あなたのデータを大切に扱います</div>
+                    </div>
+                </div>
 
-        <div class="lang-select">
-            <h3>Language</h3>
-            <div class="lang-links">
-                <a href="../ja/" class="lang-link active">日本語</a>
+                <span class="updated-badge">最終更新: 2026年2月4日</span>
+
+                <div class="highlight-box">
+                    <p><strong>重要:</strong> 本アプリは、ユーザーの体重データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. 収集する情報の種類</h3>
+                    <ul>
+                        <li><strong>カメラで取得する画像:</strong> OCR処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>健康関連データ（HealthKit）:</strong> 体重データの書き込み・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
+                        <li><strong>デバイス情報:</strong> iPhone機種識別（重量差し引き機能用）。端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>収集しない情報:</strong> 本アプリでは広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 情報の利用目的</h3>
+                    <p>体重の記録と健康管理支援、体重変化の表示、ウェルネスメッセージの表示、iPhone重量の自動差し引き。これ以外の目的には利用しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 第三者への提供</h3>
+                    <p>当社は画像データやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Apple HealthKit特記事項</h3>
+                    <ul>
+                        <li>HealthKitデータを広告、マーケティング、データマイニング目的で使用しません</li>
+                        <li>HealthKitデータをデータブローカーに販売しません</li>
+                        <li>当社はHealthKitデータを当社の外部サーバーに送信・保存しません。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います</li>
+                        <li>HealthKitへのアクセスはiOSの設定からいつでも取り消せます</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Apple Intelligence（オンデバイスAI処理）</h3>
+                    <p>本アプリはApple Intelligenceを使用してウェルネスメッセージを生成する場合があります。処理は原則として端末内で行われますが、Appleの仕様によりPrivate Cloud Compute等で処理される場合があります。当社は、当該処理のために独自の外部サーバーへデータを送信・保存しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. セキュリティ対策</h3>
+                    <p>データ最小化設計、全処理の端末内完結、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. 子供のプライバシー</h3>
+                    <p>本アプリは13歳未満のお子様を対象としていません。アプリの機能利用において、当社は個人情報を収集しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. ユーザーの権利</h3>
+                    <ul>
+                        <li><strong>すべてのユーザー:</strong> HealthKitデータの管理・削除は「設定」>「ヘルスケア」から可能。アプリ削除時、iOSがヘルスケアデータの削除を確認します。</li>
+                        <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
+                        <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
+                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。国外への情報移転なし。</li>
+                        <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
+                        <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. お問い合わせについて</h3>
+                    <p>ユーザーが当社へお問い合わせを行う場合、当社は返信対応のために、メールアドレスおよびお問い合わせ内容を取得・利用します。これらの情報はサポート対応の目的にのみ用い、法令に基づく場合を除き第三者に提供しません。対応完了後は合理的な期間で削除または匿名化します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 準拠法と管轄</h3>
+                    <p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 多言語版について</h3>
+                    <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terms Section -->
+        <div id="terms" class="section-panel">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📜</div>
+                    <div>
+                        <div class="card-title">利用規約</div>
+                        <div class="card-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月4日</span>
+
+                <div class="legal-section">
+                    <h3>1. 規約の適用</h3>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「WeightSnap」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 利用開始と同意</h3>
+                    <p>ユーザーが本アプリをダウンロードし、インストールまたは利用を開始した時点で、本規約に同意したものとみなされます。本規約に同意しない場合、本アプリをご利用いただくことはできません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 本アプリの概要と対応機器</h3>
+                    <p>本アプリは、体重計のディスプレイに表示された数値をカメラで撮影し、AI（人工知能）による光学文字認識（OCR）技術を用いて読み取り、Apple HealthKit（ヘルスケア）に記録するアプリケーションです。</p>
+                    <ul>
+                        <li><strong>対応体重計:</strong> デジタル表示（7セグメントLED、液晶ディスプレイ等）の体重計に対応しています。アナログ体重計（針式メーター、回転式ダイヤル等）には対応しておりません。</li>
+                        <li><strong>対応体重範囲:</strong> 30.0kg〜200.0kgの範囲に対応しています。</li>
+                        <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. プライバシーポリシーおよびHealthKitデータの取り扱い</h3>
+                    <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy" onclick="switchTab('privacy'); return false;">プライバシーポリシー</a>に従って取り扱います。</p>
+                    <p>Apple HealthKitに記録されたデータについて、当社は以下を遵守します:</p>
+                    <ul>
+                        <li>HealthKitデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
+                        <li>HealthKitデータをデータブローカーや第三者に販売・提供しません</li>
+                        <li>HealthKitデータを当社が運用するサーバーへ送信・保存しません</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 禁止事項</h3>
+                    <ul>
+                        <li>本アプリの目的と異なる利用</li>
+                        <li>法令または公序良俗に反する行為</li>
+                        <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
+                        <li>第三者の体重データを無断で撮影・記録する行為</li>
+                        <li>その他当社が不適切と判断する行為</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 健康情報に関する注意</h3>
+                    <p>本アプリは一般的なウェルネスおよびフィットネス支援を目的としたものであり、医療機器ではありません。健康状態に関する疑問や不安がある場合は医師にご相談ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. OCR認識の精度について</h3>
+                    <ul>
+                        <li><strong>認識精度の非保証:</strong> OCR認識の精度は100%ではありません。</li>
+                        <li><strong>高信頼度結果の自動保存:</strong> 本アプリが認識結果を高信頼度と判定した場合、ユーザーの確認なしに自動でApple HealthKit（ヘルスケア）へ記録します。</li>
+                        <li><strong>低信頼度結果の確認フロー:</strong> 本アプリが認識結果を低信頼度（精度が十分でない）と判定した場合、認識した値を画面に表示し、ユーザーが内容を確認した上で「この値で記録する」ことを許可した場合にのみ、ヘルスケアへ記録します。ユーザーが許可しない場合、その値は記録されず、再度撮影・再認識を行っていただきます。</li>
+                        <li><strong>記録後の訂正方法:</strong> Apple HealthKitに記録された体重データは、本アプリから編集できません（削除のみ可能）。誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 知的財産権</h3>
+                    <p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 免責事項</h3>
+                    <p>当社は、本アプリの機能が中断なく動作すること、OCR認識結果が常に正確であることを保証しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 料金および支払</h3>
+                    <p>15回まで無料。16回目以降は買い切り購入が必要です。サブスクリプションはありません。過去に購入された場合は「購入を復元」機能をご利用ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 規約の変更</h3>
+                    <p>当社は、必要に応じて本規約を変更することがあります。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. 準拠法・管轄</h3>
+                    <p>本規約は日本法に準拠し、東京地方裁判所を専属的合意管轄裁判所とします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. 多言語版について</h3>
+                    <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div id="contact" class="section-panel">
+            <div class="contact-card">
+                <h2>お問い合わせ</h2>
+                <p>ご質問やフィードバックがございましたら、お気軽にご連絡ください。</p>
+
+                <a href="mailto:weightsnap-support@allnew.work" class="contact-email">
+                    ✉️ メールを送る
+                </a>
+
+                <dl class="contact-details">
+                    <div class="contact-item">
+                        <dt>運営者</dt>
+                        <dd>合同会社AllNew</dd>
+                    </div>
+                    <div class="contact-item">
+                        <dt>代表者</dt>
+                        <dd>植野 正徳</dd>
+                    </div>
+                    <div class="contact-item">
+                        <dt>所在地</dt>
+                        <dd>〒107-0052<br>東京都港区赤坂8-4-14<br>青山タワープレイス8F</dd>
+                    </div>
+                    <div class="contact-item">
+                        <dt>法人番号</dt>
+                        <dd>8020003014806</dd>
+                    </div>
+                    <div class="contact-item">
+                        <dt>メール</dt>
+                        <dd>weightsnap-support@allnew.work</dd>
+                    </div>
+                    <div class="contact-item">
+                        <dt>受付時間</dt>
+                        <dd>10:00〜17:00（平日のみ）</dd>
+                    </div>
+                    <div class="contact-item">
+                        <dt>対応言語</dt>
+                        <dd>日本語・英語</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="lang-section">
+            <div class="lang-title">Language / 言語</div>
+            <div class="lang-grid">
+                <a href="../ja/#faq" class="lang-link active">日本語</a>
                 <a href="../en/" class="lang-link">English</a>
+                <a href="../fr/" class="lang-link">Français</a>
                 <a href="../es/" class="lang-link">Español</a>
                 <a href="../zh-Hans/" class="lang-link">简体中文</a>
                 <a href="../ko/" class="lang-link">한국어</a>
@@ -180,8 +1019,54 @@
         </div>
     </main>
 
-    <footer>
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#faq" onclick="switchTab('faq'); return false;">FAQ</a>
+            <a href="#privacy" onclick="switchTab('privacy'); return false;">プライバシー</a>
+            <a href="#terms" onclick="switchTab('terms'); return false;">利用規約</a>
+            <a href="#contact" onclick="switchTab('contact'); return false;">お問い合わせ</a>
+        </div>
         <p>© 2026 合同会社AllNew</p>
     </footer>
+
+    <script>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tab === tabId);
+            });
+            document.querySelectorAll('.section-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === tabId);
+            });
+            // Update URL hash without scrolling
+            history.pushState(null, null, '#' + tabId);
+            // Scroll to top of content
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        // Handle initial hash
+        if (window.location.hash) {
+            const tabId = window.location.hash.substring(1);
+            if (['faq', 'privacy', 'terms', 'contact'].includes(tabId)) {
+                switchTab(tabId);
+            }
+        }
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all others
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                // Toggle current
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+    </script>
 </body>
 </html>
