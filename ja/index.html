@@ -441,6 +441,15 @@
             gap: 16px;
         }
 
+        .contact-details-top {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            padding-top: 0;
+            padding-bottom: 16px;
+            border-top: none;
+            border-bottom: 1px solid var(--border);
+        }
+
         .contact-item {
             font-size: 0.85rem;
         }
@@ -967,15 +976,26 @@
                 <h2>お問い合わせ</h2>
                 <p>ご質問やフィードバックがございましたら、お気軽にご連絡ください。</p>
 
-                <a href="mailto:weightsnap-support@allnew.work" class="contact-email">
-                    ✉️ メールを送る
-                </a>
-
-                <dl class="contact-details">
+                <dl class="contact-details contact-details-top">
+                    <div class="contact-item">
+                        <dt>受付時間</dt>
+                        <dd>平日 11:00〜15:00</dd>
+                    </div>
+                    <div class="contact-item">
+                        <dt>対応言語</dt>
+                        <dd>日本語・英語</dd>
+                    </div>
                     <div class="contact-item">
                         <dt>運営者</dt>
                         <dd>合同会社AllNew</dd>
                     </div>
+                </dl>
+
+                <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20" class="contact-email">
+                    ✉️ メールを送る
+                </a>
+
+                <dl class="contact-details">
                     <div class="contact-item">
                         <dt>代表者</dt>
                         <dd>植野 正徳</dd>
@@ -983,22 +1003,6 @@
                     <div class="contact-item">
                         <dt>所在地</dt>
                         <dd>〒107-0052<br>東京都港区赤坂8-4-14<br>青山タワープレイス8F</dd>
-                    </div>
-                    <div class="contact-item">
-                        <dt>法人番号</dt>
-                        <dd>8020003014806</dd>
-                    </div>
-                    <div class="contact-item">
-                        <dt>メール</dt>
-                        <dd>weightsnap-support@allnew.work</dd>
-                    </div>
-                    <div class="contact-item">
-                        <dt>受付時間</dt>
-                        <dd>10:00〜17:00（平日のみ）</dd>
-                    </div>
-                    <div class="contact-item">
-                        <dt>対応言語</dt>
-                        <dd>日本語・英語</dd>
                     </div>
                 </dl>
             </div>
