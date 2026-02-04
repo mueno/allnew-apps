@@ -6,8 +6,17 @@
     <title>Terms of Service - WeightSnap</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #ffffff; color: #333; line-height: 1.8; }
-        .header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #eee; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #333;
+            line-height: 1.8;
+        }
+        .header {
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
         .header a { color: inherit; text-decoration: none; }
         .logo { font-size: 1.8rem; font-weight: 700; color: #1a1a1a; }
         .app-name { color: #666; margin-top: 4px; }
@@ -16,16 +25,24 @@
         .back-link:hover { text-decoration: underline; }
         h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
         .updated { color: #999; margin-bottom: 2rem; font-size: 0.9rem; }
+        .intro { margin-bottom: 2rem; color: #444; }
         .content { background: #f9f9f9; padding: 32px; border-radius: 12px; }
         h2 { font-size: 1.1rem; margin: 2rem 0 1rem; color: #1a1a1a; }
         h2:first-of-type { margin-top: 0; }
         p { margin-bottom: 1rem; color: #444; }
-        ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+        ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
         li { margin-bottom: 0.5rem; color: #444; }
         a { color: #007aff; }
         hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
         .company-info { color: #666; font-size: 0.9rem; }
-        footer { text-align: center; padding: 40px 20px; color: #999; font-size: 0.85rem; border-top: 1px solid #eee; }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+        }
+        .trademark { margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -37,73 +54,85 @@
     </header>
 
     <main class="container">
-        <a href="index.html" class="back-link">← Back to Support</a>
-        <h1>Terms of Service</h1>
-        <p class="updated">Last Updated: February 4, 2026</p>
+        <a href="index.html" class="back-link">&larr; Back to Support</a>
+        <h1>WeightSnap Terms of Service</h1>
+        <p class="updated">Last updated: 2026-MM-DD</p>
+
+        <p class="intro">These Terms of Service ("Terms") govern your use of the iOS application "WeightSnap" ("App") provided by AllNew LLC ("Company", "we", "us"). By using the App, you agree to these Terms.</p>
 
         <div class="content">
-            <h2>1. Acceptance of Terms</h2>
-            <p>These Terms of Service govern your use of "WeightSnap" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
+            <h2>1. About the App</h2>
+            <ol>
+                <li>The App captures a photo of your scale display, uses OCR to estimate a weight value, and&mdash;based on your permissions and settings&mdash;writes weight data to the Apple Health app (via HealthKit).</li>
+                <li>If you optionally grant read access, the App may also read your weight data from the Apple Health app to show changes since your previous measurement and to display trends (e.g., charts/graphs).</li>
+                <li>The App may include an optional sound-effect feature triggered by device motion (accelerometer). This feature is off by default and works only if you choose to enable it.</li>
+                <li>The App is not a medical device and does not provide medical advice, diagnosis, or treatment.</li>
+            </ol>
+            <p><strong>Supported Scales:</strong> Digital displays (7-segment LED, LCD). Analog scales are not supported.<br>
+            <strong>Weight Range:</strong> 30.0kg&ndash;200.0kg (66&ndash;440 lbs)<br>
+            <strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</p>
 
-            <h2>2. Agreement to Terms</h2>
-            <p>By downloading, installing, or using the App, you agree to be bound by these Terms. If you do not agree, do not use the App.</p>
+            <h2>2. OCR Confidence and Saving</h2>
+            <ol>
+                <li>The App determines a confidence level for the OCR result:
+                    <ul>
+                        <li><strong>High confidence:</strong> the App may write the weight value to Apple Health without additional confirmation.</li>
+                        <li><strong>Insufficient confidence:</strong> the App shows the detected value and writes to Apple Health only after you approve. If you do not approve, nothing is saved and you can retry scanning.</li>
+                    </ul>
+                </li>
+                <li>We do not guarantee perfect accuracy.</li>
+            </ol>
 
-            <h2>3. App Description and Compatibility</h2>
-            <p>The App captures weight scale displays using your camera, reads the numbers using AI-OCR technology, and records them to Apple HealthKit.</p>
-            <ul>
-                <li><strong>Supported Scales:</strong> Digital displays (7-segment LED, LCD). Analog scales are not supported.</li>
-                <li><strong>Weight Range:</strong> 30.0kg–200.0kg (66–440 lbs)</li>
-                <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</li>
-            </ul>
+            <h2>3. Correcting Entries in Apple Health</h2>
+            <p>Entries in Apple Health may not be editable and may only be deletable depending on Apple's system behavior. To correct a value, delete it in Apple Health and rescan in the App.</p>
 
-            <h2>4. Privacy Policy and HealthKit Data Handling</h2>
-            <p>Your use of the App is also governed by our <a href="privacy.html">Privacy Policy</a>.</p>
-            <p>Regarding data recorded in Apple HealthKit, we commit to the following:</p>
-            <ul>
-                <li>We do not use HealthKit data for advertising, marketing, or data mining purposes</li>
-                <li>We do not sell or provide HealthKit data to data brokers or third parties</li>
-                <li>We do not transmit or store HealthKit data on servers operated by us</li>
-            </ul>
+            <h2>4. Data Transmission &amp; Storage (Key Point)</h2>
+            <ol>
+                <li>We do not transmit or store your weight data, Apple Health read data, captured images, or motion data on servers operated by us.</li>
+                <li>If read access is granted, the App uses the read weight data only for on-device display and analysis (e.g., deltas and charts).</li>
+                <li>Captured images are used temporarily for OCR and are not transmitted or stored on servers operated by us.</li>
+                <li>If you enable the optional sound-effect feature, the App may temporarily access on-device motion signals to trigger sounds, but we do not transmit or store such motion data on servers operated by us.</li>
+                <li>We do not use any analytics SDK in the App.</li>
+            </ol>
 
-            <h2>5. Prohibited Activities</h2>
-            <ul>
-                <li>Using the App for purposes other than weight tracking</li>
-                <li>Violating any laws or third-party rights</li>
-                <li>Reverse engineering or decompiling the App</li>
-                <li>Recording third parties' weight data without consent</li>
-            </ul>
+            <h2>5. Purchases, Pricing, Refunds</h2>
+            <ol>
+                <li>The App may offer a limited number of free uses and then provide a one-time in-app purchase to unlock additional usage. The free-use limit, price, availability, and terms are as shown on the App Store listing and purchase screens, and may vary by region, taxes, and exchange rates.</li>
+                <li>We may change, suspend, or discontinue the free-use limit, pricing, or purchase terms at any time.</li>
+                <li>Payments, refunds, and restore purchases are handled by Apple under Apple's terms. We do not guarantee refunds.</li>
+            </ol>
 
-            <h2>6. Health Disclaimer</h2>
-            <p>This App is for general wellness and fitness purposes only. It is not a medical device. Consult a healthcare professional for medical advice.</p>
+            <h2>6. Prohibited Conduct</h2>
+            <p>You agree not to:</p>
+            <ol>
+                <li>Violate any laws or public order</li>
+                <li>Misuse, modify, decompile, or reverse engineer the App</li>
+                <li>Infringe upon the rights (intellectual property, reputation, privacy, etc.) of us or third parties</li>
+                <li>Use the App for fraudulent purposes or interfere with its operation</li>
+            </ol>
 
-            <h2>7. OCR Accuracy</h2>
-            <ul>
-                <li><strong>No Guarantee:</strong> OCR accuracy is not 100%.</li>
-                <li><strong>High-Confidence Auto-Save:</strong> If the App determines an OCR result is high confidence, it will be automatically saved to Apple HealthKit without user confirmation.</li>
-                <li><strong>Low-Confidence Confirmation:</strong> If the App determines an OCR result is low confidence, it will display the detected value and will record it to HealthKit only if you explicitly confirm that the value is correct. If you do not confirm, the value will not be saved and you will be prompted to retake and retry recognition.</li>
-                <li><strong>How to Correct Entries:</strong> Weight entries saved to HealthKit cannot be edited within the App (deletion only). To correct a value, delete the incorrect entry in the iOS Health app and then re-scan and save again using the App.</li>
-            </ul>
+            <h2>7. Intellectual Property</h2>
+            <p>All intellectual property rights in the App and related content belong to us or legitimate rights holders.</p>
 
-            <h2>8. Intellectual Property</h2>
-            <p>All intellectual property rights in the App belong to us or our licensors.</p>
+            <h2>8. Disclaimers &amp; Limitation of Liability</h2>
+            <ol>
+                <li>We do not warrant that the App will meet your specific needs, that OCR recognition will be error-free, or that it will be complete, accurate, or useful.</li>
+                <li>We are not responsible for damages arising from user device specifications, OS, or Apple services (Health, iCloud, etc.).</li>
+                <li>To the maximum extent permitted by law, our liability is limited to direct damages only, excluding indirect or consequential damages, except where caused by our willful misconduct or gross negligence. This limitation does not apply to the extent prohibited by mandatory consumer protection laws.</li>
+            </ol>
 
-            <h2>9. Disclaimer of Warranties</h2>
-            <p>The App is provided "as is" without warranties of any kind.</p>
+            <h2>9. Changes to Terms</h2>
+            <p>We may modify these Terms at any time. Changes become effective upon posting on our website. For significant changes, we will endeavor to provide reasonable advance notice.</p>
 
-            <h2>10. Pricing</h2>
-            <p>Free for the first 15 uses. After that, a one-time purchase is required. No subscription. Use "Restore Purchase" if you've previously purchased.</p>
+            <h2>10. Governing Law &amp; Jurisdiction</h2>
+            <p>These Terms are governed by the laws of Japan. Any dispute shall be subject to the exclusive jurisdiction of the Tokyo District Court as the court of first instance, to the extent permitted by applicable law.</p>
 
-            <h2>11. Changes to Terms</h2>
-            <p>We may modify these Terms at any time. Continued use constitutes acceptance.</p>
-
-            <h2>12. Governing Law</h2>
-            <p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p>
-
-            <h2>13. Translations</h2>
+            <h2>11. Translations</h2>
             <p>The Japanese version of these Terms of Service is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws or other applicable regulations in your country or region of residence.</p>
 
-            <h2>14. Contact</h2>
-            <p>Email: <a href="mailto:weightsnap-support@allnew.work">weightsnap-support@allnew.work</a></p>
+            <h2>12. Contact</h2>
+            <p>AllNew LLC<br>
+            Email: <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20">weightsnap-support@allnew.work</a></p>
 
             <hr>
             <p class="company-info">Operator: AllNew LLC</p>
@@ -111,8 +140,8 @@
     </main>
 
     <footer>
-        <p class="trademark">Apple, iPhone, iOS, and HealthKit are trademarks of Apple Inc., registered in the U.S. and other countries. Other company and product names may be trademarks of their respective owners.</p>
-        <p>© 2026 AllNew LLC</p>
+        <p class="trademark">Apple, iPhone, iOS, Apple Health, and HealthKit are trademarks of Apple Inc., registered in the U.S. and other countries. Other company and product names may be trademarks of their respective owners.</p>
+        <p>&copy; 2026 AllNew LLC</p>
     </footer>
 </body>
 </html>
