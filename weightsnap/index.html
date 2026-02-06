@@ -690,22 +690,22 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">認識精度が低い場合はどうなりますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-question">認識後の記録方法は？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>アプリが認識結果の精度（信頼度）を自動判定します。</p>
+                        <p><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、「記録する」ボタンを押すとヘルスケアに保存されます。</p>
                         <ul>
-                            <li><strong>高信頼度の場合:</strong> 確認画面なしで自動的にヘルスケアに記録されます</li>
-                            <li><strong>低信頼度の場合:</strong> 認識した値を確認画面で表示し、「この値で記録する」を選択した場合のみ保存されます。</li>
+                            <li><strong>通常:</strong> 確認画面で数値を確認し、「記録する」を選択すると保存されます</li>
+                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にヘルスケアに記録されます</li>
                         </ul>
-                        <p>低信頼度と判定された場合、ユーザーが明示的に許可しない限り記録されることはありません。</p>
+                        <p>認識精度が低い場合は、自動記録がオンでも確認画面が表示されます。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">認識結果が間違っていた場合は？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>保存前の場合:</strong> 認識精度が低い場合は、アプリが確認画面を表示します。正しくないと思ったら「記録しない」を選択し、再度撮影してください。</p>
-                        <p><strong>保存後の場合:</strong> 高信頼度の認識結果は確認なしで自動保存されます。誤った数値が保存された場合は、iOSの<strong>ヘルスケアアプリから削除</strong>してください。</p>
+                        <p><strong>保存前の場合:</strong> 確認画面で数値を確認できます。正しくないと思ったら「記録しない」を選択し、再度撮影してください。</p>
+                        <p><strong>保存後の場合:</strong> 誤った数値が保存された場合は、iOSの<strong>ヘルスケアアプリから削除</strong>してください。</p>
                         <p><strong>削除手順:</strong></p>
                         <ul>
                             <li>ヘルスケアアプリを開く</li>
@@ -759,7 +759,7 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">最終更新: 2026年2月4日</span>
+                <span class="updated-badge">最終更新: 2026年2月5日</span>
 
                 <div class="highlight-box">
                     <p><strong>重要:</strong> 本アプリは、ユーザーの体重データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</p>
@@ -797,44 +797,39 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>5. Apple Intelligence（オンデバイスAI処理）</h3>
-                    <p>本アプリは、対応端末・地域でユーザーが有効化した場合、Apple Intelligenceを使用してウェルネスメッセージを生成することがあります。処理は原則として端末内で行われますが、Appleの仕様によりPrivate Cloud Compute等で処理される場合があります。当社は、当該処理のために独自の外部サーバーへデータを送信・保存しません。</p>
-                </div>
-
-                <div class="legal-section">
-                    <h3>6. セキュリティ対策</h3>
+                    <h3>5. セキュリティ対策</h3>
                     <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>7. 子供のプライバシー</h3>
+                    <h3>6. 子供のプライバシー</h3>
                     <p>本アプリは13歳未満のお子様を対象としていません。アプリの機能利用において、当社は個人情報を収集しません。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>8. ユーザーの権利</h3>
+                    <h3>7. ユーザーの権利</h3>
                     <ul>
                         <li><strong>すべてのユーザー:</strong> HealthKitデータの管理・削除はiOSのApple Health（ヘルスケア）アプリから可能です。表示項目はiOSバージョンにより異なる場合があります。アプリ削除時、iOSがヘルスケアデータの削除を確認します。</li>
                         <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
                         <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
-                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。ただし、iCloud同期やApple Intelligence（Private Cloud Compute）等のAppleサービスは、ユーザー設定およびAppleの仕様に依存します。</li>
+                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。ただし、iCloud同期等のAppleサービスは、ユーザー設定およびAppleの仕様に依存します。</li>
                         <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
                         <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>9. お問い合わせについて</h3>
+                    <h3>8. お問い合わせについて</h3>
                     <p>ユーザーが当社へお問い合わせを行う場合、当社は返信対応のために、メールアドレスおよびお問い合わせ内容を取得・利用します。これらの情報はサポート対応の目的にのみ用い、法令に基づく場合を除き第三者に提供しません。対応完了後は合理的な期間で削除または匿名化します。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>10. 準拠法と管轄</h3>
+                    <h3>9. 準拠法と管轄</h3>
                     <p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>11. 多言語版について</h3>
+                    <h3>10. 多言語版について</h3>
                     <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
                 </div>
             </section>
@@ -849,7 +844,7 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">最終更新: 2026年2月4日</span>
+                <span class="updated-badge">最終更新: 2026年2月5日</span>
 
                 <div class="legal-section">
                     <h3>1. 規約の適用</h3>
@@ -902,8 +897,8 @@
                     <h3>7. OCR認識の精度について</h3>
                     <ul>
                         <li><strong>認識精度の非保証:</strong> OCR認識の精度は100%ではありません。</li>
-                        <li><strong>高信頼度結果の自動保存:</strong> 本アプリが認識結果を高信頼度と判定した場合、ユーザーの確認なしに自動でApple HealthKit（ヘルスケア）へ記録します。</li>
-                        <li><strong>低信頼度結果の確認フロー:</strong> 本アプリが認識結果を低信頼度と判定した場合、認識した値を画面に表示し、ユーザーが「この値で記録する」を許可した場合にのみ、ヘルスケアへ記録します。</li>
+                        <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
+                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
                         <li><strong>記録後の訂正方法:</strong> Apple HealthKitに記録された体重データは、本アプリから編集できません。誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。</li>
                     </ul>
                 </div>
@@ -943,16 +938,23 @@
             <section id="contact-ja" class="section">
                 <div class="contact-card">
                     <h2>お問い合わせ</h2>
-                    <p>ご質問やフィードバックがございましたら、お気軽にご連絡ください。</p>
+                    <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20" class="contact-email">✉️ メールを送る</a>
                     <dl class="contact-details contact-details-top">
                         <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
                         <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
-                        <div class="contact-item"><dt>運営者</dt><dd>合同会社AllNew</dd></div>
                     </dl>
-                    <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20" class="contact-email">✉️ メールを送る</a>
+
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.1rem;">特定商取引法に基づく表記</h3>
                     <dl class="contact-details">
-                        <div class="contact-item"><dt>代表者</dt><dd>植野 正徳</dd></div>
+                        <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
+                        <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
                         <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
+                        <div class="contact-item"><dt>お問い合わせ先</dt><dd>weightsnap-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+                        <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格（税込）</dd></div>
+                        <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
+                        <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
+                        <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセル、返金には応じられません</dd></div>
+                        <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
                     </dl>
                 </div>
             </section>
@@ -1081,7 +1083,7 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">Last Updated: February 4, 2026</span>
+                <span class="updated-badge">Last Updated: February 5, 2026</span>
 
                 <div class="highlight-box">
                     <p><strong>Important:</strong> This app does not send or store your weight data or captured images on our external servers. Weight data is stored on your device and in Apple HealthKit. Captured images are discarded immediately after OCR processing. Health data storage/sync behavior (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior.</p>
@@ -1119,44 +1121,39 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>5. Apple Intelligence (On-Device AI)</h3>
-                    <p>The App may use Apple Intelligence for wellness messages when enabled by the user on supported devices and regions. Processing typically occurs on-device; however, depending on Apple's system behavior, some requests may be processed via Private Cloud Compute. We do not transmit or store your data on our own external servers for this processing.</p>
+                    <h3>5. Security</h3>
+                    <p>We employ data minimization, on-device processing where possible, Keychain protection, and HealthKit encryption.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>6. Security</h3>
-                    <p>We employ data minimization, on-device processing where possible, Keychain protection, and HealthKit encryption. When Apple Intelligence is used, some requests may be processed via Private Cloud Compute depending on Apple's system behavior.</p>
-                </div>
-
-                <div class="legal-section">
-                    <h3>7. Children's Privacy</h3>
+                    <h3>6. Children's Privacy</h3>
                     <p>This App is not intended for children under 13. We do not collect personal information through the App's functionality.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>8. Your Rights</h3>
+                    <h3>7. Your Rights</h3>
                     <ul>
                         <li><strong>All Users:</strong> You can manage or delete HealthKit data through the iOS Apple Health app. Navigation paths may vary depending on your iOS version. When uninstalling, iOS asks whether to delete health data.</li>
                         <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
                         <li><strong>California (CCPA/CPRA):</strong> Right to know, delete, opt-out. We don't sell personal information.</li>
-                        <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country. Note that Apple services (iCloud sync, Apple Intelligence/Private Cloud Compute) may involve processing outside your region depending on your settings and Apple's system behavior.</li>
+                        <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country. Note that Apple services (such as iCloud sync) may involve processing outside your region depending on your settings and Apple's system behavior.</li>
                         <li><strong>South Korea (PIPA):</strong> Right to request processing suspension.</li>
                         <li><strong>Brazil (LGPD):</strong> Right to data portability.</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>9. When You Contact Us</h3>
+                    <h3>8. When You Contact Us</h3>
                     <p>If you contact us, we may receive your email address and the contents of your message to respond to your inquiry. We use this information solely for customer support and do not share it with third parties except as required by law.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>10. Governing Law</h3>
+                    <h3>9. Governing Law</h3>
                     <p>This policy is governed by Japanese law. Regional laws (GDPR, CCPA/CPRA, PIPL, LGPD, PIPA) apply to respective residents.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>11. Translations</h3>
+                    <h3>10. Translations</h3>
                     <p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws or other applicable regulations in your country or region of residence.</p>
                 </div>
             </section>
@@ -1171,7 +1168,7 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">Last Updated: February 4, 2026</span>
+                <span class="updated-badge">Last Updated: February 5, 2026</span>
 
                 <div class="legal-section">
                     <h3>1. Acceptance of Terms</h3>
@@ -1223,8 +1220,8 @@
                     <h3>7. OCR Accuracy</h3>
                     <ul>
                         <li><strong>No Guarantee:</strong> OCR accuracy is not 100%.</li>
-                        <li><strong>High-Confidence Auto-Save:</strong> If the App determines an OCR result is high confidence, it will be automatically saved to Apple HealthKit without user confirmation.</li>
-                        <li><strong>Low-Confidence Confirmation:</strong> If the App determines an OCR result is low confidence, it will display the detected value and will record it only if you explicitly confirm.</li>
+                        <li><strong>Default Behavior:</strong> OCR results are shown on a confirmation screen. The data is saved to Apple HealthKit only when you tap "Save".</li>
+                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
                         <li><strong>How to Correct Entries:</strong> Weight entries saved to HealthKit cannot be edited within the App. To correct a value, delete the incorrect entry in the iOS Health app and then re-scan.</li>
                     </ul>
                 </div>
@@ -1264,16 +1261,23 @@
             <section id="contact-en" class="section">
                 <div class="contact-card">
                     <h2>Contact Us</h2>
-                    <p>If you have any questions or feedback, please feel free to reach out.</p>
+                    <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20" class="contact-email">✉️ Send Email</a>
                     <dl class="contact-details contact-details-top">
                         <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
                         <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
-                        <div class="contact-item"><dt>Company</dt><dd>AllNew LLC</dd></div>
                     </dl>
-                    <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20" class="contact-email">✉️ Send Email</a>
+
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.1rem;">Legal Information (Specified Commercial Transactions Act)</h3>
                     <dl class="contact-details">
+                        <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
                         <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
                         <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+                        <div class="contact-item"><dt>Contact</dt><dd>weightsnap-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
+                        <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen (tax included)</dd></div>
+                        <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
+                        <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
+                        <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase</dd></div>
+                        <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
                     </dl>
                 </div>
             </section>
@@ -1297,7 +1301,7 @@
             if (hash) {
                 const parts = hash.split('-');
                 if (parts.length >= 2) {
-                    const possibleLang = parts[0] === 'zh' ? 'zh-Hans' : parts[0];
+                    const possibleLang = parts[0];
                     if (langData[possibleLang]) return possibleLang;
                 }
             }
@@ -1397,9 +1401,7 @@
                 const parts = hash.split('-');
                 if (parts.length >= 2) {
                     const possibleLang = parts[parts.length - 1];
-                    if (parts[0] === 'zh') {
-                        switchLanguage('zh-Hans');
-                    } else if (langData[possibleLang]) {
+                    if (langData[possibleLang]) {
                         if (currentLang !== possibleLang) {
                             switchLanguage(possibleLang);
                         }
