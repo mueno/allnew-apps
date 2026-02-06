@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeightSnap Support</title>
     <meta name="description" content="WeightSnap - AI-powered weight tracking app. FAQ, Privacy Policy, Terms of Service.">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="bingbot" content="noindex, nofollow, noarchive">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
     <style>
         :root {
             --bg-primary: #fafafa;
@@ -48,6 +56,11 @@
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            /* Copy Protection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         /* Sticky Header */
@@ -464,6 +477,59 @@
 
         .legal-section a:hover {
             text-decoration: underline;
+        }
+
+        /* Commercial Accordion */
+        .commercial-accordion {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .commercial-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .commercial-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .commercial-toggle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .commercial-accordion.open .commercial-toggle {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .commercial-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .commercial-accordion.open .commercial-content {
+            max-height: 600px;
+            padding: 0 24px 24px;
         }
 
         /* Contact Card */
@@ -911,25 +977,31 @@
 
             <!-- Commercial Law -->
             <section id="commercial-ja" class="section">
-                <div class="section-header">
-                    <div class="section-icon">🏢</div>
-                    <div>
-                        <div class="section-title">特定商取引法に基づく表記</div>
-                        <div class="section-subtitle">販売事業者情報</div>
+                <div class="commercial-accordion">
+                    <div class="commercial-header" onclick="toggleCommercial(this)">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">特定商取引法に基づく表記</div>
+                                <div class="section-subtitle">販売事業者情報</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
+                            <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
+                            <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
+                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>weightsnap-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+                            <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格（税込）</dd></div>
+                            <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
+                            <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
+                            <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセル、返金には応じられません</dd></div>
+                            <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
+                        </dl>
                     </div>
                 </div>
-
-                <dl class="contact-details" style="margin-top: 0; padding-top: 0; border-top: none;">
-                    <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
-                    <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
-                    <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
-                    <div class="contact-item"><dt>お問い合わせ先</dt><dd>weightsnap-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
-                    <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格（税込）</dd></div>
-                    <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
-                    <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
-                    <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセル、返金には応じられません</dd></div>
-                    <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
-                </dl>
             </section>
 
             <!-- Contact -->
@@ -1218,25 +1290,31 @@
 
             <!-- Commercial Law -->
             <section id="commercial-en" class="section">
-                <div class="section-header">
-                    <div class="section-icon">🏢</div>
-                    <div>
-                        <div class="section-title">Seller Information</div>
-                        <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+                <div class="commercial-accordion">
+                    <div class="commercial-header" onclick="toggleCommercial(this)">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">Seller Information</div>
+                                <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
+                            <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
+                            <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+                            <div class="contact-item"><dt>Contact</dt><dd>weightsnap-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
+                            <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen (tax included)</dd></div>
+                            <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
+                            <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
+                            <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase</dd></div>
+                            <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
+                        </dl>
                     </div>
                 </div>
-
-                <dl class="contact-details" style="margin-top: 0; padding-top: 0; border-top: none;">
-                    <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
-                    <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
-                    <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
-                    <div class="contact-item"><dt>Contact</dt><dd>weightsnap-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
-                    <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen (tax included)</dd></div>
-                    <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
-                    <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
-                    <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase</dd></div>
-                    <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
-                </dl>
             </section>
 
             <!-- Contact -->
@@ -1359,8 +1437,25 @@
             });
         });
 
+        // Commercial Accordion
+        function toggleCommercial(header) {
+            const accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        }
+
+        // Auto-expand commercial section if accessed via anchor
+        function checkCommercialAnchor() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(acc => {
+                    acc.classList.add('open');
+                });
+            }
+        }
+
         // Initialize
         switchLanguage(currentLang);
+        checkCommercialAnchor();
 
         // Handle hash changes for section navigation
         window.addEventListener('hashchange', () => {
@@ -1378,6 +1473,20 @@
                 }
             }
         });
+
+        // Copy Protection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', e => e.preventDefault());
     </script>
 
     <!-- Trademark Attribution Footer -->
