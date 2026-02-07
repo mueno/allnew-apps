@@ -12,16 +12,18 @@
             --bg: #f5f5f7;
             --bg-card: #ffffff;
             --bg-glass: rgba(245, 245, 247, 0.72);
+            --bg-dark-card: #1d1d1f;
             --text: #1d1d1f;
             --text-secondary: #6e6e73;
             --text-tertiary: #86868b;
-            --accent: #007aff;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
             --border: rgba(0,0,0,0.06);
-            --shadow: 0 2px 16px rgba(0,0,0,0.06);
-            --shadow-hover: 0 12px 40px rgba(0,0,0,0.12);
-            --badge-camera: #007AFF;
-            --badge-voice: #FF8C00;
-            --badge-sound: #AF52DE;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --shadow-hover: 0 12px 48px rgba(0,0,0,0.12);
+            --color-camera: #007AFF;
+            --color-voice: #FF8C00;
+            --color-sound: #AF52DE;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -29,150 +31,381 @@
                 --bg: #000000;
                 --bg-card: #1c1c1e;
                 --bg-glass: rgba(28, 28, 30, 0.72);
+                --bg-dark-card: #000000;
                 --text: #f5f5f7;
                 --text-secondary: #a1a1a6;
                 --text-tertiary: #6e6e73;
-                --accent: #0a84ff;
+                --accent: #2997ff;
+                --accent-hover: #4daeff;
                 --border: rgba(255,255,255,0.08);
-                --shadow: 0 2px 16px rgba(0,0,0,0.3);
-                --shadow-hover: 0 12px 40px rgba(0,0,0,0.5);
+                --shadow: 0 4px 24px rgba(0,0,0,0.3);
+                --shadow-hover: 0 12px 48px rgba(0,0,0,0.5);
             }
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', 'Segoe UI', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Hiragino Sans', 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--text);
             -webkit-font-smoothing: antialiased;
-            line-height: 1.6;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.47059;
         }
 
-        /* ======== Hero Section ======== */
-        .hero {
-            text-align: center;
-            padding: 72px 24px 48px;
-            background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg) 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(0,122,255,0.06) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .hero-logo {
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            color: var(--text);
-            margin-bottom: 12px;
-            position: relative;
-        }
-
-        .hero-subtitle {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-            max-width: 400px;
-            margin: 0 auto 24px;
-            line-height: 1.7;
-        }
-
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-top: 20px;
-        }
-
-        .hero-stat {
-            text-align: center;
-        }
-
-        .hero-stat-num {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--accent);
-            letter-spacing: -0.03em;
-        }
-
-        .hero-stat-label {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* ======== Category Tabs (sticky nav) ======== */
-        .category-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            padding: 14px 20px;
+        /* ==================== Global Nav ==================== */
+        .global-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: var(--bg-glass);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
             border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 50;
+        }
+
+        .global-nav-inner {
+            max-width: 1024px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+            height: 48px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-logo img {
+            height: 18px;
+            width: auto;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .nav-logo img {
+                filter: brightness(0) invert(1);
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 980px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text);
+            background: var(--border);
+        }
+
+        .nav-link.active {
+            font-weight: 600;
+        }
+
+        /* ==================== Hero ==================== */
+        .hero {
+            text-align: center;
+            padding: 80px 24px 60px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .hero-deco {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .hero-deco-1 {
+            width: 500px;
+            height: 500px;
+            background: #007AFF;
+            top: -200px;
+            left: -100px;
+        }
+
+        .hero-deco-2 {
+            width: 400px;
+            height: 400px;
+            background: #FF8C00;
+            top: -100px;
+            right: -80px;
+        }
+
+        .hero-deco-3 {
+            width: 300px;
+            height: 300px;
+            background: #AF52DE;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+        }
+
+        .hero-title {
+            font-size: clamp(2.4rem, 6vw, 3.8rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.08;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(90deg, #007AFF, #AF52DE, #FF8C00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
+        }
+
+        .hero-chips {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
-        .tab-btn {
-            padding: 8px 20px;
-            border: none;
-            background: transparent;
-            color: var(--text-tertiary);
+        .hero-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 980px;
             font-size: 0.85rem;
             font-weight: 500;
-            border-radius: 980px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-family: inherit;
+            color: var(--text-secondary);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
         }
 
-        .tab-btn:hover {
-            background: var(--border);
-            color: var(--text);
+        .hero-chip-icon {
+            font-size: 1rem;
         }
 
-        .tab-btn.active {
-            background: var(--text);
-            color: var(--bg-card);
+        /* ==================== Section ==================== */
+        .section {
+            padding: 60px 0;
         }
 
-        /* ======== Apps Grid (Bento-style) ======== */
-        .apps-container {
-            max-width: 1200px;
+        .section-header {
+            max-width: 1024px;
             margin: 0 auto;
-            padding: 32px 20px 120px;
+            padding: 0 22px 24px;
         }
 
-        .apps-grid {
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* ==================== Featured Banner ==================== */
+        .featured-banner {
+            max-width: 1024px;
+            margin: 0 auto 0;
+            padding: 0 22px;
+        }
+
+        .featured-card {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            background: linear-gradient(135deg, #1d1d1f 0%, #2c2c2e 100%);
+            border-radius: 28px;
+            overflow: hidden;
+            min-height: 440px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
-        /* ======== App Card (Glassmorphism) ======== */
-        .app-card {
+        .featured-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .featured-text {
+            padding: 48px;
+            color: #f5f5f7;
+        }
+
+        .featured-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #a1a1a6;
+            margin-bottom: 12px;
+        }
+
+        .featured-name {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 8px;
+            line-height: 1.1;
+        }
+
+        .featured-ja-name {
+            font-size: 1rem;
+            color: #a1a1a6;
+            margin-bottom: 16px;
+        }
+
+        .featured-desc {
+            font-size: 1rem;
+            color: #d1d1d6;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .featured-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .featured-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 980px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .featured-cta:hover {
+            background: var(--accent-hover);
+        }
+
+        .featured-cta-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .featured-cta-secondary:hover {
+            opacity: 0.7;
+        }
+
+        .featured-cta-secondary::after {
+            content: '\203A';
+            font-size: 1.2rem;
+        }
+
+        .featured-promo {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 32px 32px 0;
+            height: 100%;
+        }
+
+        .featured-promo img {
+            max-width: 260px;
+            width: 100%;
+            height: auto;
+            border-radius: 20px 20px 0 0;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 32px rgba(0,0,0,0.3));
+        }
+
+        /* ==================== Horizontal Shelf ==================== */
+        .shelf-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 22px 20px;
+            max-width: 100%;
+            scrollbar-width: none;
+        }
+
+        .shelf-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Shelf centered container */
+        .shelf-inner {
+            display: flex;
+            gap: 20px;
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 22px 20px;
+        }
+
+        /* ==================== Product Card (Shelf Item) ==================== */
+        .product-card {
+            flex: 0 0 310px;
+            scroll-snap-align: start;
             background: var(--bg-card);
             border-radius: 24px;
             overflow: hidden;
@@ -182,583 +415,885 @@
             display: flex;
             flex-direction: column;
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
         }
 
-        .app-card.visible {
+        .product-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .app-card:hover {
+        .product-card:hover {
             box-shadow: var(--shadow-hover);
-            transform: translateY(-6px);
-            border-color: rgba(0,122,255,0.15);
+            transform: translateY(-4px) scale(1.01);
         }
 
-        .app-card.visible:hover {
-            transform: translateY(-6px);
+        .product-card.visible:hover {
+            transform: translateY(-4px) scale(1.01);
         }
 
-        .app-card-header {
+        .product-card-inner {
+            padding: 28px 24px 0;
+        }
+
+        .product-card-top {
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 24px 24px 0;
+            margin-bottom: 12px;
         }
 
-        .app-card-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        .product-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             flex-shrink: 0;
-            transition: transform 0.3s ease;
         }
 
-        .app-card:hover .app-card-icon {
-            transform: scale(1.05);
-        }
-
-        .app-card-info {
+        .product-name-block {
             flex: 1;
             min-width: 0;
         }
 
-        .app-card-name {
-            font-size: 1.2rem;
+        .product-name {
+            font-size: 1.15rem;
             font-weight: 700;
             color: var(--text);
-            line-height: 1.3;
+            line-height: 1.2;
             letter-spacing: -0.02em;
         }
 
-        .app-card-ja-name {
-            font-size: 0.8rem;
+        .product-ja {
+            font-size: 0.78rem;
             color: var(--text-tertiary);
-            font-weight: 400;
+            margin-top: 2px;
         }
 
-        .app-card-badge {
+        .product-tag {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             padding: 3px 10px;
             border-radius: 980px;
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             font-weight: 600;
             color: #ffffff;
             margin-top: 6px;
             letter-spacing: 0.02em;
         }
 
-        .badge-camera { background: var(--badge-camera); }
-        .badge-voice { background: var(--badge-voice); }
-        .badge-sound { background: var(--badge-sound); }
+        .tag-camera { background: var(--color-camera); }
+        .tag-voice { background: var(--color-voice); }
+        .tag-sound { background: var(--color-sound); }
 
-        .app-card-desc {
-            padding: 14px 24px 0;
-            font-size: 0.9rem;
+        .product-desc {
+            font-size: 0.88rem;
             color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        .app-card-promo {
-            flex: 1;
-            padding: 20px 24px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .app-card-promo img {
-            width: 100%;
-            max-width: 280px;
-            height: auto;
-            border-radius: 16px;
-            object-fit: contain;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-        }
-
-        .app-card:hover .app-card-promo img {
-            transform: scale(1.02);
-        }
-
-        .app-card-actions {
-            padding: 0 24px 24px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .app-store-btn {
-            height: 36px;
-            transition: opacity 0.2s;
-        }
-
-        .app-store-btn:hover {
-            opacity: 0.8;
-        }
-
-        .more-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 10px 22px;
-            background: var(--bg);
-            color: var(--accent);
-            text-decoration: none;
-            border-radius: 980px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.25s ease;
-            border: 1px solid var(--border);
-        }
-
-        .more-link:hover {
-            background: var(--accent);
-            color: #ffffff;
-            border-color: var(--accent);
-        }
-
-        .more-link::after {
-            content: '\2192';
-            font-size: 0.9rem;
-            transition: transform 0.2s ease;
-        }
-
-        .more-link:hover::after {
-            transform: translateX(3px);
-        }
-
-        /* ======== Footer ======== */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            text-align: center;
-            padding: 12px 20px;
-            background: var(--bg-glass);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-top: 1px solid var(--border);
-            z-index: 20;
-        }
-
-        .footer-links {
+            line-height: 1.6;
             margin-bottom: 4px;
         }
 
-        .footer-links a {
-            color: var(--text-tertiary);
+        .product-promo {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 16px 16px 0;
+            overflow: hidden;
+        }
+
+        .product-promo img {
+            width: 100%;
+            max-width: 240px;
+            height: auto;
+            border-radius: 16px 16px 0 0;
+            object-fit: contain;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-promo img {
+            transform: scale(1.03) translateY(-4px);
+        }
+
+        .product-actions {
+            padding: 16px 24px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
             text-decoration: none;
-            font-size: 0.72rem;
-            margin: 0 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .product-link:hover {
+            opacity: 0.7;
+        }
+
+        .product-link::after {
+            content: '\203A';
+            font-size: 1.1rem;
+        }
+
+        .app-store-badge {
+            height: 32px;
+            transition: opacity 0.2s;
+        }
+
+        .app-store-badge:hover {
+            opacity: 0.8;
+        }
+
+        /* ==================== Dark Feature Cards ==================== */
+        .dark-feature-section {
+            background: var(--bg-dark-card);
+            padding: 80px 0;
+            margin: 0;
+        }
+
+        .dark-feature-section .section-title {
+            color: #f5f5f7;
+        }
+
+        .dark-feature-section .section-subtitle {
+            color: #a1a1a6;
+        }
+
+        .dark-grid {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 22px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .dark-card {
+            background: #2c2c2e;
+            border-radius: 24px;
+            overflow: hidden;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            min-height: 360px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .dark-card {
+                background: #1c1c1e;
+                border: 1px solid rgba(255,255,255,0.06);
+            }
+        }
+
+        .dark-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dark-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .dark-card.visible:hover {
+            transform: translateY(-4px);
+        }
+
+        .dark-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 13px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .dark-card-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f5f5f7;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .dark-card-ja {
+            font-size: 0.82rem;
+            color: #a1a1a6;
+            margin-bottom: 12px;
+        }
+
+        .dark-card-desc {
+            font-size: 0.9rem;
+            color: #d1d1d6;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .dark-card-promo {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .dark-card-promo img {
+            max-width: 200px;
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 16px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .dark-card:hover .dark-card-promo img {
+            transform: scale(1.04);
+        }
+
+        .dark-card-actions {
+            margin-top: 16px;
+        }
+
+        .dark-card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .dark-card-link:hover {
+            opacity: 0.7;
+        }
+
+        .dark-card-link::after {
+            content: '\203A';
+            font-size: 1.1rem;
+        }
+
+        .dark-card .product-tag {
+            display: inline-flex;
+            margin-bottom: 12px;
+        }
+
+        /* ==================== Feature Highlights ==================== */
+        .highlights {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 22px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 0;
+        }
+
+        .highlight-card {
+            text-align: center;
+            padding: 40px 24px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .highlight-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight-icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+
+        .highlight-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+
+        .highlight-desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ==================== Footer ==================== */
+        .footer {
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 32px 22px;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.78rem;
             transition: color 0.2s;
         }
 
         .footer-links a:hover {
-            color: var(--accent);
+            color: var(--text);
         }
 
-        .footer p {
+        .footer-copy {
+            font-size: 0.75rem;
             color: var(--text-tertiary);
-            font-size: 0.68rem;
         }
 
-        .footer .trademark {
-            font-size: 0.6rem;
+        .footer-trademark {
+            font-size: 0.68rem;
             color: var(--text-tertiary);
             opacity: 0.6;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
-        /* ======== Responsive ======== */
-        @media (max-width: 700px) {
-            .apps-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
+        /* ==================== Responsive ==================== */
+        @media (max-width: 768px) {
+            .global-nav-inner {
+                padding: 0 16px;
+            }
+
+            .nav-links {
+                gap: 0;
+            }
+
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.7rem;
             }
 
             .hero {
-                padding: 48px 16px 32px;
+                padding: 60px 16px 40px;
             }
 
-            .hero-logo {
-                font-size: 2.2rem;
+            .hero-chips {
+                gap: 8px;
             }
 
-            .hero-subtitle {
-                font-size: 1rem;
+            .hero-chip {
+                padding: 8px 14px;
+                font-size: 0.78rem;
             }
 
-            .hero-stats {
-                gap: 20px;
+            .featured-card {
+                grid-template-columns: 1fr;
+                min-height: auto;
             }
 
-            .hero-stat-num {
+            .featured-text {
+                padding: 32px 24px;
+            }
+
+            .featured-name {
+                font-size: 1.8rem;
+            }
+
+            .featured-promo {
+                padding: 0 24px;
+                justify-content: center;
+                align-items: flex-end;
+            }
+
+            .featured-promo img {
+                max-width: 200px;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .section-header {
+                padding: 0 16px 20px;
+            }
+
+            .section-title {
                 font-size: 1.4rem;
             }
 
-            .apps-container {
-                padding: 20px 12px 120px;
+            .shelf-scroll {
+                padding: 0 16px 16px;
             }
 
-            .app-card-header {
-                padding: 20px 20px 0;
+            .product-card {
+                flex: 0 0 270px;
             }
 
-            .app-card-desc {
-                padding: 12px 20px 0;
+            .dark-grid {
+                grid-template-columns: 1fr;
+                padding: 0 16px;
             }
 
-            .app-card-promo {
-                padding: 16px 20px;
+            .dark-card {
+                min-height: 280px;
             }
 
-            .app-card-promo img {
-                max-width: 240px;
+            .highlights {
+                grid-template-columns: 1fr;
+                padding: 0 16px;
             }
 
-            .app-card-actions {
-                padding: 0 20px 20px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .apps-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .footer {
+                padding: 24px 16px;
             }
         }
 
-        /* ======== App Card Hidden (for filter) ======== */
-        .app-card.hidden {
-            display: none;
+        @media (max-width: 480px) {
+            .product-card {
+                flex: 0 0 250px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
         }
 
-        /* ======== Accessibility ======== */
+        /* ==================== Accessibility ==================== */
         @media (prefers-reduced-motion: reduce) {
-            .app-card {
+            .product-card,
+            .featured-card,
+            .dark-card,
+            .highlight-card {
                 opacity: 1;
                 transform: none;
                 transition: box-shadow 0.2s ease;
             }
-            .app-card:hover {
+
+            .product-card:hover,
+            .dark-card:hover,
+            .featured-card:hover {
                 transform: none;
             }
-            .app-card.visible {
+
+            .product-card.visible:hover,
+            .dark-card.visible:hover {
                 transform: none;
             }
-            .app-card.visible:hover {
-                transform: none;
-            }
-            .hero::before {
+
+            .hero-deco {
                 display: none;
             }
         }
 
-        /* Focus visible for keyboard nav */
-        .tab-btn:focus-visible,
-        .more-link:focus-visible,
-        .app-store-btn:focus-visible {
+        .nav-link:focus-visible,
+        .product-link:focus-visible,
+        .featured-cta:focus-visible,
+        .dark-card-link:focus-visible {
             outline: 2px solid var(--accent);
             outline-offset: 2px;
         }
     </style>
 </head>
 <body>
+    <!-- Global Navigation -->
+    <nav class="global-nav" role="navigation" aria-label="Main navigation">
+        <div class="global-nav-inner">
+            <a href="#" class="nav-logo"><img src="allnew-logo.png" alt="AllNew" /></a>
+            <div class="nav-links">
+                <button class="nav-link active" data-filter="all">すべて</button>
+                <button class="nav-link" data-filter="camera">カメラ認識</button>
+                <button class="nav-link" data-filter="voice">音声入力</button>
+                <button class="nav-link" data-filter="sound">音検出</button>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero -->
-    <section class="hero">
-        <h1 class="hero-logo">AllNew Apps</h1>
-        <p class="hero-subtitle">あなたの健康を、もっとシンプルに。<br>撮る・話す・聴く、3つの方法で健康データを記録。</p>
-        <div class="hero-stats">
-            <div class="hero-stat">
-                <div class="hero-stat-num">10</div>
-                <div class="hero-stat-label">Apps</div>
-            </div>
-            <div class="hero-stat">
-                <div class="hero-stat-num">3</div>
-                <div class="hero-stat-label">Input Methods</div>
-            </div>
-            <div class="hero-stat">
-                <div class="hero-stat-num">0</div>
-                <div class="hero-stat-label">Data Sent</div>
+    <section class="hero" id="hero">
+        <div class="hero-deco hero-deco-1"></div>
+        <div class="hero-deco hero-deco-2"></div>
+        <div class="hero-deco hero-deco-3"></div>
+        <div class="hero-content">
+            <p class="hero-eyebrow">Health & Wellness</p>
+            <h1 class="hero-title">
+                健康を、<span class="gradient-text">もっとシンプルに。</span>
+            </h1>
+            <p class="hero-subtitle">撮る・話す・聴く。<br>3つの方法で、毎日の健康データをかんたんに記録。</p>
+            <div class="hero-chips">
+                <div class="hero-chip">
+                    <span class="hero-chip-icon">📷</span>
+                    カメラで撮る
+                </div>
+                <div class="hero-chip">
+                    <span class="hero-chip-icon">🎤</span>
+                    声で伝える
+                </div>
+                <div class="hero-chip">
+                    <span class="hero-chip-icon">🔊</span>
+                    音を聴く
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Category Tabs -->
-    <nav class="category-tabs" role="tablist" aria-label="Category filter">
-        <button class="tab-btn active" data-filter="all" role="tab" aria-selected="true">すべて</button>
-        <button class="tab-btn" data-filter="camera" role="tab" aria-selected="false">📷 カメラ認識</button>
-        <button class="tab-btn" data-filter="voice" role="tab" aria-selected="false">🎤 音声入力</button>
-        <button class="tab-btn" data-filter="sound" role="tab" aria-selected="false">🔊 音検出</button>
-    </nav>
-
-    <!-- Apps -->
-    <main class="apps-container">
-        <div class="apps-grid" id="appsGrid">
-
-            <!-- WeightSnap -->
-            <div class="app-card" data-category="camera">
-                <div class="app-card-header">
-                    <img src="weightsnap-icon.png" alt="WeightSnap" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">WeightSnap</div>
-                        <div class="app-card-ja-name">体重</div>
-                        <span class="app-card-badge badge-camera">📷 Camera + OCR</span>
+    <!-- Featured App: WeightSnap -->
+    <section class="section" data-section="camera">
+        <div class="featured-banner">
+            <div class="featured-card" data-category="camera">
+                <div class="featured-text">
+                    <p class="featured-eyebrow">New App</p>
+                    <h2 class="featured-name">WeightSnap</h2>
+                    <p class="featured-ja-name">体重</p>
+                    <p class="featured-desc">体重計のディスプレイをカメラで撮るだけ。AIが数値を自動認識して Apple HealthKit に記録します。</p>
+                    <div class="featured-actions">
+                        <a href="https://apps.apple.com/app/weightsnap/id6743864029" class="featured-cta" aria-label="WeightSnapをApp Storeでダウンロード">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.15 1.67C11.79.89 12.21.01 12.1-.01c-.91.04-2.01.61-2.66 1.38-.59.68-1.1 1.59-.96 2.52 1.01.08 2.05-.52 2.67-1.22zM12.09 3.89c-1.48-.09-2.74.84-3.44.84-.71 0-1.8-.82-2.97-.8-1.53.03-2.94.89-3.72 2.27-1.59 2.75-.41 6.83 1.14 9.07.76 1.1 1.66 2.34 2.85 2.29 1.14-.04 1.57-.74 2.95-.74 1.37 0 1.76.74 2.96.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.27 1.23-2.5 1.25-2.56-.03-.01-2.4-.92-2.42-3.65-.02-2.29 1.87-3.38 1.95-3.44-1.06-1.57-2.72-1.74-3.31-1.77z"/></svg>
+                            App Store
+                        </a>
+                        <a href="weightsnap/?lang=ja" class="featured-cta-secondary" aria-label="WeightSnapの詳細">さらに詳しく</a>
                     </div>
                 </div>
-                <p class="app-card-desc">体重計のディスプレイをカメラで撮るだけ。AIが数値を自動認識してApple HealthKitに記録します。</p>
-                <div class="app-card-promo">
+                <div class="featured-promo">
                     <img src="weightsnap-promo.png" alt="WeightSnap - 体重計をカメラで撮影して記録" loading="lazy">
                 </div>
-                <div class="app-card-actions">
-                    <a href="https://apps.apple.com/app/weightsnap/id6743864029" aria-label="WeightSnapをApp Storeでダウンロード">
-                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ja-jp?size=250x83" alt="Download on the App Store" class="app-store-btn">
-                    </a>
-                    <a href="weightsnap/?lang=ja" class="more-link" aria-label="WeightSnapの詳細">More</a>
-                </div>
             </div>
+        </div>
+    </section>
 
+    <!-- Camera Recognition Apps (Shelf) -->
+    <section class="section" id="section-camera" data-section="camera">
+        <div class="section-header">
+            <h2 class="section-title">📷 カメラ認識</h2>
+            <p class="section-subtitle">計測器のディスプレイを撮影するだけで、AIが数値を自動認識。</p>
+        </div>
+        <div class="shelf-scroll">
             <!-- ThermoSnap -->
-            <div class="app-card" data-category="camera">
-                <div class="app-card-header">
-                    <img src="thermosnap-icon.png" alt="ThermoSnap" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">ThermoSnap</div>
-                        <div class="app-card-ja-name">体温</div>
-                        <span class="app-card-badge badge-camera">📷 Camera + OCR</span>
+            <div class="product-card" data-category="camera">
+                <div class="product-card-inner">
+                    <div class="product-card-top">
+                        <img src="thermosnap-icon.png" alt="ThermoSnap" class="product-icon">
+                        <div class="product-name-block">
+                            <div class="product-name">ThermoSnap</div>
+                            <div class="product-ja">体温</div>
+                        </div>
                     </div>
+                    <span class="product-tag tag-camera">Camera + OCR</span>
+                    <p class="product-desc">体温計のディスプレイをカメラで撮るだけ。体温を自動認識して記録。</p>
                 </div>
-                <p class="app-card-desc">体温計のディスプレイをカメラで撮るだけ。AIが数値を自動認識してApple HealthKitに記録します。</p>
-                <div class="app-card-promo">
-                    <img src="thermosnap-promo.png" alt="ThermoSnap - 体温計をカメラで撮影して記録" loading="lazy">
+                <div class="product-promo">
+                    <img src="thermosnap-promo.png" alt="ThermoSnap" loading="lazy">
                 </div>
-                <div class="app-card-actions">
-                    <a href="thermosnap/?lang=ja" class="more-link" aria-label="ThermoSnapの詳細">More</a>
+                <div class="product-actions">
+                    <a href="thermosnap/?lang=ja" class="product-link" aria-label="ThermoSnapの詳細">さらに詳しく</a>
                 </div>
             </div>
 
             <!-- BPSnap -->
-            <div class="app-card" data-category="camera">
-                <div class="app-card-header">
-                    <img src="bpsnap-icon.png" alt="BPSnap" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">BPSnap</div>
-                        <div class="app-card-ja-name">血圧</div>
-                        <span class="app-card-badge badge-camera">📷 Camera + OCR</span>
+            <div class="product-card" data-category="camera">
+                <div class="product-card-inner">
+                    <div class="product-card-top">
+                        <img src="bpsnap-icon.png" alt="BPSnap" class="product-icon">
+                        <div class="product-name-block">
+                            <div class="product-name">BPSnap</div>
+                            <div class="product-ja">血圧</div>
+                        </div>
                     </div>
+                    <span class="product-tag tag-camera">Camera + OCR</span>
+                    <p class="product-desc">血圧計をカメラで撮るだけ。最高・最低血圧と脈拍を自動認識。</p>
                 </div>
-                <p class="app-card-desc">血圧計のディスプレイをカメラで撮るだけ。最高・最低血圧と脈拍をAIが自動認識してApple HealthKitに記録します。</p>
-                <div class="app-card-promo">
-                    <img src="bpsnap-promo.png" alt="BPSnap - 血圧計をカメラで撮影して記録" loading="lazy">
+                <div class="product-promo">
+                    <img src="bpsnap-promo.png" alt="BPSnap" loading="lazy">
                 </div>
-                <div class="app-card-actions">
-                    <a href="bloodpressuresnap/?lang=ja" class="more-link" aria-label="BPSnapの詳細">More</a>
+                <div class="product-actions">
+                    <a href="bloodpressuresnap/?lang=ja" class="product-link" aria-label="BPSnapの詳細">さらに詳しく</a>
                 </div>
             </div>
 
             <!-- GlucoSnap -->
-            <div class="app-card" data-category="camera">
-                <div class="app-card-header">
-                    <img src="glucosnap-icon.png" alt="GlucoSnap" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">GlucoSnap</div>
-                        <div class="app-card-ja-name">血糖値</div>
-                        <span class="app-card-badge badge-camera">📷 Camera + OCR</span>
+            <div class="product-card" data-category="camera">
+                <div class="product-card-inner">
+                    <div class="product-card-top">
+                        <img src="glucosnap-icon.png" alt="GlucoSnap" class="product-icon">
+                        <div class="product-name-block">
+                            <div class="product-name">GlucoSnap</div>
+                            <div class="product-ja">血糖値</div>
+                        </div>
                     </div>
+                    <span class="product-tag tag-camera">Camera + OCR</span>
+                    <p class="product-desc">血糖値計をカメラで撮るだけ。AIが数値を自動認識して記録。</p>
                 </div>
-                <p class="app-card-desc">血糖値計のディスプレイをカメラで撮るだけ。AIが数値を自動認識してApple HealthKitに記録します。</p>
-                <div class="app-card-promo">
-                    <img src="glucosnap-promo.png" alt="GlucoSnap - 血糖値計をカメラで撮影して記録" loading="lazy">
+                <div class="product-promo">
+                    <img src="glucosnap-promo.png" alt="GlucoSnap" loading="lazy">
                 </div>
-                <div class="app-card-actions">
-                    <a href="glucosnap/?lang=ja" class="more-link" aria-label="GlucoSnapの詳細">More</a>
+                <div class="product-actions">
+                    <a href="glucosnap/?lang=ja" class="product-link" aria-label="GlucoSnapの詳細">さらに詳しく</a>
                 </div>
             </div>
 
             <!-- OxiSnap -->
-            <div class="app-card" data-category="camera">
-                <div class="app-card-header">
-                    <img src="oxisnap-icon.png" alt="OxiSnap" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">OxiSnap</div>
-                        <div class="app-card-ja-name">血中酸素</div>
-                        <span class="app-card-badge badge-camera">📷 Camera + OCR</span>
+            <div class="product-card" data-category="camera">
+                <div class="product-card-inner">
+                    <div class="product-card-top">
+                        <img src="oxisnap-icon.png" alt="OxiSnap" class="product-icon">
+                        <div class="product-name-block">
+                            <div class="product-name">OxiSnap</div>
+                            <div class="product-ja">血中酸素</div>
+                        </div>
                     </div>
+                    <span class="product-tag tag-camera">Camera + OCR</span>
+                    <p class="product-desc">パルスオキシメーターを撮るだけ。SpO2を自動認識して記録。</p>
                 </div>
-                <p class="app-card-desc">パルスオキシメーターのディスプレイをカメラで撮るだけ。AIがSpO2を自動認識してApple HealthKitに記録します。</p>
-                <div class="app-card-promo">
-                    <img src="oxisnap-promo.png" alt="OxiSnap - パルスオキシメーターをカメラで撮影して記録" loading="lazy">
+                <div class="product-promo">
+                    <img src="oxisnap-promo.png" alt="OxiSnap" loading="lazy">
                 </div>
-                <div class="app-card-actions">
-                    <a href="oxisnap/?lang=ja" class="more-link" aria-label="OxiSnapの詳細">More</a>
+                <div class="product-actions">
+                    <a href="oxisnap/?lang=ja" class="product-link" aria-label="OxiSnapの詳細">さらに詳しく</a>
                 </div>
             </div>
+        </div>
+    </section>
 
+    <!-- Voice Input Apps (Dark Section) -->
+    <section class="dark-feature-section" id="section-voice" data-section="voice">
+        <div class="section-header" style="max-width: 1024px; margin: 0 auto;">
+            <h2 class="section-title">🎤 音声入力</h2>
+            <p class="section-subtitle">数値を声で言うだけ。ハンズフリーでかんたん記録。</p>
+        </div>
+        <div class="dark-grid">
             <!-- PupWeight -->
-            <div class="app-card" data-category="voice">
-                <div class="app-card-header">
-                    <img src="pupweight-icon.png" alt="PupWeight" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">PupWeight</div>
-                        <div class="app-card-ja-name">ペット体重</div>
-                        <span class="app-card-badge badge-voice">🎤 Voice Input</span>
-                    </div>
+            <div class="dark-card" data-category="voice">
+                <img src="pupweight-icon.png" alt="PupWeight" class="dark-card-icon">
+                <span class="product-tag tag-voice">Voice Input</span>
+                <div class="dark-card-name">PupWeight</div>
+                <div class="dark-card-ja">ペット体重</div>
+                <p class="dark-card-desc">飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出して記録します。</p>
+                <div class="dark-card-promo">
+                    <img src="pupweight-promo.png" alt="PupWeight" loading="lazy">
                 </div>
-                <p class="app-card-desc">飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出して記録します。</p>
-                <div class="app-card-promo">
-                    <img src="pupweight-promo.png" alt="PupWeight - 音声でペットの体重を記録" loading="lazy">
-                </div>
-                <div class="app-card-actions">
-                    <a href="pupweight/?lang=ja" class="more-link" aria-label="PupWeightの詳細">More</a>
+                <div class="dark-card-actions">
+                    <a href="pupweight/?lang=ja" class="dark-card-link" aria-label="PupWeightの詳細">さらに詳しく</a>
                 </div>
             </div>
 
             <!-- BabyVox -->
-            <div class="app-card" data-category="voice">
-                <div class="app-card-header">
-                    <img src="babyvox-icon.png" alt="BabyVox" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">BabyVox</div>
-                        <div class="app-card-ja-name">Baby記録</div>
-                        <span class="app-card-badge badge-voice">🎤 Voice Input</span>
-                    </div>
+            <div class="dark-card" data-category="voice">
+                <img src="babyvox-icon.png" alt="BabyVox" class="dark-card-icon">
+                <span class="product-tag tag-voice">Voice Input</span>
+                <div class="dark-card-name">BabyVox</div>
+                <div class="dark-card-ja">Baby記録</div>
+                <p class="dark-card-desc">赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存します。</p>
+                <div class="dark-card-promo">
+                    <img src="babyvox-promo.png" alt="BabyVox" loading="lazy">
                 </div>
-                <p class="app-card-desc">赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存します。</p>
-                <div class="app-card-promo">
-                    <img src="babyvox-promo.png" alt="BabyVox - 音声で赤ちゃんの成長を記録" loading="lazy">
-                </div>
-                <div class="app-card-actions">
-                    <a href="babyvox/?lang=ja" class="more-link" aria-label="BabyVoxの詳細">More</a>
+                <div class="dark-card-actions">
+                    <a href="babyvox/?lang=ja" class="dark-card-link" aria-label="BabyVoxの詳細">さらに詳しく</a>
                 </div>
             </div>
 
             <!-- WaistVox -->
-            <div class="app-card" data-category="voice">
-                <div class="app-card-header">
-                    <img src="waistvox-icon.png" alt="WaistVox" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">WaistVox</div>
-                        <div class="app-card-ja-name">ウエスト</div>
-                        <span class="app-card-badge badge-voice">🎤 Voice Input</span>
-                    </div>
+            <div class="dark-card" data-category="voice">
+                <img src="waistvox-icon.png" alt="WaistVox" class="dark-card-icon">
+                <span class="product-tag tag-voice">Voice Input</span>
+                <div class="dark-card-name">WaistVox</div>
+                <div class="dark-card-ja">ウエスト</div>
+                <p class="dark-card-desc">ウエスト周囲径を声で言うだけ。AIが自動認識して Apple HealthKit に記録します。</p>
+                <div class="dark-card-promo">
+                    <img src="waistvox-promo.png" alt="WaistVox" loading="lazy">
                 </div>
-                <p class="app-card-desc">ウエスト周囲径を声で言うだけ。AIが自動認識してApple HealthKitに記録します。</p>
-                <div class="app-card-promo">
-                    <img src="waistvox-promo.png" alt="WaistVox - 音声でウエストサイズを記録" loading="lazy">
-                </div>
-                <div class="app-card-actions">
-                    <a href="waistvox/?lang=ja" class="more-link" aria-label="WaistVoxの詳細">More</a>
+                <div class="dark-card-actions">
+                    <a href="waistvox/?lang=ja" class="dark-card-link" aria-label="WaistVoxの詳細">さらに詳しく</a>
                 </div>
             </div>
+        </div>
+    </section>
 
+    <!-- Sound Detection Apps (Shelf) -->
+    <section class="section" id="section-sound" data-section="sound">
+        <div class="section-header">
+            <h2 class="section-title">🔊 音検出</h2>
+            <p class="section-subtitle">マイクが音をリアルタイムで検出。睡眠や健康をモニタリング。</p>
+        </div>
+        <div class="shelf-scroll">
             <!-- CoughWav -->
-            <div class="app-card" data-category="sound">
-                <div class="app-card-header">
-                    <img src="coughwav-icon.png" alt="CoughWav" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">CoughWav</div>
-                        <div class="app-card-ja-name">咳</div>
-                        <span class="app-card-badge badge-sound">🔊 Sound Detection</span>
+            <div class="product-card" data-category="sound">
+                <div class="product-card-inner">
+                    <div class="product-card-top">
+                        <img src="coughwav-icon.png" alt="CoughWav" class="product-icon">
+                        <div class="product-name-block">
+                            <div class="product-name">CoughWav</div>
+                            <div class="product-ja">咳</div>
+                        </div>
                     </div>
+                    <span class="product-tag tag-sound">Sound Detection</span>
+                    <p class="product-desc">咳の音をリアルタイム検出。頻度と重症度を HealthKit に記録するモニタリングアプリ。</p>
                 </div>
-                <p class="app-card-desc">マイクで咳の音をリアルタイム検出。頻度と重症度をApple HealthKitに記録するモニタリングアプリです。</p>
-                <div class="app-card-promo">
-                    <img src="coughwav-promo.png" alt="CoughWav - 咳をリアルタイムでモニタリング" loading="lazy">
+                <div class="product-promo">
+                    <img src="coughwav-promo.png" alt="CoughWav" loading="lazy">
                 </div>
-                <div class="app-card-actions">
-                    <a href="coughwav/?lang=ja" class="more-link" aria-label="CoughWavの詳細">More</a>
+                <div class="product-actions">
+                    <a href="coughwav/?lang=ja" class="product-link" aria-label="CoughWavの詳細">さらに詳しく</a>
                 </div>
             </div>
 
             <!-- SnoreWav -->
-            <div class="app-card" data-category="sound">
-                <div class="app-card-header">
-                    <img src="snorewav-icon.png" alt="SnoreWav" class="app-card-icon">
-                    <div class="app-card-info">
-                        <div class="app-card-name">SnoreWav</div>
-                        <div class="app-card-ja-name">いびき</div>
-                        <span class="app-card-badge badge-sound">🔊 Sound Detection</span>
+            <div class="product-card" data-category="sound">
+                <div class="product-card-inner">
+                    <div class="product-card-top">
+                        <img src="snorewav-icon.png" alt="SnoreWav" class="product-icon">
+                        <div class="product-name-block">
+                            <div class="product-name">SnoreWav</div>
+                            <div class="product-ja">いびき</div>
+                        </div>
                     </div>
+                    <span class="product-tag tag-sound">Sound Detection</span>
+                    <p class="product-desc">睡眠中のいびき・騒音レベルをリアルタイム計測。環境音データとして記録。</p>
                 </div>
-                <p class="app-card-desc">睡眠中のいびき・騒音レベルをリアルタイム計測。環境音データとしてApple HealthKitに記録します。</p>
-                <div class="app-card-promo">
-                    <img src="snorewav-promo.png" alt="SnoreWav - いびきをリアルタイムでモニタリング" loading="lazy">
+                <div class="product-promo">
+                    <img src="snorewav-promo.png" alt="SnoreWav" loading="lazy">
                 </div>
-                <div class="app-card-actions">
-                    <a href="snorewav/?lang=ja" class="more-link" aria-label="SnoreWavの詳細">More</a>
+                <div class="product-actions">
+                    <a href="snorewav/?lang=ja" class="product-link" aria-label="SnoreWavの詳細">さらに詳しく</a>
                 </div>
             </div>
-
         </div>
-    </main>
+    </section>
+
+    <!-- Highlights -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">すべてのアプリに共通。</h2>
+        </div>
+        <div class="highlights">
+            <div class="highlight-card">
+                <div class="highlight-icon">🔒</div>
+                <h3 class="highlight-title">プライバシー最優先</h3>
+                <p class="highlight-desc">データは端末内で処理。<br>外部サーバーへの送信はゼロ。</p>
+            </div>
+            <div class="highlight-card">
+                <div class="highlight-icon">❤️</div>
+                <h3 class="highlight-title">Apple HealthKit</h3>
+                <p class="highlight-desc">記録したデータは HealthKit に<br>自動連携。ヘルスケアで一元管理。</p>
+            </div>
+            <div class="highlight-card">
+                <div class="highlight-icon">⚡</div>
+                <h3 class="highlight-title">1秒で記録</h3>
+                <p class="highlight-desc">撮る、話す、聴くだけ。<br>操作は最小限でストレスフリー。</p>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-links">
-            <a href="https://allnew.work/policy/">個人情報の取り扱い</a>
-            <a href="https://allnew.work/policy/">サイトポリシー</a>
+        <div class="footer-inner">
+            <div class="footer-links">
+                <a href="ja/privacy/">プライバシーポリシー</a>
+                <a href="ja/terms/">利用規約</a>
+                <a href="ja/tokusho/">特定商取引法に基づく表記</a>
+                <a href="ja/faq/">FAQ</a>
+            </div>
+            <p class="footer-copy">&copy; 2026 AllNew LLC（合同会社AllNew）</p>
+            <p class="footer-trademark">App Store は Apple Inc. の商標です。</p>
         </div>
-        <p>&copy; 2026 AllNew LLC</p>
-        <p class="trademark">App Store は Apple Inc. の商標です。</p>
     </footer>
 
     <script>
-        // ===== Category Filter =====
-        const tabs = document.querySelectorAll('.tab-btn');
-        const cards = document.querySelectorAll('.app-card');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const filter = tab.dataset.filter;
-
-                tabs.forEach(t => {
-                    t.classList.remove('active');
-                    t.setAttribute('aria-selected', 'false');
-                });
-                tab.classList.add('active');
-                tab.setAttribute('aria-selected', 'true');
-
-                cards.forEach(card => {
-                    if (filter === 'all' || card.dataset.category === filter) {
-                        card.classList.remove('hidden');
-                    } else {
-                        card.classList.add('hidden');
-                    }
-                });
-
-                // Re-trigger scroll animation for newly visible cards
-                requestAnimationFrame(() => observeCards());
-            });
-        });
-
-        // ===== Scroll-reveal animation (IntersectionObserver) =====
-        function observeCards() {
+        // ===== Scroll Reveal (IntersectionObserver) =====
+        function observeElements() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
+                entries.forEach((entry, idx) => {
                     if (entry.isIntersecting) {
                         setTimeout(() => {
                             entry.target.classList.add('visible');
-                        }, index * 60);
+                        }, idx * 80);
                         observer.unobserve(entry.target);
                     }
                 });
             }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -40px 0px'
+                threshold: 0.08,
+                rootMargin: '0px 0px -30px 0px'
             });
 
-            document.querySelectorAll('.app-card:not(.hidden):not(.visible)').forEach(card => {
-                observer.observe(card);
+            document.querySelectorAll('.product-card:not(.visible), .featured-card:not(.visible), .dark-card:not(.visible), .highlight-card:not(.visible)').forEach(el => {
+                observer.observe(el);
             });
         }
 
-        // Initial observation
-        observeCards();
+        observeElements();
+
+        // ===== Category Filter (smooth scroll to section) =====
+        const navLinks = document.querySelectorAll('.nav-link');
+        const allSections = document.querySelectorAll('[data-section]');
+        const allCards = document.querySelectorAll('[data-category]');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                const filter = link.dataset.filter;
+
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                if (filter === 'all') {
+                    // Show all sections
+                    allSections.forEach(s => s.style.display = '');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // Show only matching sections
+                    allSections.forEach(s => {
+                        if (s.dataset.section === filter) {
+                            s.style.display = '';
+                        } else {
+                            s.style.display = 'none';
+                        }
+                    });
+
+                    // Scroll to first visible section
+                    const target = document.getElementById('section-' + filter);
+                    if (target) {
+                        setTimeout(() => {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
+                }
+
+                // Re-observe for animation
+                requestAnimationFrame(() => observeElements());
+            });
+        });
+
+        // ===== Update active nav on scroll =====
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+                    const sectionId = entry.target.dataset.section;
+                    if (sectionId) {
+                        navLinks.forEach(l => {
+                            l.classList.toggle('active', l.dataset.filter === sectionId);
+                        });
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('[id^="section-"]').forEach(section => {
+            sectionObserver.observe(section);
+        });
     </script>
 </body>
 </html>
