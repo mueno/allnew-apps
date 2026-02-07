@@ -3,76 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllNew Apps - Health & Wellness Apps</title>
-    <meta name="description" content="AllNew LLC - iOS health and wellness apps. Weight, temperature, blood pressure, glucose, SpO2, pet weight, baby growth, cough, waist, and snore tracking.">
-    <meta name="theme-color" content="#ffffff">
+    <title>AllNew Apps - Health & Wellness</title>
+    <meta name="description" content="AllNew LLC - 撮る・話す・聴く。3つの方法で健康データを記録する iOS アプリ。">
+    <meta name="theme-color" content="#fafafa">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ==================== Design Tokens (Material 3) ==================== */
         :root {
-            --surface: #ffffff;
-            --surface-container: #f3f3f3;
-            --surface-container-high: #e8e8e8;
-            --surface-variant: #e1e3e1;
-            --on-surface: #1f1f1f;
-            --on-surface-variant: #444746;
-            --outline: #747775;
-            --outline-variant: #c4c7c5;
-            --primary: #1a73e8;
-            --primary-hover: #1557b0;
-            --on-primary: #ffffff;
-            --secondary-container: #c2e7ff;
-            --on-secondary-container: #001d35;
-            --error: #b3261e;
-            --shadow-1: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
-            --shadow-2: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
-            --shadow-3: 0 4px 8px 3px rgba(60,64,67,.15), 0 1px 3px rgba(60,64,67,.3);
-            --radius-sm: 12px;
-            --radius-md: 16px;
-            --radius-lg: 28px;
-            --radius-full: 9999px;
-            --color-camera: #1a73e8;
-            --color-voice: #e8710a;
-            --color-sound: #9334e6;
-            --color-camera-bg: #d2e3fc;
-            --color-voice-bg: #fde293;
-            --color-sound-bg: #e9d2fd;
-            --nav-height: 64px;
+            --bg: #fafafa;
+            --fg: #111111;
+            --fg-secondary: #555555;
+            --fg-tertiary: #999999;
+            --border: #e0e0e0;
+            --border-light: #f0f0f0;
+            --accent: #111111;
+            --white: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
 
-        body {
-            font-family: 'Google Sans', 'Noto Sans JP', 'Roboto', Arial, sans-serif;
-            background: var(--surface);
-            color: var(--on-surface);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            line-height: 1.5;
+        html {
+            scroll-behavior: smooth;
             font-size: 16px;
         }
 
-        /* ==================== Navigation ==================== */
-        .nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: var(--surface);
-            border-bottom: 1px solid var(--outline-variant);
-            height: var(--nav-height);
+        body {
+            font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .nav-inner {
-            max-width: 1280px;
-            margin: 0 auto;
+        /* ==================== Nav ==================== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 48px;
+            height: 72px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 24px;
-            height: 100%;
+            background: transparent;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .nav.scrolled {
+            background: rgba(250,250,250,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .nav-logo {
@@ -82,189 +67,281 @@
         }
 
         .nav-logo img {
-            height: 20px;
+            height: 18px;
             width: auto;
         }
 
-        .nav-tabs {
+        .nav-right {
             display: flex;
             align-items: center;
-            gap: 4px;
-            height: 100%;
+            gap: 32px;
         }
 
-        .nav-tab {
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            height: 100%;
-            font-size: 14px;
+        .nav-link {
+            font-size: 13px;
             font-weight: 500;
-            color: var(--on-surface-variant);
+            color: var(--fg);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
             background: none;
             border: none;
             cursor: pointer;
             font-family: inherit;
-            transition: color 0.2s;
-            white-space: nowrap;
         }
 
-        .nav-tab::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 16px;
-            right: 16px;
-            height: 3px;
-            border-radius: 3px 3px 0 0;
-            background: var(--primary);
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .nav-tab:hover {
-            color: var(--on-surface);
-        }
-
-        .nav-tab.active {
-            color: var(--primary);
-        }
-
-        .nav-tab.active::after {
-            opacity: 1;
+        .nav-link:hover {
+            opacity: 0.5;
         }
 
         /* ==================== Hero ==================== */
         .hero {
-            background: linear-gradient(180deg, #e8f0fe 0%, var(--surface) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            padding: 80px 24px 64px;
+            padding: 120px 48px 80px;
             position: relative;
-            overflow: hidden;
         }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 16px;
-            background: var(--secondary-container);
-            color: var(--on-secondary-container);
-            border-radius: var(--radius-full);
-            font-size: 13px;
+        .hero-tagline {
+            font-size: clamp(11px, 1.2vw, 13px);
             font-weight: 500;
-            margin-bottom: 24px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--fg-tertiary);
+            margin-bottom: 32px;
         }
 
         .hero-title {
-            font-size: clamp(32px, 5vw, 56px);
+            font-size: clamp(36px, 7vw, 80px);
             font-weight: 700;
-            line-height: 1.15;
-            color: var(--on-surface);
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            color: var(--fg);
+            margin-bottom: 32px;
+            max-width: 900px;
         }
 
-        .hero-title .accent {
-            color: var(--primary);
+        .hero-desc {
+            font-size: clamp(15px, 1.8vw, 18px);
+            font-weight: 300;
+            color: var(--fg-secondary);
+            max-width: 520px;
+            line-height: 1.7;
+            margin-bottom: 48px;
         }
 
-        .hero-subtitle {
-            font-size: clamp(16px, 2vw, 20px);
-            color: var(--on-surface-variant);
-            max-width: 540px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
-        }
-
-        .hero-methods {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            flex-wrap: wrap;
-        }
-
-        .hero-method {
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
+            color: var(--fg-tertiary);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            animation: float 2s ease-in-out infinite;
         }
 
-        .hero-method-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
+        .hero-scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--fg-tertiary), transparent);
         }
 
-        .hero-method-icon.camera { background: var(--color-camera-bg); }
-        .hero-method-icon.voice { background: var(--color-voice-bg); }
-        .hero-method-icon.sound { background: var(--color-sound-bg); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(6px); }
+        }
 
-        .hero-method-label {
+        /* ==================== Section Common ==================== */
+        .section {
+            padding: 120px 48px;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
             font-size: 13px;
             font-weight: 500;
-            color: var(--on-surface-variant);
+            color: var(--fg-tertiary);
+            letter-spacing: 0.08em;
+            margin-bottom: 24px;
         }
 
-        /* ==================== Section ==================== */
-        .section {
-            padding: 64px 0;
-        }
-
-        .section--alt {
-            background: var(--surface-container);
-        }
-
-        .section-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .section-head {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            margin-bottom: 32px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .section-title {
-            font-size: 28px;
+        .section-heading {
+            font-size: clamp(28px, 4vw, 48px);
             font-weight: 700;
-            color: var(--on-surface);
-            letter-spacing: -0.01em;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            color: var(--fg);
+            margin-bottom: 24px;
         }
 
-        .section-subtitle {
+        .section-text {
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--fg-secondary);
+            line-height: 1.8;
+            max-width: 640px;
+        }
+
+        /* ==================== (What we do) ==================== */
+        .methods-section {
+            background: var(--white);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            margin-top: 64px;
+        }
+
+        .method-item {
+            padding: 48px 40px;
+            border-right: 1px solid var(--border);
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .method-item:last-child {
+            border-right: none;
+        }
+
+        .method-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .method-number {
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--border);
+            line-height: 1;
+            margin-bottom: 24px;
+            letter-spacing: -0.04em;
+        }
+
+        .method-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--fg);
+            margin-bottom: 8px;
+        }
+
+        .method-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--fg-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .method-desc {
             font-size: 14px;
-            color: var(--on-surface-variant);
+            font-weight: 300;
+            color: var(--fg-secondary);
+            line-height: 1.7;
         }
 
-        /* ==================== Featured Hero Card ==================== */
-        .featured {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
+        /* ==================== (Who we are) ==================== */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            margin-top: 64px;
+        }
+
+        .about-text .about-lead {
+            font-size: clamp(20px, 2.5vw, 28px);
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--fg);
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .about-text .about-body {
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--fg-secondary);
+            line-height: 1.8;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+
+        .stat-item {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--fg);
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--fg-tertiary);
+            margin-top: 8px;
+        }
+
+        /* ==================== Featured ==================== */
+        .featured-section {
+            background: var(--fg);
+            color: var(--white);
+        }
+
+        .featured-section .section-label {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .featured-section .section-heading {
+            color: var(--white);
         }
 
         .featured-card {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            background: var(--on-surface);
-            border-radius: var(--radius-lg);
+            gap: 0;
+            margin-top: 64px;
+            border-radius: 16px;
             overflow: hidden;
-            min-height: 420px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
             opacity: 0;
             transform: translateY(24px);
-            transition: opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
         .featured-card.visible {
@@ -273,409 +350,410 @@
         }
 
         .featured-body {
-            padding: 56px 48px;
+            padding: 56px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            color: var(--surface);
         }
 
-        .featured-label {
-            font-size: 12px;
+        .featured-eyebrow {
+            font-size: 11px;
             font-weight: 500;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 16px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 20px;
         }
 
         .featured-name {
-            font-size: 40px;
+            font-size: 36px;
             font-weight: 700;
             line-height: 1.15;
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
         }
 
         .featured-ja {
-            font-size: 16px;
-            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
             margin-bottom: 20px;
         }
 
         .featured-desc {
-            font-size: 16px;
-            color: rgba(255,255,255,0.85);
-            line-height: 1.6;
+            font-size: 15px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.7;
             margin-bottom: 32px;
         }
 
         .featured-btns {
             display: flex;
-            gap: 12px;
-            align-items: center;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
-        /* Buttons (Material 3) */
-        .btn-filled {
+        .btn-primary {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 0 24px;
-            height: 40px;
-            background: var(--primary);
-            color: var(--on-primary);
+            padding: 14px 28px;
+            background: var(--white);
+            color: var(--fg);
             border: none;
-            border-radius: var(--radius-full);
-            font-size: 14px;
-            font-weight: 500;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
             font-family: inherit;
-            cursor: pointer;
             text-decoration: none;
-            transition: background 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s;
         }
 
-        .btn-filled:hover {
-            background: var(--primary-hover);
-            box-shadow: var(--shadow-1);
+        .btn-primary:hover {
+            opacity: 0.85;
         }
 
-        .btn-outlined {
+        .btn-secondary {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 0 24px;
-            height: 40px;
+            padding: 14px 28px;
             background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--outline);
-            border-radius: var(--radius-full);
-            font-size: 14px;
+            color: var(--white);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 500;
             font-family: inherit;
-            cursor: pointer;
             text-decoration: none;
-            transition: background 0.2s, border-color 0.2s;
-        }
-
-        .btn-outlined:hover {
-            background: rgba(26,115,232,0.04);
-            border-color: var(--primary);
-        }
-
-        .btn-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 0 12px;
-            height: 40px;
-            background: transparent;
-            color: var(--primary);
-            border: none;
-            border-radius: var(--radius-full);
-            font-size: 14px;
-            font-weight: 500;
-            font-family: inherit;
             cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s;
+            letter-spacing: 0.02em;
+            transition: border-color 0.2s, background 0.2s;
         }
 
-        .btn-text:hover {
-            background: rgba(26,115,232,0.08);
-        }
-
-        .btn-text::after {
-            content: '';
-            width: 18px;
-            height: 18px;
-            background: currentColor;
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/%3E%3C/svg%3E") center/contain no-repeat;
-            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/%3E%3C/svg%3E") center/contain no-repeat;
+        .btn-secondary:hover {
+            border-color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.05);
         }
 
         .featured-img {
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding: 40px 40px 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            padding: 48px 48px 0;
+            background: rgba(255,255,255,0.03);
         }
 
         .featured-img img {
             max-width: 280px;
             width: 100%;
             height: auto;
-            border-radius: var(--radius-md) var(--radius-md) 0 0;
-            object-fit: contain;
+            border-radius: 12px 12px 0 0;
         }
 
-        /* ==================== Product Grid ==================== */
-        .product-grid {
+        /* ==================== (Apps) — Work Grid ==================== */
+        .work-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 64px;
         }
 
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
+        .work-card {
+            position: relative;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid var(--outline-variant);
-            transition: box-shadow 0.2s cubic-bezier(.4,0,.2,1), transform 0.2s cubic-bezier(.4,0,.2,1);
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            transform: translateY(16px);
             cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
 
-        .section--alt .card {
-            border-color: transparent;
-            box-shadow: var(--shadow-1);
-        }
-
-        .card.visible {
+        .work-card.visible {
             opacity: 1;
             transform: translateY(0);
-            transition: opacity 0.4s cubic-bezier(.4,0,.2,1), transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.2s, border-color 0.2s;
         }
 
-        .card:hover {
-            box-shadow: var(--shadow-3);
+        .work-card:hover {
+            box-shadow: 0 16px 48px rgba(0,0,0,0.08);
             border-color: transparent;
         }
 
-        .card-img {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 32px 24px 16px;
-            min-height: 200px;
-        }
-
-        .card-img img {
+        .work-card-img {
             width: 100%;
-            max-width: 200px;
-            height: auto;
-            aspect-ratio: 9/16;
-            object-fit: contain;
-            border-radius: var(--radius-md);
-            transition: transform 0.3s cubic-bezier(.4,0,.2,1);
-        }
-
-        .card:hover .card-img img {
-            transform: scale(1.04);
-        }
-
-        .card-body {
-            padding: 16px 24px 24px;
-            flex: 1;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            background: var(--border-light);
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
         }
 
-        .card-top {
+        .work-card-img img {
+            max-width: 200px;
+            width: 80%;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.4s ease;
+        }
+
+        .work-card:hover .work-card-img img {
+            transform: scale(1.06);
+        }
+
+        .work-card-body {
+            padding: 24px 28px;
+        }
+
+        .work-card-meta {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-1);
+        .work-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             flex-shrink: 0;
         }
 
-        .card-names {
+        .work-card-names {
             flex: 1;
-            min-width: 0;
         }
 
-        .card-name {
+        .work-card-name {
             font-size: 18px;
-            font-weight: 700;
-            color: var(--on-surface);
+            font-weight: 600;
             line-height: 1.3;
+            letter-spacing: -0.01em;
         }
 
-        .card-ja {
-            font-size: 13px;
-            color: var(--on-surface-variant);
-        }
-
-        .card-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 12px;
-            border-radius: var(--radius-full);
+        .work-card-ja {
             font-size: 12px;
+            color: var(--fg-tertiary);
+        }
+
+        .work-card-tag {
+            display: inline-block;
+            font-size: 11px;
             font-weight: 500;
-            margin: 8px 0 12px;
-            width: fit-content;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--fg-tertiary);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
         }
 
-        .card-tag--camera {
-            background: var(--color-camera-bg);
-            color: #174ea6;
-        }
-
-        .card-tag--voice {
-            background: var(--color-voice-bg);
-            color: #7c4a03;
-        }
-
-        .card-tag--sound {
-            background: var(--color-sound-bg);
-            color: #5b157b;
-        }
-
-        .card-desc {
+        .work-card-desc {
             font-size: 14px;
-            color: var(--on-surface-variant);
+            font-weight: 300;
+            color: var(--fg-secondary);
             line-height: 1.6;
-            flex: 1;
         }
 
-        .card-footer {
-            padding: 0 24px 20px;
+        .work-card-arrow {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, border-color 0.2s;
         }
 
-        /* ==================== Highlights Strip ==================== */
-        .highlights-strip {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
+        .work-card:hover .work-card-arrow {
+            background: var(--fg);
+            border-color: var(--fg);
+        }
+
+        .work-card-arrow svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--fg-secondary);
+            transition: fill 0.2s, transform 0.2s;
+        }
+
+        .work-card:hover .work-card-arrow svg {
+            fill: var(--white);
+            transform: translate(1px, -1px);
+        }
+
+        /* ==================== (What matters) — Values ==================== */
+        .values-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            gap: 0;
+            margin-top: 64px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--white);
         }
 
-        .hl-card {
-            background: var(--surface);
-            border: 1px solid var(--outline-variant);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            text-align: center;
+        .value-card {
+            padding: 48px 36px;
+            border-right: 1px solid var(--border);
             opacity: 0;
             transform: translateY(16px);
-            transition: opacity 0.4s cubic-bezier(.4,0,.2,1), transform 0.4s cubic-bezier(.4,0,.2,1);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        .hl-card.visible {
+        .value-card:last-child {
+            border-right: none;
+        }
+
+        .value-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .hl-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 16px;
-            border-radius: var(--radius-lg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
+        .value-icon {
+            font-size: 32px;
+            margin-bottom: 20px;
         }
 
-        .hl-icon--privacy { background: #e8f5e9; }
-        .hl-icon--health  { background: #fce4ec; }
-        .hl-icon--speed   { background: #fff3e0; }
-
-        .hl-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--on-surface);
+        .value-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--fg);
             margin-bottom: 8px;
         }
 
-        .hl-desc {
+        .value-desc {
             font-size: 14px;
-            color: var(--on-surface-variant);
-            line-height: 1.5;
+            font-weight: 300;
+            color: var(--fg-secondary);
+            line-height: 1.7;
         }
 
         /* ==================== Footer ==================== */
         .footer {
-            background: var(--surface-container);
-            padding: 40px 24px;
+            background: var(--fg);
+            color: var(--white);
+            padding: 80px 48px;
         }
 
         .footer-inner {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
         }
 
-        .footer-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .footer-logo img {
-            height: 18px;
+        .footer-brand .footer-logo img {
+            height: 20px;
             width: auto;
+            filter: brightness(0) invert(1);
+            margin-bottom: 20px;
         }
 
-        .footer-nav {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
+        .footer-tagline {
+            font-size: 14px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.6;
         }
 
-        .footer-nav a {
-            color: var(--on-surface-variant);
+        .footer-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-col-title {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 16px;
+        }
+
+        .footer-col a,
+        .footer-col p {
+            display: block;
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.7);
             text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
+            line-height: 2;
             transition: color 0.2s;
         }
 
-        .footer-nav a:hover {
-            color: var(--on-surface);
+        .footer-col a:hover {
+            color: var(--white);
         }
 
         .footer-bottom {
-            border-top: 1px solid var(--outline-variant);
-            padding-top: 20px;
+            max-width: 1200px;
+            margin: 48px auto 0;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.08);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 12px;
         }
 
         .footer-copy {
             font-size: 12px;
-            color: var(--outline);
+            color: rgba(255,255,255,0.3);
         }
 
-        .footer-trademark {
+        .footer-copy-right {
             font-size: 11px;
-            color: var(--outline);
+            color: rgba(255,255,255,0.2);
         }
 
         /* ==================== Responsive ==================== */
         @media (max-width: 960px) {
+            .nav { padding: 0 24px; }
+            .section { padding: 80px 24px; }
+            .hero { padding: 100px 24px 80px; }
+            .footer { padding: 60px 24px; }
+
+            .methods-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .method-item {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 32px 0;
+            }
+
+            .method-item:last-child {
+                border-bottom: none;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
             .featured-card {
                 grid-template-columns: 1fr;
-                min-height: auto;
             }
 
             .featured-body {
                 padding: 40px 32px;
-            }
-
-            .featured-name {
-                font-size: 32px;
             }
 
             .featured-img {
@@ -686,180 +764,199 @@
                 max-width: 220px;
             }
 
-            .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-                gap: 16px;
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .values-row {
+                grid-template-columns: 1fr;
+            }
+
+            .value-card {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .value-card:last-child {
+                border-bottom: none;
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
 
-        @media (max-width: 768px) {
-            .nav-inner {
-                padding: 0 16px;
-            }
+        @media (max-width: 600px) {
+            .nav { padding: 0 20px; height: 60px; }
+            .nav-right { gap: 20px; }
+            .section { padding: 64px 20px; }
+            .hero { padding: 80px 20px 64px; }
+            .hero-title { font-size: 32px; }
+            .footer { padding: 48px 20px; }
 
-            .nav-tab {
-                padding: 0 12px;
-                font-size: 13px;
-            }
-
-            .hero {
-                padding: 56px 16px 40px;
-            }
-
-            .hero-methods {
+            .about-stats {
+                grid-template-columns: repeat(2, 1fr);
                 gap: 24px;
             }
 
-            .section {
-                padding: 48px 0;
+            .stat-number {
+                font-size: 36px;
             }
 
-            .section-container {
-                padding: 0 16px;
+            .method-number {
+                font-size: 48px;
             }
 
-            .section-head {
-                margin-bottom: 24px;
-            }
-
-            .section-title {
-                font-size: 22px;
-            }
-
-            .featured {
-                padding: 0 16px;
-            }
-
-            .featured-body {
-                padding: 32px 24px;
-            }
-
-            .featured-name {
-                font-size: 28px;
-            }
-
-            .featured-img {
-                padding: 0 24px;
-            }
-
-            .featured-img img {
-                max-width: 180px;
-            }
-
-            .product-grid {
+            .footer-cols {
                 grid-template-columns: 1fr;
-            }
-
-            .highlights-strip {
-                grid-template-columns: 1fr;
-                padding: 0 16px;
-            }
-
-            .footer {
-                padding: 32px 16px;
             }
         }
 
-        @media (max-width: 480px) {
-            .nav-tabs {
-                gap: 0;
-            }
-
-            .nav-tab {
-                padding: 0 8px;
-                font-size: 12px;
-            }
-
-            .hero-title {
-                font-size: 28px;
-            }
-
-            .card-img {
-                min-height: 160px;
-                padding: 24px 16px 12px;
-            }
-
-            .card-body {
-                padding: 12px 20px 20px;
-            }
-
-            .card-footer {
-                padding: 0 20px 16px;
-            }
+        /* ==================== Scroll Animations ==================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ==================== Accessibility ==================== */
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger delays */
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.2s; }
+        .reveal-d3 { transition-delay: 0.3s; }
+        .reveal-d4 { transition-delay: 0.4s; }
+
         @media (prefers-reduced-motion: reduce) {
-            .card, .featured-card, .hl-card {
+            .reveal, .method-item, .work-card, .value-card, .stat-item, .featured-card {
                 opacity: 1;
                 transform: none;
-                transition: box-shadow 0.2s ease;
+                transition: none;
             }
-            .card:hover .card-img img {
-                transform: none;
-            }
+            .hero-scroll { animation: none; }
         }
 
-        .nav-tab:focus-visible,
-        .btn-filled:focus-visible,
-        .btn-outlined:focus-visible,
-        .btn-text:focus-visible {
-            outline: 2px solid var(--primary);
+        .nav-link:focus-visible,
+        .btn-primary:focus-visible,
+        .btn-secondary:focus-visible,
+        .work-card:focus-visible {
+            outline: 2px solid var(--fg);
             outline-offset: 2px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav class="nav" role="navigation" aria-label="Main">
-        <div class="nav-inner">
-            <a href="#" class="nav-logo"><img src="allnew-logo.png" alt="AllNew" /></a>
-            <div class="nav-tabs">
-                <button class="nav-tab active" data-filter="all">すべて</button>
-                <button class="nav-tab" data-filter="camera">カメラ認識</button>
-                <button class="nav-tab" data-filter="voice">音声入力</button>
-                <button class="nav-tab" data-filter="sound">音検出</button>
-            </div>
+    <!-- Nav -->
+    <nav class="nav" id="nav" role="navigation" aria-label="Main">
+        <a href="#" class="nav-logo"><img src="allnew-logo.png" alt="AllNew" /></a>
+        <div class="nav-right">
+            <button class="nav-link" data-filter="all">Apps</button>
+            <a href="#contact" class="nav-link">Contact</a>
         </div>
     </nav>
 
     <!-- Hero -->
     <section class="hero">
-        <div class="hero-badge">✨ 10のヘルスケアアプリ</div>
-        <h1 class="hero-title">健康を、<span class="accent">もっとシンプル</span>に。</h1>
-        <p class="hero-subtitle">撮る・話す・聴く。3つの方法で、毎日の健康データをかんたんに記録できます。</p>
-        <div class="hero-methods">
-            <div class="hero-method">
-                <div class="hero-method-icon camera">📷</div>
-                <span class="hero-method-label">カメラで撮る</span>
-            </div>
-            <div class="hero-method">
-                <div class="hero-method-icon voice">🎤</div>
-                <span class="hero-method-label">声で伝える</span>
-            </div>
-            <div class="hero-method">
-                <div class="hero-method-icon sound">🔊</div>
-                <span class="hero-method-label">音を聴く</span>
+        <p class="hero-tagline reveal">Health & Wellness Apps</p>
+        <h1 class="hero-title reveal reveal-d1">健康を、<br>もっとシンプルに。</h1>
+        <p class="hero-desc reveal reveal-d2">撮る・話す・聴く。<br>3つの方法で、毎日の健康データをかんたんに記録できます。</p>
+        <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="hero-scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- (What we do) -->
+    <section class="section methods-section">
+        <div class="section-inner">
+            <p class="section-label reveal">(What we do)</p>
+            <h2 class="section-heading reveal reveal-d1">3つの入力方式</h2>
+            <p class="section-text reveal reveal-d2">専用デバイスやウェアラブルは不要。あなたの iPhone だけで、さまざまな健康データを記録します。</p>
+
+            <div class="methods-grid">
+                <div class="method-item">
+                    <div class="method-number">01</div>
+                    <h3 class="method-name">カメラ認識</h3>
+                    <p class="method-label">Camera + OCR</p>
+                    <p class="method-desc">体重計・体温計・血圧計・血糖値計・パルスオキシメーターのディスプレイをカメラで撮影。AI がリアルタイムで数値を認識し、Apple HealthKit に自動記録します。</p>
+                </div>
+                <div class="method-item">
+                    <div class="method-number">02</div>
+                    <h3 class="method-name">音声入力</h3>
+                    <p class="method-label">Voice Input</p>
+                    <p class="method-desc">計測した数値を声で言うだけ。ハンズフリーで記録が完了します。ペットを抱いたまま、赤ちゃんを見ながら、メジャーを持ったまま。両手がふさがっていても大丈夫。</p>
+                </div>
+                <div class="method-item">
+                    <div class="method-number">03</div>
+                    <h3 class="method-name">音検出</h3>
+                    <p class="method-label">Sound Detection</p>
+                    <p class="method-desc">iPhone のマイクが環境音をリアルタイムで分析。咳の頻度や睡眠中のいびきを自動検出し、HealthKit に記録します。寝ている間の健康データも逃しません。</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Featured: WeightSnap -->
-    <section class="section" data-section="camera">
-        <div class="featured">
-            <div class="featured-card" data-category="camera">
+    <!-- (Who we are) -->
+    <section class="section">
+        <div class="section-inner">
+            <p class="section-label reveal">(Who we are)</p>
+            <h2 class="section-heading reveal reveal-d1">AllNew が追求するもの</h2>
+
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-lead reveal">すべてのアプリは「記録の手間をゼロにする」という信念のもと設計されています。</p>
+                    <p class="about-body reveal reveal-d1">複雑な操作は必要ありません。アプリを開いて、撮る・話す・聴くだけ。データは端末内で処理され、外部サーバーへ送信されることは一切ありません。プライバシーを最優先に、あなただけの健康データを安全に管理します。</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">10</div>
+                        <p class="stat-label">Health Apps</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <p class="stat-label">Input Methods</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <p class="stat-label">Data Sent to Server</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1s</div>
+                        <p class="stat-label">Time to Record</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured -->
+    <section class="section featured-section" data-section="camera">
+        <div class="section-inner">
+            <p class="section-label reveal">(Pick up)</p>
+            <h2 class="section-heading reveal reveal-d1" style="color: #fff;">WeightSnap</h2>
+            <div class="featured-card">
                 <div class="featured-body">
-                    <p class="featured-label">Pick up</p>
-                    <h2 class="featured-name">WeightSnap</h2>
+                    <p class="featured-eyebrow">Camera + OCR</p>
+                    <h3 class="featured-name">WeightSnap</h3>
                     <p class="featured-ja">体重</p>
-                    <p class="featured-desc">体重計のディスプレイをカメラで撮るだけ。AIが数値を自動認識して Apple HealthKit に記録します。</p>
+                    <p class="featured-desc">体重計のディスプレイをカメラで撮るだけ。AI が数値を自動認識して Apple HealthKit に記録します。毎日の体重管理を、1秒で。</p>
                     <div class="featured-btns">
-                        <a href="https://apps.apple.com/app/weightsnap/id6743864029" class="btn-filled" aria-label="App Storeでダウンロード">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.15 1.67C11.79.89 12.21.01 12.1-.01c-.91.04-2.01.61-2.66 1.38-.59.68-1.1 1.59-.96 2.52 1.01.08 2.05-.52 2.67-1.22zM12.09 3.89c-1.48-.09-2.74.84-3.44.84-.71 0-1.8-.82-2.97-.8-1.53.03-2.94.89-3.72 2.27-1.59 2.75-.41 6.83 1.14 9.07.76 1.1 1.66 2.34 2.85 2.29 1.14-.04 1.57-.74 2.95-.74 1.37 0 1.76.74 2.96.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.27 1.23-2.5 1.25-2.56-.03-.01-2.4-.92-2.42-3.65-.02-2.29 1.87-3.38 1.95-3.44-1.06-1.57-2.72-1.74-3.31-1.77z"/></svg>
+                        <a href="https://apps.apple.com/app/weightsnap/id6743864029" class="btn-primary" aria-label="App Storeでダウンロード">
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M11.15 1.67C11.79.89 12.21.01 12.1-.01c-.91.04-2.01.61-2.66 1.38-.59.68-1.1 1.59-.96 2.52 1.01.08 2.05-.52 2.67-1.22zM12.09 3.89c-1.48-.09-2.74.84-3.44.84-.71 0-1.8-.82-2.97-.8-1.53.03-2.94.89-3.72 2.27-1.59 2.75-.41 6.83 1.14 9.07.76 1.1 1.66 2.34 2.85 2.29 1.14-.04 1.57-.74 2.95-.74 1.37 0 1.76.74 2.96.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.27 1.23-2.5 1.25-2.56-.03-.01-2.4-.92-2.42-3.65-.02-2.29 1.87-3.38 1.95-3.44-1.06-1.57-2.72-1.74-3.31-1.77z"/></svg>
                             App Store
                         </a>
-                        <a href="weightsnap/?lang=ja" class="btn-text">さらに詳しく</a>
+                        <a href="weightsnap/?lang=ja" class="btn-secondary">さらに詳しく →</a>
                     </div>
                 </div>
                 <div class="featured-img">
@@ -869,323 +966,287 @@
         </div>
     </section>
 
-    <!-- Camera Recognition -->
-    <section class="section section--alt" id="section-camera" data-section="camera">
-        <div class="section-container">
-            <div class="section-head">
-                <h2 class="section-title">カメラ認識</h2>
-                <p class="section-subtitle">計測器を撮影するだけで、AIが数値を自動認識</p>
-            </div>
-            <div class="product-grid">
+    <!-- (Apps) — Camera -->
+    <section class="section" id="section-camera" data-section="camera">
+        <div class="section-inner">
+            <p class="section-label reveal">(Apps) — Camera + OCR</p>
+            <h2 class="section-heading reveal reveal-d1">カメラ認識アプリ</h2>
+            <p class="section-text reveal reveal-d2">計測器のディスプレイを撮影するだけ。AI が数値を自動認識し、HealthKit に記録します。</p>
 
-                <div class="card" data-category="camera" onclick="location.href='thermosnap/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+            <div class="work-grid">
+                <a class="work-card" href="thermosnap/?lang=ja">
+                    <div class="work-card-img" style="background:#f0f4ff;">
                         <img src="thermosnap-promo.png" alt="ThermoSnap" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="thermosnap-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">ThermoSnap</div>
-                                <div class="card-ja">体温</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="thermosnap-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">ThermoSnap</div>
+                                <div class="work-card-ja">体温</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
-                        <p class="card-desc">体温計のディスプレイをカメラで撮るだけ。体温を自動認識して HealthKit に記録。</p>
+                        <span class="work-card-tag">Camera + OCR</span>
+                        <p class="work-card-desc">体温計のディスプレイを撮るだけ。体温を自動認識して HealthKit に記録。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="thermosnap/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
 
-                <div class="card" data-category="camera" onclick="location.href='bloodpressuresnap/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+                <a class="work-card" href="bloodpressuresnap/?lang=ja">
+                    <div class="work-card-img" style="background:#f0f4ff;">
                         <img src="bpsnap-promo.png" alt="BPSnap" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="bpsnap-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">BPSnap</div>
-                                <div class="card-ja">血圧</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="bpsnap-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">BPSnap</div>
+                                <div class="work-card-ja">血圧</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
-                        <p class="card-desc">血圧計をカメラで撮るだけ。最高・最低血圧と脈拍を自動認識して記録。</p>
+                        <span class="work-card-tag">Camera + OCR</span>
+                        <p class="work-card-desc">血圧計を撮るだけ。最高・最低血圧と脈拍を自動認識して記録。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="bloodpressuresnap/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
 
-                <div class="card" data-category="camera" onclick="location.href='glucosnap/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+                <a class="work-card" href="glucosnap/?lang=ja">
+                    <div class="work-card-img" style="background:#f0f4ff;">
                         <img src="glucosnap-promo.png" alt="GlucoSnap" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="glucosnap-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">GlucoSnap</div>
-                                <div class="card-ja">血糖値</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="glucosnap-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">GlucoSnap</div>
+                                <div class="work-card-ja">血糖値</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
-                        <p class="card-desc">血糖値計をカメラで撮るだけ。AIが数値を自動認識して HealthKit に記録。</p>
+                        <span class="work-card-tag">Camera + OCR</span>
+                        <p class="work-card-desc">血糖値計を撮るだけ。AI が数値を自動認識して HealthKit に記録。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="glucosnap/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
 
-                <div class="card" data-category="camera" onclick="location.href='oxisnap/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+                <a class="work-card" href="oxisnap/?lang=ja">
+                    <div class="work-card-img" style="background:#f0f4ff;">
                         <img src="oxisnap-promo.png" alt="OxiSnap" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="oxisnap-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">OxiSnap</div>
-                                <div class="card-ja">血中酸素</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="oxisnap-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">OxiSnap</div>
+                                <div class="work-card-ja">血中酸素</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
-                        <p class="card-desc">パルスオキシメーターを撮るだけ。SpO2 を自動認識して HealthKit に記録。</p>
+                        <span class="work-card-tag">Camera + OCR</span>
+                        <p class="work-card-desc">パルスオキシメーターを撮るだけ。SpO2 を自動認識して記録。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="oxisnap/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
-
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Voice Input -->
-    <section class="section" id="section-voice" data-section="voice">
-        <div class="section-container">
-            <div class="section-head">
-                <h2 class="section-title">音声入力</h2>
-                <p class="section-subtitle">数値を声で言うだけ。ハンズフリーでかんたん記録</p>
-            </div>
-            <div class="product-grid">
+    <!-- (Apps) — Voice -->
+    <section class="section" id="section-voice" data-section="voice" style="background: var(--white); border-top: 1px solid var(--border);">
+        <div class="section-inner">
+            <p class="section-label reveal">(Apps) — Voice Input</p>
+            <h2 class="section-heading reveal reveal-d1">音声入力アプリ</h2>
+            <p class="section-text reveal reveal-d2">数値を声で言うだけ。ハンズフリーでかんたんに記録できます。</p>
 
-                <div class="card" data-category="voice" onclick="location.href='pupweight/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #fef7e0 0%, transparent 100%);">
+            <div class="work-grid">
+                <a class="work-card" href="pupweight/?lang=ja">
+                    <div class="work-card-img" style="background:#fef7e0;">
                         <img src="pupweight-promo.png" alt="PupWeight" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="pupweight-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">PupWeight</div>
-                                <div class="card-ja">ペット体重</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="pupweight-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">PupWeight</div>
+                                <div class="work-card-ja">ペット体重</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--voice">🎤 Voice Input</span>
-                        <p class="card-desc">飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出。</p>
+                        <span class="work-card-tag">Voice Input</span>
+                        <p class="work-card-desc">飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="pupweight/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
 
-                <div class="card" data-category="voice" onclick="location.href='babyvox/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #fef7e0 0%, transparent 100%);">
+                <a class="work-card" href="babyvox/?lang=ja">
+                    <div class="work-card-img" style="background:#fef7e0;">
                         <img src="babyvox-promo.png" alt="BabyVox" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="babyvox-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">BabyVox</div>
-                                <div class="card-ja">Baby記録</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="babyvox-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">BabyVox</div>
+                                <div class="work-card-ja">Baby記録</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--voice">🎤 Voice Input</span>
-                        <p class="card-desc">赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存。</p>
+                        <span class="work-card-tag">Voice Input</span>
+                        <p class="work-card-desc">赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="babyvox/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
 
-                <div class="card" data-category="voice" onclick="location.href='waistvox/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #fef7e0 0%, transparent 100%);">
+                <a class="work-card" href="waistvox/?lang=ja">
+                    <div class="work-card-img" style="background:#fef7e0;">
                         <img src="waistvox-promo.png" alt="WaistVox" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="waistvox-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">WaistVox</div>
-                                <div class="card-ja">ウエスト</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="waistvox-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">WaistVox</div>
+                                <div class="work-card-ja">ウエスト</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--voice">🎤 Voice Input</span>
-                        <p class="card-desc">ウエスト周囲径を声で言うだけ。AIが自動認識して HealthKit に記録。</p>
+                        <span class="work-card-tag">Voice Input</span>
+                        <p class="work-card-desc">ウエスト周囲径を声で言うだけ。AI が自動認識して HealthKit に記録。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="waistvox/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
-
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Sound Detection -->
-    <section class="section section--alt" id="section-sound" data-section="sound">
-        <div class="section-container">
-            <div class="section-head">
-                <h2 class="section-title">音検出</h2>
-                <p class="section-subtitle">マイクが音をリアルタイムで検出。睡眠や健康をモニタリング</p>
-            </div>
-            <div class="product-grid">
+    <!-- (Apps) — Sound -->
+    <section class="section" id="section-sound" data-section="sound">
+        <div class="section-inner">
+            <p class="section-label reveal">(Apps) — Sound Detection</p>
+            <h2 class="section-heading reveal reveal-d1">音検出アプリ</h2>
+            <p class="section-text reveal reveal-d2">マイクが音をリアルタイムで検出。睡眠や健康をモニタリングします。</p>
 
-                <div class="card" data-category="sound" onclick="location.href='coughwav/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #f3e8fd 0%, transparent 100%);">
+            <div class="work-grid">
+                <a class="work-card" href="coughwav/?lang=ja">
+                    <div class="work-card-img" style="background:#f3e8fd;">
                         <img src="coughwav-promo.png" alt="CoughWav" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="coughwav-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">CoughWav</div>
-                                <div class="card-ja">咳</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="coughwav-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">CoughWav</div>
+                                <div class="work-card-ja">咳</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--sound">🔊 Sound Detection</span>
-                        <p class="card-desc">咳の音をリアルタイム検出。頻度と重症度を HealthKit に記録するモニタリングアプリ。</p>
+                        <span class="work-card-tag">Sound Detection</span>
+                        <p class="work-card-desc">咳の音をリアルタイム検出。頻度と重症度を HealthKit に記録するモニタリングアプリ。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="coughwav/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
 
-                <div class="card" data-category="sound" onclick="location.href='snorewav/?lang=ja'">
-                    <div class="card-img" style="background: linear-gradient(180deg, #f3e8fd 0%, transparent 100%);">
+                <a class="work-card" href="snorewav/?lang=ja">
+                    <div class="work-card-img" style="background:#f3e8fd;">
                         <img src="snorewav-promo.png" alt="SnoreWav" loading="lazy">
                     </div>
-                    <div class="card-body">
-                        <div class="card-top">
-                            <img src="snorewav-icon.png" alt="" class="card-icon">
-                            <div class="card-names">
-                                <div class="card-name">SnoreWav</div>
-                                <div class="card-ja">いびき</div>
+                    <div class="work-card-body">
+                        <div class="work-card-meta">
+                            <img src="snorewav-icon.png" alt="" class="work-card-icon">
+                            <div class="work-card-names">
+                                <div class="work-card-name">SnoreWav</div>
+                                <div class="work-card-ja">いびき</div>
                             </div>
                         </div>
-                        <span class="card-tag card-tag--sound">🔊 Sound Detection</span>
-                        <p class="card-desc">睡眠中のいびき・騒音レベルをリアルタイム計測。環境音データとして記録。</p>
+                        <span class="work-card-tag">Sound Detection</span>
+                        <p class="work-card-desc">睡眠中のいびき・騒音レベルをリアルタイム計測。環境音データとして記録。</p>
                     </div>
-                    <div class="card-footer">
-                        <a href="snorewav/?lang=ja" class="btn-text">さらに詳しく</a>
-                    </div>
-                </div>
-
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Highlights -->
-    <section class="section">
-        <div class="section-container">
-            <div class="section-head">
-                <h2 class="section-title">すべてのアプリに共通</h2>
-            </div>
-        </div>
-        <div class="highlights-strip">
-            <div class="hl-card">
-                <div class="hl-icon hl-icon--privacy">🔒</div>
-                <h3 class="hl-title">プライバシー最優先</h3>
-                <p class="hl-desc">データは端末内で処理。外部サーバーへの送信はゼロ。</p>
-            </div>
-            <div class="hl-card">
-                <div class="hl-icon hl-icon--health">❤️</div>
-                <h3 class="hl-title">Apple HealthKit 連携</h3>
-                <p class="hl-desc">記録したデータは HealthKit に自動連携。ヘルスケアで一元管理。</p>
-            </div>
-            <div class="hl-card">
-                <div class="hl-icon hl-icon--speed">⚡</div>
-                <h3 class="hl-title">1秒で記録</h3>
-                <p class="hl-desc">撮る、話す、聴くだけ。操作は最小限でストレスフリー。</p>
+    <!-- (What matters) -->
+    <section class="section" style="background: var(--white); border-top: 1px solid var(--border);">
+        <div class="section-inner">
+            <p class="section-label reveal">(What matters)</p>
+            <h2 class="section-heading reveal reveal-d1">すべてのアプリに共通</h2>
+
+            <div class="values-row">
+                <div class="value-card">
+                    <div class="value-icon">🔒</div>
+                    <h3 class="value-title">プライバシー最優先</h3>
+                    <p class="value-desc">データは端末内で処理。外部サーバーへの送信はゼロ。あなたの健康データは、あなただけのもの。</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">❤️</div>
+                    <h3 class="value-title">Apple HealthKit 連携</h3>
+                    <p class="value-desc">記録したデータは HealthKit に自動連携。Apple ヘルスケアアプリで一元管理できます。</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">⚡</div>
+                    <h3 class="value-title">1秒で記録</h3>
+                    <p class="value-desc">撮る、話す、聴くだけ。操作は最小限。毎日の記録を、ストレスフリーに。</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" id="contact">
         <div class="footer-inner">
-            <div class="footer-top">
-                <div class="footer-logo">
-                    <img src="allnew-logo.png" alt="AllNew">
-                </div>
-                <div class="footer-nav">
+            <div class="footer-brand">
+                <div class="footer-logo"><img src="allnew-logo.png" alt="AllNew"></div>
+                <p class="footer-tagline">合同会社AllNew<br>Health &amp; Wellness iOS Apps</p>
+            </div>
+            <div class="footer-cols">
+                <div class="footer-col">
+                    <p class="footer-col-title">Legal</p>
                     <a href="ja/privacy/">プライバシーポリシー</a>
                     <a href="ja/terms/">利用規約</a>
                     <a href="ja/tokusho/">特定商取引法に基づく表記</a>
                     <a href="ja/faq/">FAQ</a>
                 </div>
+                <div class="footer-col">
+                    <p class="footer-col-title">Apps</p>
+                    <p>Camera: WeightSnap, ThermoSnap, BPSnap, GlucoSnap, OxiSnap</p>
+                    <p>Voice: PupWeight, BabyVox, WaistVox</p>
+                    <p>Sound: CoughWav, SnoreWav</p>
+                </div>
             </div>
-            <div class="footer-bottom">
-                <p class="footer-copy">&copy; 2026 AllNew LLC（合同会社AllNew）</p>
-                <p class="footer-trademark">App Store は Apple Inc. の商標です。</p>
-            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copy">&copy; 2026 AllNew LLC</p>
+            <p class="footer-copy-right">App Store は Apple Inc. の商標です。</p>
         </div>
     </footer>
 
     <script>
-        // ===== Scroll Reveal =====
-        function observeAll() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, i) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => entry.target.classList.add('visible'), i * 60);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
-
-            document.querySelectorAll('.card:not(.visible), .featured-card:not(.visible), .hl-card:not(.visible)').forEach(el => observer.observe(el));
+        // ===== Nav scroll state =====
+        const nav = document.getElementById('nav');
+        function checkNavScroll() {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
         }
-        observeAll();
+        window.addEventListener('scroll', checkNavScroll, { passive: true });
+        checkNavScroll();
 
-        // ===== Nav Filter =====
-        const tabs = document.querySelectorAll('.nav-tab');
-        const sections = document.querySelectorAll('[data-section]');
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const f = tab.dataset.filter;
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-
-                if (f === 'all') {
-                    sections.forEach(s => s.style.display = '');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    sections.forEach(s => {
-                        s.style.display = s.dataset.section === f ? '' : 'none';
-                    });
-                    const target = document.getElementById('section-' + f);
-                    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        // ===== Scroll reveal =====
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 50);
+                    revealObserver.unobserve(entry.target);
                 }
-                requestAnimationFrame(observeAll);
             });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal, .method-item, .work-card, .value-card, .stat-item, .featured-card').forEach(el => {
+            revealObserver.observe(el);
         });
 
-        // ===== Active tab on scroll =====
-        const sObs = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting && e.intersectionRatio > 0.25) {
-                    const id = e.target.dataset.section;
-                    if (id) tabs.forEach(t => t.classList.toggle('active', t.dataset.filter === id));
-                }
-            });
-        }, { threshold: 0.25 });
-
-        document.querySelectorAll('[id^="section-"]').forEach(s => sObs.observe(s));
+        // ===== Work card SVG stroke =====
+        document.querySelectorAll('.work-card-arrow svg').forEach(svg => {
+            svg.setAttribute('fill', 'none');
+            svg.setAttribute('stroke', 'currentColor');
+            svg.setAttribute('stroke-width', '1.5');
+            svg.setAttribute('stroke-linecap', 'round');
+            svg.setAttribute('stroke-linejoin', 'round');
+        });
     </script>
 
 </body>
