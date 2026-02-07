@@ -5,275 +5,266 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AllNew Apps - Health & Wellness Apps</title>
     <meta name="description" content="AllNew LLC - iOS health and wellness apps. Weight, temperature, blood pressure, glucose, SpO2, pet weight, baby growth, cough, waist, and snore tracking.">
-    <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* ==================== Design Tokens (Material 3) ==================== */
         :root {
-            --bg: #f5f5f7;
-            --bg-card: #ffffff;
-            --bg-glass: rgba(245, 245, 247, 0.72);
-            --bg-dark-card: #1d1d1f;
-            --text: #1d1d1f;
-            --text-secondary: #6e6e73;
-            --text-tertiary: #86868b;
-            --accent: #0071e3;
-            --accent-hover: #0077ed;
-            --border: rgba(0,0,0,0.06);
-            --shadow: 0 4px 24px rgba(0,0,0,0.06);
-            --shadow-hover: 0 12px 48px rgba(0,0,0,0.12);
-            --color-camera: #007AFF;
-            --color-voice: #FF8C00;
-            --color-sound: #AF52DE;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #000000;
-                --bg-card: #1c1c1e;
-                --bg-glass: rgba(28, 28, 30, 0.72);
-                --bg-dark-card: #000000;
-                --text: #f5f5f7;
-                --text-secondary: #a1a1a6;
-                --text-tertiary: #6e6e73;
-                --accent: #2997ff;
-                --accent-hover: #4daeff;
-                --border: rgba(255,255,255,0.08);
-                --shadow: 0 4px 24px rgba(0,0,0,0.3);
-                --shadow-hover: 0 12px 48px rgba(0,0,0,0.5);
-            }
+            --surface: #ffffff;
+            --surface-container: #f3f3f3;
+            --surface-container-high: #e8e8e8;
+            --surface-variant: #e1e3e1;
+            --on-surface: #1f1f1f;
+            --on-surface-variant: #444746;
+            --outline: #747775;
+            --outline-variant: #c4c7c5;
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
+            --on-primary: #ffffff;
+            --secondary-container: #c2e7ff;
+            --on-secondary-container: #001d35;
+            --error: #b3261e;
+            --shadow-1: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+            --shadow-2: 0 1px 2px 0 rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
+            --shadow-3: 0 4px 8px 3px rgba(60,64,67,.15), 0 1px 3px rgba(60,64,67,.3);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 28px;
+            --radius-full: 9999px;
+            --color-camera: #1a73e8;
+            --color-voice: #e8710a;
+            --color-sound: #9334e6;
+            --color-camera-bg: #d2e3fc;
+            --color-voice-bg: #fde293;
+            --color-sound-bg: #e9d2fd;
+            --nav-height: 64px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Hiragino Sans', 'Segoe UI', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            font-family: 'Google Sans', 'Noto Sans JP', 'Roboto', Arial, sans-serif;
+            background: var(--surface);
+            color: var(--on-surface);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            line-height: 1.47059;
+            line-height: 1.5;
+            font-size: 16px;
         }
 
-        /* ==================== Global Nav ==================== */
-        .global-nav {
+        /* ==================== Navigation ==================== */
+        .nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: var(--bg-glass);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            border-bottom: 1px solid var(--outline-variant);
+            height: var(--nav-height);
         }
 
-        .global-nav-inner {
-            max-width: 1024px;
+        .nav-inner {
+            max-width: 1280px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 22px;
-            height: 48px;
+            padding: 0 24px;
+            height: 100%;
         }
 
         .nav-logo {
             display: flex;
             align-items: center;
             text-decoration: none;
-            white-space: nowrap;
         }
 
         .nav-logo img {
-            height: 18px;
+            height: 20px;
             width: auto;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .nav-logo img {
-                filter: brightness(0) invert(1);
-            }
-        }
-
-        .nav-links {
+        .nav-tabs {
             display: flex;
             align-items: center;
             gap: 4px;
+            height: 100%;
         }
 
-        .nav-link {
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: var(--text-secondary);
-            text-decoration: none;
-            border-radius: 980px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
+        .nav-tab {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            height: 100%;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--on-surface-variant);
             background: none;
+            border: none;
+            cursor: pointer;
             font-family: inherit;
+            transition: color 0.2s;
             white-space: nowrap;
         }
 
-        .nav-link:hover, .nav-link.active {
-            color: var(--text);
-            background: var(--border);
+        .nav-tab::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 16px;
+            right: 16px;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.2s;
         }
 
-        .nav-link.active {
-            font-weight: 600;
+        .nav-tab:hover {
+            color: var(--on-surface);
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+        }
+
+        .nav-tab.active::after {
+            opacity: 1;
         }
 
         /* ==================== Hero ==================== */
         .hero {
+            background: linear-gradient(180deg, #e8f0fe 0%, var(--surface) 100%);
             text-align: center;
-            padding: 80px 24px 60px;
+            padding: 80px 24px 64px;
             position: relative;
             overflow: hidden;
-            background: var(--bg);
         }
 
-        .hero-deco {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
-        .hero-deco-1 {
-            width: 500px;
-            height: 500px;
-            background: #007AFF;
-            top: -200px;
-            left: -100px;
-        }
-
-        .hero-deco-2 {
-            width: 400px;
-            height: 400px;
-            background: #FF8C00;
-            top: -100px;
-            right: -80px;
-        }
-
-        .hero-deco-3 {
-            width: 300px;
-            height: 300px;
-            background: #AF52DE;
-            bottom: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-eyebrow {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 12px;
-        }
-
-        .hero-title {
-            font-size: clamp(2.4rem, 6vw, 3.8rem);
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            line-height: 1.08;
-            color: var(--text);
-            margin-bottom: 16px;
-        }
-
-        .hero-title .gradient-text {
-            background: linear-gradient(90deg, #007AFF, #AF52DE, #FF8C00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: var(--text-secondary);
-            font-weight: 400;
-            max-width: 500px;
-            margin: 0 auto 40px;
-            line-height: 1.5;
-        }
-
-        .hero-chips {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .hero-chip {
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 10px 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 980px;
-            font-size: 0.85rem;
+            padding: 6px 16px;
+            background: var(--secondary-container);
+            color: var(--on-secondary-container);
+            border-radius: var(--radius-full);
+            font-size: 13px;
             font-weight: 500;
-            color: var(--text-secondary);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
         }
 
-        .hero-chip-icon {
-            font-size: 1rem;
+        .hero-title {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--on-surface);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .accent {
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--on-surface-variant);
+            max-width: 540px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .hero-methods {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .hero-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-method-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .hero-method-icon.camera { background: var(--color-camera-bg); }
+        .hero-method-icon.voice { background: var(--color-voice-bg); }
+        .hero-method-icon.sound { background: var(--color-sound-bg); }
+
+        .hero-method-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--on-surface-variant);
         }
 
         /* ==================== Section ==================== */
         .section {
-            padding: 60px 0;
+            padding: 64px 0;
         }
 
-        .section-header {
-            max-width: 1024px;
+        .section--alt {
+            background: var(--surface-container);
+        }
+
+        .section-container {
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 22px 24px;
+            padding: 0 24px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .section-title {
-            font-size: 1.7rem;
+            font-size: 28px;
             font-weight: 700;
-            color: var(--text);
-            letter-spacing: -0.03em;
-            line-height: 1.2;
+            color: var(--on-surface);
+            letter-spacing: -0.01em;
         }
 
         .section-subtitle {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-top: 6px;
+            font-size: 14px;
+            color: var(--on-surface-variant);
         }
 
-        /* ==================== Featured Banner ==================== */
-        .featured-banner {
-            max-width: 1024px;
-            margin: 0 auto 0;
-            padding: 0 22px;
+        /* ==================== Featured Hero Card ==================== */
+        .featured {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
         .featured-card {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            align-items: center;
-            background: linear-gradient(135deg, #1d1d1f 0%, #2c2c2e 100%);
-            border-radius: 28px;
+            background: var(--on-surface);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            min-height: 440px;
-            position: relative;
+            min-height: 420px;
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateY(24px);
+            transition: opacity 0.5s cubic-bezier(.4,0,.2,1), transform 0.5s cubic-bezier(.4,0,.2,1);
         }
 
         .featured-card.visible {
@@ -281,920 +272,844 @@
             transform: translateY(0);
         }
 
-        .featured-text {
-            padding: 48px;
-            color: #f5f5f7;
+        .featured-body {
+            padding: 56px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: var(--surface);
         }
 
-        .featured-eyebrow {
-            font-size: 0.75rem;
-            font-weight: 600;
+        .featured-label {
+            font-size: 12px;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #a1a1a6;
-            margin-bottom: 12px;
-        }
-
-        .featured-name {
-            font-size: 2.4rem;
-            font-weight: 800;
-            letter-spacing: -0.04em;
-            margin-bottom: 8px;
-            line-height: 1.1;
-        }
-
-        .featured-ja-name {
-            font-size: 1rem;
-            color: #a1a1a6;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.6);
             margin-bottom: 16px;
         }
 
+        .featured-name {
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .featured-ja {
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 20px;
+        }
+
         .featured-desc {
-            font-size: 1rem;
-            color: #d1d1d6;
+            font-size: 16px;
+            color: rgba(255,255,255,0.85);
             line-height: 1.6;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
 
-        .featured-actions {
+        .featured-btns {
             display: flex;
+            gap: 12px;
             align-items: center;
-            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        .featured-cta {
+        /* Buttons (Material 3) */
+        .btn-filled {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 12px 24px;
-            background: var(--accent);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 980px;
-            font-size: 0.9rem;
+            gap: 8px;
+            padding: 0 24px;
+            height: 40px;
+            background: var(--primary);
+            color: var(--on-primary);
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 14px;
             font-weight: 500;
-            transition: background 0.2s;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, box-shadow 0.2s;
         }
 
-        .featured-cta:hover {
-            background: var(--accent-hover);
+        .btn-filled:hover {
+            background: var(--primary-hover);
+            box-shadow: var(--shadow-1);
         }
 
-        .featured-cta-secondary {
+        .btn-outlined {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 24px;
+            height: 40px;
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--outline);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-outlined:hover {
+            background: rgba(26,115,232,0.04);
+            border-color: var(--primary);
+        }
+
+        .btn-text {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.9rem;
+            padding: 0 12px;
+            height: 40px;
+            background: transparent;
+            color: var(--primary);
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 14px;
             font-weight: 500;
-            transition: opacity 0.2s;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
         }
 
-        .featured-cta-secondary:hover {
-            opacity: 0.7;
+        .btn-text:hover {
+            background: rgba(26,115,232,0.08);
         }
 
-        .featured-cta-secondary::after {
-            content: '\203A';
-            font-size: 1.2rem;
+        .btn-text::after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background: currentColor;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/%3E%3C/svg%3E") center/contain no-repeat;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/%3E%3C/svg%3E") center/contain no-repeat;
         }
 
-        .featured-promo {
+        .featured-img {
             display: flex;
-            justify-content: center;
             align-items: flex-end;
-            padding: 32px 32px 0;
-            height: 100%;
+            justify-content: center;
+            padding: 40px 40px 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
         }
 
-        .featured-promo img {
-            max-width: 260px;
+        .featured-img img {
+            max-width: 280px;
             width: 100%;
             height: auto;
-            border-radius: 20px 20px 0 0;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
             object-fit: contain;
-            filter: drop-shadow(0 8px 32px rgba(0,0,0,0.3));
         }
 
-        /* ==================== Horizontal Shelf ==================== */
-        .shelf-scroll {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            padding: 0 22px 20px;
-            max-width: 100%;
-            scrollbar-width: none;
+        /* ==================== Product Grid ==================== */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
         }
 
-        .shelf-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Shelf centered container */
-        .shelf-inner {
-            display: flex;
-            gap: 20px;
-            max-width: 1024px;
-            margin: 0 auto;
-            padding: 0 22px 20px;
-        }
-
-        /* ==================== Product Card (Shelf Item) ==================== */
-        .product-card {
-            flex: 0 0 310px;
-            scroll-snap-align: start;
-            background: var(--bg-card);
-            border-radius: 24px;
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
             overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid var(--outline-variant);
+            transition: box-shadow 0.2s cubic-bezier(.4,0,.2,1), transform 0.2s cubic-bezier(.4,0,.2,1);
             display: flex;
             flex-direction: column;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(16px);
+            cursor: pointer;
         }
 
-        .product-card.visible {
+        .section--alt .card {
+            border-color: transparent;
+            box-shadow: var(--shadow-1);
+        }
+
+        .card.visible {
             opacity: 1;
             transform: translateY(0);
+            transition: opacity 0.4s cubic-bezier(.4,0,.2,1), transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.2s, border-color 0.2s;
         }
 
-        .product-card:hover {
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-4px) scale(1.01);
+        .card:hover {
+            box-shadow: var(--shadow-3);
+            border-color: transparent;
         }
 
-        .product-card.visible:hover {
-            transform: translateY(-4px) scale(1.01);
+        .card-img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 32px 24px 16px;
+            min-height: 200px;
         }
 
-        .product-card-inner {
-            padding: 28px 24px 0;
+        .card-img img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            aspect-ratio: 9/16;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+            transition: transform 0.3s cubic-bezier(.4,0,.2,1);
         }
 
-        .product-card-top {
+        .card:hover .card-img img {
+            transform: scale(1.04);
+        }
+
+        .card-body {
+            padding: 16px 24px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-top {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin-bottom: 8px;
         }
 
-        .product-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-1);
             flex-shrink: 0;
         }
 
-        .product-name-block {
+        .card-names {
             flex: 1;
             min-width: 0;
         }
 
-        .product-name {
-            font-size: 1.15rem;
+        .card-name {
+            font-size: 18px;
             font-weight: 700;
-            color: var(--text);
-            line-height: 1.2;
-            letter-spacing: -0.02em;
+            color: var(--on-surface);
+            line-height: 1.3;
         }
 
-        .product-ja {
-            font-size: 0.78rem;
-            color: var(--text-tertiary);
-            margin-top: 2px;
+        .card-ja {
+            font-size: 13px;
+            color: var(--on-surface-variant);
         }
 
-        .product-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            padding: 3px 10px;
-            border-radius: 980px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-top: 6px;
-            letter-spacing: 0.02em;
-        }
-
-        .tag-camera { background: var(--color-camera); }
-        .tag-voice { background: var(--color-voice); }
-        .tag-sound { background: var(--color-sound); }
-
-        .product-desc {
-            font-size: 0.88rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 4px;
-        }
-
-        .product-promo {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            padding: 16px 16px 0;
-            overflow: hidden;
-        }
-
-        .product-promo img {
-            width: 100%;
-            max-width: 240px;
-            height: auto;
-            border-radius: 16px 16px 0 0;
-            object-fit: contain;
-            transition: transform 0.4s ease;
-        }
-
-        .product-card:hover .product-promo img {
-            transform: scale(1.03) translateY(-4px);
-        }
-
-        .product-actions {
-            padding: 16px 24px 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .product-link {
+        .card-tag {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
             font-weight: 500;
-            transition: opacity 0.2s;
+            margin: 8px 0 12px;
+            width: fit-content;
         }
 
-        .product-link:hover {
-            opacity: 0.7;
+        .card-tag--camera {
+            background: var(--color-camera-bg);
+            color: #174ea6;
         }
 
-        .product-link::after {
-            content: '\203A';
-            font-size: 1.1rem;
+        .card-tag--voice {
+            background: var(--color-voice-bg);
+            color: #7c4a03;
         }
 
-        .app-store-badge {
-            height: 32px;
-            transition: opacity 0.2s;
+        .card-tag--sound {
+            background: var(--color-sound-bg);
+            color: #5b157b;
         }
 
-        .app-store-badge:hover {
-            opacity: 0.8;
-        }
-
-        /* ==================== Dark Feature Cards ==================== */
-        .dark-feature-section {
-            background: var(--bg-dark-card);
-            padding: 80px 0;
-            margin: 0;
-        }
-
-        .dark-feature-section .section-title {
-            color: #f5f5f7;
-        }
-
-        .dark-feature-section .section-subtitle {
-            color: #a1a1a6;
-        }
-
-        .dark-grid {
-            max-width: 1024px;
-            margin: 0 auto;
-            padding: 0 22px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .dark-card {
-            background: #2c2c2e;
-            border-radius: 24px;
-            overflow: hidden;
-            padding: 32px;
-            display: flex;
-            flex-direction: column;
-            min-height: 360px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
-            position: relative;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .dark-card {
-                background: #1c1c1e;
-                border: 1px solid rgba(255,255,255,0.06);
-            }
-        }
-
-        .dark-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .dark-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .dark-card.visible:hover {
-            transform: translateY(-4px);
-        }
-
-        .dark-card-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 13px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .dark-card-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #f5f5f7;
-            letter-spacing: -0.02em;
-            margin-bottom: 4px;
-        }
-
-        .dark-card-ja {
-            font-size: 0.82rem;
-            color: #a1a1a6;
-            margin-bottom: 12px;
-        }
-
-        .dark-card-desc {
-            font-size: 0.9rem;
-            color: #d1d1d6;
+        .card-desc {
+            font-size: 14px;
+            color: var(--on-surface-variant);
             line-height: 1.6;
             flex: 1;
         }
 
-        .dark-card-promo {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
+        .card-footer {
+            padding: 0 24px 20px;
         }
 
-        .dark-card-promo img {
-            max-width: 200px;
-            width: 100%;
-            height: auto;
-            border-radius: 16px;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 16px rgba(0,0,0,0.3));
-            transition: transform 0.3s ease;
-        }
-
-        .dark-card:hover .dark-card-promo img {
-            transform: scale(1.04);
-        }
-
-        .dark-card-actions {
-            margin-top: 16px;
-        }
-
-        .dark-card-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: opacity 0.2s;
-        }
-
-        .dark-card-link:hover {
-            opacity: 0.7;
-        }
-
-        .dark-card-link::after {
-            content: '\203A';
-            font-size: 1.1rem;
-        }
-
-        .dark-card .product-tag {
-            display: inline-flex;
-            margin-bottom: 12px;
-        }
-
-        /* ==================== Feature Highlights ==================== */
-        .highlights {
-            max-width: 1024px;
+        /* ==================== Highlights Strip ==================== */
+        .highlights-strip {
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 22px;
+            padding: 0 24px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-top: 0;
+            gap: 24px;
         }
 
-        .highlight-card {
+        .hl-card {
+            background: var(--surface);
+            border: 1px solid var(--outline-variant);
+            border-radius: var(--radius-lg);
+            padding: 32px;
             text-align: center;
-            padding: 40px 24px;
-            background: var(--bg-card);
-            border-radius: 20px;
-            border: 1px solid var(--border);
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease;
+            transform: translateY(16px);
+            transition: opacity 0.4s cubic-bezier(.4,0,.2,1), transform 0.4s cubic-bezier(.4,0,.2,1);
         }
 
-        .highlight-card.visible {
+        .hl-card.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .highlight-icon {
-            font-size: 2.2rem;
-            margin-bottom: 12px;
+        .hl-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 16px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
         }
 
-        .highlight-title {
-            font-size: 1rem;
+        .hl-icon--privacy { background: #e8f5e9; }
+        .hl-icon--health  { background: #fce4ec; }
+        .hl-icon--speed   { background: #fff3e0; }
+
+        .hl-title {
+            font-size: 16px;
             font-weight: 700;
-            color: var(--text);
-            margin-bottom: 6px;
-            letter-spacing: -0.01em;
+            color: var(--on-surface);
+            margin-bottom: 8px;
         }
 
-        .highlight-desc {
-            font-size: 0.82rem;
-            color: var(--text-secondary);
+        .hl-desc {
+            font-size: 14px;
+            color: var(--on-surface-variant);
             line-height: 1.5;
         }
 
         /* ==================== Footer ==================== */
         .footer {
-            background: var(--bg);
-            border-top: 1px solid var(--border);
-            padding: 32px 22px;
-            text-align: center;
+            background: var(--surface-container);
+            padding: 40px 24px;
         }
 
         .footer-inner {
-            max-width: 1024px;
+            max-width: 1280px;
             margin: 0 auto;
         }
 
-        .footer-links {
+        .footer-top {
             display: flex;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-logo img {
+            height: 18px;
+            width: auto;
+        }
+
+        .footer-nav {
+            display: flex;
             gap: 24px;
-            margin-bottom: 16px;
             flex-wrap: wrap;
         }
 
-        .footer-links a {
-            color: var(--text-secondary);
+        .footer-nav a {
+            color: var(--on-surface-variant);
             text-decoration: none;
-            font-size: 0.78rem;
+            font-size: 13px;
+            font-weight: 500;
             transition: color 0.2s;
         }
 
-        .footer-links a:hover {
-            color: var(--text);
+        .footer-nav a:hover {
+            color: var(--on-surface);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--outline-variant);
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .footer-copy {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
+            font-size: 12px;
+            color: var(--outline);
         }
 
         .footer-trademark {
-            font-size: 0.68rem;
-            color: var(--text-tertiary);
-            opacity: 0.6;
-            margin-top: 4px;
+            font-size: 11px;
+            color: var(--outline);
         }
 
         /* ==================== Responsive ==================== */
-        @media (max-width: 768px) {
-            .global-nav-inner {
-                padding: 0 16px;
-            }
-
-            .nav-links {
-                gap: 0;
-            }
-
-            .nav-link {
-                padding: 6px 10px;
-                font-size: 0.7rem;
-            }
-
-            .hero {
-                padding: 60px 16px 40px;
-            }
-
-            .hero-chips {
-                gap: 8px;
-            }
-
-            .hero-chip {
-                padding: 8px 14px;
-                font-size: 0.78rem;
-            }
-
+        @media (max-width: 960px) {
             .featured-card {
                 grid-template-columns: 1fr;
                 min-height: auto;
             }
 
-            .featured-text {
+            .featured-body {
+                padding: 40px 32px;
+            }
+
+            .featured-name {
+                font-size: 32px;
+            }
+
+            .featured-img {
+                padding: 0 32px;
+            }
+
+            .featured-img img {
+                max-width: 220px;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-inner {
+                padding: 0 16px;
+            }
+
+            .nav-tab {
+                padding: 0 12px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 56px 16px 40px;
+            }
+
+            .hero-methods {
+                gap: 24px;
+            }
+
+            .section {
+                padding: 48px 0;
+            }
+
+            .section-container {
+                padding: 0 16px;
+            }
+
+            .section-head {
+                margin-bottom: 24px;
+            }
+
+            .section-title {
+                font-size: 22px;
+            }
+
+            .featured {
+                padding: 0 16px;
+            }
+
+            .featured-body {
                 padding: 32px 24px;
             }
 
             .featured-name {
-                font-size: 1.8rem;
+                font-size: 28px;
             }
 
-            .featured-promo {
+            .featured-img {
                 padding: 0 24px;
-                justify-content: center;
-                align-items: flex-end;
             }
 
-            .featured-promo img {
-                max-width: 200px;
-                border-radius: 16px 16px 0 0;
+            .featured-img img {
+                max-width: 180px;
             }
 
-            .section-header {
-                padding: 0 16px 20px;
-            }
-
-            .section-title {
-                font-size: 1.4rem;
-            }
-
-            .shelf-scroll {
-                padding: 0 16px 16px;
-            }
-
-            .product-card {
-                flex: 0 0 270px;
-            }
-
-            .dark-grid {
+            .product-grid {
                 grid-template-columns: 1fr;
-                padding: 0 16px;
             }
 
-            .dark-card {
-                min-height: 280px;
-            }
-
-            .highlights {
+            .highlights-strip {
                 grid-template-columns: 1fr;
                 padding: 0 16px;
             }
 
             .footer {
-                padding: 24px 16px;
+                padding: 32px 16px;
             }
         }
 
         @media (max-width: 480px) {
-            .product-card {
-                flex: 0 0 250px;
+            .nav-tabs {
+                gap: 0;
+            }
+
+            .nav-tab {
+                padding: 0 8px;
+                font-size: 12px;
             }
 
             .hero-title {
-                font-size: 2rem;
+                font-size: 28px;
+            }
+
+            .card-img {
+                min-height: 160px;
+                padding: 24px 16px 12px;
+            }
+
+            .card-body {
+                padding: 12px 20px 20px;
+            }
+
+            .card-footer {
+                padding: 0 20px 16px;
             }
         }
 
         /* ==================== Accessibility ==================== */
         @media (prefers-reduced-motion: reduce) {
-            .product-card,
-            .featured-card,
-            .dark-card,
-            .highlight-card {
+            .card, .featured-card, .hl-card {
                 opacity: 1;
                 transform: none;
                 transition: box-shadow 0.2s ease;
             }
-
-            .product-card:hover,
-            .dark-card:hover,
-            .featured-card:hover {
+            .card:hover .card-img img {
                 transform: none;
-            }
-
-            .product-card.visible:hover,
-            .dark-card.visible:hover {
-                transform: none;
-            }
-
-            .hero-deco {
-                display: none;
             }
         }
 
-        .nav-link:focus-visible,
-        .product-link:focus-visible,
-        .featured-cta:focus-visible,
-        .dark-card-link:focus-visible {
-            outline: 2px solid var(--accent);
+        .nav-tab:focus-visible,
+        .btn-filled:focus-visible,
+        .btn-outlined:focus-visible,
+        .btn-text:focus-visible {
+            outline: 2px solid var(--primary);
             outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-    <!-- Global Navigation -->
-    <nav class="global-nav" role="navigation" aria-label="Main navigation">
-        <div class="global-nav-inner">
+
+    <!-- Navigation -->
+    <nav class="nav" role="navigation" aria-label="Main">
+        <div class="nav-inner">
             <a href="#" class="nav-logo"><img src="allnew-logo.png" alt="AllNew" /></a>
-            <div class="nav-links">
-                <button class="nav-link active" data-filter="all">すべて</button>
-                <button class="nav-link" data-filter="camera">カメラ認識</button>
-                <button class="nav-link" data-filter="voice">音声入力</button>
-                <button class="nav-link" data-filter="sound">音検出</button>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-filter="all">すべて</button>
+                <button class="nav-tab" data-filter="camera">カメラ認識</button>
+                <button class="nav-tab" data-filter="voice">音声入力</button>
+                <button class="nav-tab" data-filter="sound">音検出</button>
             </div>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="hero" id="hero">
-        <div class="hero-deco hero-deco-1"></div>
-        <div class="hero-deco hero-deco-2"></div>
-        <div class="hero-deco hero-deco-3"></div>
-        <div class="hero-content">
-            <p class="hero-eyebrow">Health & Wellness</p>
-            <h1 class="hero-title">
-                健康を、<span class="gradient-text">もっとシンプルに。</span>
-            </h1>
-            <p class="hero-subtitle">撮る・話す・聴く。<br>3つの方法で、毎日の健康データをかんたんに記録。</p>
-            <div class="hero-chips">
-                <div class="hero-chip">
-                    <span class="hero-chip-icon">📷</span>
-                    カメラで撮る
-                </div>
-                <div class="hero-chip">
-                    <span class="hero-chip-icon">🎤</span>
-                    声で伝える
-                </div>
-                <div class="hero-chip">
-                    <span class="hero-chip-icon">🔊</span>
-                    音を聴く
-                </div>
+    <section class="hero">
+        <div class="hero-badge">✨ 10のヘルスケアアプリ</div>
+        <h1 class="hero-title">健康を、<span class="accent">もっとシンプル</span>に。</h1>
+        <p class="hero-subtitle">撮る・話す・聴く。3つの方法で、毎日の健康データをかんたんに記録できます。</p>
+        <div class="hero-methods">
+            <div class="hero-method">
+                <div class="hero-method-icon camera">📷</div>
+                <span class="hero-method-label">カメラで撮る</span>
+            </div>
+            <div class="hero-method">
+                <div class="hero-method-icon voice">🎤</div>
+                <span class="hero-method-label">声で伝える</span>
+            </div>
+            <div class="hero-method">
+                <div class="hero-method-icon sound">🔊</div>
+                <span class="hero-method-label">音を聴く</span>
             </div>
         </div>
     </section>
 
-    <!-- Featured App: WeightSnap -->
+    <!-- Featured: WeightSnap -->
     <section class="section" data-section="camera">
-        <div class="featured-banner">
+        <div class="featured">
             <div class="featured-card" data-category="camera">
-                <div class="featured-text">
-                    <p class="featured-eyebrow">New App</p>
+                <div class="featured-body">
+                    <p class="featured-label">Pick up</p>
                     <h2 class="featured-name">WeightSnap</h2>
-                    <p class="featured-ja-name">体重</p>
+                    <p class="featured-ja">体重</p>
                     <p class="featured-desc">体重計のディスプレイをカメラで撮るだけ。AIが数値を自動認識して Apple HealthKit に記録します。</p>
-                    <div class="featured-actions">
-                        <a href="https://apps.apple.com/app/weightsnap/id6743864029" class="featured-cta" aria-label="WeightSnapをApp Storeでダウンロード">
+                    <div class="featured-btns">
+                        <a href="https://apps.apple.com/app/weightsnap/id6743864029" class="btn-filled" aria-label="App Storeでダウンロード">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M11.15 1.67C11.79.89 12.21.01 12.1-.01c-.91.04-2.01.61-2.66 1.38-.59.68-1.1 1.59-.96 2.52 1.01.08 2.05-.52 2.67-1.22zM12.09 3.89c-1.48-.09-2.74.84-3.44.84-.71 0-1.8-.82-2.97-.8-1.53.03-2.94.89-3.72 2.27-1.59 2.75-.41 6.83 1.14 9.07.76 1.1 1.66 2.34 2.85 2.29 1.14-.04 1.57-.74 2.95-.74 1.37 0 1.76.74 2.96.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.27 1.23-2.5 1.25-2.56-.03-.01-2.4-.92-2.42-3.65-.02-2.29 1.87-3.38 1.95-3.44-1.06-1.57-2.72-1.74-3.31-1.77z"/></svg>
                             App Store
                         </a>
-                        <a href="weightsnap/?lang=ja" class="featured-cta-secondary" aria-label="WeightSnapの詳細">さらに詳しく</a>
+                        <a href="weightsnap/?lang=ja" class="btn-text">さらに詳しく</a>
                     </div>
                 </div>
-                <div class="featured-promo">
-                    <img src="weightsnap-promo.png" alt="WeightSnap - 体重計をカメラで撮影して記録" loading="lazy">
+                <div class="featured-img">
+                    <img src="weightsnap-promo.png" alt="WeightSnap" loading="lazy">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Camera Recognition Apps (Shelf) -->
-    <section class="section" id="section-camera" data-section="camera">
-        <div class="section-header">
-            <h2 class="section-title">📷 カメラ認識</h2>
-            <p class="section-subtitle">計測器のディスプレイを撮影するだけで、AIが数値を自動認識。</p>
-        </div>
-        <div class="shelf-scroll">
-            <!-- ThermoSnap -->
-            <div class="product-card" data-category="camera">
-                <div class="product-card-inner">
-                    <div class="product-card-top">
-                        <img src="thermosnap-icon.png" alt="ThermoSnap" class="product-icon">
-                        <div class="product-name-block">
-                            <div class="product-name">ThermoSnap</div>
-                            <div class="product-ja">体温</div>
-                        </div>
+    <!-- Camera Recognition -->
+    <section class="section section--alt" id="section-camera" data-section="camera">
+        <div class="section-container">
+            <div class="section-head">
+                <h2 class="section-title">カメラ認識</h2>
+                <p class="section-subtitle">計測器を撮影するだけで、AIが数値を自動認識</p>
+            </div>
+            <div class="product-grid">
+
+                <div class="card" data-category="camera" onclick="location.href='thermosnap/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+                        <img src="thermosnap-promo.png" alt="ThermoSnap" loading="lazy">
                     </div>
-                    <span class="product-tag tag-camera">Camera + OCR</span>
-                    <p class="product-desc">体温計のディスプレイをカメラで撮るだけ。体温を自動認識して記録。</p>
-                </div>
-                <div class="product-promo">
-                    <img src="thermosnap-promo.png" alt="ThermoSnap" loading="lazy">
-                </div>
-                <div class="product-actions">
-                    <a href="thermosnap/?lang=ja" class="product-link" aria-label="ThermoSnapの詳細">さらに詳しく</a>
-                </div>
-            </div>
-
-            <!-- BPSnap -->
-            <div class="product-card" data-category="camera">
-                <div class="product-card-inner">
-                    <div class="product-card-top">
-                        <img src="bpsnap-icon.png" alt="BPSnap" class="product-icon">
-                        <div class="product-name-block">
-                            <div class="product-name">BPSnap</div>
-                            <div class="product-ja">血圧</div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="thermosnap-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">ThermoSnap</div>
+                                <div class="card-ja">体温</div>
+                            </div>
                         </div>
+                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
+                        <p class="card-desc">体温計のディスプレイをカメラで撮るだけ。体温を自動認識して HealthKit に記録。</p>
                     </div>
-                    <span class="product-tag tag-camera">Camera + OCR</span>
-                    <p class="product-desc">血圧計をカメラで撮るだけ。最高・最低血圧と脈拍を自動認識。</p>
+                    <div class="card-footer">
+                        <a href="thermosnap/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
                 </div>
-                <div class="product-promo">
-                    <img src="bpsnap-promo.png" alt="BPSnap" loading="lazy">
-                </div>
-                <div class="product-actions">
-                    <a href="bloodpressuresnap/?lang=ja" class="product-link" aria-label="BPSnapの詳細">さらに詳しく</a>
-                </div>
-            </div>
 
-            <!-- GlucoSnap -->
-            <div class="product-card" data-category="camera">
-                <div class="product-card-inner">
-                    <div class="product-card-top">
-                        <img src="glucosnap-icon.png" alt="GlucoSnap" class="product-icon">
-                        <div class="product-name-block">
-                            <div class="product-name">GlucoSnap</div>
-                            <div class="product-ja">血糖値</div>
+                <div class="card" data-category="camera" onclick="location.href='bloodpressuresnap/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+                        <img src="bpsnap-promo.png" alt="BPSnap" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="bpsnap-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">BPSnap</div>
+                                <div class="card-ja">血圧</div>
+                            </div>
                         </div>
+                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
+                        <p class="card-desc">血圧計をカメラで撮るだけ。最高・最低血圧と脈拍を自動認識して記録。</p>
                     </div>
-                    <span class="product-tag tag-camera">Camera + OCR</span>
-                    <p class="product-desc">血糖値計をカメラで撮るだけ。AIが数値を自動認識して記録。</p>
+                    <div class="card-footer">
+                        <a href="bloodpressuresnap/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
                 </div>
-                <div class="product-promo">
-                    <img src="glucosnap-promo.png" alt="GlucoSnap" loading="lazy">
-                </div>
-                <div class="product-actions">
-                    <a href="glucosnap/?lang=ja" class="product-link" aria-label="GlucoSnapの詳細">さらに詳しく</a>
-                </div>
-            </div>
 
-            <!-- OxiSnap -->
-            <div class="product-card" data-category="camera">
-                <div class="product-card-inner">
-                    <div class="product-card-top">
-                        <img src="oxisnap-icon.png" alt="OxiSnap" class="product-icon">
-                        <div class="product-name-block">
-                            <div class="product-name">OxiSnap</div>
-                            <div class="product-ja">血中酸素</div>
+                <div class="card" data-category="camera" onclick="location.href='glucosnap/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+                        <img src="glucosnap-promo.png" alt="GlucoSnap" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="glucosnap-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">GlucoSnap</div>
+                                <div class="card-ja">血糖値</div>
+                            </div>
                         </div>
+                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
+                        <p class="card-desc">血糖値計をカメラで撮るだけ。AIが数値を自動認識して HealthKit に記録。</p>
                     </div>
-                    <span class="product-tag tag-camera">Camera + OCR</span>
-                    <p class="product-desc">パルスオキシメーターを撮るだけ。SpO2を自動認識して記録。</p>
+                    <div class="card-footer">
+                        <a href="glucosnap/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
                 </div>
-                <div class="product-promo">
-                    <img src="oxisnap-promo.png" alt="OxiSnap" loading="lazy">
-                </div>
-                <div class="product-actions">
-                    <a href="oxisnap/?lang=ja" class="product-link" aria-label="OxiSnapの詳細">さらに詳しく</a>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Voice Input Apps (Dark Section) -->
-    <section class="dark-feature-section" id="section-voice" data-section="voice">
-        <div class="section-header" style="max-width: 1024px; margin: 0 auto;">
-            <h2 class="section-title">🎤 音声入力</h2>
-            <p class="section-subtitle">数値を声で言うだけ。ハンズフリーでかんたん記録。</p>
-        </div>
-        <div class="dark-grid">
-            <!-- PupWeight -->
-            <div class="dark-card" data-category="voice">
-                <img src="pupweight-icon.png" alt="PupWeight" class="dark-card-icon">
-                <span class="product-tag tag-voice">Voice Input</span>
-                <div class="dark-card-name">PupWeight</div>
-                <div class="dark-card-ja">ペット体重</div>
-                <p class="dark-card-desc">飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出して記録します。</p>
-                <div class="dark-card-promo">
-                    <img src="pupweight-promo.png" alt="PupWeight" loading="lazy">
+                <div class="card" data-category="camera" onclick="location.href='oxisnap/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #e8f0fe 0%, transparent 100%);">
+                        <img src="oxisnap-promo.png" alt="OxiSnap" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="oxisnap-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">OxiSnap</div>
+                                <div class="card-ja">血中酸素</div>
+                            </div>
+                        </div>
+                        <span class="card-tag card-tag--camera">📷 Camera + OCR</span>
+                        <p class="card-desc">パルスオキシメーターを撮るだけ。SpO2 を自動認識して HealthKit に記録。</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="oxisnap/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
                 </div>
-                <div class="dark-card-actions">
-                    <a href="pupweight/?lang=ja" class="dark-card-link" aria-label="PupWeightの詳細">さらに詳しく</a>
-                </div>
-            </div>
 
-            <!-- BabyVox -->
-            <div class="dark-card" data-category="voice">
-                <img src="babyvox-icon.png" alt="BabyVox" class="dark-card-icon">
-                <span class="product-tag tag-voice">Voice Input</span>
-                <div class="dark-card-name">BabyVox</div>
-                <div class="dark-card-ja">Baby記録</div>
-                <p class="dark-card-desc">赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存します。</p>
-                <div class="dark-card-promo">
-                    <img src="babyvox-promo.png" alt="BabyVox" loading="lazy">
-                </div>
-                <div class="dark-card-actions">
-                    <a href="babyvox/?lang=ja" class="dark-card-link" aria-label="BabyVoxの詳細">さらに詳しく</a>
-                </div>
-            </div>
-
-            <!-- WaistVox -->
-            <div class="dark-card" data-category="voice">
-                <img src="waistvox-icon.png" alt="WaistVox" class="dark-card-icon">
-                <span class="product-tag tag-voice">Voice Input</span>
-                <div class="dark-card-name">WaistVox</div>
-                <div class="dark-card-ja">ウエスト</div>
-                <p class="dark-card-desc">ウエスト周囲径を声で言うだけ。AIが自動認識して Apple HealthKit に記録します。</p>
-                <div class="dark-card-promo">
-                    <img src="waistvox-promo.png" alt="WaistVox" loading="lazy">
-                </div>
-                <div class="dark-card-actions">
-                    <a href="waistvox/?lang=ja" class="dark-card-link" aria-label="WaistVoxの詳細">さらに詳しく</a>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Sound Detection Apps (Shelf) -->
-    <section class="section" id="section-sound" data-section="sound">
-        <div class="section-header">
-            <h2 class="section-title">🔊 音検出</h2>
-            <p class="section-subtitle">マイクが音をリアルタイムで検出。睡眠や健康をモニタリング。</p>
-        </div>
-        <div class="shelf-scroll">
-            <!-- CoughWav -->
-            <div class="product-card" data-category="sound">
-                <div class="product-card-inner">
-                    <div class="product-card-top">
-                        <img src="coughwav-icon.png" alt="CoughWav" class="product-icon">
-                        <div class="product-name-block">
-                            <div class="product-name">CoughWav</div>
-                            <div class="product-ja">咳</div>
-                        </div>
-                    </div>
-                    <span class="product-tag tag-sound">Sound Detection</span>
-                    <p class="product-desc">咳の音をリアルタイム検出。頻度と重症度を HealthKit に記録するモニタリングアプリ。</p>
-                </div>
-                <div class="product-promo">
-                    <img src="coughwav-promo.png" alt="CoughWav" loading="lazy">
-                </div>
-                <div class="product-actions">
-                    <a href="coughwav/?lang=ja" class="product-link" aria-label="CoughWavの詳細">さらに詳しく</a>
-                </div>
+    <!-- Voice Input -->
+    <section class="section" id="section-voice" data-section="voice">
+        <div class="section-container">
+            <div class="section-head">
+                <h2 class="section-title">音声入力</h2>
+                <p class="section-subtitle">数値を声で言うだけ。ハンズフリーでかんたん記録</p>
             </div>
+            <div class="product-grid">
 
-            <!-- SnoreWav -->
-            <div class="product-card" data-category="sound">
-                <div class="product-card-inner">
-                    <div class="product-card-top">
-                        <img src="snorewav-icon.png" alt="SnoreWav" class="product-icon">
-                        <div class="product-name-block">
-                            <div class="product-name">SnoreWav</div>
-                            <div class="product-ja">いびき</div>
-                        </div>
+                <div class="card" data-category="voice" onclick="location.href='pupweight/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #fef7e0 0%, transparent 100%);">
+                        <img src="pupweight-promo.png" alt="PupWeight" loading="lazy">
                     </div>
-                    <span class="product-tag tag-sound">Sound Detection</span>
-                    <p class="product-desc">睡眠中のいびき・騒音レベルをリアルタイム計測。環境音データとして記録。</p>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="pupweight-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">PupWeight</div>
+                                <div class="card-ja">ペット体重</div>
+                            </div>
+                        </div>
+                        <span class="card-tag card-tag--voice">🎤 Voice Input</span>
+                        <p class="card-desc">飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出。</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="pupweight/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
                 </div>
-                <div class="product-promo">
-                    <img src="snorewav-promo.png" alt="SnoreWav" loading="lazy">
+
+                <div class="card" data-category="voice" onclick="location.href='babyvox/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #fef7e0 0%, transparent 100%);">
+                        <img src="babyvox-promo.png" alt="BabyVox" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="babyvox-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">BabyVox</div>
+                                <div class="card-ja">Baby記録</div>
+                            </div>
+                        </div>
+                        <span class="card-tag card-tag--voice">🎤 Voice Input</span>
+                        <p class="card-desc">赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存。</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="babyvox/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
                 </div>
-                <div class="product-actions">
-                    <a href="snorewav/?lang=ja" class="product-link" aria-label="SnoreWavの詳細">さらに詳しく</a>
+
+                <div class="card" data-category="voice" onclick="location.href='waistvox/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #fef7e0 0%, transparent 100%);">
+                        <img src="waistvox-promo.png" alt="WaistVox" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="waistvox-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">WaistVox</div>
+                                <div class="card-ja">ウエスト</div>
+                            </div>
+                        </div>
+                        <span class="card-tag card-tag--voice">🎤 Voice Input</span>
+                        <p class="card-desc">ウエスト周囲径を声で言うだけ。AIが自動認識して HealthKit に記録。</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="waistvox/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
                 </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sound Detection -->
+    <section class="section section--alt" id="section-sound" data-section="sound">
+        <div class="section-container">
+            <div class="section-head">
+                <h2 class="section-title">音検出</h2>
+                <p class="section-subtitle">マイクが音をリアルタイムで検出。睡眠や健康をモニタリング</p>
+            </div>
+            <div class="product-grid">
+
+                <div class="card" data-category="sound" onclick="location.href='coughwav/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #f3e8fd 0%, transparent 100%);">
+                        <img src="coughwav-promo.png" alt="CoughWav" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="coughwav-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">CoughWav</div>
+                                <div class="card-ja">咳</div>
+                            </div>
+                        </div>
+                        <span class="card-tag card-tag--sound">🔊 Sound Detection</span>
+                        <p class="card-desc">咳の音をリアルタイム検出。頻度と重症度を HealthKit に記録するモニタリングアプリ。</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="coughwav/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
+                </div>
+
+                <div class="card" data-category="sound" onclick="location.href='snorewav/?lang=ja'">
+                    <div class="card-img" style="background: linear-gradient(180deg, #f3e8fd 0%, transparent 100%);">
+                        <img src="snorewav-promo.png" alt="SnoreWav" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-top">
+                            <img src="snorewav-icon.png" alt="" class="card-icon">
+                            <div class="card-names">
+                                <div class="card-name">SnoreWav</div>
+                                <div class="card-ja">いびき</div>
+                            </div>
+                        </div>
+                        <span class="card-tag card-tag--sound">🔊 Sound Detection</span>
+                        <p class="card-desc">睡眠中のいびき・騒音レベルをリアルタイム計測。環境音データとして記録。</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="snorewav/?lang=ja" class="btn-text">さらに詳しく</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
     <!-- Highlights -->
     <section class="section">
-        <div class="section-header">
-            <h2 class="section-title">すべてのアプリに共通。</h2>
+        <div class="section-container">
+            <div class="section-head">
+                <h2 class="section-title">すべてのアプリに共通</h2>
+            </div>
         </div>
-        <div class="highlights">
-            <div class="highlight-card">
-                <div class="highlight-icon">🔒</div>
-                <h3 class="highlight-title">プライバシー最優先</h3>
-                <p class="highlight-desc">データは端末内で処理。<br>外部サーバーへの送信はゼロ。</p>
+        <div class="highlights-strip">
+            <div class="hl-card">
+                <div class="hl-icon hl-icon--privacy">🔒</div>
+                <h3 class="hl-title">プライバシー最優先</h3>
+                <p class="hl-desc">データは端末内で処理。外部サーバーへの送信はゼロ。</p>
             </div>
-            <div class="highlight-card">
-                <div class="highlight-icon">❤️</div>
-                <h3 class="highlight-title">Apple HealthKit</h3>
-                <p class="highlight-desc">記録したデータは HealthKit に<br>自動連携。ヘルスケアで一元管理。</p>
+            <div class="hl-card">
+                <div class="hl-icon hl-icon--health">❤️</div>
+                <h3 class="hl-title">Apple HealthKit 連携</h3>
+                <p class="hl-desc">記録したデータは HealthKit に自動連携。ヘルスケアで一元管理。</p>
             </div>
-            <div class="highlight-card">
-                <div class="highlight-icon">⚡</div>
-                <h3 class="highlight-title">1秒で記録</h3>
-                <p class="highlight-desc">撮る、話す、聴くだけ。<br>操作は最小限でストレスフリー。</p>
+            <div class="hl-card">
+                <div class="hl-icon hl-icon--speed">⚡</div>
+                <h3 class="hl-title">1秒で記録</h3>
+                <p class="hl-desc">撮る、話す、聴くだけ。操作は最小限でストレスフリー。</p>
             </div>
         </div>
     </section>
@@ -1202,98 +1117,76 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-inner">
-            <div class="footer-links">
-                <a href="ja/privacy/">プライバシーポリシー</a>
-                <a href="ja/terms/">利用規約</a>
-                <a href="ja/tokusho/">特定商取引法に基づく表記</a>
-                <a href="ja/faq/">FAQ</a>
+            <div class="footer-top">
+                <div class="footer-logo">
+                    <img src="allnew-logo.png" alt="AllNew">
+                </div>
+                <div class="footer-nav">
+                    <a href="ja/privacy/">プライバシーポリシー</a>
+                    <a href="ja/terms/">利用規約</a>
+                    <a href="ja/tokusho/">特定商取引法に基づく表記</a>
+                    <a href="ja/faq/">FAQ</a>
+                </div>
             </div>
-            <p class="footer-copy">&copy; 2026 AllNew LLC（合同会社AllNew）</p>
-            <p class="footer-trademark">App Store は Apple Inc. の商標です。</p>
+            <div class="footer-bottom">
+                <p class="footer-copy">&copy; 2026 AllNew LLC（合同会社AllNew）</p>
+                <p class="footer-trademark">App Store は Apple Inc. の商標です。</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // ===== Scroll Reveal (IntersectionObserver) =====
-        function observeElements() {
+        // ===== Scroll Reveal =====
+        function observeAll() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, idx) => {
+                entries.forEach((entry, i) => {
                     if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('visible');
-                        }, idx * 80);
+                        setTimeout(() => entry.target.classList.add('visible'), i * 60);
                         observer.unobserve(entry.target);
                     }
                 });
-            }, {
-                threshold: 0.08,
-                rootMargin: '0px 0px -30px 0px'
-            });
+            }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
 
-            document.querySelectorAll('.product-card:not(.visible), .featured-card:not(.visible), .dark-card:not(.visible), .highlight-card:not(.visible)').forEach(el => {
-                observer.observe(el);
-            });
+            document.querySelectorAll('.card:not(.visible), .featured-card:not(.visible), .hl-card:not(.visible)').forEach(el => observer.observe(el));
         }
+        observeAll();
 
-        observeElements();
+        // ===== Nav Filter =====
+        const tabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('[data-section]');
 
-        // ===== Category Filter (smooth scroll to section) =====
-        const navLinks = document.querySelectorAll('.nav-link');
-        const allSections = document.querySelectorAll('[data-section]');
-        const allCards = document.querySelectorAll('[data-category]');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const f = tab.dataset.filter;
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                const filter = link.dataset.filter;
-
-                navLinks.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-
-                if (filter === 'all') {
-                    // Show all sections
-                    allSections.forEach(s => s.style.display = '');
+                if (f === 'all') {
+                    sections.forEach(s => s.style.display = '');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                    // Show only matching sections
-                    allSections.forEach(s => {
-                        if (s.dataset.section === filter) {
-                            s.style.display = '';
-                        } else {
-                            s.style.display = 'none';
-                        }
+                    sections.forEach(s => {
+                        s.style.display = s.dataset.section === f ? '' : 'none';
                     });
-
-                    // Scroll to first visible section
-                    const target = document.getElementById('section-' + filter);
-                    if (target) {
-                        setTimeout(() => {
-                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                    }
+                    const target = document.getElementById('section-' + f);
+                    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
                 }
-
-                // Re-observe for animation
-                requestAnimationFrame(() => observeElements());
+                requestAnimationFrame(observeAll);
             });
         });
 
-        // ===== Update active nav on scroll =====
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
-                    const sectionId = entry.target.dataset.section;
-                    if (sectionId) {
-                        navLinks.forEach(l => {
-                            l.classList.toggle('active', l.dataset.filter === sectionId);
-                        });
-                    }
+        // ===== Active tab on scroll =====
+        const sObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting && e.intersectionRatio > 0.25) {
+                    const id = e.target.dataset.section;
+                    if (id) tabs.forEach(t => t.classList.toggle('active', t.dataset.filter === id));
                 }
             });
-        }, { threshold: 0.3 });
+        }, { threshold: 0.25 });
 
-        document.querySelectorAll('[id^="section-"]').forEach(section => {
-            sectionObserver.observe(section);
-        });
+        document.querySelectorAll('[id^="section-"]').forEach(s => sObs.observe(s));
     </script>
+
 </body>
 </html>
