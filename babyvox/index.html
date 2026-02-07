@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BabyVox Support</title>
+    <meta name="description" content="BabyVox - AI-powered baby growth tracking app with voice recognition. FAQ, Privacy Policy, Terms of Service.">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="bingbot" content="noindex, nofollow, noarchive">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
+    <style>
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.72);
+            --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #2997ff;
+                --accent-hover: #4da8ff;
+                --border: rgba(255,255,255,0.1);
+                --glass: rgba(28,28,30,0.72);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            /* Copy Protection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Sticky Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--border);
+        }
+
+        .app-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Language Dropdown */
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 980px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .lang-btn::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-dropdown.open .lang-btn::after {
+            transform: rotate(180deg);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 160px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-soft);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+            z-index: 200;
+        }
+
+        .lang-dropdown.open .lang-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .lang-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .lang-option.active {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .lang-option:first-child { border-radius: 11px 11px 0 0; }
+        .lang-option:last-child { border-radius: 0 0 11px 11px; }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation TOC */
+        .toc {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .toc-link {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 980px;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        /* Language Content Containers */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        /* Section */
+        .section {
+            padding: 48px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Updated Badge */
+        .updated-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-tertiary);
+            padding: 6px 12px;
+            border-radius: 980px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .updated-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #34c759;
+            border-radius: 50%;
+        }
+
+        /* Important Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0,113,227,0.08) 0%, rgba(102,126,234,0.08) 100%);
+            border: 1px solid rgba(0,113,227,0.2);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .highlight-box p {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(0,113,227,0.3);
+        }
+
+        .faq-question {
+            padding: 18px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 800px;
+            padding: 0 24px 24px;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .faq-answer p:last-child { margin-bottom: 0; }
+
+        .faq-answer ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* Legal Sections */
+        .legal-section {
+            margin-bottom: 28px;
+        }
+
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legal-section h3::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .legal-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .legal-section li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .legal-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .legal-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Commercial Accordion */
+        .commercial-accordion {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .commercial-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .commercial-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .commercial-toggle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .commercial-accordion.open .commercial-toggle {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .commercial-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .commercial-accordion.open .commercial-content {
+            max-height: 600px;
+            padding: 0 24px 24px;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .contact-card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .contact-card > p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .contact-email:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .contact-details {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .contact-details-top {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            padding-top: 0;
+            padding-bottom: 16px;
+            border-top: none;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contact-item {
+            font-size: 0.85rem;
+        }
+
+        .contact-item dt {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .contact-item dd {
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        /* Translation Notice */
+        .translation-notice {
+            background: #fff3cd;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .translation-notice {
+                background: rgba(255, 193, 7, 0.15);
+                color: #ffc107;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-inner {
+                gap: 12px;
+            }
+
+            .hero { padding: 40px 20px 30px; }
+            .hero h1 { font-size: 1.6rem; }
+
+            .toc { gap: 4px; }
+            .toc-link { padding: 6px 12px; font-size: 0.8rem; }
+
+            .section { padding: 32px 0; }
+            .section-header { flex-direction: column; text-align: center; }
+
+            .contact-card { padding: 28px; }
+            .contact-details { grid-template-columns: 1fr; }
+        }
+
+        /* Scroll offset for anchors */
+        :target {
+            scroll-margin-top: 80px;
+        }
+
+        /* Fun Easter Egg */
+        .hero-icon:hover {
+            animation: wiggle 0.5s ease;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="../" class="logo-link">
+                <span class="logo">AllNew</span>
+                <span class="logo-divider"></span>
+                <span class="app-name">BabyVox</span>
+            </a>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-btn" id="langBtn">
+                    <span id="currentLangLabel">日本語</span>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <button class="lang-option active" data-lang="ja">日本語</button>
+                    <button class="lang-option" data-lang="en">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <img src="../babyvox-icon.png" alt="BabyVox" class="hero-icon">
+        <h1 id="heroTitle">BabyVox</h1>
+        <p class="hero-subtitle" id="heroSubtitle">声で記録。タップ不要。<br>シンプルな乳幼児の成長記録。</p>
+    </section>
+
+    <nav class="toc" id="toc">
+        <a href="#faq" class="toc-link" data-section="faq">FAQ</a>
+        <a href="#privacy" class="toc-link" data-section="privacy">プライバシー</a>
+        <a href="#terms" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#commercial" class="toc-link" data-section="commercial">特定商取引法</a>
+        <a href="#contact" class="toc-link" data-section="contact">お問い合わせ</a>
+    </nav>
+
+    <main class="main">
+        <!-- ==================== JAPANESE ==================== -->
+        <div class="lang-content active" data-lang="ja">
+            <!-- FAQ -->
+            <section id="faq-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">よくある質問</div>
+                        <div class="section-subtitle">使い方や機能についてお答えします</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">どのように記録しますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>音声認識で乳幼児の身長・体重を記録します。</p>
+                        <ul>
+                            <li><strong>対応:</strong> 日本語・英語の音声入力</li>
+                            <li><strong>必要:</strong> マイクへのアクセス許可</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">認識できる数値の範囲は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>以下の範囲に対応しています：</p>
+                        <ul>
+                            <li><strong>体重:</strong> 1.0kg〜30.0kg</li>
+                            <li><strong>身長:</strong> 30.0cm〜130.0cm</li>
+                            
+                        </ul>
+                        <p>この範囲外の数値は認識されません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">対応しているiPhoneは？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>iOS 17.0以降</strong>を搭載し、マイク機能に対応したiPhoneで動作します。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">無料で使えますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>15回まで無料</strong>でお使いいただけます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>乳幼児の成長データは<strong>お使いのデバイス内</strong>に保存されます。</p>
+                        <p>当社が運用するサーバーへの送信はありません。音声データは認識処理後に即時破棄されます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">認識後の記録方法は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、「記録する」ボタンを押すとヘルスケアに保存されます。</p>
+                        <ul>
+                            <li><strong>通常:</strong> 確認画面で数値を確認し、「記録する」を選択すると保存されます</li>
+                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にヘルスケアに記録されます</li>
+                        </ul>
+                        <p>認識精度が低い場合は、自動記録がオンでも確認画面が表示されます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">認識結果が間違っていた場合は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>保存前の場合:</strong> 確認画面で数値を確認できます。正しくないと思ったら「記録しない」を選択し、再度撮影してください。</p>
+                        <p><strong>保存後の場合:</strong> 誤った数値が保存された場合は、iOSのヘルスケアアプリから削除してください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">購入を復元したい<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップする。</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">プライバシーポリシー</div>
+                        <div class="section-subtitle">あなたのデータを大切に扱います</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月5日</span>
+
+                <div class="highlight-box">
+                    <p><strong>重要:</strong> 本アプリは、ユーザーの乳幼児成長データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内に保存されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. 収集する情報の種類</h3>
+                    <ul>
+                        <li><strong>マイクで取得する音声:</strong> 音声認識処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>健康関連データ（HealthKit）:</strong> 乳幼児の成長データの記録・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
+                        <li><strong>デバイス情報:</strong> 端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>収集しない情報:</strong> 本アプリでは広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 情報の利用目的</h3>
+                    <p>乳幼児の身長・体重の記録と成長管理支援、成長変化の表示。これ以外の目的には利用しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 第三者への提供</h3>
+                    <p>当社は画像データやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Apple HealthKit特記事項</h3>
+                    <ul>
+                        <li>HealthKitデータを広告、マーケティング、データマイニング目的で使用しません</li>
+                        <li>HealthKitデータをデータブローカーに販売しません</li>
+                        <li>当社はHealthKitデータを当社の外部サーバーに送信・保存しません。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います</li>
+                        <li>HealthKitへのアクセスはiOSの設定からいつでも取り消せます</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. セキュリティ対策</h3>
+                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 子供のプライバシー</h3>
+                    <p>本アプリは13歳未満のお子様を対象としていません。アプリの機能利用において、当社は個人情報を収集しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. ユーザーの権利</h3>
+                    <ul>
+                        <li><strong>すべてのユーザー:</strong> HealthKitデータの管理・削除はiOSのApple Health（ヘルスケア）アプリから可能です。表示項目はiOSバージョンにより異なる場合があります。アプリ削除時、iOSがヘルスケアデータの削除を確認します。</li>
+                        <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
+                        <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
+                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。ただし、iCloud同期等のAppleサービスは、ユーザー設定およびAppleの仕様に依存します。</li>
+                        <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
+                        <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. お問い合わせについて</h3>
+                    <p>ユーザーが当社へお問い合わせを行う場合、当社は返信対応のために、メールアドレスおよびお問い合わせ内容を取得・利用します。これらの情報はサポート対応の目的にのみ用い、法令に基づく場合を除き第三者に提供しません。対応完了後は合理的な期間で削除または匿名化します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 準拠法と管轄</h3>
+                    <p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 多言語版について</h3>
+                    <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">利用規約</div>
+                        <div class="section-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月5日</span>
+
+                <div class="legal-section">
+                    <h3>1. 規約の適用</h3>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「BabyVox」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 利用開始と同意</h3>
+                    <p>ユーザーが本アプリをダウンロードし、インストールまたは利用を開始した時点で、本規約に同意したものとみなされます。本規約に同意しない場合、本アプリをご利用いただくことはできません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 本アプリの概要と対応機器</h3>
+                    <p>本アプリは、音声認識技術を用いて乳幼児の身長・体重を記録し、成長を管理するアプリケーションです。</p>
+                    <ul>
+                        <li><strong>入力方法:</strong> 音声認識による数値入力に対応しています。</li>
+                        <li><strong>対応範囲:</strong> 体重1.0kg〜30.0kg、身長30.0cm〜130.0cmの範囲に対応しています。</li>
+                        <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. プライバシーポリシーおよびHealthKitデータの取り扱い</h3>
+                    <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
+                    <p>Apple HealthKitに記録されたデータについて、当社は以下を遵守します:</p>
+                    <ul>
+                        <li>HealthKitデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
+                        <li>HealthKitデータをデータブローカーや第三者に販売・提供しません</li>
+                        <li>HealthKitデータを当社が運用するサーバーへ送信・保存しません</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 禁止事項</h3>
+                    <ul>
+                        <li>本アプリの目的と異なる利用</li>
+                        <li>法令または公序良俗に反する行為</li>
+                        <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
+                        <li>第三者の乳幼児データを無断で記録する行為</li>
+                        <li>その他当社が不適切と判断する行為</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 健康情報に関する注意</h3>
+                    <p>本アプリは一般的なウェルネスおよびフィットネス支援を目的としたものであり、医療機器ではありません。健康状態に関する疑問や不安がある場合は医師にご相談ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. 音声認識の精度について</h3>
+                    <ul>
+                        <li><strong>認識精度の非保証:</strong> 音声認識の精度は100%ではありません。</li>
+                        <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
+                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
+                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 知的財産権</h3>
+                    <p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 免責事項</h3>
+                    <p>当社は、本アプリの機能が中断なく動作すること、OCR認識結果が常に正確であることを保証しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 料金および支払</h3>
+                    <p>15回まで無料でお使いいただけます。過去に購入された場合は「購入を復元」機能をご利用ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 規約の変更</h3>
+                    <p>当社は、必要に応じて本規約を変更することがあります。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. 準拠法・管轄</h3>
+                    <p>本規約は日本法に準拠し、東京地方裁判所を専属的合意管轄裁判所とします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. 多言語版について</h3>
+                    <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-ja" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header" onclick="toggleCommercial(this)">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">特定商取引法に基づく表記</div>
+                                <div class="section-subtitle">販売事業者情報</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
+                            <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
+                            <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
+                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>babyvox-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+                            <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格</dd></div>
+                            <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
+                            <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
+                            <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセル、返金には応じられません</dd></div>
+                            <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-ja" class="section">
+                <div class="contact-card">
+                    <h2>お問い合わせ</h2>
+                    <a href="mailto:babyvox-support@allnew.work?subject=BabyVox%20%3A%20" class="contact-email">✉️ メールを送る</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
+                        <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== ENGLISH ==================== -->
+        <div class="lang-content" data-lang="en">
+            <!-- FAQ -->
+            <section id="faq-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">Frequently Asked Questions</div>
+                        <div class="section-subtitle">Answers about features and usage</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">How do I record measurements?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Use voice recognition to record your baby's height and weight.</p>
+                        <ul>
+                            <li><strong>Supported:</strong> Japanese and English voice input</li>
+                            <li><strong>Required:</strong> Microphone access permission</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What measurement ranges are recognized?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>The following ranges are supported:</p>
+                        <ul>
+                            <li><strong>Weight:</strong> 1.0kg–30.0kg</li>
+                            <li><strong>Height:</strong> 30.0cm–130.0cm</li>
+                            
+                        </ul>
+                        <p>Values outside this range won't be recognized.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iPhones running <strong>iOS 17.0 or later</strong> with microphone support.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is it free?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>Free for the first 15 uses.</strong></p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Growth data is stored <strong>on your device</strong>.</p>
+                        <p>We do not transmit data to servers operated by us. Voice audio is discarded immediately after recognition processing.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What happens when recognition confidence is low?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>The app automatically evaluates voice recognition confidence.</p>
+                        <ul>
+                            <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
+                            <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value. "Record this value" saves it; "Don't Record" prompts you to retake.</li>
+                        </ul>
+                        <p>When the app determines confidence is low, data will not be saved unless you explicitly approve it.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What if the recognition is wrong?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>Before saving:</strong> If the recognition confidence is low, the app will show a confirmation screen. If the value looks incorrect, choose "Don't Record" and retake the photo.</p>
+                        <p><strong>After saving:</strong> High-confidence readings are automatically saved. If incorrect data was saved, delete it from the iOS Health app. Please refer to the Health app for detailed instructions.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>Steps:</strong> Open the app → Settings → About → Restore Purchase.</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">Privacy Policy</div>
+                        <div class="section-subtitle">How we handle your data</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: February 5, 2026</span>
+
+                <div class="highlight-box">
+                    <p><strong>Important:</strong> This app does not send or store your baby's growth data on our external servers. All data is stored on your device. Voice audio is discarded immediately after recognition processing.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. Information We Collect</h3>
+                    <ul>
+                        <li><strong>Voice Audio:</strong> Discarded immediately after recognition processing. Not transmitted to servers operated by us.</li>
+                        <li><strong>Growth Data:</strong> Baby height and weight data. Stored on your device.</li>
+                        <li><strong>Device Info:</strong> Processed on your device; not transmitted to servers operated by us.</li>
+                        <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
+                        <li><strong>What We Don't Collect:</strong> We do not use advertising SDKs, analytics services, or user registration in this App.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. How We Use Information</h3>
+                    <p>Baby height and weight recording, growth management support, and displaying growth trends. No other purposes.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. Third-Party Sharing</h3>
+                    <p>We do not provide, sell, or share image data or HealthKit data with third parties.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Apple HealthKit</h3>
+                    <ul>
+                        <li>HealthKit data is not used for advertising, marketing, or data mining</li>
+                        <li>HealthKit data is not sold to data brokers</li>
+                        <li>We do not transmit or store HealthKit data on our own external servers. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior</li>
+                        <li>HealthKit access can be revoked anytime in iOS Settings</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Security</h3>
+                    <p>We employ data minimization, on-device processing where possible, Keychain protection, and HealthKit encryption.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Children's Privacy</h3>
+                    <p>This App is not intended for children under 13. We do not collect personal information through the App's functionality.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Your Rights</h3>
+                    <ul>
+                        <li><strong>All Users:</strong> You can manage or delete HealthKit data through the iOS Apple Health app. Navigation paths may vary depending on your iOS version. When uninstalling, iOS asks whether to delete health data.</li>
+                        <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
+                        <li><strong>California (CCPA/CPRA):</strong> Right to know, delete, opt-out. We don't sell personal information.</li>
+                        <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country. Note that Apple services (such as iCloud sync) may involve processing outside your region depending on your settings and Apple's system behavior.</li>
+                        <li><strong>South Korea (PIPA):</strong> Right to request processing suspension.</li>
+                        <li><strong>Brazil (LGPD):</strong> Right to data portability.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. When You Contact Us</h3>
+                    <p>If you contact us, we may receive your email address and the contents of your message to respond to your inquiry. We use this information solely for customer support and do not share it with third parties except as required by law.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Governing Law</h3>
+                    <p>This policy is governed by Japanese law. Regional laws (GDPR, CCPA/CPRA, PIPL, LGPD, PIPA) apply to respective residents.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Translations</h3>
+                    <p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws or other applicable regulations in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">Terms of Service</div>
+                        <div class="section-subtitle">Conditions for using the App</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: February 5, 2026</span>
+
+                <div class="legal-section">
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>These Terms of Service govern your use of "BabyVox" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Agreement to Terms</h3>
+                    <p>By downloading, installing, or using the App, you agree to be bound by these Terms. If you do not agree, do not use the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. App Description and Compatibility</h3>
+                    <p>The App uses voice recognition to record baby height and weight measurements for growth tracking.</p>
+                    <ul>
+                        <li><strong>Input Method:</strong> Voice recognition for measurement input.</li>
+                        <li><strong>Measurement Range:</strong> Weight 1.0kg–30.0kg, Height 30.0cm–130.0cm</li>
+                        <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Privacy Policy and HealthKit Data Handling</h3>
+                    <p>Your use of the App is also governed by our <a href="#privacy-en">Privacy Policy</a>.</p>
+                    <p>Regarding data recorded in Apple HealthKit, we commit to the following:</p>
+                    <ul>
+                        <li>We do not use HealthKit data for advertising, marketing, or data mining purposes</li>
+                        <li>We do not sell or provide HealthKit data to data brokers or third parties</li>
+                        <li>We do not transmit or store HealthKit data on servers operated by us</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Prohibited Activities</h3>
+                    <ul>
+                        <li>Using the App for purposes other than baby growth tracking</li>
+                        <li>Violating any laws or third-party rights</li>
+                        <li>Reverse engineering or decompiling the App</li>
+                        <li>Recording third parties' data without consent</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Health Disclaimer</h3>
+                    <p>This App is for general wellness and fitness purposes only. It is not a medical device. Consult a healthcare professional for medical advice.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Voice Recognition Accuracy</h3>
+                    <ul>
+                        <li><strong>No Guarantee:</strong> Voice recognition accuracy is not 100%.</li>
+                        <li><strong>Default Behavior:</strong> OCR results are shown on a confirmation screen. The data is saved to Apple HealthKit only when you tap "Save".</li>
+                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
+                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan. Please refer to the Health app for detailed instructions.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Intellectual Property</h3>
+                    <p>All intellectual property rights in the App belong to us or our licensors.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Disclaimer of Warranties</h3>
+                    <p>The App is provided "as is" without warranties of any kind.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Pricing</h3>
+                    <p>Free for the first 15 uses. Use "Restore Purchase" if you've previously purchased.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Changes to Terms</h3>
+                    <p>We may modify these Terms at any time. Continued use constitutes acceptance.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. Governing Law</h3>
+                    <p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. Translations</h3>
+                    <p>The Japanese version of these Terms of Service is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-en" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header" onclick="toggleCommercial(this)">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">Seller Information</div>
+                                <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
+                            <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
+                            <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+                            <div class="contact-item"><dt>Contact</dt><dd>babyvox-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
+                            <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen</dd></div>
+                            <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
+                            <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
+                            <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase</dd></div>
+                            <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-en" class="section">
+                <div class="contact-card">
+                    <h2>Contact Us</h2>
+                    <a href="mailto:babyvox-support@allnew.work?subject=BabyVox%20%3A%20" class="contact-email">✉️ Send Email</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
+                        <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 合同会社AllNew / AllNew LLC</p>
+    </footer>
+
+    <script>
+        // Language Data
+        const langData = {
+            ja: { label: '日本語', hero: 'BabyVox', subtitle: '声で記録。タップ不要。<br>シンプルな乳幼児の成長記録。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'BabyVox', subtitle: 'Just Say It. No more Tap.<br>The Simplest Way to Track Your Baby's Growth.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
+        };
+
+        // Get current language from URL hash or default to ja
+        function getLangFromHash() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[0];
+                    if (langData[possibleLang]) return possibleLang;
+                }
+            }
+            // Check URL params
+            const params = new URLSearchParams(window.location.search);
+            const langParam = params.get('lang');
+            if (langParam && langData[langParam]) return langParam;
+            // Default based on browser language
+            const browserLang = navigator.language.split('-')[0];
+            if (langData[browserLang]) return browserLang;
+            return 'ja';
+        }
+
+        let currentLang = getLangFromHash();
+
+        // Switch Language
+        function switchLanguage(lang) {
+            currentLang = lang;
+
+            // Update content visibility
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+
+            // Update dropdown
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+            document.getElementById('currentLangLabel').textContent = langData[lang].label;
+
+            // Update hero
+            document.getElementById('heroTitle').textContent = langData[lang].hero;
+            document.getElementById('heroSubtitle').innerHTML = langData[lang].subtitle;
+
+            // Update TOC
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const tocLabels = langData[lang].toc;
+            tocLinks.forEach((link, i) => {
+                link.textContent = tocLabels[i];
+                const section = link.dataset.section;
+                link.href = `#${section}-${lang}`;
+            });
+
+            // Update URL
+            const currentHash = window.location.hash;
+            if (currentHash && currentHash.includes('-')) {
+                const section = currentHash.split('-').pop();
+                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(s => currentHash.includes(s))) {
+                    const sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace(`-${getLangFromHash()}`, '');
+                    history.replaceState(null, null, `?lang=${lang}#${sectionName}-${lang}`);
+                }
+            } else {
+                history.replaceState(null, null, `?lang=${lang}`);
+            }
+
+            // Close dropdown
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+
+        // Language Dropdown Toggle
+        const langBtn = document.getElementById('langBtn');
+        const langDropdown = document.getElementById('langDropdown');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            langDropdown.classList.remove('open');
+        });
+
+        // Language Options
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => switchLanguage(opt.dataset.lang));
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all in same lang-content
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // Commercial Accordion
+        function toggleCommercial(header) {
+            const accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        }
+
+        // Auto-expand commercial section if accessed via anchor
+        function checkCommercialAnchor() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(acc => {
+                    acc.classList.add('open');
+                });
+            }
+        }
+
+        // Initialize
+        switchLanguage(currentLang);
+        checkCommercialAnchor();
+
+        // Handle hash changes for section navigation
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                // Extract language from hash like "privacy-en"
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang]) {
+                        if (currentLang !== possibleLang) {
+                            switchLanguage(possibleLang);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Copy Protection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', e => e.preventDefault());
+    </script>
+
+    <!-- Trademark Attribution Footer -->
+    <footer class="trademark-footer">
+        <div class="trademark-content">
+            <p class="trademark-text">
+                Apple、Appleのロゴ、iPhone、iOS、HealthKit、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                <br>
+                Apple, the Apple logo, iPhone, iOS, HealthKit, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+            </p>
+            <p class="trademark-disclaimer">
+                本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
+                This application is not developed or endorsed by Apple Inc.
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .trademark-footer {
+            margin-top: 60px;
+            padding: 24px 20px 40px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+        .trademark-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .trademark-text {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .trademark-disclaimer {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+    </style>
+</body>
+</html>
