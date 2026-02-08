@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BabyVox Support</title>
-    <meta name="description" content="BabyVox - Baby growth tracking app with voice recognition. FAQ, Privacy Policy, Terms of Service.">
+    <title>SnoreWav Support</title>
+    <meta name="description" content="SnoreWav - Snoring detection app with sound analysis. FAQ, Privacy Policy, Terms of Service.">
     <!-- Bot/Crawler Protection -->
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
@@ -674,7 +674,7 @@
             <a href="../" class="logo-link">
                 <span class="logo">AllNew</span>
                 <span class="logo-divider"></span>
-                <span class="app-name">BabyVox</span>
+                <span class="app-name">SnoreWav</span>
             </a>
             <div class="lang-dropdown" id="langDropdown">
                 <button class="lang-btn" id="langBtn">
@@ -689,9 +689,9 @@
     </header>
 
     <section class="hero">
-        <img src="../babyvox-icon.png" alt="BabyVox" class="hero-icon">
-        <h1 id="heroTitle">BabyVox</h1>
-        <p class="hero-subtitle" id="heroSubtitle">声で記録。タップ不要。<br>シンプルな乳幼児の成長記録。</p>
+        <img src="../snorewav-icon.png" alt="SnoreWav" class="hero-icon">
+        <h1 id="heroTitle">SnoreWav</h1>
+        <p class="hero-subtitle" id="heroSubtitle">置くだけ。タップ不要。<br>睡眠中のいびきモニタリング。</p>
     </section>
 
     <nav class="toc" id="toc">
@@ -716,33 +716,31 @@
                 </div>
 
                 <div class="faq-item open">
-                    <div class="faq-question">どのように記録しますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-question">どのように使いますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>音声認識で乳幼児の身長・体重を記録します。</p>
+                        <p>就寝時にiPhoneを枕元に置くだけで、マイクがいびきの音をデシベル閾値検出により記録します。</p>
                         <ul>
-                            <li><strong>対応:</strong> 日本語・英語の音声入力</li>
-                            <li><strong>必要:</strong> マイクへのアクセス許可</li>
+                            <li><strong>対応:</strong> iPhoneのマイクによるいびきの音声検出</li>
+                            <li><strong>必要:</strong> マイクへのアクセス許可、バックグラウンドオーディオ</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">認識できる数値の範囲は？<span class="faq-icon">+</span></div>
+                    <div class="faq-question">どのようないびきを検出できますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>以下の範囲に対応しています：</p>
+                        <p>いびきの検出と記録を行います：</p>
                         <ul>
-                            <li><strong>体重:</strong> 1.0kg〜30.0kg</li>
-                            <li><strong>身長:</strong> 30.0cm〜130.0cm</li>
-                            
+                            <li><strong>いびきの検出:</strong> 睡眠中のいびき音をデシベル閾値で検出</li>
                         </ul>
-                        <p>この範囲外の数値は認識されません。</p>
+                        <p>周囲の騒音状況によっては検出精度が低下する場合があります。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">対応しているiPhoneは？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>iOS 17.0以降</strong>を搭載し、マイク機能に対応したiPhoneで動作します。</p>
+                        <p><strong>iOS 17.0以降</strong>を搭載し、マイク機能およびApple HealthKitに対応したiPhoneで動作します。</p>
                     </div>
                 </div>
 
@@ -756,8 +754,8 @@
                 <div class="faq-item">
                     <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>乳幼児の成長データは<strong>お使いのデバイス内</strong>に保存されます。</p>
-                        <p>当社が運用するサーバーへの送信はありません。音声データは認識処理後に即時破棄されます。</p>
+                        <p>いびきデータは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。</p>
+                        <p>当社が運用するサーバーへの送信はありません。録音した音声データはいびき検出処理後に即時破棄されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。</p>
                     </div>
                 </div>
 
@@ -800,17 +798,17 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">最終更新: 2026年2月5日</span>
+                <span class="updated-badge">最終更新: 2026年2月8日</span>
 
                 <div class="highlight-box">
-                    <p><strong>重要:</strong> 本アプリは、ユーザーの乳幼児成長データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内に保存されます。</p>
+                    <p><strong>重要:</strong> 本アプリは、ユーザーのいびきデータを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>1. 収集する情報の種類</h3>
                     <ul>
-                        <li><strong>マイクで取得する音声:</strong> 音声認識処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
-                        <li><strong>健康関連データ（HealthKit）:</strong> 乳幼児の成長データの記録・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
+                        <li><strong>マイクで取得する音声:</strong> いびき検出処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>健康関連データ（HealthKit）:</strong> いびきデータの書き込み・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
                         <li><strong>デバイス情報:</strong> 端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>収集しない情報:</strong> 本アプリでは広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
@@ -819,7 +817,7 @@
 
                 <div class="legal-section">
                     <h3>2. 情報の利用目的</h3>
-                    <p>乳幼児の身長・体重の記録と成長管理支援、成長変化の表示。これ以外の目的には利用しません。</p>
+                    <p>いびきの記録と健康管理支援、いびきの変化の表示。これ以外の目的には利用しません。</p>
                 </div>
 
                 <div class="legal-section">
@@ -885,11 +883,11 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">最終更新: 2026年2月5日</span>
+                <span class="updated-badge">最終更新: 2026年2月8日</span>
 
                 <div class="legal-section">
                     <h3>1. 規約の適用</h3>
-                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「BabyVox」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「SnoreWav」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
                 </div>
 
                 <div class="legal-section">
@@ -899,10 +897,10 @@
 
                 <div class="legal-section">
                     <h3>3. 本アプリの概要と対応機器</h3>
-                    <p>本アプリは、音声認識技術を用いて乳幼児の身長・体重を記録し、成長を管理するアプリケーションです。</p>
+                    <p>本アプリは、マイクを使用して睡眠中のいびき音をデシベル閾値で検出し、Apple HealthKit（ヘルスケア）に記録するアプリケーションです。</p>
                     <ul>
-                        <li><strong>入力方法:</strong> 音声認識による数値入力に対応しています。</li>
-                        <li><strong>対応範囲:</strong> 体重1.0kg〜30.0kg、身長30.0cm〜130.0cmの範囲に対応しています。</li>
+                        <li><strong>検出方法:</strong> iPhoneのマイクによるデシベル閾値検出でいびきを検出します。</li>
+                        <li><strong>モニタリング:</strong> バックグラウンドオーディオモードで睡眠中のいびきを継続的にモニタリングします。</li>
                         <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
                     </ul>
                 </div>
@@ -924,7 +922,7 @@
                         <li>本アプリの目的と異なる利用</li>
                         <li>法令または公序良俗に反する行為</li>
                         <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
-                        <li>第三者の乳幼児データを無断で記録する行為</li>
+                        <li>第三者のいびきデータを無断で記録する行為</li>
                         <li>その他当社が不適切と判断する行為</li>
                     </ul>
                 </div>
@@ -935,9 +933,9 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>7. 音声認識の精度について</h3>
+                    <h3>7. いびき検出の精度について</h3>
                     <ul>
-                        <li><strong>認識精度の非保証:</strong> 音声認識の精度は100%ではありません。</li>
+                        <li><strong>検出精度の非保証:</strong> いびき検出の精度は100%ではありません。周囲の騒音により誤検出が発生する場合があります。</li>
                         <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
                         <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
                         <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</li>
@@ -951,7 +949,7 @@
 
                 <div class="legal-section">
                     <h3>9. 免責事項</h3>
-                    <p>当社は、本アプリの機能が中断なく動作すること、音声認識結果が常に正確であることを保証しません。</p>
+                    <p>当社は、本アプリの機能が中断なく動作すること、いびき検出結果が常に正確であることを保証しません。</p>
                 </div>
 
                 <div class="legal-section">
@@ -993,7 +991,7 @@
                             <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
                             <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
                             <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
-                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>babyvox-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>snorewav-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
                             <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格</dd></div>
                             <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
                             <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
@@ -1008,7 +1006,7 @@
             <section id="contact-ja" class="section">
                 <div class="contact-card">
                     <h2>お問い合わせ</h2>
-                    <a href="mailto:babyvox-support@allnew.work?subject=BabyVox%20%3A%20" class="contact-email">✉️ メールを送る</a>
+                    <a href="mailto:snorewav-support@allnew.work?subject=SnoreWav%20%3A%20" class="contact-email">✉️ メールを送る</a>
                     <dl class="contact-details contact-details-top" style="border-bottom: none;">
                         <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
                         <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
@@ -1030,33 +1028,31 @@
                 </div>
 
                 <div class="faq-item open">
-                    <div class="faq-question">How do I record measurements?<span class="faq-icon">+</span></div>
+                    <div class="faq-question">How does snoring monitoring work?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>Use voice recognition to record your baby's height and weight.</p>
+                        <p>Place your iPhone near your bed at night. The microphone detects and records snoring sounds using decibel threshold detection.</p>
                         <ul>
-                            <li><strong>Supported:</strong> Japanese and English voice input</li>
-                            <li><strong>Required:</strong> Microphone access permission</li>
+                            <li><strong>Supported:</strong> Snoring sound detection via iPhone microphone</li>
+                            <li><strong>Required:</strong> Microphone access permission, background audio</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">What measurement ranges are recognized?<span class="faq-icon">+</span></div>
+                    <div class="faq-question">What does the app detect?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>The following ranges are supported:</p>
+                        <p>The app detects and records the following:</p>
                         <ul>
-                            <li><strong>Weight:</strong> 1.0kg–30.0kg</li>
-                            <li><strong>Height:</strong> 30.0cm–130.0cm</li>
-                            
+                            <li><strong>Snoring Detection:</strong> Detects snoring sounds using decibel threshold analysis</li>
                         </ul>
-                        <p>Values outside this range won't be recognized.</p>
+                        <p>Detection accuracy may vary depending on ambient noise conditions.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>iPhones running <strong>iOS 17.0 or later</strong> with microphone support.</p>
+                        <p>iPhones running <strong>iOS 17.0 or later</strong> with microphone and Apple HealthKit support.</p>
                     </div>
                 </div>
 
@@ -1070,15 +1066,15 @@
                 <div class="faq-item">
                     <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>Growth data is stored <strong>on your device</strong>.</p>
-                        <p>We do not transmit data to servers operated by us. Voice audio is discarded immediately after recognition processing.</p>
+                        <p>Snoring data is stored in <strong>Apple HealthKit on your device</strong>.</p>
+                        <p>We do not transmit data to servers operated by us. Audio recordings are discarded immediately after snoring detection processing. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">What happens when recognition confidence is low?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>The app automatically evaluates voice recognition confidence.</p>
+                        <p>The app automatically evaluates recognition confidence.</p>
                         <ul>
                             <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
                             <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value. "Record this value" saves it; "Don't Record" prompts you to retake.</li>
@@ -1114,17 +1110,17 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">Last Updated: February 5, 2026</span>
+                <span class="updated-badge">Last Updated: February 8, 2026</span>
 
                 <div class="highlight-box">
-                    <p><strong>Important:</strong> This app does not send or store your baby's growth data on our external servers. All data is stored on your device. Voice audio is discarded immediately after recognition processing.</p>
+                    <p><strong>Important:</strong> This app does not send or store your snoring data or audio recordings on our external servers. Snoring data is stored on your device and in Apple HealthKit. Audio is discarded immediately after snoring detection processing. Health data storage/sync behavior (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>1. Information We Collect</h3>
                     <ul>
-                        <li><strong>Voice Audio:</strong> Discarded immediately after recognition processing. Not transmitted to servers operated by us.</li>
-                        <li><strong>Growth Data:</strong> Baby height and weight data. Stored on your device.</li>
+                        <li><strong>Audio Recordings:</strong> Discarded immediately after snoring detection processing. Not transmitted to servers operated by us.</li>
+                        <li><strong>Health Data (HealthKit):</strong> Snoring data read/write. Stored on your device and in Apple HealthKit. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</li>
                         <li><strong>Device Info:</strong> Processed on your device; not transmitted to servers operated by us.</li>
                         <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
                         <li><strong>What We Don't Collect:</strong> We do not use advertising SDKs, analytics services, or user registration in this App.</li>
@@ -1133,12 +1129,12 @@
 
                 <div class="legal-section">
                     <h3>2. How We Use Information</h3>
-                    <p>Baby height and weight recording, growth management support, and displaying growth trends. No other purposes.</p>
+                    <p>Snoring recording, health management support, and displaying snoring trends. No other purposes.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>3. Third-Party Sharing</h3>
-                    <p>We do not provide, sell, or share voice data or HealthKit data with third parties.</p>
+                    <p>We do not provide, sell, or share audio data or HealthKit data with third parties.</p>
                 </div>
 
                 <div class="legal-section">
@@ -1199,11 +1195,11 @@
                     </div>
                 </div>
 
-                <span class="updated-badge">Last Updated: February 5, 2026</span>
+                <span class="updated-badge">Last Updated: February 8, 2026</span>
 
                 <div class="legal-section">
                     <h3>1. Acceptance of Terms</h3>
-                    <p>These Terms of Service govern your use of "BabyVox" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
+                    <p>These Terms of Service govern your use of "SnoreWav" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
                 </div>
 
                 <div class="legal-section">
@@ -1213,10 +1209,10 @@
 
                 <div class="legal-section">
                     <h3>3. App Description and Compatibility</h3>
-                    <p>The App uses voice recognition to record baby height and weight measurements for growth tracking.</p>
+                    <p>The App uses your iPhone's microphone to detect snoring sounds during sleep using decibel threshold detection, and records the data to Apple HealthKit.</p>
                     <ul>
-                        <li><strong>Input Method:</strong> Voice recognition for measurement input.</li>
-                        <li><strong>Measurement Range:</strong> Weight 1.0kg–30.0kg, Height 30.0cm–130.0cm</li>
+                        <li><strong>Detection Method:</strong> Decibel threshold analysis via iPhone microphone for snoring detection.</li>
+                        <li><strong>Monitoring:</strong> Background audio mode for continuous sleep snoring monitoring.</li>
                         <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</li>
                     </ul>
                 </div>
@@ -1235,10 +1231,10 @@
                 <div class="legal-section">
                     <h3>5. Prohibited Activities</h3>
                     <ul>
-                        <li>Using the App for purposes other than baby growth tracking</li>
+                        <li>Using the App for purposes other than snoring monitoring</li>
                         <li>Violating any laws or third-party rights</li>
                         <li>Reverse engineering or decompiling the App</li>
-                        <li>Recording third parties' data without consent</li>
+                        <li>Recording third parties' snoring data without consent</li>
                     </ul>
                 </div>
 
@@ -1248,10 +1244,10 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>7. Voice Recognition Accuracy</h3>
+                    <h3>7. Snoring Detection Accuracy</h3>
                     <ul>
-                        <li><strong>No Guarantee:</strong> Voice recognition accuracy is not 100%.</li>
-                        <li><strong>Default Behavior:</strong> Recognition results are shown on a confirmation screen. The data is saved only when you tap "Save".</li>
+                        <li><strong>No Guarantee:</strong> Snoring detection accuracy is not 100%. Ambient noise may cause false detections.</li>
+                        <li><strong>Default Behavior:</strong> Detection results are shown on a confirmation screen. The data is saved to Apple HealthKit only when you tap "Save".</li>
                         <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
                         <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan. Please refer to the Health app for detailed instructions.</li>
                     </ul>
@@ -1306,7 +1302,7 @@
                             <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
                             <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
                             <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
-                            <div class="contact-item"><dt>Contact</dt><dd>babyvox-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
+                            <div class="contact-item"><dt>Contact</dt><dd>snorewav-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
                             <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen</dd></div>
                             <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
                             <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
@@ -1321,7 +1317,7 @@
             <section id="contact-en" class="section">
                 <div class="contact-card">
                     <h2>Contact Us</h2>
-                    <a href="mailto:babyvox-support@allnew.work?subject=BabyVox%20%3A%20" class="contact-email">✉️ Send Email</a>
+                    <a href="mailto:snorewav-support@allnew.work?subject=SnoreWav%20%3A%20" class="contact-email">✉️ Send Email</a>
                     <dl class="contact-details contact-details-top" style="border-bottom: none;">
                         <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
                         <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
@@ -1338,8 +1334,8 @@
     <script>
         // Language Data
         const langData = {
-            ja: { label: '日本語', hero: 'BabyVox', subtitle: '声で記録。タップ不要。<br>シンプルな乳幼児の成長記録。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
-            en: { label: 'English', hero: 'BabyVox', subtitle: 'Just Say It. No more Tap.<br>The Simplest Way to Track Your Baby's Growth.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
+            ja: { label: '日本語', hero: 'SnoreWav', subtitle: '置くだけ。タップ不要。<br>睡眠中のいびきモニタリング。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'SnoreWav', subtitle: 'Just Set It Down. No more Tap.<br>Snoring Detection During Sleep.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
         };
 
         // Get current language from URL hash or default to ja
