@@ -810,6 +810,7 @@
                     <h3>1. 収集する情報の種類</h3>
                     <ul>
                         <li><strong>カメラで取得する画像:</strong> OCR処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>マイクで取得する音声:</strong> 音声認識処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>健康関連データ（HealthKit）:</strong> 体温データの書き込み・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
                         <li><strong>デバイス情報:</strong> 端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
@@ -824,7 +825,7 @@
 
                 <div class="legal-section">
                     <h3>3. 第三者への提供</h3>
-                    <p>当社は画像データやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                    <p>当社は画像データ、音声データ、およびHealthKitデータを第三者に提供、販売、共有しません。</p>
                 </div>
 
                 <div class="legal-section">
@@ -899,8 +900,9 @@
 
                 <div class="legal-section">
                     <h3>3. 本アプリの概要と対応機器</h3>
-                    <p>本アプリは、体温計のディスプレイに表示された数値をカメラで撮影し、Apple標準の文字認識（OCR）技術を用いて読み取り、Apple HealthKit（ヘルスケア）に記録するアプリケーションです。</p>
+                    <p>本アプリは、体温計のディスプレイに表示された数値をカメラで撮影し、Apple標準の文字認識（OCR）技術を用いて読み取り、Apple HealthKit（ヘルスケア）に記録するアプリケーションです。また、音声認識（Apple Speech Framework）による数値入力にも対応しています。</p>
                     <ul>
+                        <li><strong>入力方法:</strong> カメラ撮影によるOCR認識、および音声認識による数値入力に対応しています。音声データは認識処理後に即時破棄され、当社のサーバーへの送信はありません。</li>
                         <li><strong>対応体温計:</strong> デジタル表示の体温計に対応しています。アナログ表示の体温計（水銀式など）には対応しておりません。</li>
                         <li><strong>対応体温範囲:</strong> iOSのヘルスケア設定に応じて、34.0°C〜42.0°C（摂氏）または93.2°F〜107.6°F（華氏）の範囲に対応しています。</li>
                         <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
@@ -935,52 +937,43 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>7. OCR認識の精度について</h3>
+                    <h3>7. 認識精度について</h3>
                     <ul>
-                        <li><strong>認識精度の非保証:</strong> OCR認識の精度は100%ではありません。</li>
+                        <li><strong>認識精度の非保証:</strong> OCR認識および音声認識の精度は100%ではありません。撮影条件（照明、角度、ディスプレイの反射等）や音声条件（周囲の騒音、発話の明瞭さ、アクセント、マイクの状態等）により、認識精度が低下する場合があります。</li>
                         <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
                         <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
-                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</li>
-                    </ul>
-                </div>
-
-
-                <div class="legal-section">
-                    <h3>8. 音声認識の精度について</h3>
-                    <ul>
-                        <li><strong>認識精度の非保証:</strong> 音声認識の精度は100%ではありません。周囲の騒音、発話の明瞭さ、アクセント、マイクの状態などにより、認識精度が低下する場合があります。</li>
-                        <li><strong>デフォルト動作:</strong> 音声認識結果は確認画面に表示され、ユーザーが確認した後に記録されます。</li>
-                        <li><strong>免責:</strong> 音声入力の誤認識による記録について、当社は責任を負いません。</li>
+                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。</li>
+                        <li><strong>免責:</strong> OCRおよび音声入力の誤認識による記録について、当社は責任を負いません。</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>9. 知的財産権</h3>
+                    <h3>8. 知的財産権</h3>
                     <p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>10. 免責事項</h3>
+                    <h3>9. 免責事項</h3>
                     <p>当社は、本アプリの機能が中断なく動作すること、OCR認識結果および音声認識結果が常に正確であることを保証しません。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>11. 料金および支払</h3>
+                    <h3>10. 料金および支払</h3>
                     <p>15回まで無料でお使いいただけます。過去に購入された場合は「購入を復元」機能をご利用ください。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>12. 規約の変更</h3>
+                    <h3>11. 規約の変更</h3>
                     <p>当社は、必要に応じて本規約を変更することがあります。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>13. 準拠法・管轄</h3>
+                    <h3>12. 準拠法・管轄</h3>
                     <p>本規約は日本法に準拠し、東京地方裁判所を専属的合意管轄裁判所とします。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>14. 多言語版について</h3>
+                    <h3>13. 多言語版について</h3>
                     <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
                 </div>
             </section>
@@ -1134,6 +1127,7 @@
                     <h3>1. Information We Collect</h3>
                     <ul>
                         <li><strong>Camera Images:</strong> Discarded immediately after OCR processing. Not transmitted to servers operated by us.</li>
+                        <li><strong>Voice Data (Microphone):</strong> Discarded immediately after voice recognition processing. Not transmitted to servers operated by us.</li>
                         <li><strong>Health Data (HealthKit):</strong> Body temperature data read/write. Stored on your device and in Apple HealthKit. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</li>
                         <li><strong>Device Info:</strong> Processed on your device; not transmitted to servers operated by us.</li>
                         <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
@@ -1148,7 +1142,7 @@
 
                 <div class="legal-section">
                     <h3>3. Third-Party Sharing</h3>
-                    <p>We do not provide, sell, or share image data or HealthKit data with third parties.</p>
+                    <p>We do not provide, sell, or share image data, voice data, or HealthKit data with third parties.</p>
                 </div>
 
                 <div class="legal-section">
@@ -1223,8 +1217,9 @@
 
                 <div class="legal-section">
                     <h3>3. App Description and Compatibility</h3>
-                    <p>The App captures thermometer displays using your camera, reads the numbers using built-in text recognition (OCR) technology, and records them to Apple HealthKit.</p>
+                    <p>The App captures thermometer displays using your camera, reads the numbers using built-in text recognition (OCR) technology, and records them to Apple HealthKit. The App also supports voice recognition (Apple Speech Framework) for numerical input.</p>
                     <ul>
+                        <li><strong>Input Methods:</strong> Camera-based OCR recognition and voice recognition for numerical input. Voice data is discarded immediately after processing and is not transmitted to our servers.</li>
                         <li><strong>Supported Thermometers:</strong> Digital display thermometers. Analog thermometers are not supported.</li>
                         <li><strong>Temperature Range:</strong> 34.0°C–42.0°C (Celsius) or 93.2°F–107.6°F (Fahrenheit)</li>
                         <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</li>
@@ -1258,52 +1253,43 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>7. OCR Accuracy</h3>
+                    <h3>7. Recognition Accuracy</h3>
                     <ul>
-                        <li><strong>No Guarantee:</strong> OCR accuracy is not 100%.</li>
-                        <li><strong>Default Behavior:</strong> OCR results are shown on a confirmation screen. The data is saved to Apple HealthKit only when you tap "Save".</li>
+                        <li><strong>No Guarantee:</strong> Neither OCR nor voice recognition accuracy is guaranteed to be 100%. Accuracy may decrease due to shooting conditions (lighting, angle, display reflections, etc.) or voice conditions (ambient noise, speech clarity, accent, microphone conditions, etc.).</li>
+                        <li><strong>Default Behavior:</strong> Recognition results are shown on a confirmation screen. Data is saved to Apple HealthKit only when you tap "Save".</li>
                         <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
-                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan. Please refer to the Health app for detailed instructions.</li>
-                    </ul>
-                </div>
-
-
-                <div class="legal-section">
-                    <h3>8. Voice Recognition Accuracy</h3>
-                    <ul>
-                        <li><strong>No Guarantee:</strong> Voice recognition accuracy is not 100%. Accuracy may decrease due to ambient noise, speech clarity, accent, or microphone conditions.</li>
-                        <li><strong>Default Behavior:</strong> Voice recognition results are shown on screen for confirmation before saving.</li>
-                        <li><strong>Disclaimer:</strong> We are not liable for inaccurate data recorded due to voice misrecognition.</li>
+                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan or re-input. Please refer to the Health app for detailed instructions.</li>
+                        <li><strong>Disclaimer:</strong> We are not liable for inaccurate data recorded due to OCR or voice misrecognition.</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>9. Intellectual Property</h3>
+                    <h3>8. Intellectual Property</h3>
                     <p>All intellectual property rights in the App belong to us or our licensors.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>10. Disclaimer of Warranties</h3>
+                    <h3>9. Disclaimer of Warranties</h3>
                     <p>The App is provided "as is" without warranties of any kind. We do not guarantee that OCR or voice recognition results will always be accurate.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>11. Pricing</h3>
+                    <h3>10. Pricing</h3>
                     <p>Free for the first 15 uses. Use "Restore Purchase" if you've previously purchased.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>12. Changes to Terms</h3>
+                    <h3>11. Changes to Terms</h3>
                     <p>We may modify these Terms at any time. Continued use constitutes acceptance.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>13. Governing Law</h3>
+                    <h3>12. Governing Law</h3>
                     <p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>14. Translations</h3>
+                    <h3>13. Translations</h3>
                     <p>The Japanese version of these Terms of Service is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region of residence.</p>
                 </div>
             </section>

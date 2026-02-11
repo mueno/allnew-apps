@@ -12,11 +12,7 @@
             color: #333;
             line-height: 1.8;
         }
-        .header {
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-        }
+        .header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #eee; }
         .header a { color: inherit; text-decoration: none; }
         .logo { font-size: 1.8rem; font-weight: 700; color: #1a1a1a; }
         .app-name { color: #666; margin-top: 4px; }
@@ -25,14 +21,7 @@
         .back-link:hover { text-decoration: underline; }
         h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
         .updated { color: #999; margin-bottom: 1rem; font-size: 0.9rem; }
-        .important {
-            background: #e8f4fd;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            border-left: 4px solid #007aff;
-            color: #1a1a1a;
-        }
+        .important { background: #e8f4fd; padding: 16px 20px; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #007aff; color: #1a1a1a; }
         .content { background: #f9f9f9; padding: 32px; border-radius: 12px; }
         h2 { font-size: 1.1rem; margin: 2rem 0 1rem; color: #1a1a1a; }
         h2:first-of-type { margin-top: 0; }
@@ -43,13 +32,7 @@
         a { color: #007aff; }
         hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
         .company-info { color: #666; font-size: 0.9rem; }
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-            font-size: 0.85rem;
-            border-top: 1px solid #eee;
-        }
+        footer { text-align: center; padding: 40px 20px; color: #999; font-size: 0.85rem; border-top: 1px solid #eee; }
         .trademark { margin-bottom: 8px; }
     </style>
 </head>
@@ -63,28 +46,28 @@
 
     <main class="container">
         <a href="index.html" class="back-link">&larr; Back to Support</a>
-        <h1>WeightSnap Privacy Policy</h1>
+        <h1><span data-app="name">WeightSnap</span> Privacy Policy</h1>
         <p class="updated">Last updated: February 5, 2026</p>
 
         <div class="important">
-            <strong>Important:</strong> This app does not send or store your weight data or captured images on our external servers. Weight data is stored on your device and in Apple HealthKit. Captured images are discarded immediately after OCR processing. Health data storage/sync behavior (including iCloud) depends on your device settings and Apple's system behavior.
+            <strong>Important:</strong> <span data-app="importantNote">This app does not send or store your weight data or captured images on our external servers. Weight data is stored on your device and in Apple HealthKit. Captured images are discarded immediately after OCR processing. Health data storage/sync behavior (including iCloud) depends on your device settings and Apple's system behavior.</span>
         </div>
 
-        <p>This Privacy Policy explains how AllNew LLC ("we") handles information in the WeightSnap app.</p>
+        <p>This Privacy Policy explains how AllNew LLC ("we") handles information in the <span data-app="name">WeightSnap</span> app.</p>
 
         <div class="content">
             <h2>1. Information We Handle</h2>
 
-            <h3>(A) Apple Health data (Weight)</h3>
+            <h3>(A) Apple Health data</h3>
             <ul>
-                <li>With your permission, the App writes weight data to the Apple Health app (via HealthKit).</li>
-                <li>If you optionally grant read access, the App may read your weight data from the Apple Health app to display changes since your previous measurement and to show trends (e.g., charts/graphs).</li>
+                <li>With your permission, the App performs <span data-app="healthKitWrite">writing weight data</span> to the Apple Health app (via HealthKit).</li>
+                <li>If you optionally grant read access, the App may use <span data-app="healthKitRead">reading weight data (to show changes and trends)</span>.</li>
                 <li>We do not transmit or store Apple Health data on servers operated by us.</li>
             </ul>
 
             <h3>(B) Camera images</h3>
             <ul>
-                <li>The App uses captured images temporarily for OCR.</li>
+                <li>The App <span data-app="cameraUsage">uses captured images temporarily for OCR</span>.</li>
                 <li>We do not transmit or store captured images on servers operated by us.</li>
             </ul>
 
@@ -101,7 +84,7 @@
             <h2>2. Purposes</h2>
             <p>We use information only to:</p>
             <ul>
-                <li>Provide app functionality (OCR, saving flow, deltas and trend charts)</li>
+                <li>Provide app functionality (recording, deltas and trend charts)</li>
                 <li>Respond to support requests</li>
                 <li>Troubleshoot issues (based on what you provide)</li>
                 <li>Comply with law</li>
@@ -110,7 +93,7 @@
             <h2>3. Sharing &amp; Apple Services</h2>
             <ul>
                 <li>We do not use Apple Health data for advertising, marketing profiling, or data brokerage, and we do not sell such data.</li>
-                <li>We do not transmit or store your weight data, Apple Health read data, captured images, or motion data on servers operated by us.</li>
+                <li>We do not transmit or store your <span data-app="dataTypes">weight data</span>, Apple Health read data, captured images, or motion data on servers operated by us.</li>
                 <li>Apple Health storage/sync (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior. We do not control Apple's behavior.</li>
                 <li>We do not use any analytics SDK in the App.</li>
             </ul>
@@ -143,7 +126,7 @@
             <p>We may update this Privacy Policy as needed. Changes will be posted on our website.</p>
 
             <h2>9. Contact</h2>
-            <p>Email: <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20">weightsnap-support@allnew.work</a></p>
+            <p>Email: <a data-app-email href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20">weightsnap-support@allnew.work</a></p>
 
             <h2>10. Governing Law</h2>
             <p>This policy is governed by Japanese law. Regional laws (GDPR, CCPA/CPRA, PIPL, LGPD, PIPA) apply to respective residents.</p>
@@ -160,5 +143,8 @@
         <p class="trademark">Apple, iPhone, iOS, Apple Health, and HealthKit are trademarks of Apple Inc., registered in the U.S. and other countries. Other company and product names may be trademarks of their respective owners.</p>
         <p>&copy; 2026 AllNew LLC</p>
     </footer>
+
+    <script src="../app-data.js"></script>
+    <script>applyAppData('en');</script>
 </body>
 </html>

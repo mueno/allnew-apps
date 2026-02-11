@@ -12,11 +12,7 @@
             color: #333;
             line-height: 1.8;
         }
-        .header {
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-        }
+        .header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #eee; }
         .header a { color: inherit; text-decoration: none; }
         .logo { font-size: 1.8rem; font-weight: 700; color: #1a1a1a; }
         .app-name { color: #666; margin-top: 4px; }
@@ -35,13 +31,7 @@
         a { color: #007aff; }
         hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
         .company-info { color: #666; font-size: 0.9rem; }
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #999;
-            font-size: 0.85rem;
-            border-top: 1px solid #eee;
-        }
+        footer { text-align: center; padding: 40px 20px; color: #999; font-size: 0.85rem; border-top: 1px solid #eee; }
         .trademark { margin-bottom: 8px; }
     </style>
 </head>
@@ -55,27 +45,27 @@
 
     <main class="container">
         <a href="index.html" class="back-link">&larr; Back to Support</a>
-        <h1>WeightSnap Terms of Service</h1>
+        <h1><span data-app="name">WeightSnap</span> Terms of Service</h1>
         <p class="updated">Last updated: February 5, 2026</p>
 
-        <p class="intro">These Terms of Service ("Terms") govern your use of the iOS application "WeightSnap" ("App") provided by AllNew LLC ("Company", "we", "us"). By using the App, you agree to these Terms.</p>
+        <p class="intro">These Terms of Service ("Terms") govern your use of the iOS application "<span data-app="name">WeightSnap</span>" ("App") provided by AllNew LLC ("Company", "we", "us"). By using the App, you agree to these Terms.</p>
 
         <div class="content">
             <h2>1. About the App</h2>
             <ol>
-                <li>The App captures a photo of your scale display, uses OCR to estimate a weight value, and&mdash;based on your permissions and settings&mdash;writes weight data to the Apple Health app (via HealthKit).</li>
-                <li>If you optionally grant read access, the App may also read your weight data from the Apple Health app to show changes since your previous measurement and to display trends (e.g., charts/graphs).</li>
-                <li>The App is not a medical device and does not provide medical advice, diagnosis, or treatment.</li>
+                <li><span data-app="appOverview">The App captures a photo of your scale display, uses OCR to estimate a weight value, and—based on your permissions and settings—writes weight data to the Apple Health app (via HealthKit).</span></li>
+                <li><span data-app="appOverview2">If you optionally grant read access, the App may also read your weight data from the Apple Health app to show changes since your previous measurement and to display trends (e.g., charts/graphs).</span></li>
+                <li><span data-app="notMedicalDevice">The App is not a medical device and does not provide medical advice, diagnosis, or treatment.</span></li>
             </ol>
-            <p><strong>Supported Scales:</strong> Digital displays (7-segment LED, LCD). Analog scales are not supported.<br>
-            <strong>Weight Range:</strong> 30.0kg&ndash;200.0kg (66&ndash;440 lbs)<br>
-            <strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</p>
+            <p><span data-app="supportedDevices"><strong>Supported Scales:</strong> Digital displays (7-segment LED, LCD). Analog scales are not supported.</span><br>
+            <span data-app="supportedRange"><strong>Weight Range:</strong> 30.0kg–200.0kg (66–440 lbs)</span><br>
+            <span data-app="supportedOS"><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</span></p>
 
-            <h2>2. OCR Confidence and Saving</h2>
+            <h2>2. Recognition Confidence and Saving</h2>
             <ol>
-                <li>The App determines a confidence level for the OCR result:
+                <li>The App determines a confidence level for the recognition result:
                     <ul>
-                        <li><strong>Default behavior:</strong> the App shows the detected value and writes to Apple Health only after you approve by tapping "Record". If you do not approve, nothing is saved and you can retry scanning.</li>
+                        <li><strong>Default behavior:</strong> the App shows the detected value and writes to Apple Health only after you approve by tapping "Record". If you do not approve, nothing is saved and you can retry.</li>
                         <li><strong>With Auto-Save enabled:</strong> If you enable automatic recording in settings, the App may write high-confidence results to Apple Health without additional confirmation.</li>
                     </ul>
                 </li>
@@ -83,19 +73,19 @@
             </ol>
 
             <h2>3. Correcting Entries in Apple Health</h2>
-            <p>Entries in Apple Health may not be editable and may only be deletable depending on Apple's system behavior. To correct a value, delete it in Apple Health and rescan in the App.</p>
+            <p>Entries in Apple Health may not be editable and may only be deletable depending on Apple's system behavior. To correct a value, delete it in Apple Health and re-record in the App.</p>
 
             <h2>4. Data Transmission &amp; Storage (Key Point)</h2>
             <ol>
-                <li>We do not transmit or store your weight data, Apple Health read data, captured images, or motion data on servers operated by us.</li>
-                <li>If read access is granted, the App uses the read weight data only for on-device display and analysis (e.g., deltas and charts).</li>
+                <li>We do not transmit or store your <span data-app="dataTypes">weight data</span>, Apple Health read data, captured images, or motion data on servers operated by us.</li>
+                <li>If read access is granted, the App uses the read data only for on-device display and analysis (e.g., deltas and charts).</li>
                 <li>Captured images are used temporarily for OCR and are not transmitted or stored on servers operated by us.</li>
                 <li>We do not use any analytics SDK in the App.</li>
             </ol>
 
             <h2>5. Purchases, Pricing, Refunds</h2>
             <ol>
-                <li>The App may offer a limited number of free weight recordings to Apple HealthKit (up to 15 recordings) and then provide a one-time in-app purchase to unlock unlimited usage. The free-use limit, price, availability, and terms are as shown on the App Store listing and purchase screens, and may vary by region, taxes, and exchange rates.</li>
+                <li><span data-app="freeTier">The App may offer a limited number of free weight recordings to Apple HealthKit (up to 15 recordings) and then provide a one-time in-app purchase to unlock unlimited usage.</span> The free-use limit, price, availability, and terms are as shown on the App Store listing and purchase screens, and may vary by region, taxes, and exchange rates.</li>
                 <li>We may change, suspend, or discontinue the free-use limit, pricing, or purchase terms at any time.</li>
                 <li>Payments, refunds, and restore purchases are handled by Apple under Apple's terms. We do not guarantee refunds.</li>
             </ol>
@@ -114,7 +104,7 @@
 
             <h2>8. Disclaimers &amp; Limitation of Liability</h2>
             <ol>
-                <li>We do not warrant that the App will meet your specific needs, that OCR recognition will be error-free, or that it will be complete, accurate, or useful.</li>
+                <li>We do not warrant that the App will meet your specific needs, that recognition will be error-free, or that it will be complete, accurate, or useful.</li>
                 <li>We are not responsible for damages arising from user device specifications, OS, or Apple services (Health, iCloud, etc.).</li>
                 <li>To the maximum extent permitted by law, our liability is limited to direct damages only, excluding indirect or consequential damages, except where caused by our willful misconduct or gross negligence. This limitation does not apply to the extent prohibited by mandatory consumer protection laws.</li>
             </ol>
@@ -130,7 +120,7 @@
 
             <h2>12. Contact</h2>
             <p>AllNew LLC<br>
-            Email: <a href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20">weightsnap-support@allnew.work</a></p>
+            Email: <a data-app-email href="mailto:weightsnap-support@allnew.work?subject=WeightSnap%20%3A%20">weightsnap-support@allnew.work</a></p>
 
             <hr>
             <p class="company-info">Operator: AllNew LLC</p>
@@ -141,5 +131,8 @@
         <p class="trademark">Apple, iPhone, iOS, Apple Health, and HealthKit are trademarks of Apple Inc., registered in the U.S. and other countries. Other company and product names may be trademarks of their respective owners.</p>
         <p>&copy; 2026 AllNew LLC</p>
     </footer>
+
+    <script src="../app-data.js"></script>
+    <script>applyAppData('en');</script>
 </body>
 </html>
