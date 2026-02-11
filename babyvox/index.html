@@ -718,7 +718,7 @@
                 <div class="faq-item open">
                     <div class="faq-question">どのように記録しますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>音声認識で乳幼児の身長・体重を記録します。</p>
+                        <p>音声認識で乳幼児の身長・体重・頭囲・胸囲を記録します。</p>
                         <ul>
                             <li><strong>対応:</strong> 日本語・英語の音声入力</li>
                             <li><strong>必要:</strong> マイクへのアクセス許可</li>
@@ -733,7 +733,8 @@
                         <ul>
                             <li><strong>体重:</strong> 1.0kg〜30.0kg</li>
                             <li><strong>身長:</strong> 30.0cm〜130.0cm</li>
-                            
+                            <li><strong>頭囲:</strong> 20.0cm〜60.0cm</li>
+                            <li><strong>胸囲:</strong> 20.0cm〜80.0cm</li>
                         </ul>
                         <p>この範囲外の数値は認識されません。</p>
                     </div>
@@ -764,10 +765,10 @@
                 <div class="faq-item">
                     <div class="faq-question">認識後の記録方法は？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、「記録する」ボタンを押すとヘルスケアに保存されます。</p>
+                        <p><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、「記録する」ボタンを押すとカレンダーに保存されます。</p>
                         <ul>
                             <li><strong>通常:</strong> 確認画面で数値を確認し、「記録する」を選択すると保存されます</li>
-                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にヘルスケアに記録されます</li>
+                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にカレンダーに記録されます</li>
                         </ul>
                         <p>認識精度が低い場合は、自動記録がオンでも確認画面が表示されます。</p>
                     </div>
@@ -777,7 +778,7 @@
                     <div class="faq-question">認識結果が間違っていた場合は？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
                         <p><strong>保存前の場合:</strong> 確認画面で数値を確認できます。正しくないと思ったら「記録しない」を選択し、再度撮影してください。</p>
-                        <p><strong>保存後の場合:</strong> 誤った数値が保存された場合は、iOSのヘルスケアアプリから削除してください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</p>
+                        <p><strong>保存後の場合:</strong> 誤った数値が保存された場合は、iOSのカレンダーアプリから該当イベントを削除してください。</p>
                     </div>
                 </div>
 
@@ -810,7 +811,7 @@
                     <h3>1. 収集する情報の種類</h3>
                     <ul>
                         <li><strong>マイクで取得する音声:</strong> 音声認識処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
-                        <li><strong>健康関連データ（HealthKit）:</strong> 乳幼児の成長データの記録・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
+                        <li><strong>カレンダーデータ（EventKit）:</strong> 乳幼児の成長データの記録・読み取り。お使いの端末のカレンダーアプリに保存されます。カレンダーの同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
                         <li><strong>デバイス情報:</strong> 端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>収集しない情報:</strong> 本アプリでは広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
@@ -819,38 +820,38 @@
 
                 <div class="legal-section">
                     <h3>2. 情報の利用目的</h3>
-                    <p>乳幼児の身長・体重の記録と成長管理支援、成長変化の表示。これ以外の目的には利用しません。</p>
+                    <p>乳幼児の身長・体重・頭囲・胸囲の記録と成長管理支援、成長変化の表示。これ以外の目的には利用しません。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>3. 第三者への提供</h3>
-                    <p>当社は音声データやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                    <p>当社は音声データやカレンダーデータを第三者に提供、販売、共有しません。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. Apple HealthKit特記事項</h3>
+                    <h3>4. カレンダーデータの取り扱い</h3>
                     <ul>
-                        <li>HealthKitデータを広告、マーケティング、データマイニング目的で使用しません</li>
-                        <li>HealthKitデータをデータブローカーに販売しません</li>
-                        <li>当社はHealthKitデータを当社の外部サーバーに送信・保存しません。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います</li>
-                        <li>HealthKitへのアクセスはiOSの設定からいつでも取り消せます</li>
+                        <li>カレンダーデータを広告、マーケティング、データマイニング目的で使用しません</li>
+                        <li>カレンダーデータをデータブローカーに販売しません</li>
+                        <li>当社はカレンダーデータを当社の外部サーバーに送信・保存しません。カレンダーの同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います</li>
+                        <li>カレンダーへのアクセスはiOSの設定からいつでも取り消せます</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>5. セキュリティ対策</h3>
-                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。</p>
+                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護を採用しています。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>6. 子供のプライバシー</h3>
-                    <p>本アプリは13歳未満のお子様を対象としていません。アプリの機能利用において、当社は個人情報を収集しません。</p>
+                    <p>本アプリは保護者が乳幼児の成長を記録するためのアプリです。13歳未満のお子様が単独で本アプリを使用することは想定していません。記録される成長データ（身長・体重等）は保護者のデバイス内のカレンダーに保存され、当社が運用するサーバーへの送信はありません。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>7. ユーザーの権利</h3>
                     <ul>
-                        <li><strong>すべてのユーザー:</strong> HealthKitデータの管理・削除はiOSのApple Health（ヘルスケア）アプリから可能です。表示項目はiOSバージョンにより異なる場合があります。アプリ削除時、iOSがヘルスケアデータの削除を確認します。</li>
+                        <li><strong>すべてのユーザー:</strong> 成長データの管理・削除はiOSのカレンダーアプリから該当イベントを削除することで可能です。カレンダーへのアクセス権限はiOSの設定からいつでも取り消せます。</li>
                         <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
                         <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
                         <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。ただし、iCloud同期等のAppleサービスは、ユーザー設定およびAppleの仕様に依存します。</li>
@@ -899,22 +900,23 @@
 
                 <div class="legal-section">
                     <h3>3. 本アプリの概要と対応機器</h3>
-                    <p>本アプリは、音声認識技術を用いて乳幼児の身長・体重を記録し、成長を管理するアプリケーションです。</p>
+                    <p>本アプリは、音声認識技術を用いて乳幼児の身長・体重・頭囲・胸囲を認識し、iOSのカレンダー（EventKit）に成長記録として保存するアプリケーションです。</p>
                     <ul>
-                        <li><strong>入力方法:</strong> 音声認識による数値入力に対応しています。</li>
-                        <li><strong>対応範囲:</strong> 体重1.0kg〜30.0kg、身長30.0cm〜130.0cmの範囲に対応しています。</li>
+                        <li><strong>入力方法:</strong> 音声認識（Apple Speech Framework）による数値入力に対応しています。音声データは認識処理後に即時破棄され、当社のサーバーへの送信はありません。</li>
+                        <li><strong>記録先:</strong> 認識された数値はiOSのカレンダーアプリにイベントとして保存されます。iCloudカレンダー同期を有効にしている場合、データはAppleの仕様に従い同期されます。</li>
+                        <li><strong>対応範囲:</strong> 体重1.0kg〜30.0kg、身長30.0cm〜130.0cm、頭囲20.0cm〜60.0cm、胸囲20.0cm〜80.0cmの範囲に対応しています。</li>
                         <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. プライバシーポリシーおよびHealthKitデータの取り扱い</h3>
+                    <h3>4. プライバシーポリシーおよびカレンダーデータの取り扱い</h3>
                     <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
-                    <p>Apple HealthKitに記録されたデータについて、当社は以下を遵守します:</p>
+                    <p>カレンダー(EventKit)に記録されたデータについて、当社は以下を遵守します:</p>
                     <ul>
-                        <li>HealthKitデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
-                        <li>HealthKitデータをデータブローカーや第三者に販売・提供しません</li>
-                        <li>HealthKitデータを当社が運用するサーバーへ送信・保存しません</li>
+                        <li>カレンダーデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
+                        <li>カレンダーデータをデータブローカーや第三者に販売・提供しません</li>
+                        <li>カレンダーデータを当社が運用するサーバーへ送信・保存しません</li>
                     </ul>
                 </div>
 
@@ -938,9 +940,9 @@
                     <h3>7. 音声認識の精度について</h3>
                     <ul>
                         <li><strong>認識精度の非保証:</strong> 音声認識の精度は100%ではありません。</li>
-                        <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
-                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
-                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</li>
+                        <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にカレンダーへ記録されます。</li>
+                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でカレンダーへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
+                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSのカレンダーアプリで該当イベントを削除した上で、本アプリで再度認識・記録を行ってください。</li>
                     </ul>
                 </div>
 
@@ -1032,7 +1034,7 @@
                 <div class="faq-item open">
                     <div class="faq-question">How do I record measurements?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>Use voice recognition to record your baby's height and weight.</p>
+                        <p>Use voice recognition to record your baby's height, weight, head circumference, and chest circumference.</p>
                         <ul>
                             <li><strong>Supported:</strong> Japanese and English voice input</li>
                             <li><strong>Required:</strong> Microphone access permission</li>
@@ -1047,7 +1049,8 @@
                         <ul>
                             <li><strong>Weight:</strong> 1.0kg–30.0kg</li>
                             <li><strong>Height:</strong> 30.0cm–130.0cm</li>
-                            
+                            <li><strong>Head Circumference:</strong> 20.0cm–60.0cm</li>
+                            <li><strong>Chest Circumference:</strong> 20.0cm–80.0cm</li>
                         </ul>
                         <p>Values outside this range won't be recognized.</p>
                     </div>
@@ -1080,7 +1083,7 @@
                     <div class="faq-answer">
                         <p>The app automatically evaluates voice recognition confidence.</p>
                         <ul>
-                            <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
+                            <li><strong>High confidence:</strong> Automatically saved to Calendar without confirmation</li>
                             <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value. "Record this value" saves it; "Don't Record" prompts you to retake.</li>
                         </ul>
                         <p>When the app determines confidence is low, data will not be saved unless you explicitly approve it.</p>
@@ -1091,7 +1094,7 @@
                     <div class="faq-question">What if the recognition is wrong?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
                         <p><strong>Before saving:</strong> If the recognition confidence is low, the app will show a confirmation screen. If the value looks incorrect, choose "Don't Record" and retake the photo.</p>
-                        <p><strong>After saving:</strong> High-confidence readings are automatically saved. If incorrect data was saved, delete it from the iOS Health app. Please refer to the Health app for detailed instructions.</p>
+                        <p><strong>After saving:</strong> High-confidence readings are automatically saved. If incorrect data was saved, delete the event from the iOS Calendar app.</p>
                     </div>
                 </div>
 
@@ -1124,7 +1127,7 @@
                     <h3>1. Information We Collect</h3>
                     <ul>
                         <li><strong>Voice Audio:</strong> Discarded immediately after recognition processing. Not transmitted to servers operated by us.</li>
-                        <li><strong>Growth Data:</strong> Baby height and weight data. Stored on your device.</li>
+                        <li><strong>Growth Data:</strong> Baby height, weight, head circumference, and chest circumference data. Stored on your device.</li>
                         <li><strong>Device Info:</strong> Processed on your device; not transmitted to servers operated by us.</li>
                         <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
                         <li><strong>What We Don't Collect:</strong> We do not use advertising SDKs, analytics services, or user registration in this App.</li>
@@ -1133,38 +1136,38 @@
 
                 <div class="legal-section">
                     <h3>2. How We Use Information</h3>
-                    <p>Baby height and weight recording, growth management support, and displaying growth trends. No other purposes.</p>
+                    <p>Baby height, weight, head circumference, and chest circumference recording, growth management support, and displaying growth trends. No other purposes.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>3. Third-Party Sharing</h3>
-                    <p>We do not provide, sell, or share voice data or HealthKit data with third parties.</p>
+                    <p>We do not provide, sell, or share voice data or calendar data with third parties.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. Apple HealthKit</h3>
+                    <h3>4. Calendar Data Handling</h3>
                     <ul>
-                        <li>HealthKit data is not used for advertising, marketing, or data mining</li>
-                        <li>HealthKit data is not sold to data brokers</li>
-                        <li>We do not transmit or store HealthKit data on our own external servers. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior</li>
-                        <li>HealthKit access can be revoked anytime in iOS Settings</li>
+                        <li>Calendar data is not used for advertising, marketing, or data mining</li>
+                        <li>Calendar data is not sold to data brokers</li>
+                        <li>We do not transmit or store calendar data on our own external servers</li>
+                        <li>Calendar access can be revoked anytime in iOS Settings</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>5. Security</h3>
-                    <p>We employ data minimization, on-device processing where possible, Keychain protection, and HealthKit encryption.</p>
+                    <p>We employ data minimization, on-device processing where possible, Keychain protection.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>6. Children's Privacy</h3>
-                    <p>This App is not intended for children under 13. We do not collect personal information through the App's functionality.</p>
+                    <p>This App is designed for parents and guardians to record their baby's growth. It is not intended for independent use by children under 13. Growth data (height, weight, etc.) is stored in the Calendar app on the parent's device and is not transmitted to servers operated by us.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>7. Your Rights</h3>
                     <ul>
-                        <li><strong>All Users:</strong> You can manage or delete HealthKit data through the iOS Apple Health app. Navigation paths may vary depending on your iOS version. When uninstalling, iOS asks whether to delete health data.</li>
+                        <li><strong>All Users:</strong> You can manage or delete calendar data through the iOS Calendar app. Calendar events remain after app uninstallation.</li>
                         <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
                         <li><strong>California (CCPA/CPRA):</strong> Right to know, delete, opt-out. We don't sell personal information.</li>
                         <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country. Note that Apple services (such as iCloud sync) may involve processing outside your region depending on your settings and Apple's system behavior.</li>
@@ -1213,22 +1216,23 @@
 
                 <div class="legal-section">
                     <h3>3. App Description and Compatibility</h3>
-                    <p>The App uses voice recognition to record baby height and weight measurements for growth tracking.</p>
+                    <p>The App uses voice recognition (Apple Speech Framework) to recognize baby height, weight, head circumference, and chest circumference measurements, and saves them as events in the iOS Calendar (EventKit) for growth tracking.</p>
                     <ul>
-                        <li><strong>Input Method:</strong> Voice recognition for measurement input.</li>
-                        <li><strong>Measurement Range:</strong> Weight 1.0kg–30.0kg, Height 30.0cm–130.0cm</li>
+                        <li><strong>Input Method:</strong> Voice recognition for measurement input. Voice audio is discarded immediately after recognition processing and is not transmitted to servers operated by us.</li>
+                        <li><strong>Data Storage:</strong> Recognized measurements are saved as events in the iOS Calendar app. If iCloud Calendar sync is enabled, data is synced according to Apple's specifications.</li>
+                        <li><strong>Measurement Range:</strong> Weight 1.0kg–30.0kg, Height 30.0cm–130.0cm, Head Circumference 20.0cm–60.0cm, Chest Circumference 20.0cm–80.0cm</li>
                         <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. Privacy Policy and HealthKit Data Handling</h3>
+                    <h3>4. Privacy Policy and Calendar Data Handling</h3>
                     <p>Your use of the App is also governed by our <a href="#privacy-en">Privacy Policy</a>.</p>
-                    <p>Regarding data recorded in Apple HealthKit, we commit to the following:</p>
+                    <p>Regarding data recorded in Calendar \(EventKit\), we commit to the following:</p>
                     <ul>
-                        <li>We do not use HealthKit data for advertising, marketing, or data mining purposes</li>
-                        <li>We do not sell or provide HealthKit data to data brokers or third parties</li>
-                        <li>We do not transmit or store HealthKit data on servers operated by us</li>
+                        <li>We do not use calendar data for advertising, marketing, or data mining purposes</li>
+                        <li>We do not sell or provide calendar data to data brokers or third parties</li>
+                        <li>We do not transmit or store calendar data on servers operated by us</li>
                     </ul>
                 </div>
 
@@ -1252,8 +1256,8 @@
                     <ul>
                         <li><strong>No Guarantee:</strong> Voice recognition accuracy is not 100%.</li>
                         <li><strong>Default Behavior:</strong> Recognition results are shown on a confirmation screen. The data is saved only when you tap "Save".</li>
-                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
-                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan. Please refer to the Health app for detailed instructions.</li>
+                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to Calendar without confirmation. Low-confidence results will still show a confirmation screen.</li>
+                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect event in the iOS Calendar app and then re-record.</li>
                     </ul>
                 </div>
 
@@ -1493,9 +1497,9 @@
     <footer class="trademark-footer">
         <div class="trademark-content">
             <p class="trademark-text">
-                Apple、Appleのロゴ、iPhone、iOS、HealthKit、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                Apple、Appleのロゴ、iPhone、iOS、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
                 <br>
-                Apple, the Apple logo, iPhone, iOS, HealthKit, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+                Apple, the Apple logo, iPhone, iOS, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
             </p>
             <p class="trademark-disclaimer">
                 本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
