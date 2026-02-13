@@ -802,14 +802,19 @@
 
                 <span class="updated-badge">最終更新: 2026年2月5日</span>
 
-                <div class="highlight-box">
+                <div class="highlight-box v1-content">
                     <p><strong>重要:</strong> 本アプリは、ユーザーの体重データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</p>
+                </div>
+
+                <div class="highlight-box v2-content" style="display:none;">
+                    <p><strong>重要:</strong> 本アプリは、ユーザーの体重データや音声データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。撮影した画像および音声は処理後に即時破棄されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>1. 収集する情報の種類</h3>
                     <ul>
                         <li><strong>カメラで取得する画像:</strong> OCR処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
+                        <li class="v2-content" style="display:none;"><strong>マイクで取得する音声:</strong> 音声認識処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>健康関連データ（HealthKit）:</strong> 体重データの書き込み・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
                         <li><strong>デバイス情報:</strong> iPhone機種識別（重量差し引き機能用）。端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
@@ -824,7 +829,8 @@
 
                 <div class="legal-section">
                     <h3>3. 第三者への提供</h3>
-                    <p>当社は画像データやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                    <p class="v1-content">当社は画像データやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                    <p class="v2-content" style="display:none;">当社は画像データ、音声データ、およびHealthKitデータを第三者に提供、販売、共有しません。</p>
                 </div>
 
                 <div class="legal-section">
@@ -899,8 +905,10 @@
 
                 <div class="legal-section">
                     <h3>3. 本アプリの概要と対応機器</h3>
-                    <p>本アプリは、体重計のディスプレイに表示された数値をカメラで撮影し、Apple標準の文字認識（OCR）技術を用いて読み取り、Apple HealthKit（ヘルスケア）に記録するアプリケーションです。</p>
+                    <p class="v1-content">本アプリは、体重計のディスプレイに表示された数値をカメラで撮影し、Apple標準の文字認識（OCR）技術を用いて読み取り、Apple HealthKit（ヘルスケア）に記録するアプリケーションです。</p>
+                    <p class="v2-content" style="display:none;">本アプリは、体重計のディスプレイに表示された数値をカメラで撮影し、Apple標準の文字認識（OCR）技術を用いて読み取り、Apple HealthKit（ヘルスケア）に記録するアプリケーションです。また、音声認識（Apple Speech Framework）による数値入力にも対応しています。</p>
                     <ul>
+                        <li class="v2-content" style="display:none;"><strong>入力方法:</strong> カメラ撮影によるOCR認識、および音声認識による数値入力に対応しています。音声データは認識処理後に即時破棄され、当社のサーバーへの送信はありません。</li>
                         <li><strong>対応体重計:</strong> デジタル表示の体重計に対応しています。アナログ表示の体重計には対応しておりません。</li>
                         <li><strong>対応体重範囲:</strong> iOSのヘルスケア設定に応じて、30.0kg〜200.0kg、66.0lbs〜440.0lbs、または4.7st〜31.5stの範囲に対応しています。</li>
                         <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
@@ -934,7 +942,7 @@
                     <p>本アプリは一般的なウェルネスおよびフィットネス支援を目的としたものであり、医療機器ではありません。健康状態に関する疑問や不安がある場合は医師にご相談ください。</p>
                 </div>
 
-                <div class="legal-section">
+                <div class="legal-section v1-content">
                     <h3>7. OCR認識の精度について</h3>
                     <ul>
                         <li><strong>認識精度の非保証:</strong> OCR認識の精度は100%ではありません。</li>
@@ -944,6 +952,16 @@
                     </ul>
                 </div>
 
+                <div class="legal-section v2-content" style="display:none;">
+                    <h3>7. 認識精度について</h3>
+                    <ul>
+                        <li><strong>認識精度の非保証:</strong> OCR認識および音声認識の精度は100%ではありません。撮影条件（照明、角度、ディスプレイの反射等）や音声条件（周囲の騒音、発話の明瞭さ、アクセント、マイクの状態等）により、認識精度が低下する場合があります。</li>
+                        <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
+                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
+                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。</li>
+                        <li><strong>免責:</strong> OCRおよび音声入力の誤認識による記録について、当社は責任を負いません。</li>
+                    </ul>
+                </div>
 
                 <div class="legal-section">
                     <h3>8. 知的財産権</h3>
@@ -952,7 +970,8 @@
 
                 <div class="legal-section">
                     <h3>9. 免責事項</h3>
-                    <p>当社は、本アプリの機能が中断なく動作すること、OCR認識結果が常に正確であることを保証しません。</p>
+                    <p class="v1-content">当社は、本アプリの機能が中断なく動作すること、OCR認識結果が常に正確であることを保証しません。</p>
+                    <p class="v2-content" style="display:none;">当社は、本アプリの機能が中断なく動作すること、OCR認識結果および音声認識結果が常に正確であることを保証しません。</p>
                 </div>
 
                 <div class="legal-section">
@@ -1117,14 +1136,19 @@
 
                 <span class="updated-badge">Last Updated: February 5, 2026</span>
 
-                <div class="highlight-box">
+                <div class="highlight-box v1-content">
                     <p><strong>Important:</strong> This app does not send or store your weight data or captured images on our external servers. Weight data is stored on your device and in Apple HealthKit. Captured images are discarded immediately after OCR processing. Health data storage/sync behavior (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior.</p>
+                </div>
+
+                <div class="highlight-box v2-content" style="display:none;">
+                    <p><strong>Important:</strong> This app does not send or store your weight data, audio data, or captured images on our external servers. Weight data is stored on your device and in Apple HealthKit. Captured images and audio are discarded immediately after processing. Health data storage/sync behavior (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>1. Information We Collect</h3>
                     <ul>
                         <li><strong>Camera Images:</strong> Discarded immediately after OCR processing. Not transmitted to servers operated by us.</li>
+                        <li class="v2-content" style="display:none;"><strong>Microphone Audio:</strong> Discarded immediately after speech recognition processing. Not transmitted to servers operated by us.</li>
                         <li><strong>Health Data (HealthKit):</strong> Weight data read/write. Stored on your device and in Apple HealthKit. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</li>
                         <li><strong>Device Info:</strong> iPhone model identification (for weight subtraction feature). Processed on your device; not transmitted to servers operated by us.</li>
                         <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
@@ -1139,7 +1163,8 @@
 
                 <div class="legal-section">
                     <h3>3. Third-Party Sharing</h3>
-                    <p>We do not provide, sell, or share image data or HealthKit data with third parties.</p>
+                    <p class="v1-content">We do not provide, sell, or share image data or HealthKit data with third parties.</p>
+                    <p class="v2-content" style="display:none;">We do not provide, sell, or share image data, audio data, or HealthKit data with third parties.</p>
                 </div>
 
                 <div class="legal-section">
@@ -1214,8 +1239,10 @@
 
                 <div class="legal-section">
                     <h3>3. App Description and Compatibility</h3>
-                    <p>The App captures weight scale displays using your camera, reads the numbers using built-in text recognition (OCR) technology, and records them to Apple HealthKit.</p>
+                    <p class="v1-content">The App captures weight scale displays using your camera, reads the numbers using built-in text recognition (OCR) technology, and records them to Apple HealthKit.</p>
+                    <p class="v2-content" style="display:none;">The App captures weight scale displays using your camera, reads the numbers using built-in text recognition (OCR) technology, and records them to Apple HealthKit. It also supports voice input using Apple Speech Framework.</p>
                     <ul>
+                        <li class="v2-content" style="display:none;"><strong>Input Methods:</strong> Camera-based OCR recognition and voice input via speech recognition. Audio data is discarded immediately after recognition processing and is not transmitted to our servers.</li>
                         <li><strong>Supported Scales:</strong> Digital display scales. Analog display scales are not supported.</li>
                         <li><strong>Weight Range:</strong> Based on your iOS Health unit setting: 30.0kg–200.0kg, 66.0lbs–440.0lbs, or 4.7st–31.5st</li>
                         <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later</li>
@@ -1248,7 +1275,7 @@
                     <p>This App is for general wellness and fitness purposes only. It is not a medical device. Consult a healthcare professional for medical advice.</p>
                 </div>
 
-                <div class="legal-section">
+                <div class="legal-section v1-content">
                     <h3>7. OCR Accuracy</h3>
                     <ul>
                         <li><strong>No Guarantee:</strong> OCR accuracy is not 100%.</li>
@@ -1258,6 +1285,16 @@
                     </ul>
                 </div>
 
+                <div class="legal-section v2-content" style="display:none;">
+                    <h3>7. Recognition Accuracy</h3>
+                    <ul>
+                        <li><strong>No Guarantee:</strong> OCR and speech recognition accuracy is not 100%. Recognition may be affected by conditions such as lighting, angle, display reflections (for camera), or ambient noise, speech clarity, accent, and microphone condition (for voice input).</li>
+                        <li><strong>Default Behavior:</strong> Recognition results are shown on a confirmation screen. The data is saved to Apple HealthKit only when you tap "Save".</li>
+                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
+                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan or re-input.</li>
+                        <li><strong>Disclaimer:</strong> We are not liable for records resulting from misrecognition by OCR or voice input.</li>
+                    </ul>
+                </div>
 
                 <div class="legal-section">
                     <h3>8. Intellectual Property</h3>
@@ -1266,7 +1303,8 @@
 
                 <div class="legal-section">
                     <h3>9. Disclaimer of Warranties</h3>
-                    <p>The App is provided "as is" without warranties of any kind. We do not guarantee that OCR results will always be accurate.</p>
+                    <p class="v1-content">The App is provided "as is" without warranties of any kind. We do not guarantee that OCR results will always be accurate.</p>
+                    <p class="v2-content" style="display:none;">The App is provided "as is" without warranties of any kind. We do not guarantee that OCR or speech recognition results will always be accurate.</p>
                 </div>
 
                 <div class="legal-section">
@@ -1340,8 +1378,18 @@
     <script>
         // Language Data
         const langData = {
-            ja: { label: '日本語', hero: 'WeightSnap', subtitle: '撮るだけ。タップ不要。<br>シンプルな体重記録。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
-            en: { label: 'English', hero: 'WeightSnap', subtitle: 'Just a Snap. No more Tap.<br>The Simplest Way to Log Your Weight.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
+            ja: {
+                label: '日本語', hero: 'WeightSnap',
+                subtitle: '撮るだけ。タップ不要。<br>シンプルな体重記録。',
+                subtitleV2: '撮るだけ、話すだけ。タップ不要。<br>シンプルな体重記録。',
+                toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ']
+            },
+            en: {
+                label: 'English', hero: 'WeightSnap',
+                subtitle: 'Just a Snap. No more Tap.<br>The Simplest Way to Log Your Weight.',
+                subtitleV2: 'Snap it. Say it. Done.<br>The Simplest Way to Log Your Weight.',
+                toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact']
+            }
         };
 
         // Get current language from URL hash or default to ja
@@ -1381,9 +1429,11 @@
             });
             document.getElementById('currentLangLabel').textContent = langData[lang].label;
 
-            // Update hero
+            // Update hero (innerHTML is safe here: values are hardcoded strings from langData, not user input)
+            const params = new URLSearchParams(window.location.search);
+            const isV2 = params.get('v') === '2';
             document.getElementById('heroTitle').textContent = langData[lang].hero;
-            document.getElementById('heroSubtitle').innerHTML = langData[lang].subtitle;
+            document.getElementById('heroSubtitle').innerHTML = isV2 ? langData[lang].subtitleV2 : langData[lang].subtitle;
 
             // Update TOC
             const tocLinks = document.querySelectorAll('.toc-link');
@@ -1455,9 +1505,24 @@
             }
         }
 
+        // Version-based content switching (v1 vs v2)
+        function applyVersionContent() {
+            const params = new URLSearchParams(window.location.search);
+            const version = params.get('v');
+            if (version === '2') {
+                document.querySelectorAll('.v2-content').forEach(el => {
+                    el.style.display = '';
+                });
+                document.querySelectorAll('.v1-content').forEach(el => {
+                    el.style.display = 'none';
+                });
+            }
+        }
+
         // Initialize
         switchLanguage(currentLang);
         checkCommercialAnchor();
+        applyVersionContent();
 
         // Handle hash changes for section navigation
         window.addEventListener('hashchange', () => {
