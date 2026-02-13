@@ -1444,16 +1444,19 @@
                 link.href = `#${section}-${lang}`;
             });
 
-            // Update URL
+            // Update URL (preserve existing query params like v=2)
             const currentHash = window.location.hash;
+            const currentParams = new URLSearchParams(window.location.search);
+            currentParams.set('lang', lang);
+            const queryString = currentParams.toString();
             if (currentHash && currentHash.includes('-')) {
                 const section = currentHash.split('-').pop();
                 if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(s => currentHash.includes(s))) {
                     const sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace(`-${getLangFromHash()}`, '');
-                    history.replaceState(null, null, `?lang=${lang}#${sectionName}-${lang}`);
+                    history.replaceState(null, null, `?${queryString}#${sectionName}-${lang}`);
                 }
             } else {
-                history.replaceState(null, null, `?lang=${lang}`);
+                history.replaceState(null, null, `?${queryString}`);
             }
 
             // Close dropdown
@@ -1519,10 +1522,10 @@
             }
         }
 
-        // Initialize
+        // Initialize (applyVersionContent first, before switchLanguage rewrites URL)
+        applyVersionContent();
         switchLanguage(currentLang);
         checkCommercialAnchor();
-        applyVersionContent();
 
         // Handle hash changes for section navigation
         window.addEventListener('hashchange', () => {
