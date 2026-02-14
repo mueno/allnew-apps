@@ -476,6 +476,220 @@ const APP_DATA = {
                 { q: "How do I restore my purchase?", a: "<p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" }
             ]
         }
+    },
+    botto: {
+        name: "BOTTO",
+        supportEmail: "botto-support@allnew.work",
+        icon: "&#x1F9D8;",
+        ja: {
+            subtitle: "集中タイマーアプリ",
+            description: "スマホを裏返すだけで集中モードが始まる、マインドフルネスタイマーアプリ",
+            dataTypes: "マインドフルネスセッションデータ",
+            healthKitWrite: "マインドフルネスセッションの書き込み",
+            healthKitRead: "マインドフルネスセッションの読み取り（統計表示等）",
+            cameraUsage: "本アプリはカメラを使用しません",
+            importantNote: "本アプリは、セッションデータを当社の外部サーバーに送信・保存しません。データは端末内およびApple HealthKitに保存されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。",
+            appOverview: "スマートフォンを裏返すだけで集中セッションを開始し、端末のモーションセンサーで姿勢を検知して集中状態を維持します。ユーザーの許可に基づき、セッションをApple HealthKitのマインドフルネスとして記録します。",
+            appOverview2: "ユーザーが任意に許可した場合に限り、ヘルスケア上のマインドフルネスデータを読み取り、統計表示等に利用します。",
+            supportedDevices: "<strong>入力方法:</strong> 端末を裏返す動作による自動検知。",
+            supportedRange: "",
+            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。",
+            freeTier: "本アプリは無料で利用できる回数に上限（15回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
+            tokushoFreeTier: "本アプリは無料で利用できる回数に上限（15回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。",
+            healthCategory: "「ブラウズ」→「マインドフルネス」",
+            notMedicalDevice: "本アプリは医療機器ではなく、診断・治療・予防等の医療行為を目的としません。",
+            faq: [
+                { q: "無料で使えますか？", a: "<p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。</p>" },
+                { q: "データはどこに保存されますか？", a: "<p>集中セッションのデータは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。当社が運用するサーバーへの送信はありません。</p>" },
+                { q: "購入を復元したい", a: "<p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" }
+            ]
+        },
+        en: {
+            subtitle: "Focus Timer App",
+            description: "A mindfulness timer that starts focus mode simply by flipping your phone face-down",
+            dataTypes: "mindfulness session data",
+            healthKitWrite: "writing mindfulness sessions",
+            healthKitRead: "reading mindfulness sessions (to show statistics)",
+            cameraUsage: "This app does not use the camera",
+            importantNote: "This app does not send or store session data on our external servers. Data is stored on your device and in Apple HealthKit.",
+            appOverview: "The App starts a focus session when you flip your phone face-down, using the device's motion sensor to detect orientation. Based on your permissions, sessions are recorded as mindfulness data in Apple HealthKit.",
+            appOverview2: "If you optionally grant read access, the App may also read your mindfulness data to show statistics.",
+            supportedDevices: "<strong>Input Method:</strong> Automatic detection via flipping the device face-down.",
+            supportedRange: "",
+            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later",
+            freeTier: "The App may offer up to 15 free sessions and then provide a one-time in-app purchase.",
+            tokushoFreeTier: "The App offers up to 15 free sessions, after which a one-time in-app purchase unlocks unlimited use.",
+            healthCategory: "Browse → Mindfulness",
+            notMedicalDevice: "The App is not a medical device and does not provide medical advice, diagnosis, or treatment.",
+            faq: [
+                { q: "Is it free?", a: "<p><strong>Free for the first 15 sessions.</strong> After that, a one-time purchase is required.</p><p>No subscription fees.</p>" },
+                { q: "Where is my data stored?", a: "<p>Focus session data is stored in <strong>Apple HealthKit on your device</strong>. We do not transmit data to our servers.</p>" },
+                { q: "How do I restore my purchase?", a: "<p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" }
+            ]
+        }
+    },
+    mofulens: {
+        name: "MofuLens",
+        supportEmail: "mofulens-support@allnew.work",
+        icon: "&#x1F43B;",
+        ja: {
+            subtitle: "AR動物コスチュームカメラ",
+            description: "ARKitでカメラに映った人を検出し、かわいい動物コスチュームをリアルタイムでオーバーレイするARカメラアプリ",
+            dataTypes: "",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "ARKitボディトラッキングのためにカメラを使用",
+            importantNote: "本アプリは、撮影画像や映像データを当社の外部サーバーに送信・保存しません。すべての処理（人物検出、コスチュームオーバーレイ、背景エフェクト）はデバイス上で完了します。コスチュームは顔を完全に隠すため、プライバシーが保護されます。Apple HealthKitは使用しません。",
+            appOverview: "ARKitのボディトラッキング技術を使用してカメラに映った人を検出し、かわいい動物コスチューム（くま・ねこ・たまご）をリアルタイムでオーバーレイ表示します。スナップショットの撮影・保存機能も提供します。",
+            appOverview2: "",
+            supportedDevices: "<strong>入力方法:</strong> ARカメラ（A12 Bionic以降のチップが必要）。",
+            supportedRange: "",
+            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載し、ARKit対応のiPhone（A12 Bionic以降）。",
+            freeTier: "本アプリはセッション回数について無料で利用できる回数に上限（3回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
+            tokushoFreeTier: "本アプリはセッション回数について無料で利用できる回数に上限（3回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "無料で使えますか？", a: "<p><strong>3回まで無料</strong>でお使いいただけます。4回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
+                { q: "データはどこに保存されますか？", a: "<p>スナップショットは<strong>お使いのデバイスのフォトライブラリ</strong>に保存されます。</p><p>当社が運用するサーバーへの送信はありません。すべての処理はデバイス上で完了します。</p>" },
+                { q: "顔は隠れますか？", a: "<p>はい。コスチュームは<strong>顔全体を完全に覆うサイズ</strong>で設計されています。撮影したスナップショットでも顔は隠れた状態で保存されます。</p>" },
+                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「購入を復元」をタップしてください。</p>" }
+            ]
+        },
+        en: {
+            subtitle: "AR Animal Costume Camera",
+            description: "Detects people on camera using ARKit and overlays cute animal costumes in real-time",
+            dataTypes: "",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "uses the camera for ARKit body tracking",
+            importantNote: "This app does not send or store your photos or video data on our external servers. All processing (person detection, costume overlay, background effects) is completed on-device. Costumes fully cover faces for privacy protection. Apple HealthKit is not used.",
+            appOverview: "The App uses ARKit body tracking to detect people on camera and overlay cute animal costumes (bears, cats, egg people) in real-time. Snapshot capture and save functionality is also available.",
+            appOverview2: "",
+            supportedDevices: "<strong>Input Method:</strong> AR Camera (requires A12 Bionic chip or later).",
+            supportedRange: "",
+            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later and ARKit support (A12 Bionic or later).",
+            freeTier: "The App may offer a limited number of free sessions (up to 3) and then provide a one-time in-app purchase to unlock unlimited usage.",
+            tokushoFreeTier: "The App offers up to 3 free sessions, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "Is it free?", a: "<p><strong>Free for the first 3 sessions.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
+                { q: "Where is my data stored?", a: "<p>Snapshots are saved to <strong>your device's Photo Library</strong>.</p><p>We do not transmit data to our servers. All processing is completed on-device.</p>" },
+                { q: "Are faces hidden?", a: "<p>Yes. Costumes are <strong>designed to fully cover faces</strong>. Saved snapshots also show faces covered by costumes.</p>" },
+                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → Restore Purchase</p>" }
+            ]
+        }
+    },
+    aegismail: {
+        name: "Aegis Mail",
+        supportEmail: "aegismail-support@allnew.work",
+        icon: "&#x1F6E1;&#xFE0F;",
+        ja: {
+            subtitle: "AIメールトリアージアプリ",
+            description: "Gmailのメールをオンデバイス AI が自動で3段階（重要・報告・ノイズ）に分類し、大事なメールを見逃さないメールクライアントアプリ",
+            dataTypes: "",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "本アプリはカメラを使用しません",
+            importantNote: "本アプリは Gmail API を使用してお客様のメールデータにアクセスします。メールの分類（トリアージ）は原則としてデバイス上の AI で処理されます。高度な要約・翻訳機能をご利用の場合に限り、個人情報を自動マスクしたうえでクラウド AI（Google Gemini）に送信されます。メールデータは当社の外部サーバーに保存されません。Apple HealthKitは使用しません。",
+            appOverview: "Google アカウントでサインインし、Gmail のメールを取得します。デバイス上の AI（Apple FoundationModels）がメールを「重要（Critical）」「報告（Report）」「ノイズ（Noise）」の3段階に自動分類し、優先度に応じた受信トレイを提供します。",
+            appOverview2: "高度な要約・翻訳機能は、メール本文から個人情報（PII）を自動検出・マスクした上でクラウド AI に送信します。クラウド AI の利用はユーザーの明示的な操作時のみ行われます。",
+            supportedDevices: "<strong>入力方法:</strong> Google アカウント（Gmail）でサインイン。",
+            supportedRange: "",
+            supportedOS: "<strong>対応デバイス:</strong> iOS 26.0以降を搭載し、Apple Intelligence に対応した iPhone（A17 Pro 以降）。",
+            freeTier: "本アプリはメールトリアージ回数について無料で利用できる回数に上限（50回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
+            tokushoFreeTier: "本アプリはメールトリアージ回数について無料で利用できる回数に上限（50回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "どのようなメールサービスに対応していますか？", a: "<p>現在は <strong>Gmail</strong> のみに対応しています。Google アカウントでサインインしてご利用ください。</p>" },
+                { q: "メールの内容は外部に送信されますか？", a: "<p>メールの分類（トリアージ）は<strong>デバイス上の AI</strong> で処理されるため、メール内容は外部に送信されません。</p><p>高度な要約・翻訳機能をご利用の場合のみ、<strong>個人情報を自動マスクした上で</strong>クラウド AI（Google Gemini）に送信されます。クラウド AI の利用はユーザーの明示的な操作時のみ行われます。</p>" },
+                { q: "無料で使えますか？", a: "<p><strong>50回まで無料</strong>でメールトリアージをお使いいただけます。51回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
+                { q: "データはどこに保存されますか？", a: "<p>メールデータは <strong>Gmail のサーバー</strong>に保存されています。本アプリは Gmail API を通じてメールを読み取りますが、当社が運用するサーバーにメールデータを保存することはありません。</p><p>トリアージ結果やアプリの設定はお使いのデバイス内に保存されます。</p>" },
+                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" },
+                { q: "トリアージの精度を上げるコツは？", a: "<ul><li>メールの件名と本文の冒頭が分類の判断材料になります</li><li>既知の送信者からのメールほど正確に分類されます</li><li>分類結果が期待と異なる場合はスワイプで手動再分類できます</li></ul>" }
+            ]
+        },
+        en: {
+            subtitle: "AI Email Triage App",
+            description: "An AI-powered Gmail client that automatically sorts your inbox into three priority levels—Critical, Report, and Noise—so you never miss important emails",
+            dataTypes: "",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "This app does not use the camera",
+            importantNote: "This app accesses your email data via the Gmail API. Email classification (triage) is processed on-device by AI. For advanced summarization and translation features, personal information is automatically redacted before being sent to cloud AI (Google Gemini). Email data is not stored on our external servers. Apple HealthKit is not used.",
+            appOverview: "The App uses your Google account to access Gmail, then classifies emails into three priority levels—Critical, Report, and Noise—using on-device AI (Apple FoundationModels), providing a priority-sorted inbox.",
+            appOverview2: "Advanced summarization and translation features automatically detect and redact personally identifiable information (PII) before sending to cloud AI. Cloud AI is only used when explicitly triggered by the user.",
+            supportedDevices: "<strong>Input Method:</strong> Sign in with Google account (Gmail).",
+            supportedRange: "",
+            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 26.0 or later and Apple Intelligence support (A17 Pro or later).",
+            freeTier: "The App may offer a limited number of free email triages (up to 50) and then provide a one-time in-app purchase to unlock unlimited usage.",
+            tokushoFreeTier: "The App offers up to 50 free email triages, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "Which email services are supported?", a: "<p>Currently, only <strong>Gmail</strong> is supported. Sign in with your Google account to get started.</p>" },
+                { q: "Is my email content sent to external servers?", a: "<p>Email classification (triage) is processed by <strong>on-device AI</strong>, so your email content is not sent externally.</p><p>Only when using advanced summarization or translation features is content sent to cloud AI (Google Gemini), <strong>after personal information is automatically redacted</strong>. Cloud AI is only used when you explicitly trigger these features.</p>" },
+                { q: "Is it free?", a: "<p><strong>Free for the first 50 email triages.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
+                { q: "Where is my data stored?", a: "<p>Your email data remains on <strong>Gmail's servers</strong>. This app reads emails through the Gmail API but does not store email data on our servers.</p><p>Triage results and app settings are stored on your device.</p>" },
+                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" },
+                { q: "Tips for better triage accuracy", a: "<ul><li>Email subject lines and opening text are used for classification</li><li>Emails from known senders are classified more accurately</li><li>You can manually re-classify by swiping if results differ from expectations</li></ul>" }
+            ]
+        }
+    },
+    timelens: {
+        name: "TimeLens",
+        supportEmail: "timelens-support@allnew.work",
+        icon: "&#x1F4F7;",
+        ja: {
+            subtitle: "写真オーバーレイカメラ",
+            description: "過去の写真をカメラに半透明で重ねて表示し、同じ構図で撮影できるカメラアプリ",
+            dataTypes: "写真データ",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "過去の写真との構図合わせのためにカメラを使用",
+            importantNote: "本アプリは、写真データを当社の外部サーバーに送信・保存しません。すべての処理（画像のオーバーレイ表示、AI一致度分析、コラージュ・動画生成）はデバイス上で完了します。インターネット接続は不要です。",
+            appOverview: "フォトライブラリから選んだ写真をカメラに半透明で重ねて表示し、同じアングル・構図で撮影できる機能を提供します。AIが元画像とカメラ映像の一致度をリアルタイム分析し、ビフォー・アフターのコラージュやワイプ動画を生成できます。",
+            appOverview2: "",
+            supportedDevices: "<strong>入力方法:</strong> カメラ撮影 + フォトライブラリ参照。",
+            supportedRange: "",
+            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。",
+            freeTier: "本アプリは撮影回数について無料で利用できる回数に上限（15回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
+            tokushoFreeTier: "本アプリは撮影回数について無料で利用できる回数に上限（15回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "無料で使えますか？", a: "<p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
+                { q: "データはどこに保存されますか？", a: "<p>撮影した写真やコラージュ・動画は<strong>お使いのデバイスのフォトライブラリ</strong>に保存されます。</p><p>当社が運用するサーバーへの送信はありません。すべての処理はデバイス上で完了します。</p>" },
+                { q: "どんな使い方ができますか？", a: "<ul><li>同じ場所で定期的に写真を撮る（定点観測）</li><li>聖地巡礼やロケ地巡りで同じ構図で撮影</li><li>建設現場や不動産の進捗記録</li><li>成長記録やビフォー・アフターの比較</li></ul>" },
+                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" }
+            ]
+        },
+        en: {
+            subtitle: "Photo Overlay Camera",
+            description: "Overlay past photos semi-transparently on your camera to capture the exact same angle and composition",
+            dataTypes: "photo data",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "uses the camera for composition matching with past photos",
+            importantNote: "This app does not send or store your photos on our external servers. All processing (image overlay, AI matching analysis, collage and video generation) is completed on-device. No internet connection is required.",
+            appOverview: "The App overlays a selected photo from your library semi-transparently on the live camera, enabling you to capture the exact same angle and composition. AI analyzes the similarity between the reference and camera view in real time, and you can create before-and-after collages or wipe transition videos.",
+            appOverview2: "",
+            supportedDevices: "<strong>Input Method:</strong> Camera + Photo Library reference.",
+            supportedRange: "",
+            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later",
+            freeTier: "The App may offer a limited number of free captures (up to 15) and then provide a one-time in-app purchase to unlock unlimited usage.",
+            tokushoFreeTier: "The App offers up to 15 free captures, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "Is it free?", a: "<p><strong>Free for the first 15 captures.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
+                { q: "Where is my data stored?", a: "<p>Photos, collages, and videos are saved to <strong>your device's Photo Library</strong>.</p><p>We do not transmit data to our servers. All processing is completed on-device.</p>" },
+                { q: "What can I use this for?", a: "<ul><li>Revisiting the same location over time</li><li>Anime/movie pilgrimage photography</li><li>Construction site progress documentation</li><li>Growth records and before-after comparisons</li></ul>" },
+                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" }
+            ]
+        }
     }
 };
 
