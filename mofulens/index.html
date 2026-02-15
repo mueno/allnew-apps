@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOTTO Support</title>
-    <meta name="description" content="BOTTO - Focus timer app. FAQ, Privacy Policy, Terms of Service.">
+    <title>MofuLens Support</title>
+    <meta name="description" content="MofuLens - AR animal costume camera app. FAQ, Privacy Policy, Terms of Service.">
     <!-- Security Headers (GitHub Pages cannot set HTTP response headers) -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
     <meta name="referrer" content="no-referrer">
@@ -59,14 +59,12 @@
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            /* Copy Protection */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
         }
 
-        /* Sticky Header */
         .header {
             position: sticky;
             top: 0;
@@ -113,10 +111,7 @@
             font-weight: 500;
         }
 
-        /* Language Dropdown */
-        .lang-dropdown {
-            position: relative;
-        }
+        .lang-dropdown { position: relative; }
 
         .lang-btn {
             display: flex;
@@ -133,23 +128,18 @@
             transition: all 0.2s ease;
         }
 
-        .lang-btn:hover {
-            border-color: var(--accent);
-        }
+        .lang-btn:hover { border-color: var(--accent); }
 
         .lang-btn::after {
             content: '';
-            width: 0;
-            height: 0;
+            width: 0; height: 0;
             border-left: 4px solid transparent;
             border-right: 4px solid transparent;
             border-top: 5px solid var(--text-secondary);
             transition: transform 0.2s ease;
         }
 
-        .lang-dropdown.open .lang-btn::after {
-            transform: rotate(180deg);
-        }
+        .lang-dropdown.open .lang-btn::after { transform: rotate(180deg); }
 
         .lang-menu {
             position: absolute;
@@ -168,37 +158,23 @@
         }
 
         .lang-dropdown.open .lang-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+            opacity: 1; visibility: visible; transform: translateY(0);
         }
 
         .lang-option {
-            display: block;
-            width: 100%;
+            display: block; width: 100%;
             padding: 12px 16px;
-            border: none;
-            background: none;
-            text-align: left;
-            font-size: 0.9rem;
+            border: none; background: none;
+            text-align: left; font-size: 0.9rem;
             color: var(--text-primary);
-            cursor: pointer;
-            transition: background 0.15s ease;
+            cursor: pointer; transition: background 0.15s ease;
         }
 
-        .lang-option:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .lang-option.active {
-            color: var(--accent);
-            font-weight: 500;
-        }
-
+        .lang-option:hover { background: var(--bg-tertiary); }
+        .lang-option.active { color: var(--accent); font-weight: 500; }
         .lang-option:first-child { border-radius: 11px 11px 0 0; }
         .lang-option:last-child { border-radius: 0 0 11px 11px; }
 
-        /* Hero Section */
         .hero {
             text-align: center;
             padding: 60px 20px 40px;
@@ -206,8 +182,7 @@
         }
 
         .hero-icon {
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             border-radius: 18px;
             margin: 0 auto 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -215,23 +190,15 @@
         }
 
         .hero h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
+            font-size: 2rem; font-weight: 700;
+            letter-spacing: -0.03em; margin-bottom: 8px;
         }
 
-        .hero-subtitle {
-            font-size: 1rem;
-            color: var(--text-secondary);
-        }
+        .hero-subtitle { font-size: 1rem; color: var(--text-secondary); }
 
-        /* Navigation TOC */
         .toc {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 16px 20px;
+            display: flex; justify-content: center;
+            gap: 8px; padding: 16px 20px;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border);
             flex-wrap: wrap;
@@ -241,434 +208,139 @@
             padding: 8px 16px;
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.85rem; font-weight: 500;
             border-radius: 980px;
             transition: all 0.2s ease;
         }
 
-        .toc-link:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
+        .toc-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
 
-        /* Main Content */
-        .main {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px 80px;
-        }
+        .main { max-width: 800px; margin: 0 auto; padding: 0 20px 80px; }
 
-        /* Language Content Containers */
-        .lang-content {
-            display: none;
-        }
+        .lang-content { display: none; }
+        .lang-content.active { display: block; }
 
-        .lang-content.active {
-            display: block;
-        }
+        .section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+        .section:last-child { border-bottom: none; }
 
-        /* Section */
-        .section {
-            padding: 48px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
 
         .section-icon {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             background: var(--bg-tertiary);
             border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; flex-shrink: 0;
         }
 
-        .section-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
+        .section-title { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; }
+        .section-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px; }
 
-        .section-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        /* Updated Badge */
         .updated-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-tertiary);
-            padding: 6px 12px;
-            border-radius: 980px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--bg-tertiary); padding: 6px 12px;
+            border-radius: 980px; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 20px;
         }
+        .updated-badge::before { content: ''; width: 6px; height: 6px; background: #34c759; border-radius: 50%; }
 
-        .updated-badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: #34c759;
-            border-radius: 50%;
-        }
-
-        /* Important Box */
         .highlight-box {
             background: linear-gradient(135deg, rgba(0,113,227,0.08) 0%, rgba(102,126,234,0.08) 100%);
             border: 1px solid rgba(0,113,227,0.2);
-            border-radius: var(--radius-sm);
-            padding: 20px 24px;
-            margin-bottom: 24px;
+            border-radius: var(--radius-sm); padding: 20px 24px; margin-bottom: 24px;
         }
+        .highlight-box p { color: var(--text-primary); font-size: 0.95rem; line-height: 1.7; }
+        .highlight-box strong { color: var(--accent); }
 
-        .highlight-box p {
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .highlight-box strong {
-            color: var(--accent);
-        }
-
-        /* FAQ Accordion */
         .faq-item {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            transition: all 0.3s ease;
+            background: var(--bg-secondary); border-radius: var(--radius-sm);
+            margin-bottom: 8px; border: 1px solid var(--border); overflow: hidden; transition: all 0.3s ease;
         }
-
-        .faq-item:hover {
-            border-color: rgba(0,113,227,0.3);
-        }
+        .faq-item:hover { border-color: rgba(0,113,227,0.3); }
 
         .faq-question {
-            padding: 18px 24px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            font-size: 0.95rem;
-            color: var(--text-primary);
-            transition: background 0.2s ease;
+            padding: 18px 24px; font-weight: 500; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
+            font-size: 0.95rem; color: var(--text-primary); transition: background 0.2s ease;
         }
-
-        .faq-question:hover {
-            background: var(--bg-tertiary);
-        }
+        .faq-question:hover { background: var(--bg-tertiary); }
 
         .faq-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--bg-tertiary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 18px;
-            font-weight: 300;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
+            width: 24px; height: 24px; border-radius: 50%;
+            background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;
+            color: var(--accent); font-size: 18px; font-weight: 300;
+            transition: all 0.3s ease; flex-shrink: 0;
         }
+        .faq-item.open .faq-icon { background: var(--accent); color: white; transform: rotate(45deg); }
 
-        .faq-item.open .faq-icon {
-            background: var(--accent);
-            color: white;
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-
-        .faq-item.open .faq-answer {
-            max-height: 800px;
-            padding: 0 24px 24px;
-        }
-
-        .faq-answer p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.8;
-            margin-bottom: 12px;
-        }
-
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+        .faq-item.open .faq-answer { max-height: 800px; padding: 0 24px 24px; }
+        .faq-answer p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; margin-bottom: 12px; }
         .faq-answer p:last-child { margin-bottom: 0; }
+        .faq-answer ul { padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; }
+        .faq-answer li { margin-bottom: 8px; line-height: 1.6; }
 
-        .faq-answer ul {
-            padding-left: 20px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .faq-answer li {
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        /* Legal Sections */
-        .legal-section {
-            margin-bottom: 28px;
-        }
-
+        .legal-section { margin-bottom: 28px; }
         .legal-section h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 10px;
         }
+        .legal-section h3::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; }
+        .legal-section p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; margin-bottom: 12px; }
+        .legal-section ul { padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; }
+        .legal-section li { margin-bottom: 10px; line-height: 1.7; }
+        .legal-section a { color: var(--accent); text-decoration: none; }
+        .legal-section a:hover { text-decoration: underline; }
 
-        .legal-section h3::before {
-            content: '';
-            width: 4px;
-            height: 18px;
-            background: var(--accent);
-            border-radius: 2px;
-        }
+        .commercial-accordion { background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border); overflow: hidden; }
+        .commercial-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; transition: background 0.2s ease; }
+        .commercial-header:hover { background: var(--bg-tertiary); }
+        .commercial-toggle { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 20px; font-weight: 300; transition: all 0.3s ease; flex-shrink: 0; }
+        .commercial-accordion.open .commercial-toggle { background: var(--accent); color: white; transform: rotate(45deg); }
+        .commercial-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .commercial-accordion.open .commercial-content { max-height: 600px; padding: 0 24px 24px; }
 
-        .legal-section p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.8;
-            margin-bottom: 12px;
-        }
-
-        .legal-section ul {
-            padding-left: 20px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .legal-section li {
-            margin-bottom: 10px;
-            line-height: 1.7;
-        }
-
-        .legal-section a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .legal-section a:hover {
-            text-decoration: underline;
-        }
-
-        /* Commercial Accordion */
-        .commercial-accordion {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-            overflow: hidden;
-        }
-
-        .commercial-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .commercial-header:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .commercial-toggle {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--bg-tertiary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 20px;
-            font-weight: 300;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .commercial-accordion.open .commercial-toggle {
-            background: var(--accent);
-            color: white;
-            transform: rotate(45deg);
-        }
-
-        .commercial-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .commercial-accordion.open .commercial-content {
-            max-height: 600px;
-            padding: 0 24px 24px;
-        }
-
-        /* Contact Card */
         .contact-card {
             background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-            border-radius: var(--radius-lg);
-            padding: 40px;
-            text-align: center;
-            border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 40px; text-align: center; border: 1px solid var(--border);
         }
-
-        .contact-card h2 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .contact-card > p {
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-        }
-
+        .contact-card h2 { font-size: 1.4rem; font-weight: 600; margin-bottom: 8px; }
+        .contact-card > p { color: var(--text-secondary); margin-bottom: 24px; }
         .contact-email {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--accent);
-            color: white;
-            padding: 14px 28px;
-            border-radius: 980px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--accent); color: white; padding: 14px 28px;
+            border-radius: 980px; text-decoration: none; font-weight: 500; font-size: 0.95rem;
             transition: all 0.2s ease;
         }
-
-        .contact-email:hover {
-            background: var(--accent-hover);
-            transform: scale(1.02);
-        }
+        .contact-email:hover { background: var(--accent-hover); transform: scale(1.02); }
 
         .contact-details {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-            text-align: left;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
+            margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);
+            text-align: left; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;
         }
+        .contact-details-top { margin-top: 24px; margin-bottom: 24px; padding-top: 0; padding-bottom: 16px; border-top: none; border-bottom: 1px solid var(--border); }
+        .contact-item { font-size: 0.85rem; }
+        .contact-item dt { color: var(--text-tertiary); font-weight: 500; margin-bottom: 4px; }
+        .contact-item dd { color: var(--text-primary); }
 
-        .contact-details-top {
-            margin-top: 24px;
-            margin-bottom: 24px;
-            padding-top: 0;
-            padding-bottom: 16px;
-            border-top: none;
-            border-bottom: 1px solid var(--border);
-        }
+        .footer { text-align: center; padding: 32px 20px; color: var(--text-tertiary); font-size: 0.8rem; border-top: 1px solid var(--border); background: var(--bg-secondary); }
 
-        .contact-item {
-            font-size: 0.85rem;
-        }
-
-        .contact-item dt {
-            color: var(--text-tertiary);
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .contact-item dd {
-            color: var(--text-primary);
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 32px 20px;
-            color: var(--text-tertiary);
-            font-size: 0.8rem;
-            border-top: 1px solid var(--border);
-            background: var(--bg-secondary);
-        }
-
-        /* Translation Notice */
-        .translation-notice {
-            background: #fff3cd;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 4px solid #ffc107;
-            color: #856404;
-            font-size: 0.9rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .translation-notice {
-                background: rgba(255, 193, 7, 0.15);
-                color: #ffc107;
-            }
-        }
-
-        /* Responsive */
         @media (max-width: 640px) {
-            .header-inner {
-                gap: 12px;
-            }
-
+            .header-inner { gap: 12px; }
             .hero { padding: 40px 20px 30px; }
             .hero h1 { font-size: 1.6rem; }
-
             .toc { gap: 4px; }
             .toc-link { padding: 6px 12px; font-size: 0.8rem; }
-
             .section { padding: 32px 0; }
             .section-header { flex-direction: column; text-align: center; }
-
             .contact-card { padding: 28px; }
             .contact-details { grid-template-columns: 1fr; }
         }
 
-        /* Scroll offset for anchors */
-        :target {
-            scroll-margin-top: 80px;
-        }
+        :target { scroll-margin-top: 80px; }
 
-        /* Fun Easter Egg */
-        .hero-icon:hover {
-            animation: wiggle 0.5s ease;
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg) scale(1.05); }
-            75% { transform: rotate(5deg) scale(1.05); }
-        }
+        .hero-icon:hover { animation: wiggle 0.5s ease; }
+        @keyframes wiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-5deg) scale(1.05); } 75% { transform: rotate(5deg) scale(1.05); } }
     </style>
 </head>
 <body>
@@ -677,7 +349,7 @@
             <a href="../" class="logo-link">
                 <span class="logo">AllNew</span>
                 <span class="logo-divider"></span>
-                <span class="app-name">BOTTO</span>
+                <span class="app-name">MofuLens</span>
             </a>
             <div class="lang-dropdown" id="langDropdown">
                 <button class="lang-btn" id="langBtn">
@@ -692,9 +364,9 @@
     </header>
 
     <section class="hero">
-        <img src="../botto-icon.png" alt="BOTTO" class="hero-icon">
-        <h1 id="heroTitle">BOTTO</h1>
-        <p class="hero-subtitle" id="heroSubtitle">裏返すだけ。集中が始まる。</p>
+        <img src="../mofulens-icon.png" alt="MofuLens" class="hero-icon">
+        <h1 id="heroTitle">MofuLens</h1>
+        <p class="hero-subtitle" id="heroSubtitle"></p>
     </section>
 
     <nav class="toc" id="toc">
@@ -719,48 +391,33 @@
                 </div>
 
                 <div class="faq-item open">
-                    <div class="faq-question">どうやって集中セッションを始めますか？<span class="faq-icon">+</span></div>
-                    <div class="faq-answer">
-                        <p>スマートフォンを裏返すだけで集中セッションが始まります。端末のモーションセンサーが姿勢を検知し、裏返している間セッションが継続します。</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">対応しているiPhoneは？<span class="faq-icon">+</span></div>
-                    <div class="faq-answer">
-                        <p><strong>iOS 17.0以降</strong>を搭載したiPhone。</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
                     <div class="faq-question">無料で使えますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。サブスクリプションはありません。</p>
+                        <p><strong>3回まで無料</strong>でお使いいただけます。1セッション（ARカメラの開始〜終了）が1回のカウントです。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>集中セッションのデータは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。当社が運用するサーバーへの送信はありません。</p>
+                        <p>撮影したスナップショットは<strong>お使いのデバイスのカメラロール（写真ライブラリ）</strong>に保存されます。</p>
+                        <p>当社が運用するサーバーへの送信はありません。カメラ映像はリアルタイム処理のみで、録画・送信はしません。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">HealthKitにはどのように記録されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-question">顔は映りますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>セッション完了後、ユーザーの許可に基づき、Apple HealthKitの「マインドフルネスセッション」として記録されます。「ブラウズ」→「マインドフルネス」で確認できます。</p>
+                        <p>コスチュームは<strong>顔全体を完全に覆う</strong>ようデザインされています。スナップショット撮影時も、コスチュームが被さった状態で保存されるため、顔が露出することはありません。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">購入を復元したい<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>過去に購入された方は、再購入の必要はありません。</p>
-                        <p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>
+                        <p><strong>手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップする。</p>
                     </div>
                 </div>
-
             </section>
 
             <!-- Privacy Policy -->
@@ -776,54 +433,52 @@
                 <span class="updated-badge">最終更新: 2026年2月15日</span>
 
                 <div class="highlight-box">
-                    <p><strong>重要:</strong> 本アプリは、セッションデータを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。</p>
+                    <p><strong>重要:</strong> 本アプリは、ユーザーの映像・画像データを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内で処理されます。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>1. 収集する情報の種類</h3>
                     <ul>
-                        <li><strong>モーションセンサーデータ:</strong> 端末の姿勢検知のためにリアルタイム処理されます。保存・送信はありません。</li>
-                        <li><strong>HealthKitデータ:</strong> マインドフルネスセッションの書き込み・読み取り。ユーザーの許可に基づきApple HealthKitに保存されます。</li>
-                        <li><strong>デバイス情報:</strong> 端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>カメラ映像:</strong> ARKit（人体検出）によるリアルタイム処理にのみ使用。映像は録画・送信されず、フレームごとにデバイス内で処理されます。</li>
+                        <li><strong>写真ライブラリ:</strong> スナップショット保存時にのみアクセス。保存先はお使いのデバイスのカメラロールです。</li>
                         <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
-                        <li><strong>収集しない情報:</strong> カメラ・マイクは使用しません。広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
+                        <li><strong>収集しない情報:</strong> 本アプリでは広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。顔認識データ、生体情報の収集・保存は一切行いません。</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>2. 情報の利用目的</h3>
-                    <p>集中セッションの記録とマインドフルネス管理支援。これ以外の目的には利用しません。</p>
+                    <p>ARコスチュームのリアルタイム表示、スナップショットの保存。これ以外の目的には利用しません。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>3. 第三者への提供</h3>
-                    <p>当社はセッションデータやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                    <p>当社はカメラ映像、スナップショット、その他のデータを第三者に提供、販売、共有しません。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. HealthKitデータの取り扱い</h3>
+                    <h3>4. 顔・生体情報について</h3>
                     <ul>
-                        <li>HealthKitデータを広告、マーケティング、データマイニング目的で使用しません</li>
-                        <li>HealthKitデータをデータブローカーに販売しません</li>
-                        <li>当社はHealthKitデータを当社の外部サーバーに送信・保存しません</li>
-                        <li>HealthKitへのアクセスはiOSの設定からいつでも取り消せます</li>
+                        <li>本アプリはARKit Body Tracking（人体検出）を使用しますが、顔認識（Face ID、TrueDepth等）は使用しません</li>
+                        <li>生体認証データの収集・保存・送信は行いません</li>
+                        <li>コスチュームは顔全体を完全に覆うよう設計されており、スナップショットに顔が露出することはありません</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>5. セキュリティ対策</h3>
-                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護を採用しています。</p>
+                    <p>データ最小化設計、端末内でのリアルタイム処理、Keychainによる機密情報保護を採用しています。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>6. 子供のプライバシー</h3>
-                    <p>本アプリは13歳未満のお子様が単独で使用することは想定していません。</p>
+                    <p>本アプリは13歳未満のお子様を対象としていません。アプリの機能利用において、当社は個人情報を収集しません。</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>7. ユーザーの権利</h3>
                     <ul>
-                        <li><strong>すべてのユーザー:</strong> HealthKitデータの管理・削除はiOSのヘルスケアアプリから可能です。HealthKitへのアクセス権限はiOSの設定からいつでも取り消せます。</li>
+                        <li><strong>すべてのユーザー:</strong> アプリを削除することで、デバイス内の設定情報はすべて消去されます。カメラロールに保存されたスナップショットは写真アプリから管理できます。</li>
                         <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
                         <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
                         <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。</li>
@@ -862,7 +517,7 @@
 
                 <div class="legal-section">
                     <h3>1. 規約の適用</h3>
-                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「BOTTO」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「MofuLens」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
                 </div>
 
                 <div class="legal-section">
@@ -872,22 +527,16 @@
 
                 <div class="legal-section">
                     <h3>3. 本アプリの概要と対応機器</h3>
-                    <p>本アプリは、スマートフォンを裏返すだけで集中セッションを開始し、モーションセンサーで端末の姿勢を検知して集中状態を維持するアプリケーションです。ユーザーの許可に基づきApple HealthKitにマインドフルネスセッションとして記録します。</p>
+                    <p>本アプリは、ARKit（拡張現実）技術を用いてカメラに映った人物にかわいい動物コスチュームをリアルタイムで重ね合わせるエンターテインメントアプリケーションです。</p>
                     <ul>
-                        <li><strong>入力方法:</strong> 端末を裏返す動作による自動検知。カメラ・マイクは使用しません。</li>
-                        <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
+                        <li><strong>機能:</strong> ARコスチュームの表示、スナップショット撮影・保存</li>
+                        <li><strong>対応デバイス:</strong> ARKit対応（A12チップ以降）のiPhone、iOS 17.0以降</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. プライバシーポリシーおよびHealthKitデータの取り扱い</h3>
+                    <h3>4. プライバシーポリシー</h3>
                     <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
-                    <p>HealthKitに記録されたデータについて、当社は以下を遵守します:</p>
-                    <ul>
-                        <li>HealthKitデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
-                        <li>HealthKitデータをデータブローカーや第三者に販売・提供しません</li>
-                        <li>HealthKitデータを当社が運用するサーバーへ送信・保存しません</li>
-                    </ul>
                 </div>
 
                 <div class="legal-section">
@@ -896,50 +545,38 @@
                         <li>本アプリの目的と異なる利用</li>
                         <li>法令または公序良俗に反する行為</li>
                         <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
+                        <li>第三者を無断で撮影する行為</li>
                         <li>その他当社が不適切と判断する行為</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>6. 健康情報に関する注意</h3>
-                    <p>本アプリは一般的なウェルネスおよびフィットネス支援を目的としたものであり、医療機器ではありません。健康状態に関する疑問や不安がある場合は医師にご相談ください。</p>
+                    <h3>6. 免責事項</h3>
+                    <p>本アプリはエンターテインメント目的で提供されます。当社は、本アプリの機能が中断なく動作すること、ARトラッキングが常に正確であることを保証しません。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>7. セッション検知の精度について</h3>
-                    <ul>
-                        <li><strong>精度の非保証:</strong> モーションセンサーの精度は100%ではありません。</li>
-                        <li><strong>検知の中断:</strong> 端末の姿勢により検知が中断する場合があります。</li>
-                    </ul>
-                </div>
-
-                <div class="legal-section">
-                    <h3>8. 知的財産権</h3>
+                    <h3>7. 知的財産権</h3>
                     <p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>9. 免責事項</h3>
-                    <p>当社は、本アプリの機能が中断なく動作すること、セッション検知結果が常に正確であることを保証しません。</p>
+                    <h3>8. 料金および支払</h3>
+                    <p>3回まで無料でお使いいただけます。過去に購入された場合は「購入を復元」機能をご利用ください。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>10. 料金および支払</h3>
-                    <p>15回まで無料でお使いいただけます。過去に購入された場合は「購入を復元」機能をご利用ください。</p>
-                </div>
-
-                <div class="legal-section">
-                    <h3>11. 規約の変更</h3>
+                    <h3>9. 規約の変更</h3>
                     <p>当社は、必要に応じて本規約を変更することがあります。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>12. 準拠法・管轄</h3>
+                    <h3>10. 準拠法・管轄</h3>
                     <p>本規約は日本法に準拠し、東京地方裁判所を専属的合意管轄裁判所とします。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>13. 多言語版について</h3>
+                    <h3>11. 多言語版について</h3>
                     <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
                 </div>
             </section>
@@ -962,11 +599,11 @@
                             <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
                             <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
                             <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
-                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>botto-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>mofulens-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
                             <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格</dd></div>
                             <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
                             <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
-                            <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセル、返金には応じられません。Appleの返金ポリシーに準じます</dd></div>
+                            <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセル、返金には応じられません</dd></div>
                             <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
                         </dl>
                     </div>
@@ -977,7 +614,7 @@
             <section id="contact-ja" class="section">
                 <div class="contact-card">
                     <h2>お問い合わせ</h2>
-                    <a href="mailto:botto-support@allnew.work?subject=BOTTO%20%3A%20" class="contact-email">✉️ メールを送る</a>
+                    <a href="mailto:mofulens-support@allnew.work?subject=MofuLens%20%3A%20" class="contact-email">✉️ メールを送る</a>
                     <dl class="contact-details contact-details-top" style="border-bottom: none;">
                         <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
                         <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
@@ -999,37 +636,24 @@
                 </div>
 
                 <div class="faq-item open">
-                    <div class="faq-question">How do I start a focus session?<span class="faq-icon">+</span></div>
-                    <div class="faq-answer">
-                        <p>Simply flip your phone face-down. The device's motion sensor detects the orientation and maintains the session while the phone remains face-down.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div>
-                    <div class="faq-answer">
-                        <p>iPhone with <strong>iOS 17.0 or later</strong>.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
                     <div class="faq-question">Is it free?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>Free for the first 15 sessions.</strong> After that, a one-time purchase is required. No subscription fees.</p>
+                        <p><strong>Free for the first 3 sessions.</strong> One session is counted from starting to stopping the AR camera.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>Focus session data is stored in <strong>Apple HealthKit on your device</strong>. We do not transmit data to our servers.</p>
+                        <p>Snapshots are saved to <strong>your device's Camera Roll (Photo Library)</strong>.</p>
+                        <p>We do not transmit data to servers operated by us. Camera feed is processed in real-time only and is never recorded or transmitted.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">How is data recorded in HealthKit?<span class="faq-icon">+</span></div>
+                    <div class="faq-question">Can my face be seen?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>After session completion, based on your permissions, sessions are recorded as mindfulness sessions in Apple HealthKit. You can view them under Browse → Mindfulness.</p>
+                        <p>Costumes are designed to <strong>completely cover your entire face</strong>. Snapshots are saved with the costume overlay, so your face is never exposed.</p>
                     </div>
                 </div>
 
@@ -1039,7 +663,6 @@
                         <p><strong>Steps:</strong> Open the app → Settings → About → Restore Purchase.</p>
                     </div>
                 </div>
-
             </section>
 
             <!-- Privacy Policy -->
@@ -1055,54 +678,52 @@
                 <span class="updated-badge">Last Updated: February 15, 2026</span>
 
                 <div class="highlight-box">
-                    <p><strong>Important:</strong> This app does not send or store your session data on our external servers. All data is stored on your device and in Apple HealthKit.</p>
+                    <p><strong>Important:</strong> This app does not send or store your video or image data on our external servers. All data is processed on your device.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>1. Information We Collect</h3>
                     <ul>
-                        <li><strong>Motion Sensor Data:</strong> Processed in real-time to detect device orientation. Not stored or transmitted.</li>
-                        <li><strong>HealthKit Data:</strong> Mindfulness session writing and reading. Stored in Apple HealthKit based on your permissions.</li>
-                        <li><strong>Device Info:</strong> Processed on your device; not transmitted to servers operated by us.</li>
+                        <li><strong>Camera Feed:</strong> Used only for real-time ARKit body tracking. Video is not recorded or transmitted; each frame is processed on-device and discarded.</li>
+                        <li><strong>Photo Library:</strong> Accessed only when saving snapshots. Saved to your device's Camera Roll.</li>
                         <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
-                        <li><strong>What We Don't Collect:</strong> Camera and microphone are not used. We do not use advertising SDKs, analytics services, or user registration in this App.</li>
+                        <li><strong>What We Don't Collect:</strong> We do not use advertising SDKs, analytics services, or user registration. No facial recognition data or biometric information is collected or stored.</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>2. How We Use Information</h3>
-                    <p>Focus session recording and mindfulness management support. No other purposes.</p>
+                    <p>Real-time AR costume display and snapshot saving. No other purposes.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>3. Third-Party Sharing</h3>
-                    <p>We do not provide, sell, or share session data or HealthKit data with third parties.</p>
+                    <p>We do not provide, sell, or share camera footage, snapshots, or any other data with third parties.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. HealthKit Data Handling</h3>
+                    <h3>4. Face & Biometric Information</h3>
                     <ul>
-                        <li>HealthKit data is not used for advertising, marketing, or data mining</li>
-                        <li>HealthKit data is not sold to data brokers</li>
-                        <li>We do not transmit or store HealthKit data on our own external servers</li>
-                        <li>HealthKit access can be revoked anytime in iOS Settings</li>
+                        <li>This app uses ARKit Body Tracking (body detection) but does not use facial recognition (Face ID, TrueDepth, etc.)</li>
+                        <li>No biometric authentication data is collected, stored, or transmitted</li>
+                        <li>Costumes are designed to completely cover the entire face, so snapshots never expose facial features</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>5. Security</h3>
-                    <p>We employ data minimization, on-device processing where possible, Keychain protection.</p>
+                    <p>We employ data minimization, on-device real-time processing, and Keychain protection for sensitive information.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>6. Children's Privacy</h3>
-                    <p>This App is not intended for independent use by children under 13.</p>
+                    <p>This App is not intended for children under 13. We do not collect personal information through the App's functionality.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>7. Your Rights</h3>
                     <ul>
-                        <li><strong>All Users:</strong> You can manage or delete HealthKit data through the iOS Health app. HealthKit access can be revoked anytime in iOS Settings.</li>
+                        <li><strong>All Users:</strong> Deleting the app removes all on-device settings. Snapshots saved to Camera Roll can be managed through the Photos app.</li>
                         <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
                         <li><strong>California (CCPA/CPRA):</strong> Right to know, delete, opt-out. We don't sell personal information.</li>
                         <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country.</li>
@@ -1141,7 +762,7 @@
 
                 <div class="legal-section">
                     <h3>1. Acceptance of Terms</h3>
-                    <p>These Terms of Service govern your use of "BOTTO" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
+                    <p>These Terms of Service govern your use of "MofuLens" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
                 </div>
 
                 <div class="legal-section">
@@ -1151,74 +772,55 @@
 
                 <div class="legal-section">
                     <h3>3. App Description and Compatibility</h3>
-                    <p>The App starts a focus session when you flip your phone face-down. It uses the device's motion sensor to detect orientation and maintains the session while the phone remains face-down. Based on your permissions, sessions are recorded as mindfulness sessions in Apple HealthKit.</p>
+                    <p>The App uses ARKit (augmented reality) technology to overlay cute animal costumes on people captured by the camera in real-time.</p>
                     <ul>
-                        <li><strong>Input Method:</strong> Automatic detection via flipping the device. Camera and microphone are not used.</li>
-                        <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later.</li>
+                        <li><strong>Features:</strong> AR costume display, snapshot capture and saving</li>
+                        <li><strong>Supported Devices:</strong> ARKit-capable iPhones (A12 chip or later) with iOS 17.0 or later</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. Privacy Policy and HealthKit Data Handling</h3>
+                    <h3>4. Privacy Policy</h3>
                     <p>Your use of the App is also governed by our <a href="#privacy-en">Privacy Policy</a>.</p>
-                    <p>Regarding data recorded in HealthKit, we commit to the following:</p>
-                    <ul>
-                        <li>We do not use HealthKit data for advertising, marketing, or data mining purposes</li>
-                        <li>We do not sell or provide HealthKit data to data brokers or third parties</li>
-                        <li>We do not transmit or store HealthKit data on servers operated by us</li>
-                    </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>5. Prohibited Activities</h3>
                     <ul>
-                        <li>Using the App for purposes other than focus session tracking</li>
+                        <li>Using the App for purposes other than entertainment</li>
                         <li>Violating any laws or third-party rights</li>
                         <li>Reverse engineering or decompiling the App</li>
-                        <li>Any other activities we deem inappropriate</li>
+                        <li>Photographing third parties without their consent</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
-                    <h3>6. Health Disclaimer</h3>
-                    <p>This App is for general wellness and fitness purposes only. It is not a medical device. Consult a healthcare professional for medical advice.</p>
+                    <h3>6. Disclaimer of Warranties</h3>
+                    <p>The App is provided for entertainment purposes. It is provided "as is" without warranties of any kind. We do not guarantee uninterrupted operation or perfect AR tracking accuracy.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>7. Session Detection Accuracy</h3>
-                    <ul>
-                        <li><strong>No Guarantee:</strong> Motion sensor accuracy is not 100%.</li>
-                        <li><strong>Interruptions:</strong> Detection may be interrupted depending on device orientation.</li>
-                    </ul>
-                </div>
-
-                <div class="legal-section">
-                    <h3>8. Intellectual Property</h3>
+                    <h3>7. Intellectual Property</h3>
                     <p>All intellectual property rights in the App belong to us or our licensors.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>9. Disclaimer of Warranties</h3>
-                    <p>The App is provided "as is" without warranties of any kind.</p>
+                    <h3>8. Pricing</h3>
+                    <p>Free for the first 3 sessions. Use "Restore Purchase" if you've previously purchased.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>10. Pricing</h3>
-                    <p>Free for the first 15 sessions. Use "Restore Purchase" if you've previously purchased.</p>
-                </div>
-
-                <div class="legal-section">
-                    <h3>11. Changes to Terms</h3>
+                    <h3>9. Changes to Terms</h3>
                     <p>We may modify these Terms at any time. Continued use constitutes acceptance.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>12. Governing Law</h3>
+                    <h3>10. Governing Law</h3>
                     <p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>13. Translations</h3>
+                    <h3>11. Translations</h3>
                     <p>The Japanese version of these Terms of Service is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region of residence.</p>
                 </div>
             </section>
@@ -1241,11 +843,11 @@
                             <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
                             <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
                             <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
-                            <div class="contact-item"><dt>Contact</dt><dd>botto-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
+                            <div class="contact-item"><dt>Contact</dt><dd>mofulens-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
                             <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen</dd></div>
                             <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
                             <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
-                            <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase. Subject to Apple's refund policy</dd></div>
+                            <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase</dd></div>
                             <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
                         </dl>
                     </div>
@@ -1256,7 +858,7 @@
             <section id="contact-en" class="section">
                 <div class="contact-card">
                     <h2>Contact Us</h2>
-                    <a href="mailto:botto-support@allnew.work?subject=BOTTO%20%3A%20" class="contact-email">✉️ Send Email</a>
+                    <a href="mailto:mofulens-support@allnew.work?subject=MofuLens%20%3A%20" class="contact-email">✉️ Send Email</a>
                     <dl class="contact-details contact-details-top" style="border-bottom: none;">
                         <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
                         <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
@@ -1273,13 +875,11 @@
     <script>
         // Clickjacking defense (frame-busting fallback for GitHub Pages)
         if (window.self !== window.top) { document.body.style.display = 'none'; }
-        // Language Data
         const langData = {
-            ja: { label: '日本語', hero: 'BOTTO', subtitle: '裏返すだけ。集中が始まる。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
-            en: { label: 'English', hero: 'BOTTO', subtitle: 'Just Flip. Focus Begins.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
+            ja: { label: '日本語', hero: 'MofuLens', subtitleLine1: 'ARでもふもふ変身。', subtitleLine2: 'かわいい動物コスチュームカメラ。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'MofuLens', subtitleLine1: 'Transform into fluffy animals with AR.', subtitleLine2: 'The cutest costume camera.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
         };
 
-        // Get current language from URL hash or default to ja
         function getLangFromHash() {
             const hash = window.location.hash.substring(1);
             if (hash) {
@@ -1289,11 +889,9 @@
                     if (langData[possibleLang]) return possibleLang;
                 }
             }
-            // Check URL params
             const params = new URLSearchParams(window.location.search);
             const langParam = params.get('lang');
             if (langParam && langData[langParam]) return langParam;
-            // Default based on browser language
             const browserLang = navigator.language.split('-')[0];
             if (langData[browserLang]) return browserLang;
             return 'ja';
@@ -1301,80 +899,59 @@
 
         let currentLang = getLangFromHash();
 
-        // Switch Language
         function switchLanguage(lang) {
             currentLang = lang;
-
-            // Update content visibility
             document.querySelectorAll('.lang-content').forEach(function(el) {
                 el.classList.toggle('active', el.dataset.lang === lang);
             });
-
-            // Update dropdown
             document.querySelectorAll('.lang-option').forEach(function(opt) {
                 opt.classList.toggle('active', opt.dataset.lang === lang);
             });
             document.getElementById('currentLangLabel').textContent = langData[lang].label;
-
-            // Update hero
             document.getElementById('heroTitle').textContent = langData[lang].hero;
-            document.getElementById('heroSubtitle').textContent = langData[lang].subtitle;
 
-            // Update TOC
-            const tocLinks = document.querySelectorAll('.toc-link');
-            const tocLabels = langData[lang].toc;
+            var subtitleEl = document.getElementById('heroSubtitle');
+            subtitleEl.textContent = '';
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine1));
+            subtitleEl.appendChild(document.createElement('br'));
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine2));
+
+            var tocLinks = document.querySelectorAll('.toc-link');
+            var tocLabels = langData[lang].toc;
             tocLinks.forEach(function(link, i) {
                 link.textContent = tocLabels[i];
-                const section = link.dataset.section;
+                var section = link.dataset.section;
                 link.href = '#' + section + '-' + lang;
             });
-
-            // Update URL
-            const currentHash = window.location.hash;
-            if (currentHash && currentHash.includes('-')) {
-                const section = currentHash.split('-').pop();
-                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(function(s) { return currentHash.includes(s); })) {
-                    const sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace('-' + getLangFromHash(), '');
-                    history.replaceState(null, null, '?lang=' + lang + '#' + sectionName + '-' + lang);
+            if (window.location.hash && window.location.hash.indexOf('-') !== -1) {
+                var currentHash = window.location.hash;
+                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(function(s) { return currentHash.indexOf(s) !== -1; })) {
+                    history.replaceState(null, null, '?lang=' + lang + currentHash);
                 }
             } else {
                 history.replaceState(null, null, '?lang=' + lang);
             }
-
-            // Close dropdown
             document.getElementById('langDropdown').classList.remove('open');
         }
 
-        // Language Dropdown Toggle
-        const langBtn = document.getElementById('langBtn');
-        const langDropdown = document.getElementById('langDropdown');
+        var langBtn = document.getElementById('langBtn');
+        var langDropdown = document.getElementById('langDropdown');
+        langBtn.addEventListener('click', function(e) { e.stopPropagation(); langDropdown.classList.toggle('open'); });
+        document.addEventListener('click', function() { langDropdown.classList.remove('open'); });
 
-        langBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            langDropdown.classList.toggle('open');
-        });
-
-        document.addEventListener('click', function() {
-            langDropdown.classList.remove('open');
-        });
-
-        // Language Options
         document.querySelectorAll('.lang-option').forEach(function(opt) {
             opt.addEventListener('click', function() { switchLanguage(opt.dataset.lang); });
         });
 
-        // FAQ Accordion
         document.querySelectorAll('.faq-question').forEach(function(q) {
             q.addEventListener('click', function() {
-                const item = q.parentElement;
-                const wasOpen = item.classList.contains('open');
-                // Close all in same lang-content
+                var item = q.parentElement;
+                var wasOpen = item.classList.contains('open');
                 item.closest('.lang-content').querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
                 if (!wasOpen) item.classList.add('open');
             });
         });
 
-        // Commercial Accordion
         // Commercial accordion (event delegation — no inline onclick)
         document.addEventListener('click', function(e) {
             var header = e.target.closest('.commercial-header');
@@ -1383,59 +960,45 @@
             accordion.classList.toggle('open');
         });
 
-        // Auto-expand commercial section if accessed via anchor
         function checkCommercialAnchor() {
-            const hash = window.location.hash;
-            if (hash && hash.includes('commercial')) {
-                document.querySelectorAll('.commercial-accordion').forEach(function(acc) {
-                    acc.classList.add('open');
-                });
+            var hash = window.location.hash;
+            if (hash && hash.indexOf('commercial') !== -1) {
+                document.querySelectorAll('.commercial-accordion').forEach(function(acc) { acc.classList.add('open'); });
             }
         }
 
-        // Initialize
         switchLanguage(currentLang);
         checkCommercialAnchor();
 
-        // Handle hash changes for section navigation
         window.addEventListener('hashchange', function() {
-            const hash = window.location.hash.substring(1);
+            var hash = window.location.hash.substring(1);
             if (hash) {
-                // Extract language from hash like "privacy-en"
-                const parts = hash.split('-');
+                var parts = hash.split('-');
                 if (parts.length >= 2) {
-                    const possibleLang = parts[parts.length - 1];
-                    if (langData[possibleLang]) {
-                        if (currentLang !== possibleLang) {
-                            switchLanguage(possibleLang);
-                        }
+                    var possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang] && currentLang !== possibleLang) {
+                        switchLanguage(possibleLang);
                     }
                 }
             }
         });
 
-        // Copy Protection
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.addEventListener('copy', function(e) { e.preventDefault(); });
         document.addEventListener('cut', function(e) { e.preventDefault(); });
         document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) {
-                e.preventDefault();
-            }
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
-                e.preventDefault();
-            }
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) { e.preventDefault(); }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) { e.preventDefault(); }
         });
         document.addEventListener('dragstart', function(e) { e.preventDefault(); });
     </script>
 
-    <!-- Trademark Attribution Footer -->
     <footer class="trademark-footer">
         <div class="trademark-content">
             <p class="trademark-text">
-                Apple、Appleのロゴ、iPhone、iOS、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                Apple、Appleのロゴ、iPhone、iOS、ARKit、App Storeは、米国およびその他の国で登録されたApple Inc.の商標です。
                 <br>
-                Apple, the Apple logo, iPhone, iOS, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+                Apple, the Apple logo, iPhone, iOS, ARKit, and App Store are trademarks of Apple Inc., registered in the U.S. and other countries.
             </p>
             <p class="trademark-disclaimer">
                 本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
@@ -1446,27 +1009,12 @@
 
     <style>
         .trademark-footer {
-            margin-top: 60px;
-            padding: 24px 20px 40px;
-            border-top: 1px solid var(--border);
-            background: var(--bg-tertiary);
+            margin-top: 60px; padding: 24px 20px 40px;
+            border-top: 1px solid var(--border); background: var(--bg-tertiary);
         }
-        .trademark-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .trademark-text {
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-        .trademark-disclaimer {
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-            line-height: 1.5;
-        }
+        .trademark-content { max-width: 800px; margin: 0 auto; text-align: center; }
+        .trademark-text { font-size: 0.7rem; color: var(--text-tertiary); line-height: 1.6; margin-bottom: 12px; }
+        .trademark-disclaimer { font-size: 0.7rem; color: var(--text-tertiary); line-height: 1.5; }
     </style>
 </body>
 </html>

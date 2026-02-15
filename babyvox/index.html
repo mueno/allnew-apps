@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BabyVox Support</title>
     <meta name="description" content="BabyVox - Baby growth tracking app with voice recognition. FAQ, Privacy Policy, Terms of Service.">
+    <!-- Security Headers (GitHub Pages cannot set HTTP response headers) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+    <meta name="referrer" content="no-referrer">
     <!-- Bot/Crawler Protection -->
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
     <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
@@ -980,7 +983,7 @@
             <!-- Commercial Law -->
             <section id="commercial-ja" class="section">
                 <div class="commercial-accordion">
-                    <div class="commercial-header" onclick="toggleCommercial(this)">
+                    <div class="commercial-header">
                         <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
                             <div class="section-icon">🏢</div>
                             <div>
@@ -1295,7 +1298,7 @@
             <!-- Commercial Law -->
             <section id="commercial-en" class="section">
                 <div class="commercial-accordion">
-                    <div class="commercial-header" onclick="toggleCommercial(this)">
+                    <div class="commercial-header">
                         <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
                             <div class="section-icon">🏢</div>
                             <div>
@@ -1340,9 +1343,11 @@
     </footer>
 
     <script>
+        // Clickjacking defense (frame-busting fallback for GitHub Pages)
+        if (window.self !== window.top) { document.body.style.display = 'none'; }
         // Language Data
         const langData = {
-            ja: { label: '日本語', hero: 'BabyVox', subtitle: '声で記録。タップ不要。<br>シンプルな乳幼児の成長記録。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
+            ja: { label: '日本語', hero: 'BabyVox', subtitleLine1: '声で記録。タップ不要。', subtitleLine2: 'シンプルな乳幼児の成長記録。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
             en: { label: 'English', hero: 'BabyVox', subtitle: 'Just Say It. No more Tap.<br>The Simplest Way to Track Your Baby's Growth.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
         };
 
@@ -1385,7 +1390,11 @@
 
             // Update hero
             document.getElementById('heroTitle').textContent = langData[lang].hero;
-            document.getElementById('heroSubtitle').innerHTML = langData[lang].subtitle;
+            var subtitleEl = document.getElementById('heroSubtitle');
+            subtitleEl.textContent = '';
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine1));
+            subtitleEl.appendChild(document.createElement('br'));
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine2));
 
             // Update TOC
             const tocLinks = document.querySelectorAll('.toc-link');
@@ -1442,10 +1451,13 @@
         });
 
         // Commercial Accordion
-        function toggleCommercial(header) {
-            const accordion = header.closest('.commercial-accordion');
+        // Commercial accordion (event delegation — no inline onclick)
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.commercial-header');
+            if (!header) return;
+            var accordion = header.closest('.commercial-accordion');
             accordion.classList.toggle('open');
-        }
+        });
 
         // Auto-expand commercial section if accessed via anchor
         function checkCommercialAnchor() {
