@@ -507,9 +507,12 @@
         }
 
         .work-card:hover .work-card-img img,
-        .work-card:focus-visible .work-card-img img,
-        .work-card:active .work-card-img img {
+        .work-card:focus-visible .work-card-img img {
             transform: scale(1.06);
+            filter: grayscale(0%);
+        }
+
+        .work-card.in-view-center .work-card-img img {
             filter: grayscale(0%);
         }
 
@@ -1224,11 +1227,24 @@
             });
         }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
+        // On touch devices, reveal card colors when cards pass near the viewport center.
+        const centerColorObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                entry.target.classList.toggle('in-view-center', entry.isIntersecting);
+            });
+        }, { threshold: 0.01, rootMargin: '-35% 0px -35% 0px' });
+
         function refreshLandingReveal() {
             document.querySelectorAll('.reveal, .method-item, .work-card, .value-card, .stat-item, .featured-card').forEach(el => {
                 if (el.dataset.revealBound === '1') return;
                 el.dataset.revealBound = '1';
                 revealObserver.observe(el);
+            });
+
+            document.querySelectorAll('.work-card').forEach(el => {
+                if (el.dataset.centerColorBound === '1') return;
+                el.dataset.centerColorBound = '1';
+                centerColorObserver.observe(el);
             });
 
             // ===== Work card SVG stroke =====
