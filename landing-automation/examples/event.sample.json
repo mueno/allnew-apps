@@ -1,0 +1,11 @@
+{
+  "id": "sample-event-001",
+  "client_payload": {
+    "app": {
+      "slug": "weightsnap",
+      "status": "READY_FOR_DISTRIBUTION",
+      "app_store_url": "https://apps.apple.com/app/weightsnap/id6743864029",
+      "first_screenshot_url": "https://example.com/weightsnap-first-screenshot.jpg"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+name = "allnew-asc-webhook-relay"
+main = "src/index.js"
+compatibility_date = "2026-02-15"
+
+[vars]
+ASC_SIGNATURE_HEADER = "X-Apple-Signature"
+ASC_SIGNATURE_PREFIX = "sha256="
+GITHUB_OWNER = "mueno"
+GITHUB_REPO = "allnew-apps"
+
+# Set required secrets by CLI:
+# wrangler secret put GITHUB_TOKEN
+# wrangler secret put ASC_WEBHOOK_SECRET

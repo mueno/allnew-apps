@@ -921,7 +921,7 @@
                 </div>
                 <div class="about-stats">
                     <div class="stat-item">
-                        <div class="stat-number">9</div>
+                        <div class="stat-number" id="health-app-count">9</div>
                         <p class="stat-label">Health Apps</p>
                     </div>
                     <div class="stat-item">
@@ -945,22 +945,22 @@
     <section class="section featured-section" data-section="camera">
         <div class="section-inner">
             <p class="section-label reveal">(Pick up)</p>
-            <h2 class="section-heading reveal reveal-d1" style="color: #fff;">WeightSnap</h2>
+            <h2 class="section-heading reveal reveal-d1" style="color: #fff;" id="featured-heading">WeightSnap</h2>
             <div class="featured-card">
                 <div class="featured-body">
-                    <p class="featured-eyebrow">Camera + OCR</p>
-                    <h3 class="featured-name">WeightSnap</h3>
-                    <p class="featured-ja">体重</p>
-                    <p class="featured-desc">体重計のディスプレイをカメラで撮るだけ。数値を自動認識して Apple HealthKit に記録します。毎日の体重管理を、かんたんに。</p>
+                    <p class="featured-eyebrow" id="featured-eyebrow">Camera + OCR</p>
+                    <h3 class="featured-name" id="featured-name">WeightSnap</h3>
+                    <p class="featured-ja" id="featured-ja">体重</p>
+                    <p class="featured-desc" id="featured-desc">体重計のディスプレイをカメラで撮るだけ。数値を自動認識して Apple HealthKit に記録します。毎日の体重管理を、かんたんに。</p>
                     <div class="featured-btns">
-                        <a href="https://apps.apple.com/app/weightsnap/id6743864029" class="btn-primary" aria-label="App Storeでダウンロード">
+                        <a href="https://apps.apple.com/app/weightsnap/id6743864029" class="btn-primary" aria-label="App Storeでダウンロード" id="featured-app-store-link">
                             App Store で入手
                         </a>
-                        <a href="weightsnap/?lang=ja" class="btn-secondary">さらに詳しく →</a>
+                        <a href="weightsnap/?lang=ja" class="btn-secondary" id="featured-support-link">さらに詳しく →</a>
                     </div>
                 </div>
                 <div class="featured-img">
-                    <img src="weightsnap-main-en.png" alt="WeightSnap - Just a Snap. No More Tap." loading="lazy">
+                    <img src="weightsnap-main-en.png" alt="WeightSnap - Just a Snap. No More Tap." loading="lazy" id="featured-image">
                 </div>
             </div>
         </div>
@@ -973,7 +973,7 @@
             <h2 class="section-heading reveal reveal-d1">カメラ認識アプリ</h2>
             <p class="section-text reveal reveal-d2">計測器のディスプレイを撮影するだけ。数値を自動認識し、Apple HealthKit に記録します。</p>
 
-            <div class="work-grid">
+            <div class="work-grid" id="camera-grid">
                 <a class="work-card" href="thermosnap/?lang=ja">
                     <div class="work-card-img" style="background:#f5f5f5;">
                         <img src="thermosnap-promo.png" alt="ThermoSnap" loading="lazy">
@@ -1056,7 +1056,7 @@
             <h2 class="section-heading reveal reveal-d1">音声入力アプリ</h2>
             <p class="section-text reveal reveal-d2">数値を声で言うだけ。ハンズフリーでかんたんに記録できます。</p>
 
-            <div class="work-grid">
+            <div class="work-grid" id="voice-grid">
                 <a class="work-card" href="pupweight/?lang=ja">
                     <div class="work-card-img" style="background:#f5f5f5;">
                         <img src="pupweight-promo.png" alt="PupWeight" loading="lazy">
@@ -1121,7 +1121,7 @@
             <h2 class="section-heading reveal reveal-d1">音検出アプリ</h2>
             <p class="section-text reveal reveal-d2">マイクが音をリアルタイムで検出。睡眠や健康をモニタリングします。</p>
 
-            <div class="work-grid">
+            <div class="work-grid" id="sound-grid">
                 <a class="work-card" href="coughwav/?lang=ja">
                     <div class="work-card-img" style="background:#f5f5f5;">
                         <img src="coughwav-promo.png" alt="CoughWav" loading="lazy">
@@ -1188,9 +1188,9 @@
                 </div>
                 <div class="footer-col">
                     <p class="footer-col-title">Apps</p>
-                    <p>Camera: WeightSnap, ThermoSnap, BPSnap, GlucoSnap, OxiSnap</p>
-                    <p>Voice: PupWeight, BabyVox, WaistVox</p>
-                    <p>Sound: CoughWav</p>
+                    <p id="footer-apps-camera">Camera: WeightSnap, ThermoSnap, BPSnap, GlucoSnap, OxiSnap</p>
+                    <p id="footer-apps-voice">Voice: PupWeight, BabyVox, WaistVox</p>
+                    <p id="footer-apps-sound">Sound: CoughWav</p>
                 </div>
             </div>
         </div>
@@ -1200,6 +1200,7 @@
         </div>
     </footer>
 
+    <script src="landing-automation/runtime/landing-runtime.js"></script>
     <script>
         // ===== Nav scroll state =====
         const nav = document.getElementById('nav');
@@ -1219,18 +1220,25 @@
             });
         }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-        document.querySelectorAll('.reveal, .method-item, .work-card, .value-card, .stat-item, .featured-card').forEach(el => {
-            revealObserver.observe(el);
-        });
+        function refreshLandingReveal() {
+            document.querySelectorAll('.reveal, .method-item, .work-card, .value-card, .stat-item, .featured-card').forEach(el => {
+                if (el.dataset.revealBound === '1') return;
+                el.dataset.revealBound = '1';
+                revealObserver.observe(el);
+            });
 
-        // ===== Work card SVG stroke =====
-        document.querySelectorAll('.work-card-arrow svg').forEach(svg => {
-            svg.setAttribute('fill', 'none');
-            svg.setAttribute('stroke', 'currentColor');
-            svg.setAttribute('stroke-width', '1.5');
-            svg.setAttribute('stroke-linecap', 'round');
-            svg.setAttribute('stroke-linejoin', 'round');
-        });
+            // ===== Work card SVG stroke =====
+            document.querySelectorAll('.work-card-arrow svg').forEach(svg => {
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '1.5');
+                svg.setAttribute('stroke-linecap', 'round');
+                svg.setAttribute('stroke-linejoin', 'round');
+            });
+        }
+
+        window.refreshLandingReveal = refreshLandingReveal;
+        refreshLandingReveal();
     </script>
 
 </body>

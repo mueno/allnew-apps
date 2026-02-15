@@ -1,0 +1,4 @@
+# Landing automation temp files
+assets/asc-screenshots/.tmp*
+landing-automation/state/*.tmp
+landing-automation/cloudflare-worker/node_modules/

@@ -1,0 +1,18 @@
+{
+  "by_app_id": {
+    "6743864029": "weightsnap"
+  },
+  "by_bundle_id": {
+    "jp.allnew.weightsnap": "weightsnap",
+    "jp.allnew.thermosnap": "thermosnap",
+    "jp.allnew.bloodpressuresnap": "bloodpressuresnap",
+    "jp.allnew.glucosnap": "glucosnap",
+    "jp.allnew.oxisnap": "oxisnap",
+    "jp.allnew.pupweight": "pupweight",
+    "jp.allnew.babyvox": "babyvox",
+    "jp.allnew.waistvox": "waistvox",
+    "jp.allnew.coughwav": "coughwav",
+    "jp.allnew.botto": "botto",
+    "jp.allnew.mofulens": "mofulens"
+  }
+}

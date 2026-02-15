@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-02-15T01:16:28+00:00",
+  "processed_event_ids": [],
+  "statuses": {
+    "weightsnap": "released",
+    "thermosnap": "released",
+    "bloodpressuresnap": "released",
+    "glucosnap": "released",
+    "oxisnap": "released",
+    "pupweight": "released",
+    "babyvox": "released",
+    "waistvox": "released",
+    "coughwav": "released"
+  }
+}

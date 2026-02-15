@@ -1,0 +1,370 @@
+import appSlugMap from "../config/app_slug_map.json";
+
+const SUBMITTED_STATES = new Set([
+  "WAITING_FOR_REVIEW",
+  "IN_REVIEW",
+  "PENDING_DEVELOPER_RELEASE",
+  "PENDING_APPLE_RELEASE",
+  "PROCESSING_FOR_DISTRIBUTION",
+  "PREORDER_READY_FOR_SALE",
+]);
+
+const RELEASED_STATES = new Set(["READY_FOR_DISTRIBUTION", "READY_FOR_SALE"]);
+
+const DEFAULT_SIGNATURE_HEADERS = [
+  "X-Apple-Signature",
+  "X-ASC-Signature",
+  "X-AppStoreConnect-Signature",
+  "X-Hub-Signature-256",
+];
+
+const APP_SLUG_BY_ID = appSlugMap.by_app_id ?? {};
+const APP_SLUG_BY_BUNDLE = appSlugMap.by_bundle_id ?? {};
+
+function nowIso() {
+  return new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+}
+
+function asObject(value) {
+  return value !== null && typeof value === "object" ? value : {};
+}
+
+function asString(value) {
+  return typeof value === "string" ? value : "";
+}
+
+function normalizeStatus(rawStatus) {
+  const upper = rawStatus.toUpperCase();
+  if (RELEASED_STATES.has(upper)) return "released";
+  if (SUBMITTED_STATES.has(upper)) return "submitted";
+  if (upper.includes("REJECT")) return "rejected";
+  return "unknown";
+}
+
+function pickDispatchEvent(normalizedStatus) {
+  if (normalizedStatus === "released") return "asc_app_released";
+  if (normalizedStatus === "submitted") return "asc_app_submitted";
+  return "asc_status_changed";
+}
+
+function lowerCaseHeaderMap(headers) {
+  const map = new Map();
+  headers.forEach((_value, key) => {
+    map.set(key.toLowerCase(), key);
+  });
+  return map;
+}
+
+function findSignatureHeader(headers, preferred) {
+  const lowerMap = lowerCaseHeaderMap(headers);
+  if (headers.get(preferred) !== null) {
+    return preferred;
+  }
+
+  const preferredKey = lowerMap.get(preferred.toLowerCase());
+  if (preferredKey) {
+    return preferredKey;
+  }
+
+  for (const candidate of DEFAULT_SIGNATURE_HEADERS) {
+    const candidateKey = lowerMap.get(candidate.toLowerCase());
+    if (candidateKey) {
+      return candidateKey;
+    }
+  }
+
+  return null;
+}
+
+function hexToBytes(hex) {
+  const normalized = hex.length % 2 === 0 ? hex : `0${hex}`;
+  const bytes = new Uint8Array(normalized.length / 2);
+  for (let i = 0; i < normalized.length; i += 2) {
+    const chunk = normalized.slice(i, i + 2);
+    bytes[i / 2] = Number.parseInt(chunk, 16);
+  }
+  return bytes;
+}
+
+function base64ToBytes(value) {
+  const raw = atob(value);
+  const bytes = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i += 1) {
+    bytes[i] = raw.charCodeAt(i);
+  }
+  return bytes;
+}
+
+function bytesToHex(bytes) {
+  return Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function bytesToBase64(bytes) {
+  let raw = "";
+  for (let i = 0; i < bytes.length; i += 1) {
+    raw += String.fromCharCode(bytes[i]);
+  }
+  return btoa(raw);
+}
+
+function constantTimeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i += 1) {
+    result |= a[i] ^ b[i];
+  }
+  return result === 0;
+}
+
+async function verifySignature(request, body, env) {
+  if (!env.ASC_WEBHOOK_SECRET) {
+    return { ok: true, reason: "signature bypassed (ASC_WEBHOOK_SECRET not set)" };
+  }
+
+  const headerName = findSignatureHeader(
+    request.headers,
+    env.ASC_SIGNATURE_HEADER ?? "X-Apple-Signature",
+  );
+
+  if (!headerName) {
+    return { ok: false, reason: "signature header not found" };
+  }
+
+  const providedRaw = request.headers.get(headerName) ?? "";
+  const prefix = env.ASC_SIGNATURE_PREFIX ?? "sha256=";
+  const provided = providedRaw.startsWith(prefix)
+    ? providedRaw.slice(prefix.length).trim()
+    : providedRaw.trim();
+
+  if (!provided) {
+    return { ok: false, reason: "empty signature" };
+  }
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(env.ASC_WEBHOOK_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+
+  const signatureBuffer = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(body));
+  const signatureBytes = new Uint8Array(signatureBuffer);
+
+  const expectedHexBytes = new TextEncoder().encode(bytesToHex(signatureBytes));
+  const expectedBase64Bytes = new TextEncoder().encode(bytesToBase64(signatureBytes));
+
+  let providedHexBytes = new Uint8Array();
+  let providedBase64Bytes = new Uint8Array();
+
+  try {
+    providedHexBytes = new TextEncoder().encode(bytesToHex(hexToBytes(provided)));
+  } catch (_error) {
+    providedHexBytes = new Uint8Array();
+  }
+
+  try {
+    providedBase64Bytes = new TextEncoder().encode(bytesToBase64(base64ToBytes(provided)));
+  } catch (_error) {
+    providedBase64Bytes = new Uint8Array();
+  }
+
+  if (constantTimeEqual(expectedHexBytes, providedHexBytes)) {
+    return { ok: true, reason: `verified via ${headerName} (hex)` };
+  }
+
+  if (constantTimeEqual(expectedBase64Bytes, providedBase64Bytes)) {
+    return { ok: true, reason: `verified via ${headerName} (base64)` };
+  }
+
+  return { ok: false, reason: "signature mismatch" };
+}
+
+function resolveSlug(app, data, payload) {
+  const direct = asString(payload.slug);
+  if (direct) return direct;
+
+  const appId =
+    asString(app.id) ||
+    asString(data.appId) ||
+    asString(payload.asc_app_id) ||
+    asString(payload.appStoreId) ||
+    asString(payload.app_id);
+  if (appId && APP_SLUG_BY_ID[appId]) {
+    return APP_SLUG_BY_ID[appId];
+  }
+
+  const bundleId =
+    asString(app.bundleId) ||
+    asString(app.bundleID) ||
+    asString(data.bundleId) ||
+    asString(payload.bundle_id) ||
+    asString(payload.bundleId);
+  if (bundleId && APP_SLUG_BY_BUNDLE[bundleId]) {
+    return APP_SLUG_BY_BUNDLE[bundleId];
+  }
+
+  return "";
+}
+
+function normalizeAscPayload(input) {
+  const payload = asObject(input);
+  const data = asObject(payload.data);
+  const app = asObject(data.app);
+  const appStoreVersion = asObject(data.appStoreVersion);
+
+  const statusRaw =
+    asString(appStoreVersion.state) ||
+    asString(data.status) ||
+    asString(payload.status) ||
+    asString(payload.app_store_state);
+  const normalizedStatus = normalizeStatus(statusRaw || "unknown");
+
+  const ascAppId =
+    asString(app.id) ||
+    asString(data.appId) ||
+    asString(payload.asc_app_id) ||
+    asString(payload.appStoreId) ||
+    asString(payload.app_id);
+
+  const bundleId =
+    asString(app.bundleId) ||
+    asString(app.bundleID) ||
+    asString(data.bundleId) ||
+    asString(payload.bundle_id) ||
+    asString(payload.bundleId);
+
+  return {
+    relay_version: 1,
+    event_id: asString(payload.eventId) || asString(payload.id),
+    event_type: asString(payload.eventType) || asString(payload.type),
+    received_at: nowIso(),
+    app: {
+      slug: resolveSlug(app, data, payload),
+      status: statusRaw || normalizedStatus,
+      normalized_status: normalizedStatus,
+      asc_app_id: ascAppId,
+      bundle_id: bundleId,
+      name:
+        asString(app.name) ||
+        asString(data.appName) ||
+        asString(payload.name) ||
+        asString(payload.app_name),
+      app_store_url:
+        asString(app.appStoreUrl) ||
+        asString(app.url) ||
+        asString(payload.app_store_url) ||
+        asString(payload.appStoreUrl),
+      first_screenshot_url:
+        asString(payload.first_screenshot_url) ||
+        asString(payload.promo_image_url) ||
+        asString(data.firstScreenshotUrl) ||
+        asString(appStoreVersion.firstScreenshotUrl),
+    },
+  };
+}
+
+async function sendRepositoryDispatch(env, eventType, clientPayload) {
+  const url = `https://api.github.com/repos/${env.GITHUB_OWNER}/${env.GITHUB_REPO}/dispatches`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Accept": "application/vnd.github+json",
+      "Authorization": `Bearer ${env.GITHUB_TOKEN}`,
+      "Content-Type": "application/json",
+      "User-Agent": "allnew-asc-webhook-relay/1.0",
+    },
+    body: JSON.stringify({
+      event_type: eventType,
+      client_payload: clientPayload,
+    }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`GitHub dispatch failed: ${response.status} ${body}`);
+  }
+}
+
+function jsonResponse(payload, status = 200) {
+  return new Response(JSON.stringify(payload, null, 2), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+  });
+}
+
+export default {
+  async fetch(request, env) {
+    if (request.method !== "POST") {
+      return jsonResponse({ ok: false, error: "method not allowed" }, 405);
+    }
+
+    const url = new URL(request.url);
+    if (url.pathname !== "/webhooks/asc") {
+      return jsonResponse({ ok: false, error: `path not found: ${url.pathname}` }, 404);
+    }
+
+    if (!env.GITHUB_OWNER || !env.GITHUB_REPO || !env.GITHUB_TOKEN) {
+      return jsonResponse({ ok: false, error: "missing GitHub relay config" }, 500);
+    }
+
+    let bodyText = "";
+    try {
+      bodyText = await request.text();
+    } catch (error) {
+      return jsonResponse({ ok: false, error: "failed to read body", detail: String(error) }, 400);
+    }
+
+    const verification = await verifySignature(request, bodyText, env);
+    if (!verification.ok) {
+      return jsonResponse(
+        {
+          ok: false,
+          error: "signature verification failed",
+          reason: verification.reason,
+        },
+        401,
+      );
+    }
+
+    let payload;
+    try {
+      payload = JSON.parse(bodyText);
+    } catch (error) {
+      return jsonResponse({ ok: false, error: "invalid json", detail: String(error) }, 400);
+    }
+
+    const normalized = normalizeAscPayload(payload);
+    const eventType = pickDispatchEvent(normalized.app.normalized_status);
+
+    try {
+      await sendRepositoryDispatch(env, eventType, normalized);
+    } catch (error) {
+      return jsonResponse(
+        {
+          ok: false,
+          error: "failed to dispatch GitHub event",
+          detail: String(error),
+          event_type: eventType,
+          normalized,
+        },
+        502,
+      );
+    }
+
+    return jsonResponse(
+      {
+        ok: true,
+        signature: verification.reason,
+        event_type: eventType,
+        normalized,
+      },
+      202,
+    );
+  },
+};

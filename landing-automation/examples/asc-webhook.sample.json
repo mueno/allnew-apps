@@ -1,0 +1,16 @@
+{
+  "eventId": "00000000-0000-0000-0000-000000000000",
+  "eventType": "APP_STORE_VERSION_STATE_CHANGED",
+  "eventDate": "2026-02-15T09:00:00Z",
+  "data": {
+    "app": {
+      "id": "6743864029",
+      "name": "WeightSnap",
+      "bundleId": "jp.allnew.weightsnap",
+      "appStoreUrl": "https://apps.apple.com/app/weightsnap/id6743864029"
+    },
+    "appStoreVersion": {
+      "state": "READY_FOR_DISTRIBUTION"
+    }
+  }
+}
