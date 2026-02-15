@@ -54,6 +54,8 @@ jobs:
       - name: Commit changes
         env:
           TARGET_BRANCH: ${{ github.ref_name }}
+          EVENT_NAME: ${{ github.event_name }}
+          BOOTSTRAP_INPUT: ${{ inputs.bootstrap }}
         run: |
           set -euo pipefail
 
@@ -74,7 +76,7 @@ jobs:
           git commit -m "chore: auto update landing apps data"
 
           # Retry push because repository_dispatch events can arrive in bursts.
-          # Rebase on latest branch head between attempts to avoid transient failures.
+          # On failure, rebuild from latest branch head with the same event payload.
           for attempt in 1 2 3; do
             if git push origin "HEAD:${TARGET_BRANCH}"; then
               echo "Push succeeded on attempt ${attempt}"
@@ -86,12 +88,21 @@ jobs:
               exit 1
             fi
 
-            echo "Push failed on attempt ${attempt}; fetching and rebasing before retry"
+            echo "Push failed on attempt ${attempt}; rebuilding commit from latest ${TARGET_BRANCH}"
             git fetch origin "${TARGET_BRANCH}"
-            git rebase "origin/${TARGET_BRANCH}" || {
-              git rebase --abort || true
-              echo "Rebase failed"
-              exit 1
-            }
+            git reset --hard "origin/${TARGET_BRANCH}"
+
+            if [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ]; then
+              python3 landing-automation/scripts/update_landing_data.py --bootstrap
+            else
+              python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
+            fi
+
+            git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots
+            if git diff --cached --quiet; then
+              echo "No staged changes after refresh"
+              exit 0
+            fi
+            git commit -m "chore: auto update landing apps data"
             sleep $((attempt * 2))
           done
