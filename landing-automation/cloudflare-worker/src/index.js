@@ -77,6 +77,10 @@ function findSignatureHeader(headers, preferred) {
 }
 
 function hexToBytes(hex) {
+  if (!/^[0-9a-fA-F]+$/.test(hex)) {
+    throw new Error("invalid hex signature");
+  }
+
   const normalized = hex.length % 2 === 0 ? hex : `0${hex}`;
   const bytes = new Uint8Array(normalized.length / 2);
   for (let i = 0; i < normalized.length; i += 2) {
@@ -87,7 +91,10 @@ function hexToBytes(hex) {
 }
 
 function base64ToBytes(value) {
-  const raw = atob(value);
+  const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+  const padding = normalized.length % 4;
+  const padded = padding === 0 ? normalized : `${normalized}${"=".repeat(4 - padding)}`;
+  const raw = atob(padded);
   const bytes = new Uint8Array(raw.length);
   for (let i = 0; i < raw.length; i += 1) {
     bytes[i] = raw.charCodeAt(i);
@@ -118,8 +125,75 @@ function constantTimeEqual(a, b) {
   return result === 0;
 }
 
+function getSignatureSecrets(env) {
+  const values = [env.ASC_WEBHOOK_SECRET, env.ASC_WEBHOOK_SECRET_PREVIOUS, env.ASC_WEBHOOK_SECRETS];
+  const secrets = [];
+  const seen = new Set();
+
+  for (const value of values) {
+    if (!value) continue;
+    for (const part of value.split(",")) {
+      const trimmed = part.trim();
+      if (!trimmed || seen.has(trimmed)) continue;
+      seen.add(trimmed);
+      secrets.push(trimmed);
+    }
+  }
+
+  return secrets;
+}
+
+function extractSignatureCandidates(rawHeader, prefix) {
+  const out = [];
+  const seen = new Set();
+
+  const add = (value) => {
+    const cleaned = value.trim().replace(/^"+|"+$/g, "");
+    if (!cleaned || seen.has(cleaned)) return;
+    seen.add(cleaned);
+    out.push(cleaned);
+  };
+
+  const raw = rawHeader.trim();
+  add(raw);
+
+  if (prefix && raw.toLowerCase().startsWith(prefix.toLowerCase())) {
+    add(raw.slice(prefix.length));
+  }
+
+  for (const token of raw.split(/[,\s;]+/)) {
+    if (!token) continue;
+    add(token);
+    const eqIndex = token.indexOf("=");
+    if (eqIndex > 0 && eqIndex < token.length - 1) {
+      add(token.slice(eqIndex + 1));
+    }
+  }
+
+  return out;
+}
+
+function decodeSignatureCandidate(value) {
+  const decoded = [];
+
+  try {
+    decoded.push({ format: "hex", bytes: hexToBytes(value) });
+  } catch (_error) {
+    // not hex
+  }
+
+  try {
+    decoded.push({ format: "base64", bytes: base64ToBytes(value) });
+  } catch (_error) {
+    // not base64/base64url
+  }
+
+  return decoded;
+}
+
 async function verifySignature(request, body, env) {
-  if (!env.ASC_WEBHOOK_SECRET) {
+  const secrets = getSignatureSecrets(env);
+  if (secrets.length === 0) {
     return { ok: true, reason: "signature bypassed (ASC_WEBHOOK_SECRET not set)" };
   }
 
@@ -142,44 +216,44 @@ async function verifySignature(request, body, env) {
     return { ok: false, reason: "empty signature" };
   }
 
-  const key = await crypto.subtle.importKey(
-    "raw",
-    new TextEncoder().encode(env.ASC_WEBHOOK_SECRET),
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"],
-  );
-
-  const signatureBuffer = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(body));
-  const signatureBytes = new Uint8Array(signatureBuffer);
-
-  const expectedHexBytes = new TextEncoder().encode(bytesToHex(signatureBytes));
-  const expectedBase64Bytes = new TextEncoder().encode(bytesToBase64(signatureBytes));
-
-  let providedHexBytes = new Uint8Array();
-  let providedBase64Bytes = new Uint8Array();
-
-  try {
-    providedHexBytes = new TextEncoder().encode(bytesToHex(hexToBytes(provided)));
-  } catch (_error) {
-    providedHexBytes = new Uint8Array();
+  const candidates = extractSignatureCandidates(provided, prefix);
+  if (candidates.length === 0) {
+    return { ok: false, reason: "no signature candidates found" };
   }
 
-  try {
-    providedBase64Bytes = new TextEncoder().encode(bytesToBase64(base64ToBytes(provided)));
-  } catch (_error) {
-    providedBase64Bytes = new Uint8Array();
+  for (const secret of secrets) {
+    const key = await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(secret),
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"],
+    );
+
+    const signatureBuffer = await crypto.subtle.sign(
+      "HMAC",
+      key,
+      new TextEncoder().encode(body),
+    );
+    const expectedBytes = new Uint8Array(signatureBuffer);
+
+    for (const candidate of candidates) {
+      const decodedVariants = decodeSignatureCandidate(candidate);
+      for (const variant of decodedVariants) {
+        if (constantTimeEqual(expectedBytes, variant.bytes)) {
+          return {
+            ok: true,
+            reason: `verified via ${headerName} (${variant.format})`,
+          };
+        }
+      }
+    }
   }
 
-  if (constantTimeEqual(expectedHexBytes, providedHexBytes)) {
-    return { ok: true, reason: `verified via ${headerName} (hex)` };
-  }
-
-  if (constantTimeEqual(expectedBase64Bytes, providedBase64Bytes)) {
-    return { ok: true, reason: `verified via ${headerName} (base64)` };
-  }
-
-  return { ok: false, reason: "signature mismatch" };
+  return {
+    ok: false,
+    reason: `signature mismatch (candidates=${candidates.length}, secrets=${secrets.length})`,
+  };
 }
 
 function resolveSlug(app, data, payload) {
