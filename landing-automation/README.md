@@ -13,6 +13,7 @@
 - `data/landing-apps.generated.json`
 - `landing-automation/state/landing_state.json`
 - `assets/asc-screenshots/*`（ASCの1枚目画像を保存）
+- `assets/onboarding/*`（各アプリのオンボーディング1枚目画像）
 
 ## 変更しない対象
 
@@ -28,12 +29,20 @@
   "slug": "weightsnap",
   "status": "READY_FOR_DISTRIBUTION",
   "app_store_url": "https://apps.apple.com/app/weightsnap/id6743864029",
-  "first_screenshot_url": "https://.../first-screenshot.jpg"
+  "first_screenshot_url": "https://.../first-screenshot.jpg",
+  "card_image_path": "assets/onboarding/weightsnap-onboarding1.jpeg"
 }
 ```
 
 - `status` は ASC状態名でも、`submitted` / `released` でも可
-- `first_screenshot_url` は ASCのプロモーション1枚目を指定する
+- `first_screenshot_url` は ASCのプロモーション1枚目を指定する（Featured用）
+- `card_image_path` は任意。未指定時は `app_catalog.json` の `card_image_path` を利用する
+
+## ランディング表示ルール（画像・統計）
+
+- 各アプリカード画像は `card_image_path`（オンボーディング1枚目）を優先表示
+- `promo_image_path`（ASCの1枚目画像）は Featured 表示用として保持
+- `Health Apps` は `status=released` かつ `is_health_app=true` の件数を表示
 
 ## repository_dispatch 送信例
 

@@ -16,6 +16,10 @@
 6. Add external webhook relay (`webhook-relay/asc_webhook_relay.py`) to convert ASC payloads into GitHub `repository_dispatch`.
 7. `submitted` apps stay visible with `審査中` tag; App Store CTA is hidden until `released`.
 8. Adopt Cloudflare Worker as the production relay target and keep Python relay as local fallback.
+9. Adopt docs-first operations via dedicated skills for GitHub and Cloudflare before changing CI/CD or webhook infrastructure settings.
+10. Serialize `landing-auto-update` workflow runs and add push retry-with-rebase logic to absorb bursty `repository_dispatch` events and reduce transient push failures.
+11. Use `card_image_path` (onboarding first image) for app cards, while keeping ASC screenshot in `promo_image_path` for Featured.
+12. Compute `Health Apps` metric from `released` entries with `is_health_app=true` only.
 
 ## Files
 
@@ -24,3 +28,9 @@
 - `landing-automation/runtime/landing-runtime.js`: front-end binding layer
 - `data/landing-apps.generated.json`: publish source for LP cards
 - `.github/workflows/landing-auto-update.yml`: automation workflow
+
+## Changelog
+
+- 2026-02-15: Added onboarding-first card image policy (`card_image_path`) and released-only health app count logic (`is_health_app`).
+- 2026-02-15: Added docs-first operations decision and introduced skill-based runbooks (`github-ops-docs`, `cloudflare-workers-ops-docs`).
+- 2026-02-15: Hardened workflow reliability with `concurrency` control and `git push` retry/rebase in `.github/workflows/landing-auto-update.yml`.

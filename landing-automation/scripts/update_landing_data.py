@@ -28,6 +28,7 @@ STATE_PATH = ROOT / "landing-automation" / "state" / "landing_state.json"
 ASSETS_DIR = ROOT / "assets" / "asc-screenshots"
 
 VISIBLE_STATUSES = {"submitted", "released"}
+HEALTH_APP_CATEGORIES = {"camera", "voice", "sound"}
 STATE_SUBMITTED = {
     "WAITING_FOR_REVIEW",
     "IN_REVIEW",
@@ -115,6 +116,29 @@ def normalize_status(raw_status: str | None) -> str:
     return "unknown"
 
 
+def as_bool(value: Any, *, default: bool = False) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "on"}:
+            return True
+        if normalized in {"0", "false", "no", "off"}:
+            return False
+    return default
+
+
+def default_is_health_app(catalog_app: dict[str, Any]) -> bool:
+    fallback = catalog_app.get("category") in HEALTH_APP_CATEGORIES
+    return as_bool(catalog_app.get("is_health_app"), default=fallback)
+
+
+def default_card_image_path(catalog_app: dict[str, Any]) -> str:
+    return str(catalog_app.get("card_image_path") or catalog_app.get("fallback_image_path") or "")
+
+
 def file_hash(path: Path) -> str:
     digest = sha256()
     with path.open("rb") as file:
@@ -183,16 +207,37 @@ def default_output_entry(app: dict[str, Any]) -> dict[str, Any]:
         "description_ja": app.get("description_ja", ""),
         "icon_path": app.get("icon_path", ""),
         "promo_image_path": app.get("fallback_image_path", ""),
+        "card_image_path": default_card_image_path(app),
         "promo_image_source": "catalog",
         "support_path": app.get("support_path", ""),
         "app_store_url": app.get("app_store_url", ""),
         "bundle_id": app.get("bundle_id", ""),
         "asc_app_id": app.get("asc_app_id", ""),
+        "is_health_app": default_is_health_app(app),
         "featured_priority": int(app.get("featured_priority", 999)),
         "sort_order": int(app.get("sort_order", 999)),
         "published_to_landing": bool(app.get("bootstrap_visible", False)),
         "updated_at": now_iso(),
     }
+
+
+def apply_catalog_defaults(entry: dict[str, Any], catalog_entry: dict[str, Any]) -> dict[str, Any]:
+    merged = default_output_entry(catalog_entry)
+    merged.update(entry)
+
+    if not merged.get("promo_image_path") and catalog_entry.get("fallback_image_path"):
+        merged["promo_image_path"] = catalog_entry["fallback_image_path"]
+        merged["promo_image_source"] = "catalog"
+
+    if not merged.get("card_image_path"):
+        merged["card_image_path"] = default_card_image_path(catalog_entry)
+
+    merged["is_health_app"] = as_bool(merged.get("is_health_app"), default=default_is_health_app(catalog_entry))
+    merged["published_to_landing"] = as_bool(
+        merged.get("published_to_landing"),
+        default=as_bool(catalog_entry.get("bootstrap_visible"), default=False),
+    )
+    return merged
 
 
 def sort_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -291,6 +336,13 @@ def build_entry_from_event(
     if bundle_id:
         entry["bundle_id"] = bundle_id
 
+    card_image_path = payload.get("card_image_path")
+    if card_image_path:
+        entry["card_image_path"] = card_image_path
+
+    if "is_health_app" in payload:
+        entry["is_health_app"] = as_bool(payload.get("is_health_app"), default=entry.get("is_health_app", True))
+
     screenshot_url = payload.get("first_screenshot_url") or payload.get("promo_image_url")
     if screenshot_url:
         try:
@@ -300,9 +352,7 @@ def build_entry_from_event(
         except urllib.error.URLError as error:
             print(f"[WARN] screenshot download failed for {entry['slug']}: {error}")
 
-    if not entry.get("promo_image_path") and catalog_entry.get("fallback_image_path"):
-        entry["promo_image_path"] = catalog_entry["fallback_image_path"]
-        entry["promo_image_source"] = "catalog"
+    entry = apply_catalog_defaults(entry, catalog_entry)
 
     entry["updated_at"] = now_iso()
     return entry
@@ -345,9 +395,17 @@ def update_from_event(
         entry = build_entry_from_event(existing_entry, catalog_entry, payload)
         entries_by_slug[slug] = entry
 
+    normalized_entries: list[dict[str, Any]] = []
+    for slug, entry in entries_by_slug.items():
+        catalog_entry = by_slug.get(slug)
+        if catalog_entry:
+            normalized_entries.append(apply_catalog_defaults(entry, catalog_entry))
+        else:
+            normalized_entries.append(entry)
+
     filtered_entries = [
         entry
-        for entry in entries_by_slug.values()
+        for entry in normalized_entries
         if entry.get("published_to_landing") and entry.get("status") in VISIBLE_STATUSES
     ]
 
@@ -366,7 +424,7 @@ def update_from_event(
         "schema_version": 1,
         "updated_at": now_iso(),
         "processed_event_ids": processed_ids,
-        "statuses": {entry["slug"]: entry.get("status", "unknown") for entry in entries_by_slug.values()},
+        "statuses": {entry["slug"]: entry.get("status", "unknown") for entry in normalized_entries},
     }
 
     return next_output, next_state

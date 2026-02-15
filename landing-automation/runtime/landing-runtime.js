@@ -3,6 +3,7 @@
 
   const DATA_PATH = 'data/landing-apps.generated.json';
   const VISIBLE_STATUSES = new Set(['submitted', 'released']);
+  const HEALTH_CATEGORIES = new Set(['camera', 'voice', 'sound']);
 
   const CATEGORY_TARGETS = {
     camera: { gridId: 'camera-grid', tag: 'Camera + OCR' },
@@ -14,7 +15,13 @@
     if (app && app.category && CATEGORY_TARGETS[app.category]) {
       return app.category;
     }
-    return 'camera';
+    return null;
+  }
+
+  function isHealthApp(app) {
+    if (!app) return false;
+    if (typeof app.is_health_app === 'boolean') return app.is_health_app;
+    return HEALTH_CATEGORIES.has(app.category);
   }
 
   function safeText(value) {
@@ -58,13 +65,16 @@
   function updateHealthAppCount(apps) {
     const countEl = document.getElementById('health-app-count');
     if (countEl) {
-      countEl.textContent = String(apps.length);
+      const publishedHealthCount = apps.filter(function (app) {
+        return app.status === 'released' && isHealthApp(app);
+      }).length;
+      countEl.textContent = String(publishedHealthCount);
     }
   }
 
   function buildWorkCard(app, fallbackTag) {
     const supportPath = app.support_path || (app.slug + '/?lang=ja');
-    const promoImage = normalizeImagePath(app.promo_image_path);
+    const promoImage = normalizeImagePath(app.card_image_path || app.promo_image_path);
     const iconPath = normalizeImagePath(app.icon_path);
     const baseTag = app.category_label || fallbackTag || '';
     const statusTag = app.status === 'submitted' ? '審査中' : '';
