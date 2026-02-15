@@ -18,6 +18,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: landing-auto-update-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   update-landing:
     runs-on: ubuntu-latest
@@ -48,7 +52,11 @@ jobs:
           python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
 
       - name: Commit changes
+        env:
+          TARGET_BRANCH: ${{ github.ref_name }}
         run: |
+          set -euo pipefail
+
           if git diff --quiet; then
             echo "No changes"
             exit 0
@@ -57,5 +65,33 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots
+
+          if git diff --cached --quiet; then
+            echo "No staged changes"
+            exit 0
+          fi
+
           git commit -m "chore: auto update landing apps data"
-          git push
+
+          # Retry push because repository_dispatch events can arrive in bursts.
+          # Rebase on latest branch head between attempts to avoid transient failures.
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:${TARGET_BRANCH}"; then
+              echo "Push succeeded on attempt ${attempt}"
+              exit 0
+            fi
+
+            if [ "${attempt}" -eq 3 ]; then
+              echo "Push failed after ${attempt} attempts"
+              exit 1
+            fi
+
+            echo "Push failed on attempt ${attempt}; fetching and rebasing before retry"
+            git fetch origin "${TARGET_BRANCH}"
+            git rebase "origin/${TARGET_BRANCH}" || {
+              git rebase --abort || true
+              echo "Rebase failed"
+              exit 1
+            }
+            sleep $((attempt * 2))
+          done
