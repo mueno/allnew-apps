@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-02-15T05:28:00+00:00",
+  "generated_at": "2026-02-15T05:29:35+00:00",
   "source": "event",
   "apps": [
     {
@@ -21,7 +21,7 @@
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-02-15T05:28:00+00:00"
+      "updated_at": "2026-02-15T05:29:35+00:00"
     },
     {
       "slug": "thermosnap",
