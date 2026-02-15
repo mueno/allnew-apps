@@ -214,11 +214,19 @@ def build_normalized_payload(
         or data.get("firstScreenshotUrl")
         or app_store_version.get("firstScreenshotUrl")
     )
+    release_date = (
+        payload.get("release_date")
+        or payload.get("releaseDate")
+        or data.get("releaseDate")
+        or app_store_version.get("releaseDate")
+        or ""
+    )
 
     normalized = {
         "relay_version": 1,
         "event_id": payload.get("eventId") or payload.get("id") or "",
         "event_type": payload.get("eventType") or payload.get("type") or "",
+        "event_date": payload.get("eventDate") or payload.get("event_date") or "",
         "received_at": now_iso(),
         "app": {
             "slug": slug or "",
@@ -241,6 +249,7 @@ def build_normalized_payload(
                 or ""
             ),
             "first_screenshot_url": first_screenshot_url or "",
+            "release_date": release_date,
         },
     }
 

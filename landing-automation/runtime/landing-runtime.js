@@ -4,6 +4,12 @@
   const DATA_PATH = 'data/landing-apps.generated.json';
   const VISIBLE_STATUSES = new Set(['submitted', 'released']);
   const HEALTH_CATEGORIES = new Set(['camera', 'voice', 'sound']);
+  const INPUT_METHOD_LABELS = {
+    camera_ocr: 'Camera + OCR',
+    voice_input: 'Voice Input',
+    sound_detection: 'Sound Detection',
+    camera_ar: 'Camera + AR'
+  };
 
   const CATEGORY_TARGETS = {
     camera: { gridId: 'camera-grid', tag: 'Camera + OCR' },
@@ -62,6 +68,55 @@
       });
   }
 
+  function parseDateValue(value) {
+    if (!value) return 0;
+    const text = String(value).trim();
+    if (!text) return 0;
+
+    const normalized = /^\d{4}-\d{2}-\d{2}$/.test(text) ? (text + 'T00:00:00Z') : text;
+    const timestamp = Date.parse(normalized);
+    return Number.isNaN(timestamp) ? 0 : timestamp;
+  }
+
+  function toReleaseTimestamp(app) {
+    if (!app) return 0;
+    const releaseTimestamp =
+      parseDateValue(app.release_date) ||
+      parseDateValue(app.released_at);
+    const updatedTimestamp = parseDateValue(app.updated_at);
+    return Math.max(releaseTimestamp, updatedTimestamp);
+  }
+
+  function formatReleaseDate(app) {
+    const timestamp = toReleaseTimestamp(app);
+    if (!timestamp) return '----/--/--';
+
+    const date = new Date(timestamp);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    return year + '/' + month + '/' + day;
+  }
+
+  function buildInputMethodLabel(app, fallbackTag) {
+    if (app && typeof app.input_methods_label === 'string' && app.input_methods_label.trim()) {
+      return app.input_methods_label.trim();
+    }
+
+    const methods = Array.isArray(app && app.input_methods) ? app.input_methods : [];
+    if (methods.length > 0) {
+      return methods
+        .map(function (method) {
+          const key = String(method || '').trim().toLowerCase();
+          return INPUT_METHOD_LABELS[key] || String(method || '').trim();
+        })
+        .filter(Boolean)
+        .join(' + ');
+    }
+
+    return (app && app.category_label) || fallbackTag || '';
+  }
+
   function updateHealthAppCount(apps) {
     const countEl = document.getElementById('health-app-count');
     if (countEl) {
@@ -76,7 +131,7 @@
     const supportPath = app.support_path || (app.slug + '/?lang=ja');
     const promoImage = normalizeImagePath(app.card_image_path || app.promo_image_path);
     const iconPath = normalizeImagePath(app.icon_path);
-    const baseTag = app.category_label || fallbackTag || '';
+    const baseTag = buildInputMethodLabel(app, fallbackTag);
     const statusTag = app.status === 'submitted' ? '審査中' : '';
     const tag = statusTag ? (baseTag ? (baseTag + ' / ' + statusTag) : statusTag) : baseTag;
 
@@ -133,6 +188,8 @@
         return app && app.status === 'released';
       })
       .sort(function (a, b) {
+        const timeDiff = toReleaseTimestamp(b) - toReleaseTimestamp(a);
+        if (timeDiff !== 0) return timeDiff;
         return Number(a.featured_priority || 999) - Number(b.featured_priority || 999);
       });
 
@@ -143,10 +200,10 @@
     if (!app) return;
 
     const heading = document.getElementById('featured-heading');
-    if (heading) heading.textContent = app.name;
+    if (heading) heading.textContent = formatReleaseDate(app);
 
     const eyebrow = document.getElementById('featured-eyebrow');
-    if (eyebrow) eyebrow.textContent = app.category_label || 'App';
+    if (eyebrow) eyebrow.textContent = buildInputMethodLabel(app, 'App');
 
     const nameEl = document.getElementById('featured-name');
     if (nameEl) nameEl.textContent = app.name;

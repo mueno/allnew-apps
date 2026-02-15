@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-02-15T05:44:12+00:00",
+  "generated_at": "2026-02-15T06:30:19+00:00",
   "source": "event",
   "apps": [
     {
@@ -15,15 +15,21 @@
       "promo_image_path": "assets/asc-screenshots/weightsnap.png",
       "card_image_path": "assets/onboarding/weightsnap-onboarding1.jpeg",
       "promo_image_source": "asc_first_screenshot",
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
+      "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "weightsnap/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/weightsnap/id6743864029",
       "bundle_id": "jp.allnew.weightsnap",
       "asc_app_id": "6743864029",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-02-15T05:44:12+00:00"
+      "updated_at": "2026-02-15T06:30:19+00:00"
     },
     {
       "slug": "thermosnap",
@@ -37,11 +43,17 @@
       "promo_image_path": "thermosnap-promo.png",
       "card_image_path": "assets/onboarding/thermosnap-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
+      "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "thermosnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.thermosnap",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
@@ -59,11 +71,17 @@
       "promo_image_path": "bpsnap-promo.png",
       "card_image_path": "assets/onboarding/bloodpressuresnap-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
+      "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "bloodpressuresnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.bloodpressuresnap",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
@@ -81,11 +99,17 @@
       "promo_image_path": "glucosnap-promo.png",
       "card_image_path": "assets/onboarding/glucosnap-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
+      "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "glucosnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.glucosnap",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
@@ -103,11 +127,17 @@
       "promo_image_path": "oxisnap-promo.png",
       "card_image_path": "assets/onboarding/oxisnap-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
+      "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "oxisnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.oxisnap",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
@@ -125,11 +155,16 @@
       "promo_image_path": "pupweight-promo.png",
       "card_image_path": "assets/onboarding/pupweight-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "voice_input"
+      ],
+      "input_methods_label": "Voice Input",
       "support_path": "pupweight/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.pupweight",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
@@ -147,11 +182,16 @@
       "promo_image_path": "babyvox-promo.png",
       "card_image_path": "assets/onboarding/babyvox-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "voice_input"
+      ],
+      "input_methods_label": "Voice Input",
       "support_path": "babyvox/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.babyvox",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 70,
       "sort_order": 70,
       "published_to_landing": true,
@@ -169,11 +209,16 @@
       "promo_image_path": "waistvox-promo.png",
       "card_image_path": "assets/onboarding/waistvox-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "voice_input"
+      ],
+      "input_methods_label": "Voice Input",
       "support_path": "waistvox/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.waistvox",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
@@ -191,11 +236,16 @@
       "promo_image_path": "coughwav-promo.png",
       "card_image_path": "assets/onboarding/coughwav-onboarding1.jpeg",
       "promo_image_source": "catalog",
+      "input_methods": [
+        "sound_detection"
+      ],
+      "input_methods_label": "Sound Detection",
       "support_path": "coughwav/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.coughwav",
       "asc_app_id": "",
       "is_health_app": true,
+      "release_date": "2026-02-15",
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,

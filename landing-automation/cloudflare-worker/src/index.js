@@ -314,6 +314,9 @@ function normalizeAscPayload(input) {
     relay_version: 1,
     event_id: asString(payload.eventId) || asString(payload.id),
     event_type: asString(payload.eventType) || asString(payload.type),
+    event_date:
+      asString(payload.eventDate) ||
+      asString(payload.event_date),
     received_at: nowIso(),
     app: {
       slug: resolveSlug(app, data, payload),
@@ -336,6 +339,11 @@ function normalizeAscPayload(input) {
         asString(payload.promo_image_url) ||
         asString(data.firstScreenshotUrl) ||
         asString(appStoreVersion.firstScreenshotUrl),
+      release_date:
+        asString(payload.release_date) ||
+        asString(payload.releaseDate) ||
+        asString(data.releaseDate) ||
+        asString(appStoreVersion.releaseDate),
     },
   };
 }

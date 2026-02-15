@@ -869,7 +869,7 @@
     <nav class="nav" id="nav" role="navigation" aria-label="Main">
         <a href="#" class="nav-logo"><img src="allnew-logo.png" alt="AllNew" /></a>
         <div class="nav-right">
-            <button class="nav-link" data-filter="all">Apps</button>
+            <button type="button" class="nav-link" data-filter="all" id="nav-apps-button">Apps</button>
             <a href="#contact" class="nav-link">Contact</a>
         </div>
     </nav>
@@ -951,8 +951,8 @@
     <!-- Featured -->
     <section class="section featured-section" data-section="camera">
         <div class="section-inner">
-            <p class="section-label reveal">(Pick up)</p>
-            <h2 class="section-heading reveal reveal-d1" style="color: #fff;" id="featured-heading">WeightSnap</h2>
+            <p class="section-label reveal">(New Release)</p>
+            <h2 class="section-heading reveal reveal-d1" style="color: #fff;" id="featured-heading">2026/02/15</h2>
             <div class="featured-card">
                 <div class="featured-body">
                     <p class="featured-eyebrow" id="featured-eyebrow">Camera + OCR</p>
@@ -1216,6 +1216,14 @@
         }
         window.addEventListener('scroll', checkNavScroll, { passive: true });
         checkNavScroll();
+
+        const navAppsButton = document.getElementById('nav-apps-button');
+        const appsSection = document.getElementById('section-camera');
+        if (navAppsButton && appsSection) {
+            navAppsButton.addEventListener('click', () => {
+                appsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
 
         // ===== Scroll reveal =====
         const revealObserver = new IntersectionObserver((entries) => {

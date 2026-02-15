@@ -29,6 +29,17 @@ ASSETS_DIR = ROOT / "assets" / "asc-screenshots"
 
 VISIBLE_STATUSES = {"submitted", "released"}
 HEALTH_APP_CATEGORIES = {"camera", "voice", "sound"}
+INPUT_METHOD_LABELS = {
+    "camera_ocr": "Camera + OCR",
+    "voice_input": "Voice Input",
+    "sound_detection": "Sound Detection",
+    "camera_ar": "Camera + AR",
+}
+CATEGORY_DEFAULT_INPUT_METHODS = {
+    "camera": ["camera_ocr"],
+    "voice": ["voice_input"],
+    "sound": ["sound_detection"],
+}
 STATE_SUBMITTED = {
     "WAITING_FOR_REVIEW",
     "IN_REVIEW",
@@ -139,6 +150,148 @@ def default_card_image_path(catalog_app: dict[str, Any]) -> str:
     return str(catalog_app.get("card_image_path") or catalog_app.get("fallback_image_path") or "")
 
 
+def parse_iso_datetime(value: Any) -> datetime | None:
+    if not value:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+
+    if len(text) == 10 and text[4] == "-" and text[7] == "-":
+        try:
+            return datetime.strptime(text, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        except ValueError:
+            return None
+
+    normalized = text.replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+
+    if parsed.tzinfo is None:
+        return parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def normalize_release_date(value: Any) -> str:
+    parsed = parse_iso_datetime(value)
+    if not parsed:
+        return ""
+    return parsed.date().isoformat()
+
+
+def normalize_method_code(value: Any) -> str:
+    if not value:
+        return ""
+    text = str(value).strip().lower()
+    if not text:
+        return ""
+
+    cleaned = (
+        text.replace("&", "_")
+        .replace("/", "_")
+        .replace("-", "_")
+        .replace(" ", "_")
+        .replace("+", "_")
+    )
+    while "__" in cleaned:
+        cleaned = cleaned.replace("__", "_")
+    cleaned = cleaned.strip("_")
+
+    aliases = {
+        "camera": "camera_ocr",
+        "ocr": "camera_ocr",
+        "camera_ocr": "camera_ocr",
+        "voice": "voice_input",
+        "speech": "voice_input",
+        "voice_input": "voice_input",
+        "sound": "sound_detection",
+        "audio": "sound_detection",
+        "sound_detection": "sound_detection",
+        "camera_ar": "camera_ar",
+        "ar_camera": "camera_ar",
+    }
+    return aliases.get(cleaned, cleaned)
+
+
+def dedupe_keep_order(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value in seen:
+            continue
+        seen.add(value)
+        result.append(value)
+    return result
+
+
+def parse_input_methods(value: Any, *, fallback: list[str] | None = None) -> list[str]:
+    fallback_methods = list(fallback or [])
+
+    if isinstance(value, list):
+        parsed = [normalize_method_code(item) for item in value]
+        filtered = [item for item in parsed if item]
+        return dedupe_keep_order(filtered) or dedupe_keep_order(fallback_methods)
+
+    if isinstance(value, str):
+        text = value.strip()
+        if text:
+            parts: list[str]
+            if "," in text:
+                parts = [item.strip() for item in text.split(",")]
+            elif "|" in text:
+                parts = [item.strip() for item in text.split("|")]
+            elif "/" in text:
+                parts = [item.strip() for item in text.split("/")]
+            elif " + " in text:
+                parts = [item.strip() for item in text.split("+")]
+            else:
+                parts = [text]
+
+            parsed = [normalize_method_code(item) for item in parts]
+            filtered = [item for item in parsed if item]
+            return dedupe_keep_order(filtered) or dedupe_keep_order(fallback_methods)
+
+    return dedupe_keep_order(fallback_methods)
+
+
+def default_input_methods(catalog_app: dict[str, Any]) -> list[str]:
+    explicit = parse_input_methods(catalog_app.get("input_methods"), fallback=[])
+    if explicit:
+        return explicit
+    return list(CATEGORY_DEFAULT_INPUT_METHODS.get(str(catalog_app.get("category") or ""), []))
+
+
+def input_methods_label(methods: list[str]) -> str:
+    labels = [INPUT_METHOD_LABELS.get(method, method.replace("_", " ").title()) for method in methods]
+    return " + ".join(labels)
+
+
+def pick_release_date_from_context(payload: dict[str, Any], event_data: dict[str, Any]) -> str:
+    client_payload = event_data.get("client_payload", event_data)
+    candidates = [
+        payload.get("release_date"),
+        payload.get("releaseDate"),
+        payload.get("released_at"),
+        payload.get("releasedAt"),
+        payload.get("app_store_released_at"),
+        payload.get("appStoreReleasedAt"),
+        payload.get("event_date"),
+        payload.get("eventDate"),
+        client_payload.get("event_date"),
+        client_payload.get("eventDate"),
+        client_payload.get("received_at"),
+        event_data.get("eventDate"),
+        event_data.get("created_at"),
+    ]
+    for candidate in candidates:
+        normalized = normalize_release_date(candidate)
+        if normalized:
+            return normalized
+    return ""
+
+
 def file_hash(path: Path) -> str:
     digest = sha256()
     with path.open("rb") as file:
@@ -197,6 +350,7 @@ def build_catalog_maps(catalog: dict[str, Any]) -> tuple[dict[str, dict[str, Any
 
 
 def default_output_entry(app: dict[str, Any]) -> dict[str, Any]:
+    methods = default_input_methods(app)
     return {
         "slug": app["slug"],
         "name": app.get("name", ""),
@@ -209,11 +363,14 @@ def default_output_entry(app: dict[str, Any]) -> dict[str, Any]:
         "promo_image_path": app.get("fallback_image_path", ""),
         "card_image_path": default_card_image_path(app),
         "promo_image_source": "catalog",
+        "input_methods": methods,
+        "input_methods_label": input_methods_label(methods),
         "support_path": app.get("support_path", ""),
         "app_store_url": app.get("app_store_url", ""),
         "bundle_id": app.get("bundle_id", ""),
         "asc_app_id": app.get("asc_app_id", ""),
         "is_health_app": default_is_health_app(app),
+        "release_date": normalize_release_date(app.get("release_date")),
         "featured_priority": int(app.get("featured_priority", 999)),
         "sort_order": int(app.get("sort_order", 999)),
         "published_to_landing": bool(app.get("bootstrap_visible", False)),
@@ -232,11 +389,23 @@ def apply_catalog_defaults(entry: dict[str, Any], catalog_entry: dict[str, Any])
     if not merged.get("card_image_path"):
         merged["card_image_path"] = default_card_image_path(catalog_entry)
 
+    merged_methods = parse_input_methods(
+        merged.get("input_methods"),
+        fallback=default_input_methods(catalog_entry),
+    )
+    merged["input_methods"] = merged_methods
+    merged["input_methods_label"] = input_methods_label(merged_methods)
+
     merged["is_health_app"] = as_bool(merged.get("is_health_app"), default=default_is_health_app(catalog_entry))
     merged["published_to_landing"] = as_bool(
         merged.get("published_to_landing"),
         default=as_bool(catalog_entry.get("bootstrap_visible"), default=False),
     )
+
+    merged["release_date"] = normalize_release_date(merged.get("release_date"))
+    if not merged["release_date"] and merged.get("status") == "released":
+        merged["release_date"] = normalize_release_date(merged.get("updated_at")) or normalize_release_date(now_iso())
+
     return merged
 
 
@@ -300,6 +469,7 @@ def build_entry_from_event(
     existing_entry: dict[str, Any] | None,
     catalog_entry: dict[str, Any],
     payload: dict[str, Any],
+    event_data: dict[str, Any],
 ) -> dict[str, Any]:
     entry = default_output_entry(catalog_entry)
     if existing_entry:
@@ -340,8 +510,15 @@ def build_entry_from_event(
     if card_image_path:
         entry["card_image_path"] = card_image_path
 
+    input_methods = parse_input_methods(payload.get("input_methods"), fallback=[])
+    if input_methods:
+        entry["input_methods"] = input_methods
+
     if "is_health_app" in payload:
         entry["is_health_app"] = as_bool(payload.get("is_health_app"), default=entry.get("is_health_app", True))
+
+    if "release_date" in payload or "releaseDate" in payload:
+        entry["release_date"] = normalize_release_date(payload.get("release_date") or payload.get("releaseDate"))
 
     screenshot_url = payload.get("first_screenshot_url") or payload.get("promo_image_url")
     if screenshot_url:
@@ -351,6 +528,11 @@ def build_entry_from_event(
             entry["promo_image_source"] = "asc_first_screenshot"
         except urllib.error.URLError as error:
             print(f"[WARN] screenshot download failed for {entry['slug']}: {error}")
+
+    if entry.get("status") == "released":
+        resolved_release_date = pick_release_date_from_context(payload, event_data)
+        if resolved_release_date:
+            entry["release_date"] = resolved_release_date
 
     entry = apply_catalog_defaults(entry, catalog_entry)
 
@@ -374,7 +556,13 @@ def update_from_event(
     if not isinstance(processed_ids, list):
         processed_ids = []
 
-    event_id = event_data.get("id") or event_data.get("delivery_id")
+    client_payload = event_data.get("client_payload", {})
+    event_id = (
+        event_data.get("id")
+        or event_data.get("delivery_id")
+        or client_payload.get("event_id")
+        or client_payload.get("eventId")
+    )
     if event_id and event_id in processed_ids:
         print(f"[INFO] event already processed: {event_id}")
         return existing_output, state
@@ -392,7 +580,7 @@ def update_from_event(
 
         catalog_entry = by_slug[slug]
         existing_entry = entries_by_slug.get(slug)
-        entry = build_entry_from_event(existing_entry, catalog_entry, payload)
+        entry = build_entry_from_event(existing_entry, catalog_entry, payload, event_data)
         entries_by_slug[slug] = entry
 
     normalized_entries: list[dict[str, Any]] = []
