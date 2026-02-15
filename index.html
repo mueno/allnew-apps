@@ -502,11 +502,15 @@
             width: auto;
             max-width: 100%;
             object-fit: contain;
-            transition: transform 0.4s ease;
+            filter: grayscale(100%);
+            transition: transform 0.4s ease, filter 0.35s ease;
         }
 
-        .work-card:hover .work-card-img img {
+        .work-card:hover .work-card-img img,
+        .work-card:focus-visible .work-card-img img,
+        .work-card:active .work-card-img img {
             transform: scale(1.06);
+            filter: grayscale(0%);
         }
 
         .work-card-body {
