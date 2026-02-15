@@ -17,6 +17,9 @@ const DEFAULT_SIGNATURE_HEADERS = [
   "X-AppStoreConnect-Signature",
   "X-Hub-Signature-256",
 ];
+const MAX_REQUEST_BYTES = 1024 * 1024;
+const DEFAULT_REPLAY_TTL_SECONDS = 3600;
+const ALLOWED_EVENT_SKEW_MS = 15 * 60 * 1000;
 
 const APP_SLUG_BY_ID = appSlugMap.by_app_id ?? {};
 const APP_SLUG_BY_BUNDLE = appSlugMap.by_bundle_id ?? {};
@@ -45,6 +48,12 @@ function pickDispatchEvent(normalizedStatus) {
   if (normalizedStatus === "released") return "asc_app_released";
   if (normalizedStatus === "submitted") return "asc_app_submitted";
   return "asc_status_changed";
+}
+
+function parsePositiveInt(value, fallback) {
+  const parsed = Number.parseInt(String(value ?? ""), 10);
+  if (!Number.isFinite(parsed) || parsed <= 0) return fallback;
+  return parsed;
 }
 
 function lowerCaseHeaderMap(headers) {
@@ -191,10 +200,9 @@ function decodeSignatureCandidate(value) {
   return decoded;
 }
 
-async function verifySignature(request, body, env) {
-  const secrets = getSignatureSecrets(env);
+async function verifySignature(request, body, secrets, env) {
   if (secrets.length === 0) {
-    return { ok: true, reason: "signature bypassed (ASC_WEBHOOK_SECRET not set)" };
+    return { ok: false, reason: "webhook secret not configured" };
   }
 
   const headerName = findSignatureHeader(
@@ -254,6 +262,41 @@ async function verifySignature(request, body, env) {
     ok: false,
     reason: `signature mismatch (candidates=${candidates.length}, secrets=${secrets.length})`,
   };
+}
+
+async function sha256Hex(value) {
+  const bytes = new TextEncoder().encode(value);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return bytesToHex(new Uint8Array(digest));
+}
+
+function isEventDateFresh(eventDate) {
+  if (!eventDate) return false;
+  const parsed = Date.parse(eventDate);
+  if (Number.isNaN(parsed)) return false;
+  return Math.abs(Date.now() - parsed) <= ALLOWED_EVENT_SKEW_MS;
+}
+
+async function checkReplay(eventId, ttlSeconds) {
+  const replayKey = await sha256Hex(eventId);
+  const keyUrl = `https://replay.allnew.internal/${replayKey}`;
+  const cacheKey = new Request(keyUrl, { method: "GET" });
+
+  const hit = await caches.default.match(cacheKey);
+  if (hit) {
+    return true;
+  }
+
+  const ttl = parsePositiveInt(ttlSeconds, DEFAULT_REPLAY_TTL_SECONDS);
+  await caches.default.put(
+    cacheKey,
+    new Response("seen", {
+      headers: {
+        "Cache-Control": `max-age=${ttl}`,
+      },
+    }),
+  );
+  return false;
 }
 
 function resolveSlug(app, data, payload) {
@@ -388,63 +431,82 @@ export default {
 
     const url = new URL(request.url);
     if (url.pathname !== "/webhooks/asc") {
-      return jsonResponse({ ok: false, error: `path not found: ${url.pathname}` }, 404);
+      return jsonResponse({ ok: false, error: "not found" }, 404);
     }
 
     if (!env.GITHUB_OWNER || !env.GITHUB_REPO || !env.GITHUB_TOKEN) {
-      return jsonResponse({ ok: false, error: "missing GitHub relay config" }, 500);
+      return jsonResponse({ ok: false, error: "server misconfiguration" }, 500);
+    }
+
+    const signatureSecrets = getSignatureSecrets(env);
+    if (signatureSecrets.length === 0) {
+      return jsonResponse({ ok: false, error: "server misconfiguration" }, 500);
+    }
+
+    const contentLengthHeader = request.headers.get("Content-Length");
+    if (contentLengthHeader !== null) {
+      const contentLength = Number.parseInt(contentLengthHeader, 10);
+      if (!Number.isFinite(contentLength) || contentLength < 0) {
+        return jsonResponse({ ok: false, error: "invalid content-length" }, 400);
+      }
+      if (contentLength > MAX_REQUEST_BYTES) {
+        return jsonResponse({ ok: false, error: "payload too large" }, 413);
+      }
     }
 
     let bodyText = "";
     try {
       bodyText = await request.text();
     } catch (error) {
-      return jsonResponse({ ok: false, error: "failed to read body", detail: String(error) }, 400);
+      console.error("failed to read request body", error);
+      return jsonResponse({ ok: false, error: "bad request" }, 400);
     }
 
-    const verification = await verifySignature(request, bodyText, env);
+    const bodySize = new TextEncoder().encode(bodyText).length;
+    if (bodySize > MAX_REQUEST_BYTES) {
+      return jsonResponse({ ok: false, error: "payload too large" }, 413);
+    }
+
+    const verification = await verifySignature(request, bodyText, signatureSecrets, env);
     if (!verification.ok) {
-      return jsonResponse(
-        {
-          ok: false,
-          error: "signature verification failed",
-          reason: verification.reason,
-        },
-        401,
-      );
+      console.warn("signature verification failed", verification.reason);
+      return jsonResponse({ ok: false, error: "unauthorized" }, 401);
     }
 
     let payload;
     try {
       payload = JSON.parse(bodyText);
     } catch (error) {
-      return jsonResponse({ ok: false, error: "invalid json", detail: String(error) }, 400);
+      return jsonResponse({ ok: false, error: "invalid json" }, 400);
     }
 
     const normalized = normalizeAscPayload(payload);
+    if (!normalized.event_id) {
+      return jsonResponse({ ok: false, error: "missing event_id" }, 400);
+    }
+    if (!isEventDateFresh(normalized.event_date)) {
+      return jsonResponse({ ok: false, error: "invalid or stale event_date" }, 400);
+    }
+
+    const duplicate = await checkReplay(normalized.event_id, env.REPLAY_TTL_SECONDS);
+    if (duplicate) {
+      return jsonResponse({ ok: false, error: "duplicate event" }, 409);
+    }
+
     const eventType = pickDispatchEvent(normalized.app.normalized_status);
 
     try {
       await sendRepositoryDispatch(env, eventType, normalized);
     } catch (error) {
-      return jsonResponse(
-        {
-          ok: false,
-          error: "failed to dispatch GitHub event",
-          detail: String(error),
-          event_type: eventType,
-          normalized,
-        },
-        502,
-      );
+      console.error("failed to dispatch GitHub event", error);
+      return jsonResponse({ ok: false, error: "upstream dispatch failed" }, 502);
     }
 
     return jsonResponse(
       {
         ok: true,
-        signature: verification.reason,
         event_type: eventType,
-        normalized,
+        event_id: normalized.event_id,
       },
       202,
     );

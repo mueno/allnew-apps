@@ -16,6 +16,8 @@ import hashlib
 import hmac
 import json
 import os
+import threading
+import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from http import HTTPStatus
@@ -46,6 +48,9 @@ RELEASED_STATES = {
     "READY_FOR_DISTRIBUTION",
     "READY_FOR_SALE",
 }
+DEFAULT_MAX_REQUEST_BYTES = 1024 * 1024
+DEFAULT_REPLAY_TTL_SECONDS = 3600
+DEFAULT_EVENT_FRESHNESS_SECONDS = 15 * 60
 
 
 @dataclass
@@ -60,6 +65,9 @@ class RelayConfig:
     signature_header: str
     signature_prefix: str
     catalog_path: Path
+    max_request_bytes: int
+    replay_ttl_seconds: int
+    event_freshness_seconds: int
 
 
 def now_iso() -> str:
@@ -118,7 +126,7 @@ def verify_signature(
     signature_prefix: str,
 ) -> tuple[bool, str]:
     if not secret:
-        return True, "signature bypassed (no secret configured)"
+        return False, "webhook secret not configured"
 
     header_name = find_signature_header(headers, signature_header)
     if not header_name:
@@ -139,6 +147,31 @@ def verify_signature(
         return True, f"verified via {header_name} (base64)"
 
     return False, "signature mismatch"
+
+
+def parse_positive_int(value: str, fallback: int) -> int:
+    try:
+        parsed = int(str(value))
+    except (TypeError, ValueError):
+        return fallback
+    if parsed <= 0:
+        return fallback
+    return parsed
+
+
+def is_event_date_fresh(value: str, freshness_seconds: int) -> bool:
+    if not value:
+        return False
+    parsed = value.replace("Z", "+00:00")
+    try:
+        event_time = datetime.fromisoformat(parsed)
+    except ValueError:
+        return False
+    if event_time.tzinfo is None:
+        event_time = event_time.replace(tzinfo=timezone.utc)
+    now = datetime.now(timezone.utc)
+    delta = abs((now - event_time.astimezone(timezone.utc)).total_seconds())
+    return delta <= freshness_seconds
 
 
 def normalize_status(raw_status: str | None) -> str:
@@ -286,6 +319,8 @@ class RelayHandler(BaseHTTPRequestHandler):
     config: RelayConfig
     slug_by_app_id: dict[str, str]
     slug_by_bundle: dict[str, str]
+    replay_cache: dict[str, float] = {}
+    replay_cache_lock = threading.Lock()
 
     def _write_json(self, status: int, payload: dict[str, Any]) -> None:
         body = (json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
@@ -303,16 +338,45 @@ class RelayHandler(BaseHTTPRequestHandler):
         )
         print(message)
 
+    @classmethod
+    def register_event(cls, event_id: str, ttl_seconds: int) -> bool:
+        now = time.time()
+        with cls.replay_cache_lock:
+            expired = [key for key, expires_at in cls.replay_cache.items() if expires_at <= now]
+            for key in expired:
+                cls.replay_cache.pop(key, None)
+
+            existing_expires = cls.replay_cache.get(event_id)
+            if existing_expires and existing_expires > now:
+                return False
+
+            cls.replay_cache[event_id] = now + ttl_seconds
+            return True
+
     def do_POST(self) -> None:  # noqa: N802
         if self.path != self.config.path:
             self._write_json(
                 HTTPStatus.NOT_FOUND,
-                {"ok": False, "error": f"path not found: {self.path}"},
+                {"ok": False, "error": "not found"},
             )
             return
 
-        content_length = int(self.headers.get("Content-Length", "0"))
+        try:
+            content_length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            self._write_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid content-length"})
+            return
+        if content_length < 0:
+            self._write_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid content-length"})
+            return
+        if content_length > self.config.max_request_bytes:
+            self._write_json(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "payload too large"})
+            return
+
         body = self.rfile.read(content_length)
+        if len(body) > self.config.max_request_bytes:
+            self._write_json(HTTPStatus.REQUEST_ENTITY_TOO_LARGE, {"ok": False, "error": "payload too large"})
+            return
 
         headers = {key: value for key, value in self.headers.items()}
         ok, reason = verify_signature(
@@ -323,9 +387,10 @@ class RelayHandler(BaseHTTPRequestHandler):
             self.config.signature_prefix,
         )
         if not ok:
+            print(f"[WARN] signature verification failed: {reason}")
             self._write_json(
                 HTTPStatus.UNAUTHORIZED,
-                {"ok": False, "error": "signature verification failed", "reason": reason},
+                {"ok": False, "error": "unauthorized"},
             )
             return
 
@@ -334,24 +399,36 @@ class RelayHandler(BaseHTTPRequestHandler):
         except json.JSONDecodeError as error:
             self._write_json(
                 HTTPStatus.BAD_REQUEST,
-                {"ok": False, "error": "invalid json", "detail": str(error)},
+                {"ok": False, "error": "invalid json"},
             )
             return
 
         normalized = build_normalized_payload(payload, self.slug_by_app_id, self.slug_by_bundle)
+        event_id = str(normalized.get("event_id") or "").strip()
+        if not event_id:
+            self._write_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "missing event_id"})
+            return
+
+        event_date = str(normalized.get("event_date") or "").strip()
+        if not is_event_date_fresh(event_date, self.config.event_freshness_seconds):
+            self._write_json(HTTPStatus.BAD_REQUEST, {"ok": False, "error": "invalid or stale event_date"})
+            return
+
+        if not self.register_event(event_id, self.config.replay_ttl_seconds):
+            self._write_json(HTTPStatus.CONFLICT, {"ok": False, "error": "duplicate event"})
+            return
+
         event_type = pick_dispatch_event(normalized["app"].get("normalized_status", "unknown"))
 
         try:
             send_repository_dispatch(self.config, event_type, normalized)
         except (HTTPError, URLError, RuntimeError) as error:
+            print(f"[ERROR] failed to dispatch GitHub event: {error}")
             self._write_json(
                 HTTPStatus.BAD_GATEWAY,
                 {
                     "ok": False,
-                    "error": "failed to dispatch to GitHub",
-                    "detail": str(error),
-                    "event_type": event_type,
-                    "normalized": normalized,
+                    "error": "upstream dispatch failed",
                 },
             )
             return
@@ -360,9 +437,8 @@ class RelayHandler(BaseHTTPRequestHandler):
             HTTPStatus.ACCEPTED,
             {
                 "ok": True,
-                "signature": reason,
                 "event_type": event_type,
-                "normalized": normalized,
+                "event_id": event_id,
             },
         )
 
@@ -396,6 +472,21 @@ def parse_args() -> argparse.Namespace:
             / "app_catalog.json"
         ),
     )
+    parser.add_argument(
+        "--max-request-bytes",
+        type=int,
+        default=parse_positive_int(os.getenv("ASC_MAX_REQUEST_BYTES", str(DEFAULT_MAX_REQUEST_BYTES)), DEFAULT_MAX_REQUEST_BYTES),
+    )
+    parser.add_argument(
+        "--replay-ttl-seconds",
+        type=int,
+        default=parse_positive_int(os.getenv("ASC_REPLAY_TTL_SECONDS", str(DEFAULT_REPLAY_TTL_SECONDS)), DEFAULT_REPLAY_TTL_SECONDS),
+    )
+    parser.add_argument(
+        "--event-freshness-seconds",
+        type=int,
+        default=parse_positive_int(os.getenv("ASC_EVENT_FRESHNESS_SECONDS", str(DEFAULT_EVENT_FRESHNESS_SECONDS)), DEFAULT_EVENT_FRESHNESS_SECONDS),
+    )
 
     return parser.parse_args()
 
@@ -413,13 +504,16 @@ def main() -> int:
         github_owner=require(args.github_owner, "--github-owner or GITHUB_OWNER"),
         github_repo=require(args.github_repo, "--github-repo or GITHUB_REPO"),
         github_token=require(args.github_token, "--github-token or GITHUB_TOKEN"),
-        webhook_secret=args.webhook_secret,
+        webhook_secret=require(args.webhook_secret, "--webhook-secret or ASC_WEBHOOK_SECRET"),
         host=args.host,
         port=args.port,
         path=args.path,
         signature_header=args.signature_header,
         signature_prefix=args.signature_prefix,
         catalog_path=args.catalog,
+        max_request_bytes=parse_positive_int(args.max_request_bytes, DEFAULT_MAX_REQUEST_BYTES),
+        replay_ttl_seconds=parse_positive_int(args.replay_ttl_seconds, DEFAULT_REPLAY_TTL_SECONDS),
+        event_freshness_seconds=parse_positive_int(args.event_freshness_seconds, DEFAULT_EVENT_FRESHNESS_SECONDS),
     )
 
     slug_by_app_id, slug_by_bundle = load_catalog_maps(config.catalog_path)
@@ -437,7 +531,7 @@ def main() -> int:
                 "listen": f"http://{config.host}:{config.port}{config.path}",
                 "catalog": str(config.catalog_path),
                 "mapped_apps": len(slug_by_app_id),
-                "signature_required": bool(config.webhook_secret),
+                "signature_required": True,
             },
             ensure_ascii=False,
         )

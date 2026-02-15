@@ -42,6 +42,7 @@
 - `release_date` は任意。未指定時は ASCイベント日時 / `updated_at` から補完する
 - `input_methods` は任意。例: `camera_ocr`, `voice_input`, `sound_detection`
 - ランディングページの表示言語は `?lang=ja` / `?lang=en` で切替する
+- `event_id` と `event_date` はリレーで必須（重複/リプレイ防止）
 
 ## ランディング表示ルール（画像・統計）
 
@@ -52,6 +53,8 @@
 - Featured見出しは最新リリースの `YYYY.MM.DD` を表示
 - カードタグは `input_methods` から自動生成（例: `Camera + OCR + Voice Input`）
 - 言語切替時は動的カードも再描画し、説明文・審査中ラベル・サポートリンクの `lang` を同期する
+- `first_screenshot_url` は `https` かつ許可ドメイン（既定: `mzstatic.com`, `apple.com`）のみ取得
+- 画像レスポンスは `image/*` かつサイズ上限（既定: 10MB）を満たす場合のみ採用
 
 ## repository_dispatch 送信例
 
@@ -81,6 +84,11 @@ python3 landing-automation/scripts/update_landing_data.py --bootstrap
 python3 landing-automation/scripts/update_landing_data.py --event-file /path/to/event.json
 ```
 
+セキュリティ関連のオプション環境変数:
+
+- `LANDING_ALLOWED_SCREENSHOT_DOMAINS` (default: `mzstatic.com,apple.com`)
+- `LANDING_MAX_SCREENSHOT_BYTES` (default: `10485760`)
+
 ## submitted 表示ルール
 
 - `status=submitted` のアプリは LP に表示する
@@ -107,5 +115,7 @@ python3 landing-automation/webhook-relay/asc_webhook_relay.py \
 ```
 
 - 受信エンドポイント: `http://<host>:8787/webhooks/asc`
+- 受信サイズ上限: 1MB（既定）
+- `event_id` 必須、`event_date` 鮮度検証あり、同一イベントは TTL 内で再送拒否
 - `slug` がない場合は `app_catalog.json` の `asc_app_id` / `bundle_id` で解決
 - 解決したイベントは `asc_app_submitted` / `asc_app_released` / `asc_status_changed` に変換して送信

@@ -7,6 +7,7 @@ ASC_SIGNATURE_HEADER = "X-Apple-Signature"
 ASC_SIGNATURE_PREFIX = "sha256="
 GITHUB_OWNER = "mueno"
 GITHUB_REPO = "allnew-apps"
+REPLAY_TTL_SECONDS = "3600"
 
 # Set required secrets by CLI:
 # wrangler secret put GITHUB_TOKEN

@@ -8,6 +8,7 @@ ASC Webhook を受けて GitHub `repository_dispatch` に中継する本番向�
 - 検証: Webhook署名検証（HMAC-SHA256）
 - 正規化: ASC payload を LP更新向け payload に変換
 - 中継: GitHub `repository_dispatch` を発火
+- 防御: リクエストサイズ上限、`event_id` 必須、`event_date` 鮮度検証、重複イベント抑止
 
 ## コスト
 
@@ -24,10 +25,16 @@ npm install
 
 ```bash
 wrangler secret put GITHUB_TOKEN
-wrangler secret put GITHUB_OWNER
-wrangler secret put GITHUB_REPO
 wrangler secret put ASC_WEBHOOK_SECRET
 ```
+
+`GITHUB_OWNER` と `GITHUB_REPO` は `wrangler.toml` の `[vars]` でも設定可能。
+
+### Optional vars
+
+- `REPLAY_TTL_SECONDS` (default: `3600`)
+- `ASC_SIGNATURE_HEADER` (default: `X-Apple-Signature`)
+- `ASC_SIGNATURE_PREFIX` (default: `sha256=`)
 
 ### Deploy
 
@@ -48,6 +55,7 @@ npm run deploy
 - `asc_status_changed`
 
 `client_payload` には正規化済み `app` 情報が入る。
+`event_id` がない payload は拒否される。
 
 ## slug 解決
 

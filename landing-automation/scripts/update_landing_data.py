@@ -11,8 +11,9 @@ It only updates:
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
-import shutil
+import os
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -26,6 +27,15 @@ CATALOG_PATH = ROOT / "landing-automation" / "config" / "app_catalog.json"
 OUTPUT_PATH = ROOT / "data" / "landing-apps.generated.json"
 STATE_PATH = ROOT / "landing-automation" / "state" / "landing_state.json"
 ASSETS_DIR = ROOT / "assets" / "asc-screenshots"
+ALLOWED_SCREENSHOT_DOMAINS = tuple(
+    domain.strip().lower()
+    for domain in os.getenv(
+        "LANDING_ALLOWED_SCREENSHOT_DOMAINS",
+        "mzstatic.com,apple.com",
+    ).split(",")
+    if domain.strip()
+)
+MAX_SCREENSHOT_BYTES = int(os.getenv("LANDING_MAX_SCREENSHOT_BYTES", str(10 * 1024 * 1024)))
 
 VISIBLE_STATUSES = {"submitted", "released"}
 HEALTH_APP_CATEGORIES = {"camera", "voice", "sound"}
@@ -300,7 +310,18 @@ def file_hash(path: Path) -> str:
     return digest.hexdigest()
 
 
-def guess_extension(url: str) -> str:
+def guess_extension(url: str, content_type: str = "") -> str:
+    mime_map = {
+        "image/png": ".png",
+        "image/jpeg": ".jpg",
+        "image/jpg": ".jpg",
+        "image/webp": ".webp",
+    }
+    if content_type:
+        mime = content_type.split(";", 1)[0].strip().lower()
+        if mime in mime_map:
+            return mime_map[mime]
+
     parsed = urllib.parse.urlparse(url)
     extension = Path(parsed.path).suffix.lower()
     if extension in {".png", ".jpg", ".jpeg", ".webp"}:
@@ -308,16 +329,75 @@ def guess_extension(url: str) -> str:
     return ".jpg"
 
 
+def is_allowed_screenshot_host(hostname: str) -> bool:
+    host = hostname.strip().lower().rstrip(".")
+    if not host or host == "localhost":
+        return False
+
+    try:
+        ipaddress.ip_address(host)
+        return False
+    except ValueError:
+        pass
+
+    for allowed in ALLOWED_SCREENSHOT_DOMAINS:
+        if host == allowed or host.endswith(f".{allowed}"):
+            return True
+    return False
+
+
+def validate_screenshot_url(url: str) -> str:
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme.lower() != "https":
+        raise ValueError("screenshot URL must use https")
+
+    if not parsed.hostname or not is_allowed_screenshot_host(parsed.hostname):
+        raise ValueError("screenshot URL host is not allowed")
+
+    return parsed.geturl()
+
+
+def safe_slug(slug: str) -> str:
+    normalized = "".join(ch for ch in slug.lower() if ch.isalnum() or ch == "-")
+    if not normalized:
+        raise ValueError("invalid slug")
+    return normalized
+
+
 def download_screenshot(url: str, slug: str) -> tuple[str, bool]:
     ASSETS_DIR.mkdir(parents=True, exist_ok=True)
-    extension = guess_extension(url)
-    target = ASSETS_DIR / f"{slug}{extension}"
-    temp_file = ASSETS_DIR / f".{slug}.tmp{extension}"
+    secure_url = validate_screenshot_url(url)
+    safe_name = safe_slug(slug)
+    extension = guess_extension(secure_url)
+    target = ASSETS_DIR / f"{safe_name}{extension}"
+    temp_file = ASSETS_DIR / f".{safe_name}.tmp{extension}"
 
-    request = urllib.request.Request(url, headers={"User-Agent": "allnew-landing-sync/1.0"})
-    with urllib.request.urlopen(request, timeout=30) as response:  # nosec: URL comes from trusted ASC event pipeline
-        with temp_file.open("wb") as file:
-            shutil.copyfileobj(response, file)
+    request = urllib.request.Request(secure_url, headers={"User-Agent": "allnew-landing-sync/1.0"})
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:  # nosec: URL is validated by allowlist before access
+            content_type = response.headers.get("Content-Type", "")
+            if not content_type.lower().startswith("image/"):
+                raise RuntimeError("screenshot response is not image content")
+
+            final_extension = guess_extension(secure_url, content_type)
+            if final_extension != extension:
+                extension = final_extension
+                target = ASSETS_DIR / f"{safe_name}{extension}"
+                temp_file = ASSETS_DIR / f".{safe_name}.tmp{extension}"
+
+            total = 0
+            with temp_file.open("wb") as file:
+                while True:
+                    chunk = response.read(64 * 1024)
+                    if not chunk:
+                        break
+                    total += len(chunk)
+                    if total > MAX_SCREENSHOT_BYTES:
+                        raise RuntimeError("screenshot exceeds max allowed size")
+                    file.write(chunk)
+    except Exception:
+        temp_file.unlink(missing_ok=True)
+        raise
 
     changed = True
     if target.exists() and file_hash(target) == file_hash(temp_file):
@@ -329,6 +409,25 @@ def download_screenshot(url: str, slug: str) -> tuple[str, bool]:
         temp_file.unlink(missing_ok=True)
 
     return target.relative_to(ROOT).as_posix(), changed
+
+
+def event_identity_key(event_data: dict[str, Any]) -> str:
+    client_payload = event_data.get("client_payload", {})
+    if not isinstance(client_payload, dict):
+        client_payload = {}
+
+    event_id = (
+        event_data.get("id")
+        or event_data.get("delivery_id")
+        or client_payload.get("event_id")
+        or client_payload.get("eventId")
+    )
+    if event_id:
+        return f"id:{event_id}"
+
+    canonical = json.dumps(event_data, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    digest = sha256(canonical.encode("utf-8")).hexdigest()
+    return f"hash:{digest}"
 
 
 def build_catalog_maps(catalog: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], dict[str, str], dict[str, str]]:
@@ -430,7 +529,8 @@ def ensure_bootstrap_data(catalog: dict[str, Any], existing_output: dict[str, An
 
 
 def parse_event_payload(event_data: dict[str, Any]) -> list[dict[str, Any]]:
-    client_payload = event_data.get("client_payload", event_data)
+    client_payload_raw = event_data.get("client_payload", event_data)
+    client_payload = client_payload_raw if isinstance(client_payload_raw, dict) else {}
     apps = client_payload.get("apps")
     if isinstance(apps, list):
         return [item for item in apps if isinstance(item, dict)]
@@ -531,7 +631,7 @@ def build_entry_from_event(
             relative_path, _changed = download_screenshot(screenshot_url, entry["slug"])
             entry["promo_image_path"] = relative_path
             entry["promo_image_source"] = "asc_first_screenshot"
-        except urllib.error.URLError as error:
+        except (urllib.error.URLError, ValueError, RuntimeError) as error:
             print(f"[WARN] screenshot download failed for {entry['slug']}: {error}")
 
     if entry.get("status") == "released":
@@ -561,15 +661,9 @@ def update_from_event(
     if not isinstance(processed_ids, list):
         processed_ids = []
 
-    client_payload = event_data.get("client_payload", {})
-    event_id = (
-        event_data.get("id")
-        or event_data.get("delivery_id")
-        or client_payload.get("event_id")
-        or client_payload.get("eventId")
-    )
-    if event_id and event_id in processed_ids:
-        print(f"[INFO] event already processed: {event_id}")
+    event_key = event_identity_key(event_data)
+    if event_key in processed_ids:
+        print(f"[INFO] event already processed: {event_key}")
         return existing_output, state
 
     payload_apps = parse_event_payload(event_data)
@@ -609,9 +703,8 @@ def update_from_event(
         "apps": sort_entries(filtered_entries),
     }
 
-    if event_id:
-        processed_ids.append(str(event_id))
-        processed_ids = processed_ids[-200:]
+    processed_ids.append(str(event_key))
+    processed_ids = processed_ids[-500:]
 
     next_state = {
         "schema_version": 1,
