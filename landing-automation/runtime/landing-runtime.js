@@ -2,6 +2,7 @@
   'use strict';
 
   const DATA_PATH = 'data/landing-apps.generated.json';
+  const SUPPORTED_LANGS = new Set(['ja', 'en']);
   const VISIBLE_STATUSES = new Set(['submitted', 'released']);
   const HEALTH_CATEGORIES = new Set(['camera', 'voice', 'sound']);
   const INPUT_METHOD_LABELS = {
@@ -16,6 +17,27 @@
     voice: { gridId: 'voice-grid', tag: 'Voice Input' },
     sound: { gridId: 'sound-grid', tag: 'Sound Detection' }
   };
+  let cachedPayload = null;
+  let currentLang = 'ja';
+
+  function detectLanguage() {
+    if (typeof window !== 'undefined' && typeof window.getLandingLanguage === 'function') {
+      const resolved = window.getLandingLanguage();
+      if (SUPPORTED_LANGS.has(resolved)) return resolved;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const langParam = (params.get('lang') || '').toLowerCase();
+    if (SUPPORTED_LANGS.has(langParam)) return langParam;
+
+    const htmlLang = (document.documentElement.lang || '').toLowerCase();
+    if (SUPPORTED_LANGS.has(htmlLang)) return htmlLang;
+    return 'ja';
+  }
+
+  function syncLanguage() {
+    currentLang = detectLanguage();
+  }
 
   function resolveGridCategory(app) {
     if (app && app.category && CATEGORY_TARGETS[app.category]) {
@@ -89,13 +111,39 @@
 
   function formatReleaseDate(app) {
     const timestamp = toReleaseTimestamp(app);
-    if (!timestamp) return '----/--/--';
+    if (!timestamp) return '----.--.--';
 
     const date = new Date(timestamp);
     const year = date.getUTCFullYear();
     const month = String(date.getUTCMonth() + 1).padStart(2, '0');
     const day = String(date.getUTCDate()).padStart(2, '0');
-    return year + '/' + month + '/' + day;
+    return year + '.' + month + '.' + day;
+  }
+
+  function pickAppDescription(app) {
+    if (!app) return '';
+    if (currentLang === 'en') return app.description_en || app.description_ja || '';
+    return app.description_ja || app.description_en || '';
+  }
+
+  function withLangParam(path, lang) {
+    if (!path || isExternalPath(path)) return path;
+
+    const hashIndex = path.indexOf('#');
+    const hash = hashIndex >= 0 ? path.slice(hashIndex) : '';
+    const beforeHash = hashIndex >= 0 ? path.slice(0, hashIndex) : path;
+    const queryIndex = beforeHash.indexOf('?');
+    const pathname = queryIndex >= 0 ? beforeHash.slice(0, queryIndex) : beforeHash;
+    const queryString = queryIndex >= 0 ? beforeHash.slice(queryIndex + 1) : '';
+    const params = new URLSearchParams(queryString);
+    params.set('lang', lang);
+    const search = params.toString();
+    return pathname + (search ? ('?' + search) : '') + hash;
+  }
+
+  function resolveSupportPath(app) {
+    const basePath = (app && app.support_path) || ((app && app.slug ? app.slug : '') + '/');
+    return withLangParam(basePath, currentLang);
   }
 
   function buildInputMethodLabel(app, fallbackTag) {
@@ -128,11 +176,11 @@
   }
 
   function buildWorkCard(app, fallbackTag) {
-    const supportPath = app.support_path || (app.slug + '/?lang=ja');
+    const supportPath = resolveSupportPath(app);
     const promoImage = normalizeImagePath(app.card_image_path || app.promo_image_path);
     const iconPath = normalizeImagePath(app.icon_path);
     const baseTag = buildInputMethodLabel(app, fallbackTag);
-    const statusTag = app.status === 'submitted' ? '審査中' : '';
+    const statusTag = app.status === 'submitted' ? (currentLang === 'en' ? 'In Review' : '審査中') : '';
     const tag = statusTag ? (baseTag ? (baseTag + ' / ' + statusTag) : statusTag) : baseTag;
 
     return [
@@ -153,7 +201,7 @@
       '      </div>',
       '    </div>',
       '    <span class="work-card-tag">' + safeText(tag) + '</span>',
-      '    <p class="work-card-desc">' + safeText(app.description_ja || '') + '</p>',
+      '    <p class="work-card-desc">' + safeText(pickAppDescription(app)) + '</p>',
       '  </div>',
       '  <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"></path></svg></div>',
       '</a>'
@@ -210,12 +258,12 @@
 
     const jaEl = document.getElementById('featured-ja');
     if (jaEl) {
-      const statusSuffix = app.status === 'submitted' ? '（審査中）' : '';
+      const statusSuffix = app.status === 'submitted' ? (currentLang === 'en' ? ' (In Review)' : '（審査中）') : '';
       jaEl.textContent = (app.name_ja || '') + statusSuffix;
     }
 
     const descEl = document.getElementById('featured-desc');
-    if (descEl) descEl.textContent = app.description_ja || '';
+    if (descEl) descEl.textContent = pickAppDescription(app);
 
     const appStoreBtn = document.getElementById('featured-app-store-link');
     if (appStoreBtn) {
@@ -229,7 +277,7 @@
 
     const supportBtn = document.getElementById('featured-support-link');
     if (supportBtn) {
-      supportBtn.href = app.support_path || (app.slug + '/?lang=ja');
+      supportBtn.href = resolveSupportPath(app);
     }
 
     const imageEl = document.getElementById('featured-image');
@@ -244,18 +292,22 @@
     const camera = apps.filter(function (app) { return resolveGridCategory(app) === 'camera'; }).map(function (app) { return app.name; });
     const voice = apps.filter(function (app) { return resolveGridCategory(app) === 'voice'; }).map(function (app) { return app.name; });
     const sound = apps.filter(function (app) { return resolveGridCategory(app) === 'sound'; }).map(function (app) { return app.name; });
+    const labels = currentLang === 'en'
+      ? { camera: 'Camera', voice: 'Voice', sound: 'Sound' }
+      : { camera: 'カメラ', voice: '音声', sound: '音検出' };
 
     const footerCamera = document.getElementById('footer-apps-camera');
-    if (footerCamera && camera.length > 0) footerCamera.textContent = 'Camera: ' + camera.join(', ');
+    if (footerCamera && camera.length > 0) footerCamera.textContent = labels.camera + ': ' + camera.join(', ');
 
     const footerVoice = document.getElementById('footer-apps-voice');
-    if (footerVoice && voice.length > 0) footerVoice.textContent = 'Voice: ' + voice.join(', ');
+    if (footerVoice && voice.length > 0) footerVoice.textContent = labels.voice + ': ' + voice.join(', ');
 
     const footerSound = document.getElementById('footer-apps-sound');
-    if (footerSound && sound.length > 0) footerSound.textContent = 'Sound: ' + sound.join(', ');
+    if (footerSound && sound.length > 0) footerSound.textContent = labels.sound + ': ' + sound.join(', ');
   }
 
   function applyData(payload) {
+    syncLanguage();
     const apps = normalizeVisibleApps(payload.apps || []);
     if (apps.length === 0) return;
 
@@ -278,12 +330,20 @@
         return response.json();
       })
       .then(function (payload) {
-        applyData(payload || {});
+        cachedPayload = payload || {};
+        applyData(cachedPayload);
       })
       .catch(function (error) {
         console.warn('[landing-runtime] using static fallback:', error);
       });
   }
+
+  window.addEventListener('landing:langchange', function () {
+    syncLanguage();
+    if (cachedPayload) {
+      applyData(cachedPayload);
+    }
+  });
 
   window.addEventListener('DOMContentLoaded', loadAndApply);
 })();

@@ -41,6 +41,7 @@
 - `card_image_path` は任意。未指定時は `app_catalog.json` の `card_image_path` を利用する
 - `release_date` は任意。未指定時は ASCイベント日時 / `updated_at` から補完する
 - `input_methods` は任意。例: `camera_ocr`, `voice_input`, `sound_detection`
+- ランディングページの表示言語は `?lang=ja` / `?lang=en` で切替する
 
 ## ランディング表示ルール（画像・統計）
 
@@ -48,8 +49,9 @@
 - `promo_image_path`（ASCの1枚目画像）は Featured 表示用として保持
 - `Health Apps` は `status=released` かつ `is_health_app=true` の件数を表示
 - Featuredは `released` アプリのうち `release_date` が最新の1件を表示
-- Featured見出しは最新リリースの `YYYY/MM/DD` を表示
+- Featured見出しは最新リリースの `YYYY.MM.DD` を表示
 - カードタグは `input_methods` から自動生成（例: `Camera + OCR + Voice Input`）
+- 言語切替時は動的カードも再描画し、説明文・審査中ラベル・サポートリンクの `lang` を同期する
 
 ## repository_dispatch 送信例
 

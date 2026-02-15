@@ -95,6 +95,35 @@
             opacity: 0.5;
         }
 
+        .lang-switch {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .lang-chip {
+            border: none;
+            background: transparent;
+            color: var(--fg-secondary);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            font-family: inherit;
+            line-height: 1;
+        }
+
+        .lang-chip.active {
+            background: var(--fg);
+            color: var(--white);
+        }
+
         /* ==================== Hero ==================== */
         .hero {
             min-height: 100vh;
@@ -802,7 +831,8 @@
 
         @media (max-width: 600px) {
             .nav { padding: 0 20px; height: 60px; }
-            .nav-right { gap: 20px; }
+            .nav-right { gap: 14px; }
+            .lang-chip { padding: 5px 8px; font-size: 10px; }
             .section { padding: 64px 20px; }
             .hero { padding: 80px 20px 64px; }
             .hero-title { font-size: 32px; }
@@ -870,17 +900,21 @@
         <a href="#" class="nav-logo"><img src="allnew-logo.png" alt="AllNew" /></a>
         <div class="nav-right">
             <button type="button" class="nav-link" data-filter="all" id="nav-apps-button">Apps</button>
-            <a href="#contact" class="nav-link">Contact</a>
+            <a href="#contact" class="nav-link" id="nav-contact-link">Contact</a>
+            <div class="lang-switch" id="landing-lang-switch" role="group" aria-label="Language">
+                <button type="button" class="lang-chip active" data-lang-select="ja">JA</button>
+                <button type="button" class="lang-chip" data-lang-select="en">EN</button>
+            </div>
         </div>
     </nav>
 
     <!-- Hero -->
     <section class="hero">
-        <p class="hero-tagline reveal">Health & Wellness Apps</p>
-        <h1 class="hero-title reveal reveal-d1">健康を、<br>もっとシンプルに。</h1>
-        <p class="hero-desc reveal reveal-d2">撮る・話す・聴く。<br>3つの方法で、毎日の健康データをかんたんに記録できます。</p>
+        <p class="hero-tagline reveal" id="hero-tagline">Health & Wellness Apps</p>
+        <h1 class="hero-title reveal reveal-d1" id="hero-title">健康習慣を、<br>もっとシンプルに。</h1>
+        <p class="hero-desc reveal reveal-d2" id="hero-desc">撮る・話す・聴く。<br>3つの方法で、毎日の健康データをかんたんに記録できます。</p>
         <div class="hero-scroll">
-            <span>Scroll</span>
+            <span id="hero-scroll-label">Scroll</span>
             <div class="hero-scroll-line"></div>
         </div>
     </section>
@@ -888,28 +922,28 @@
     <!-- (What we do) -->
     <section class="section methods-section">
         <div class="section-inner">
-            <p class="section-label reveal">(What we do)</p>
-            <h2 class="section-heading reveal reveal-d1">3つの入力方式</h2>
-            <p class="section-text reveal reveal-d2">専用デバイスやウェアラブルは不要。あなたの iPhone だけで、さまざまな健康データを記録します。</p>
+            <p class="section-label reveal" id="methods-section-label">(What we do)</p>
+            <h2 class="section-heading reveal reveal-d1" id="methods-section-title">3つの入力方式</h2>
+            <p class="section-text reveal reveal-d2" id="methods-section-text">専用デバイスやウェアラブルは不要。あなたの iPhone だけで、さまざまな健康データを記録します。</p>
 
             <div class="methods-grid">
                 <div class="method-item">
                     <div class="method-number">01</div>
-                    <h3 class="method-name">カメラ認識</h3>
+                    <h3 class="method-name" id="method-1-title">カメラ認識</h3>
                     <p class="method-label">Camera + OCR</p>
-                    <p class="method-desc">体重計・体温計・血圧計・血糖値計・パルスオキシメーターのディスプレイをカメラで撮影。文字認識テクノロジーがリアルタイムで数値を読み取り、Apple HealthKit に自動記録します。</p>
+                    <p class="method-desc" id="method-1-desc">体重計・体温計・血圧計・血糖値計・パルスオキシメーターのディスプレイをカメラで撮影。文字認識テクノロジーがリアルタイムで数値を読み取り、Apple HealthKit に自動記録します。</p>
                 </div>
                 <div class="method-item">
                     <div class="method-number">02</div>
-                    <h3 class="method-name">音声入力</h3>
+                    <h3 class="method-name" id="method-2-title">音声入力</h3>
                     <p class="method-label">Voice Input</p>
-                    <p class="method-desc">計測した数値を声で言うだけ。ハンズフリーで記録が完了します。ペットを抱いたまま、赤ちゃんを見ながら、メジャーを持ったまま。両手がふさがっていても大丈夫。</p>
+                    <p class="method-desc" id="method-2-desc">計測した数値を声で言うだけ。ハンズフリーで記録が完了します。ペットを抱いたまま、赤ちゃんを見ながら、メジャーを持ったまま。両手がふさがっていても大丈夫。</p>
                 </div>
                 <div class="method-item">
                     <div class="method-number">03</div>
-                    <h3 class="method-name">音検出</h3>
+                    <h3 class="method-name" id="method-3-title">音検出</h3>
                     <p class="method-label">Sound Detection</p>
-                    <p class="method-desc">iPhone のマイクが環境音をリアルタイムで分析。咳の音を機械学習で検出、睡眠中の騒音レベルをモニタリングし、Apple HealthKit に記録します。寝ている間の健康データも逃しません。</p>
+                    <p class="method-desc" id="method-3-desc">iPhone のマイクが環境音をリアルタイムで分析。咳の音を機械学習で検出、睡眠中の騒音レベルをモニタリングし、Apple HealthKit に記録します。寝ている間の健康データも逃しません。</p>
                 </div>
             </div>
         </div>
@@ -918,30 +952,30 @@
     <!-- (Who we are) -->
     <section class="section">
         <div class="section-inner">
-            <p class="section-label reveal">(Who we are)</p>
-            <h2 class="section-heading reveal reveal-d1">AllNew が追求するもの</h2>
+            <p class="section-label reveal" id="about-section-label">(Who we are)</p>
+            <h2 class="section-heading reveal reveal-d1" id="about-section-title">AllNew が追求するもの</h2>
 
             <div class="about-content">
                 <div class="about-text">
-                    <p class="about-lead reveal">すべてのアプリは「記録の手間をゼロにする」という信念のもと設計されています。</p>
-                    <p class="about-body reveal reveal-d1">複雑な操作は必要ありません。アプリを開いて、撮る・話す・聴くだけ。健康データは端末内で処理され、外部サーバーへ送信されることはありません。プライバシーを最優先に、あなただけのデータを安全に管理します。</p>
+                    <p class="about-lead reveal" id="about-lead">すべてのアプリは「記録の手間をゼロにする」という信念のもと設計されています。</p>
+                    <p class="about-body reveal reveal-d1" id="about-body">複雑な操作は必要ありません。アプリを開いて、撮る・話す・聴くだけ。健康データは端末内で処理され、外部サーバーへ送信されることはありません。プライバシーを最優先に、あなただけのデータを安全に管理します。</p>
                 </div>
                 <div class="about-stats">
                     <div class="stat-item">
                         <div class="stat-number" id="health-app-count">9</div>
-                        <p class="stat-label">Health Apps</p>
+                        <p class="stat-label" id="stat-label-health-apps">Health Apps</p>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number">3</div>
-                        <p class="stat-label">Input Methods</p>
+                        <p class="stat-label" id="stat-label-input-methods">Input Methods</p>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number">0</div>
-                        <p class="stat-label">Health Data Sent to Server</p>
+                        <p class="stat-label" id="stat-label-server">Health Data Sent to Server</p>
                     </div>
                     <div class="stat-item">
                         <div class="stat-number">∞</div>
-                        <p class="stat-label">Ease of Use</p>
+                        <p class="stat-label" id="stat-label-ease">Ease of Use</p>
                     </div>
                 </div>
             </div>
@@ -951,8 +985,8 @@
     <!-- Featured -->
     <section class="section featured-section" data-section="camera">
         <div class="section-inner">
-            <p class="section-label reveal">(New Release)</p>
-            <h2 class="section-heading reveal reveal-d1" style="color: #fff;" id="featured-heading">2026/02/15</h2>
+            <p class="section-label reveal" id="featured-section-label">(New Release)</p>
+            <h2 class="section-heading reveal reveal-d1" style="color: #fff;" id="featured-heading">2026.02.15</h2>
             <div class="featured-card">
                 <div class="featured-body">
                     <p class="featured-eyebrow" id="featured-eyebrow">Camera + OCR</p>
@@ -976,9 +1010,9 @@
     <!-- (Apps) — Camera -->
     <section class="section" id="section-camera" data-section="camera">
         <div class="section-inner">
-            <p class="section-label reveal">(Apps) — Camera + OCR</p>
-            <h2 class="section-heading reveal reveal-d1">カメラ認識アプリ</h2>
-            <p class="section-text reveal reveal-d2">計測器のディスプレイを撮影するだけ。数値を自動認識し、Apple HealthKit に記録します。</p>
+            <p class="section-label reveal" id="camera-section-label">(Apps) — Camera + OCR</p>
+            <h2 class="section-heading reveal reveal-d1" id="camera-section-title">カメラ認識アプリ</h2>
+            <p class="section-text reveal reveal-d2" id="camera-section-text">計測器のディスプレイを撮影するだけ。数値を自動認識し、Apple HealthKit に記録します。</p>
 
             <div class="work-grid" id="camera-grid">
                 <a class="work-card" href="thermosnap/?lang=ja">
@@ -1059,9 +1093,9 @@
     <!-- (Apps) — Voice -->
     <section class="section" id="section-voice" data-section="voice" style="background: var(--white); border-top: 1px solid var(--border);">
         <div class="section-inner">
-            <p class="section-label reveal">(Apps) — Voice Input</p>
-            <h2 class="section-heading reveal reveal-d1">音声入力アプリ</h2>
-            <p class="section-text reveal reveal-d2">数値を声で言うだけ。ハンズフリーでかんたんに記録できます。</p>
+            <p class="section-label reveal" id="voice-section-label">(Apps) — Voice Input</p>
+            <h2 class="section-heading reveal reveal-d1" id="voice-section-title">音声入力アプリ</h2>
+            <p class="section-text reveal reveal-d2" id="voice-section-text">数値を声で言うだけ。ハンズフリーでかんたんに記録できます。</p>
 
             <div class="work-grid" id="voice-grid">
                 <a class="work-card" href="pupweight/?lang=ja">
@@ -1124,9 +1158,9 @@
     <!-- (Apps) — Sound -->
     <section class="section" id="section-sound" data-section="sound">
         <div class="section-inner">
-            <p class="section-label reveal">(Apps) — Sound Detection</p>
-            <h2 class="section-heading reveal reveal-d1">音検出アプリ</h2>
-            <p class="section-text reveal reveal-d2">マイクが音をリアルタイムで検出。睡眠や健康をモニタリングします。</p>
+            <p class="section-label reveal" id="sound-section-label">(Apps) — Sound Detection</p>
+            <h2 class="section-heading reveal reveal-d1" id="sound-section-title">音検出アプリ</h2>
+            <p class="section-text reveal reveal-d2" id="sound-section-text">マイクが音をリアルタイムで検出。睡眠や健康をモニタリングします。</p>
 
             <div class="work-grid" id="sound-grid">
                 <a class="work-card" href="coughwav/?lang=ja">
@@ -1154,27 +1188,27 @@
     <!-- (What matters) -->
     <section class="section" style="background: var(--white); border-top: 1px solid var(--border);">
         <div class="section-inner">
-            <p class="section-label reveal">(What matters)</p>
-            <h2 class="section-heading reveal reveal-d1">すべてのアプリに共通</h2>
+            <p class="section-label reveal" id="values-section-label">(What matters)</p>
+            <h2 class="section-heading reveal reveal-d1" id="values-section-title">すべてのアプリに共通</h2>
 
             <div class="values-row">
                 <div class="value-card">
                     <div class="value-icon">🔒</div>
-                    <h3 class="value-title">プライバシー最優先</h3>
-                    <p class="value-desc">健康データは端末内で処理。外部サーバーへの送信はゼロ。あなたの健康データは、あなただけのもの。</p>
+                    <h3 class="value-title" id="value-1-title">プライバシー最優先</h3>
+                    <p class="value-desc" id="value-1-desc">健康データは端末内で処理。外部サーバーへの送信はゼロ。あなたの健康データは、あなただけのもの。</p>
                 </div>
                 <div class="value-card">
                     <div class="value-icon">❤️</div>
-                    <h3 class="value-title">Apple HealthKit 連携</h3>
-                    <p class="value-desc">対応アプリのデータは Apple HealthKit に自動連携。ヘルスケアアプリで一元管理できます。*</p>
+                    <h3 class="value-title" id="value-2-title">Apple HealthKit 連携</h3>
+                    <p class="value-desc" id="value-2-desc">対応アプリのデータは Apple HealthKit に自動連携。ヘルスケアアプリで一元管理できます。*</p>
                 </div>
                 <div class="value-card">
                     <div class="value-icon">⚡</div>
-                    <h3 class="value-title">かんたん記録</h3>
-                    <p class="value-desc">撮る、話す、聴くだけ。操作は最小限。毎日の記録を、ストレスフリーに。</p>
+                    <h3 class="value-title" id="value-3-title">かんたん記録</h3>
+                    <p class="value-desc" id="value-3-desc">撮る、話す、聴くだけ。操作は最小限。毎日の記録を、ストレスフリーに。</p>
                 </div>
             </div>
-            <p style="margin-top: 32px; font-size: 12px; font-weight: 300; color: var(--fg-tertiary); line-height: 1.6;">* PupWeight・BabyVox はカレンダー（EventKit）にデータを保存します。Apple HealthKit には対応していません。</p>
+            <p style="margin-top: 32px; font-size: 12px; font-weight: 300; color: var(--fg-tertiary); line-height: 1.6;" id="values-footnote">* PupWeight・BabyVox はカレンダー（EventKit）にデータを保存します。Apple HealthKit には対応していません。</p>
         </div>
     </section>
 
@@ -1183,18 +1217,18 @@
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo"><img src="allnew-logo.png" alt="AllNew"></div>
-                <p class="footer-tagline">合同会社AllNew<br>Health &amp; Wellness iOS Apps</p>
+                <p class="footer-tagline" id="footer-tagline">合同会社AllNew<br>Health &amp; Wellness iOS Apps</p>
             </div>
             <div class="footer-cols">
                 <div class="footer-col">
-                    <p class="footer-col-title">Legal</p>
-                    <a href="ja/privacy.html">プライバシーポリシー</a>
-                    <a href="ja/terms.html">利用規約</a>
-                    <a href="ja/tokusho.html">特定商取引法に基づく表記</a>
-                    <a href="ja/faq.html">FAQ</a>
+                    <p class="footer-col-title" id="footer-legal-title">Legal</p>
+                    <a href="ja/privacy.html" id="footer-legal-privacy">プライバシーポリシー</a>
+                    <a href="ja/terms.html" id="footer-legal-terms">利用規約</a>
+                    <a href="ja/tokusho.html" id="footer-legal-commercial">特定商取引法に基づく表記</a>
+                    <a href="ja/faq.html" id="footer-legal-faq">FAQ</a>
                 </div>
                 <div class="footer-col">
-                    <p class="footer-col-title">Apps</p>
+                    <p class="footer-col-title" id="footer-apps-title">Apps</p>
                     <p id="footer-apps-camera">Camera: WeightSnap, ThermoSnap, BPSnap, GlucoSnap, OxiSnap</p>
                     <p id="footer-apps-voice">Voice: PupWeight, BabyVox, WaistVox</p>
                     <p id="footer-apps-sound">Sound: CoughWav</p>
@@ -1209,6 +1243,226 @@
 
     <script src="landing-automation/runtime/landing-runtime.js"></script>
     <script>
+        const SUPPORTED_LANGS = new Set(['ja', 'en']);
+        const I18N = {
+            ja: {
+                title: 'AllNew Apps - Health & Wellness',
+                description: 'AllNew LLC - 撮る・話す・聴く。3つの方法で健康データを記録する iOS アプリ。',
+                text: {
+                    'nav-apps-button': 'Apps',
+                    'nav-contact-link': 'Contact',
+                    'hero-tagline': 'Health & Wellness Apps',
+                    'hero-scroll-label': 'Scroll',
+                    'methods-section-title': '3つの入力方式',
+                    'methods-section-text': '専用デバイスやウェアラブルは不要。あなたの iPhone だけで、さまざまな健康データを記録します。',
+                    'method-1-title': 'カメラ認識',
+                    'method-1-desc': '体重計・体温計・血圧計・血糖値計・パルスオキシメーターのディスプレイをカメラで撮影。文字認識テクノロジーがリアルタイムで数値を読み取り、Apple HealthKit に自動記録します。',
+                    'method-2-title': '音声入力',
+                    'method-2-desc': '計測した数値を声で言うだけ。ハンズフリーで記録が完了します。ペットを抱いたまま、赤ちゃんを見ながら、メジャーを持ったまま。両手がふさがっていても大丈夫。',
+                    'method-3-title': '音検出',
+                    'method-3-desc': 'iPhone のマイクが環境音をリアルタイムで分析。咳の音を機械学習で検出、睡眠中の騒音レベルをモニタリングし、Apple HealthKit に記録します。寝ている間の健康データも逃しません。',
+                    'about-section-title': 'AllNew が追求するもの',
+                    'about-lead': 'すべてのアプリは「記録の手間をゼロにする」という信念のもと設計されています。',
+                    'about-body': '複雑な操作は必要ありません。アプリを開いて、撮る・話す・聴くだけ。健康データは端末内で処理され、外部サーバーへ送信されることはありません。プライバシーを最優先に、あなただけのデータを安全に管理します。',
+                    'camera-section-title': 'カメラ認識アプリ',
+                    'camera-section-text': '計測器のディスプレイを撮影するだけ。数値を自動認識し、Apple HealthKit に記録します。',
+                    'voice-section-title': '音声入力アプリ',
+                    'voice-section-text': '数値を声で言うだけ。ハンズフリーでかんたんに記録できます。',
+                    'sound-section-title': '音検出アプリ',
+                    'sound-section-text': 'マイクが音をリアルタイムで検出。睡眠や健康をモニタリングします。',
+                    'values-section-title': 'すべてのアプリに共通',
+                    'value-1-title': 'プライバシー最優先',
+                    'value-1-desc': '健康データは端末内で処理。外部サーバーへの送信はゼロ。あなたの健康データは、あなただけのもの。',
+                    'value-2-title': 'Apple HealthKit 連携',
+                    'value-2-desc': '対応アプリのデータは Apple HealthKit に自動連携。ヘルスケアアプリで一元管理できます。*',
+                    'value-3-title': 'かんたん記録',
+                    'value-3-desc': '撮る、話す、聴くだけ。操作は最小限。毎日の記録を、ストレスフリーに。',
+                    'values-footnote': '* PupWeight・BabyVox はカレンダー（EventKit）にデータを保存します。Apple HealthKit には対応していません。',
+                    'footer-tagline': '合同会社AllNew\nHealth & Wellness iOS Apps',
+                    'footer-legal-privacy': 'プライバシーポリシー',
+                    'footer-legal-terms': '利用規約',
+                    'footer-legal-commercial': '特定商取引法に基づく表記',
+                    'footer-legal-faq': 'FAQ',
+                    'featured-app-store-link': 'App Storeでダウンロード',
+                    'featured-support-link': 'さらに詳しく →'
+                },
+                html: {
+                    'hero-title': '健康習慣を、<br>もっとシンプルに。',
+                    'hero-desc': '撮る・話す・聴く。<br>3つの方法で、毎日の健康データをかんたんに記録できます。'
+                },
+                legalLinks: {
+                    'footer-legal-privacy': 'ja/privacy.html',
+                    'footer-legal-terms': 'ja/terms.html',
+                    'footer-legal-commercial': 'ja/tokusho.html',
+                    'footer-legal-faq': 'ja/faq.html'
+                },
+                trademark: 'App Store、HealthKit、iPhone は Apple Inc. の商標です。'
+            },
+            en: {
+                title: 'AllNew Apps - Health & Wellness',
+                description: 'AllNew LLC - Snap, speak, and listen. iOS apps that make daily health logging effortless.',
+                text: {
+                    'nav-apps-button': 'Apps',
+                    'nav-contact-link': 'Contact',
+                    'hero-tagline': 'Health & Wellness Apps',
+                    'hero-scroll-label': 'Scroll',
+                    'methods-section-title': 'Three Input Methods',
+                    'methods-section-text': 'No dedicated devices or wearables needed. Use your iPhone to capture health data in seconds.',
+                    'method-1-title': 'Camera Recognition',
+                    'method-1-desc': 'Point your camera at displays on scales, thermometers, blood pressure monitors, glucose meters, and pulse oximeters. OCR reads values in real time and saves them to Apple HealthKit.',
+                    'method-2-title': 'Voice Input',
+                    'method-2-desc': 'Just say the measured value out loud. Logging completes hands-free, even when both hands are busy with your pet, baby, or measuring tape.',
+                    'method-3-title': 'Sound Detection',
+                    'method-3-desc': 'Your iPhone microphone analyzes ambient audio in real time. Cough sounds and nighttime noise trends are detected and recorded to Apple HealthKit.',
+                    'about-section-title': 'What AllNew Pursues',
+                    'about-lead': 'Every app is built on one belief: make health logging effortless.',
+                    'about-body': 'No complicated operations. Open the app and snap, speak, or listen. Health data is processed on-device and is never sent to external servers.',
+                    'camera-section-title': 'Camera Apps',
+                    'camera-section-text': 'Capture a measurement display and save recognized values to Apple HealthKit automatically.',
+                    'voice-section-title': 'Voice Apps',
+                    'voice-section-text': 'Speak measured values out loud and record them hands-free.',
+                    'sound-section-title': 'Sound Detection Apps',
+                    'sound-section-text': 'Monitor sleep and wellness by detecting ambient sounds in real time.',
+                    'values-section-title': 'Shared Across All Apps',
+                    'value-1-title': 'Privacy First',
+                    'value-1-desc': 'Health data is processed on-device. Nothing is sent to external servers.',
+                    'value-2-title': 'Apple HealthKit Integration',
+                    'value-2-desc': 'Supported apps sync data to Apple HealthKit so you can manage everything in one place.*',
+                    'value-3-title': 'Simple Logging',
+                    'value-3-desc': 'Snap, speak, or listen. Minimal interaction for stress-free daily tracking.',
+                    'values-footnote': '* PupWeight and BabyVox store data in Calendar (EventKit). Apple HealthKit is not supported.',
+                    'footer-tagline': 'AllNew LLC\nHealth & Wellness iOS Apps',
+                    'footer-legal-privacy': 'Privacy Policy',
+                    'footer-legal-terms': 'Terms of Service',
+                    'footer-legal-commercial': 'Legal Notice',
+                    'footer-legal-faq': 'FAQ',
+                    'featured-app-store-link': 'Download on App Store',
+                    'featured-support-link': 'Learn More →'
+                },
+                html: {
+                    'hero-title': 'Healthy Habits,<br>Made Simpler.',
+                    'hero-desc': 'Snap, speak, or listen.<br>Three ways to record daily health data with your iPhone.'
+                },
+                legalLinks: {
+                    'footer-legal-privacy': 'en/privacy.html',
+                    'footer-legal-terms': 'en/terms.html',
+                    'footer-legal-commercial': 'en/legal-notice.html',
+                    'footer-legal-faq': 'en/faq.html'
+                },
+                trademark: 'App Store, HealthKit, and iPhone are trademarks of Apple Inc.'
+            }
+        };
+
+        function detectInitialLanguage() {
+            const params = new URLSearchParams(window.location.search);
+            const langParam = (params.get('lang') || '').toLowerCase();
+            if (SUPPORTED_LANGS.has(langParam)) return langParam;
+            const browserLang = (navigator.language || 'ja').split('-')[0].toLowerCase();
+            if (SUPPORTED_LANGS.has(browserLang)) return browserLang;
+            return 'ja';
+        }
+
+        function setQueryLang(lang) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('lang', lang);
+            const query = params.toString();
+            const nextUrl = window.location.pathname + (query ? ('?' + query) : '') + window.location.hash;
+            history.replaceState(null, '', nextUrl);
+        }
+
+        function setLangChipState(lang) {
+            document.querySelectorAll('[data-lang-select]').forEach((button) => {
+                button.classList.toggle('active', button.dataset.langSelect === lang);
+            });
+        }
+
+        function updateLangParamLinks(lang) {
+            document.querySelectorAll('a[href]').forEach((anchor) => {
+                const href = anchor.getAttribute('href') || '';
+                if (!href || href.startsWith('#')) return;
+                if (!/[?&]lang=/.test(href)) return;
+                if (/^(mailto:|tel:|javascript:)/i.test(href)) return;
+                if (/^https?:\/\//i.test(href)) return;
+
+                const hashIndex = href.indexOf('#');
+                const hash = hashIndex >= 0 ? href.slice(hashIndex) : '';
+                const beforeHash = hashIndex >= 0 ? href.slice(0, hashIndex) : href;
+                const queryIndex = beforeHash.indexOf('?');
+                const pathname = queryIndex >= 0 ? beforeHash.slice(0, queryIndex) : beforeHash;
+                const search = queryIndex >= 0 ? beforeHash.slice(queryIndex + 1) : '';
+                const params = new URLSearchParams(search);
+                params.set('lang', lang);
+                const nextHref = pathname + '?' + params.toString() + hash;
+                anchor.setAttribute('href', nextHref);
+            });
+        }
+
+        function applyI18n(lang) {
+            const copy = I18N[lang] || I18N.ja;
+            document.documentElement.lang = lang;
+            document.title = copy.title;
+
+            const metaDescription = document.querySelector('meta[name="description"]');
+            if (metaDescription) {
+                metaDescription.setAttribute('content', copy.description);
+            }
+
+            Object.entries(copy.text).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (!element) return;
+                if (id === 'footer-tagline') {
+                    element.innerHTML = value.replace('\n', '<br>');
+                    return;
+                }
+                element.textContent = value;
+            });
+
+            Object.entries(copy.html).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (!element) return;
+                element.innerHTML = value;
+            });
+
+            Object.entries(copy.legalLinks).forEach(([id, href]) => {
+                const element = document.getElementById(id);
+                if (!element) return;
+                element.setAttribute('href', href);
+            });
+
+            const trademark = document.querySelector('.footer-copy-right');
+            if (trademark) {
+                trademark.textContent = copy.trademark;
+            }
+        }
+
+        let currentLandingLang = detectInitialLanguage();
+        window.getLandingLanguage = () => currentLandingLang;
+
+        function switchLandingLanguage(lang, { updateUrl = true, dispatch = true } = {}) {
+            const nextLang = SUPPORTED_LANGS.has(lang) ? lang : 'ja';
+            currentLandingLang = nextLang;
+            setLangChipState(nextLang);
+            applyI18n(nextLang);
+            updateLangParamLinks(nextLang);
+            if (updateUrl) setQueryLang(nextLang);
+            if (dispatch) {
+                window.dispatchEvent(new CustomEvent('landing:langchange', { detail: { lang: nextLang } }));
+            }
+        }
+
+        document.querySelectorAll('[data-lang-select]').forEach((button) => {
+            button.addEventListener('click', () => {
+                switchLandingLanguage(button.dataset.langSelect);
+            });
+        });
+
+        switchLandingLanguage(currentLandingLang, { updateUrl: true, dispatch: false });
+
+        window.addEventListener('popstate', () => {
+            const nextLang = detectInitialLanguage();
+            switchLandingLanguage(nextLang, { updateUrl: false, dispatch: true });
+        });
+
         // ===== Nav scroll state =====
         const nav = document.getElementById('nav');
         function checkNavScroll() {

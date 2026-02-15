@@ -359,6 +359,7 @@ def default_output_entry(app: dict[str, Any]) -> dict[str, Any]:
         "category": app.get("category", "camera"),
         "category_label": app.get("category_label", ""),
         "description_ja": app.get("description_ja", ""),
+        "description_en": app.get("description_en", ""),
         "icon_path": app.get("icon_path", ""),
         "promo_image_path": app.get("fallback_image_path", ""),
         "card_image_path": default_card_image_path(app),
@@ -493,6 +494,10 @@ def build_entry_from_event(
     description = payload.get("description_ja")
     if description:
         entry["description_ja"] = description
+
+    description_en = payload.get("description_en") or payload.get("descriptionEn")
+    if description_en:
+        entry["description_en"] = description_en
 
     app_store_url = payload.get("app_store_url") or payload.get("appStoreUrl")
     if app_store_url:

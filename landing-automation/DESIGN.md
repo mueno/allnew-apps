@@ -20,9 +20,10 @@
 10. Serialize `landing-auto-update` workflow runs and add push retry-with-rebase logic to absorb bursty `repository_dispatch` events and reduce transient push failures.
 11. Use `card_image_path` (onboarding first image) for app cards, while keeping ASC screenshot in `promo_image_path` for Featured.
 12. Compute `Health Apps` metric from `released` entries with `is_health_app=true` only.
-13. Featured section is treated as `New Release`: select the latest `released` app by `release_date` (fallback to `updated_at`) and show the release date in `YYYY/MM/DD`.
+13. Featured section is treated as `New Release`: select the latest `released` app by `release_date` (fallback to `updated_at`) and show the release date in `YYYY.MM.DD`.
 14. App card tags are generated from normalized `input_methods` metadata instead of hardcoded `category_label` strings.
 15. `Apps` nav button performs smooth-scroll to the apps section (`#section-camera`) instead of a no-op filter button.
+16. Landing page language is controlled by `?lang=ja|en`; static copy and legal links switch in-page, and dynamic app cards re-render via `landing:langchange`.
 
 ## Files
 
@@ -38,3 +39,4 @@
 - 2026-02-15: Added onboarding-first card image policy (`card_image_path`) and released-only health app count logic (`is_health_app`).
 - 2026-02-15: Added docs-first operations decision and introduced skill-based runbooks (`github-ops-docs`, `cloudflare-workers-ops-docs`).
 - 2026-02-15: Hardened workflow reliability with `concurrency` control and `git push` retry/rebase in `.github/workflows/landing-auto-update.yml`.
+- 2026-02-15: Switched featured date display to `YYYY.MM.DD` and added landing-level JA/EN switching with `?lang=`.
