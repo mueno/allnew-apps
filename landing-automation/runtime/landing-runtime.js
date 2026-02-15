@@ -176,7 +176,7 @@
     }
 
     const imageEl = document.getElementById('featured-image');
-    const imagePath = normalizeImagePath(app.promo_image_path);
+    const imagePath = normalizeImagePath(app.card_image_path || app.promo_image_path);
     if (imageEl && imagePath) {
       imageEl.src = imagePath;
       imageEl.alt = app.name;
