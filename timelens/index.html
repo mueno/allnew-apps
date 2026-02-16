@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeLens Support</title>
+    <meta name="description" content="TimeLens - Fixed-point photography app. FAQ, Privacy Policy, Terms of Service.">
+    <!-- Security Headers (GitHub Pages cannot set HTTP response headers) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+    <meta name="referrer" content="no-referrer">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="bingbot" content="noindex, nofollow, noarchive">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
+    <style>
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #d98c19;
+            --accent-hover: #e69a2a;
+            --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.72);
+            --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #f2b833;
+                --accent-hover: #f5c54d;
+                --border: rgba(255,255,255,0.1);
+                --glass: rgba(28,28,30,0.72);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); letter-spacing: -0.02em; }
+        .logo-divider { width: 1px; height: 18px; background: var(--border); }
+        .app-name { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+
+        .lang-dropdown { position: relative; }
+        .lang-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 14px; background: var(--bg-tertiary);
+            border: 1px solid var(--border); border-radius: 980px;
+            font-size: 0.85rem; font-weight: 500; color: var(--text-primary);
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .lang-btn:hover { border-color: var(--accent); }
+        .lang-btn::after {
+            content: ''; width: 0; height: 0;
+            border-left: 4px solid transparent; border-right: 4px solid transparent;
+            border-top: 5px solid var(--text-secondary); transition: transform 0.2s ease;
+        }
+        .lang-dropdown.open .lang-btn::after { transform: rotate(180deg); }
+        .lang-menu {
+            position: absolute; top: calc(100% + 8px); right: 0; min-width: 160px;
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); box-shadow: var(--shadow-soft);
+            opacity: 0; visibility: hidden; transform: translateY(-8px);
+            transition: all 0.2s ease; z-index: 200;
+        }
+        .lang-dropdown.open .lang-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .lang-option {
+            display: block; width: 100%; padding: 12px 16px; border: none;
+            background: none; text-align: left; font-size: 0.9rem;
+            color: var(--text-primary); cursor: pointer; transition: background 0.15s ease;
+        }
+        .lang-option:hover { background: var(--bg-tertiary); }
+        .lang-option.active { color: var(--accent); font-weight: 500; }
+        .lang-option:first-child { border-radius: 11px 11px 0 0; }
+        .lang-option:last-child { border-radius: 0 0 11px 11px; }
+
+        .hero {
+            text-align: center; padding: 60px 20px 40px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+        .hero-icon {
+            width: 80px; height: 80px; border-radius: 18px;
+            margin: 0 auto 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); object-fit: cover;
+        }
+        .hero h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px; }
+        .hero-subtitle { font-size: 1rem; color: var(--text-secondary); }
+
+        .toc {
+            display: flex; justify-content: center; gap: 8px; padding: 16px 20px;
+            background: var(--bg-secondary); border-bottom: 1px solid var(--border); flex-wrap: wrap;
+        }
+        .toc-link {
+            padding: 8px 16px; color: var(--text-secondary); text-decoration: none;
+            font-size: 0.85rem; font-weight: 500; border-radius: 980px; transition: all 0.2s ease;
+        }
+        .toc-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+
+        .main { max-width: 800px; margin: 0 auto; padding: 0 20px 80px; }
+        .lang-content { display: none; }
+        .lang-content.active { display: block; }
+
+        .section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+        .section:last-child { border-bottom: none; }
+        .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+        .section-icon {
+            width: 48px; height: 48px; background: var(--bg-tertiary); border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
+        }
+        .section-title { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.02em; }
+        .section-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px; }
+
+        .updated-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--bg-tertiary); padding: 6px 12px; border-radius: 980px;
+            font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 20px;
+        }
+        .updated-badge::before { content: ''; width: 6px; height: 6px; background: #34c759; border-radius: 50%; }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(217,140,25,0.08) 0%, rgba(242,184,51,0.08) 100%);
+            border: 1px solid rgba(217,140,25,0.2); border-radius: var(--radius-sm);
+            padding: 20px 24px; margin-bottom: 24px;
+        }
+        .highlight-box p { color: var(--text-primary); font-size: 0.95rem; line-height: 1.7; }
+        .highlight-box strong { color: var(--accent); }
+
+        .faq-item {
+            background: var(--bg-secondary); border-radius: var(--radius-sm);
+            margin-bottom: 8px; border: 1px solid var(--border); overflow: hidden; transition: all 0.3s ease;
+        }
+        .faq-item:hover { border-color: rgba(217,140,25,0.3); }
+        .faq-question {
+            padding: 18px 24px; font-weight: 500; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
+            font-size: 0.95rem; color: var(--text-primary); transition: background 0.2s ease;
+        }
+        .faq-question:hover { background: var(--bg-tertiary); }
+        .faq-icon {
+            width: 24px; height: 24px; border-radius: 50%; background: var(--bg-tertiary);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); font-size: 18px; font-weight: 300;
+            transition: all 0.3s ease; flex-shrink: 0;
+        }
+        .faq-item.open .faq-icon { background: var(--accent); color: white; transform: rotate(45deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+        .faq-item.open .faq-answer { max-height: 800px; padding: 0 24px 24px; }
+        .faq-answer p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; margin-bottom: 12px; }
+        .faq-answer p:last-child { margin-bottom: 0; }
+        .faq-answer ul { padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; }
+        .faq-answer li { margin-bottom: 8px; line-height: 1.6; }
+
+        .legal-section { margin-bottom: 28px; }
+        .legal-section h3 {
+            font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .legal-section h3::before { content: ''; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; }
+        .legal-section p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8; margin-bottom: 12px; }
+        .legal-section ul { padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; }
+        .legal-section li { margin-bottom: 10px; line-height: 1.7; }
+        .legal-section a { color: var(--accent); text-decoration: none; }
+        .legal-section a:hover { text-decoration: underline; }
+
+        .commercial-accordion {
+            background: var(--bg-secondary); border-radius: var(--radius-sm);
+            border: 1px solid var(--border); overflow: hidden;
+        }
+        .commercial-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 24px; cursor: pointer; transition: background 0.2s ease;
+        }
+        .commercial-header:hover { background: var(--bg-tertiary); }
+        .commercial-toggle {
+            width: 28px; height: 28px; border-radius: 50%; background: var(--bg-tertiary);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); font-size: 20px; font-weight: 300;
+            transition: all 0.3s ease; flex-shrink: 0;
+        }
+        .commercial-accordion.open .commercial-toggle { background: var(--accent); color: white; transform: rotate(45deg); }
+        .commercial-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .commercial-accordion.open .commercial-content { max-height: 600px; padding: 0 24px 24px; }
+
+        .contact-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: var(--radius-lg); padding: 40px; text-align: center; border: 1px solid var(--border);
+        }
+        .contact-card h2 { font-size: 1.4rem; font-weight: 600; margin-bottom: 8px; }
+        .contact-card > p { color: var(--text-secondary); margin-bottom: 24px; }
+        .contact-email {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--accent); color: white; padding: 14px 28px;
+            border-radius: 980px; text-decoration: none; font-weight: 500;
+            font-size: 0.95rem; transition: all 0.2s ease;
+        }
+        .contact-email:hover { background: var(--accent-hover); transform: scale(1.02); }
+        .contact-details {
+            margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);
+            text-align: left; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;
+        }
+        .contact-details-top { margin-top: 24px; margin-bottom: 24px; padding-top: 0; padding-bottom: 16px; border-top: none; border-bottom: 1px solid var(--border); }
+        .contact-item { font-size: 0.85rem; }
+        .contact-item dt { color: var(--text-tertiary); font-weight: 500; margin-bottom: 4px; }
+        .contact-item dd { color: var(--text-primary); }
+
+        .footer { text-align: center; padding: 32px 20px; color: var(--text-tertiary); font-size: 0.8rem; border-top: 1px solid var(--border); background: var(--bg-secondary); }
+
+        .translation-notice {
+            background: #fff3cd; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px;
+            border-left: 4px solid #ffc107; color: #856404; font-size: 0.9rem;
+        }
+        @media (prefers-color-scheme: dark) {
+            .translation-notice { background: rgba(255, 193, 7, 0.15); color: #ffc107; }
+        }
+
+        @media (max-width: 640px) {
+            .header-inner { gap: 12px; }
+            .hero { padding: 40px 20px 30px; }
+            .hero h1 { font-size: 1.6rem; }
+            .toc { gap: 4px; }
+            .toc-link { padding: 6px 12px; font-size: 0.8rem; }
+            .section { padding: 32px 0; }
+            .section-header { flex-direction: column; text-align: center; }
+            .contact-card { padding: 28px; }
+            .contact-details { grid-template-columns: 1fr; }
+        }
+
+        :target { scroll-margin-top: 80px; }
+        .hero-icon:hover { animation: wiggle 0.5s ease; }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="../" class="logo-link">
+                <span class="logo">AllNew</span>
+                <span class="logo-divider"></span>
+                <span class="app-name">TimeLens</span>
+            </a>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-btn" id="langBtn">
+                    <span id="currentLangLabel">日本語</span>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <button class="lang-option active" data-lang="ja">日本語</button>
+                    <button class="lang-option" data-lang="en">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <img src="../timelens-icon.png" alt="TimeLens" class="hero-icon">
+        <h1 id="heroTitle">TimeLens</h1>
+        <p class="hero-subtitle" id="heroSubtitle">同じ場所で、時間を重ねる。</p>
+    </section>
+
+    <nav class="toc" id="toc">
+        <a href="#faq" class="toc-link" data-section="faq">FAQ</a>
+        <a href="#privacy" class="toc-link" data-section="privacy">プライバシー</a>
+        <a href="#terms" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#commercial" class="toc-link" data-section="commercial">特定商取引法</a>
+        <a href="#contact" class="toc-link" data-section="contact">お問い合わせ</a>
+    </nav>
+
+    <main class="main">
+        <!-- ==================== JAPANESE ==================== -->
+        <div class="lang-content active" data-lang="ja">
+            <!-- FAQ -->
+            <section id="faq-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">よくある質問</div>
+                        <div class="section-subtitle">使い方や機能についてお答えします</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">TimeLensとは？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>TimeLensは、同じ場所・同じアングルで撮影した写真を重ねて比較できる定点撮影アプリです。過去の写真を半透明のゴーストとしてカメラ画面に重ね、時間の変化をビジュアルで確認できます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">どうやって使いますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>3ステップ:</strong></p>
+                        <ul>
+                            <li><strong>1. 元写真を選ぶ:</strong> フォトライブラリから比較したい過去の写真を選択します。</li>
+                            <li><strong>2. 位置を合わせる:</strong> ゴースト画像を見ながら、同じアングルにカメラを合わせます。ピンチ・ドラッグ・回転でゴーストの位置を微調整できます。</li>
+                            <li><strong>3. 撮影する:</strong> シャッターボタンで撮影。写真の保存、コラージュ画像やワイプ動画の生成ができます。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">対応しているiPhoneは？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>iOS 17.0以降</strong>を搭載したiPhone。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">無料で使えますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>5回まで無料</strong>でお使いいただけます。6回目以降は一回限りの買い切り購入が必要です。サブスクリプションはありません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>撮影した写真やコラージュ、ワイプ動画は<strong>お使いのデバイスのフォトライブラリ</strong>に保存されます。当社が運用するサーバーへの送信はありません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">購入を復元したい<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>過去に購入された方は、再購入の必要はありません。</p>
+                        <p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">プライバシーポリシー</div>
+                        <div class="section-subtitle">あなたのデータを大切に扱います</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月16日</span>
+
+                <div class="highlight-box">
+                    <p><strong>重要:</strong> 本アプリは、撮影データやフォトライブラリのデータを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内に保存されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. 収集する情報の種類</h3>
+                    <ul>
+                        <li><strong>カメラデータ:</strong> 撮影のためにカメラにアクセスします。カメラ映像はリアルタイム処理のみに使用し、当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>フォトライブラリ:</strong> 元写真の読み込みと撮影結果の保存のためにアクセスします。アクセスはiOSの権限管理に従います。</li>
+                        <li><strong>モーションデータ:</strong> 水平器機能のためにデバイスのモーションセンサーを使用します。データは端末内でリアルタイム処理され、保存・送信はありません。</li>
+                        <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>収集しない情報:</strong> マイクは使用しません。広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 情報の利用目的</h3>
+                    <p>定点撮影、比較画像の生成、ワイプ動画の作成。これ以外の目的には利用しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 第三者への提供</h3>
+                    <p>当社は撮影データやフォトライブラリのデータを第三者に提供、販売、共有しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. セキュリティ対策</h3>
+                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護を採用しています。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 子供のプライバシー</h3>
+                    <p>本アプリは13歳未満のお子様が単独で使用することは想定していません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. ユーザーの権利</h3>
+                    <ul>
+                        <li><strong>すべてのユーザー:</strong> カメラ・フォトライブラリへのアクセス権限はiOSの設定からいつでも取り消せます。</li>
+                        <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
+                        <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
+                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。</li>
+                        <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
+                        <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. お問い合わせについて</h3>
+                    <p>ユーザーが当社へお問い合わせを行う場合、当社は返信対応のために、メールアドレスおよびお問い合わせ内容を取得・利用します。これらの情報はサポート対応の目的にのみ用い、法令に基づく場合を除き第三者に提供しません。対応完了後は合理的な期間で削除または匿名化します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 準拠法と管轄</h3>
+                    <p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 多言語版について</h3>
+                    <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">利用規約</div>
+                        <div class="section-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月16日</span>
+
+                <div class="legal-section">
+                    <h3>1. 規約の適用</h3>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「TimeLens」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 利用開始と同意</h3>
+                    <p>ユーザーが本アプリをダウンロードし、インストールまたは利用を開始した時点で、本規約に同意したものとみなされます。本規約に同意しない場合、本アプリをご利用いただくことはできません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 本アプリの概要と対応機器</h3>
+                    <p>本アプリは、同じ場所で過去と現在の写真を重ねて比較する定点撮影アプリケーションです。過去の写真をゴーストとしてカメラ画面に重ね、撮影・コラージュ画像・ワイプ動画の生成が可能です。</p>
+                    <ul>
+                        <li><strong>入力方法:</strong> カメラ撮影およびフォトライブラリからの画像読み込み。</li>
+                        <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. プライバシーポリシー</h3>
+                    <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 禁止事項</h3>
+                    <ul>
+                        <li>本アプリの目的と異なる利用</li>
+                        <li>法令または公序良俗に反する行為</li>
+                        <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
+                        <li>その他当社が不適切と判断する行為</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 知的財産権</h3>
+                    <p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. 免責事項</h3>
+                    <p>当社は、本アプリの機能が中断なく動作することを保証しません。</p>
+                    <p>当社が損害賠償責任を負う場合でも、当社の故意または重過失がある場合を除き、当社の責任は通常かつ直接の損害に限られます。なお、消費者契約法その他の強行法規により制限される範囲では本項は適用されません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 料金および支払</h3>
+                    <p>5回まで無料でお使いいただけます。過去に購入された場合は「購入を復元」機能をご利用ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 規約の変更</h3>
+                    <p>当社は、必要に応じて本規約を変更することがあります。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 準拠法・管轄</h3>
+                    <p>本規約は日本法に準拠し、東京地方裁判所を専属的合意管轄裁判所とします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 多言語版について</h3>
+                    <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-ja" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">特定商取引法に基づく表記</div>
+                                <div class="section-subtitle">販売事業者情報</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
+                            <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
+                            <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
+                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>timelens-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+                            <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格</dd></div>
+                            <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
+                            <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
+                            <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセルはお受けできません。返金の可否・手続はAppleの返金ポリシーに従います。</dd></div>
+                            <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-ja" class="section">
+                <div class="contact-card">
+                    <h2>お問い合わせ</h2>
+                    <a href="mailto:timelens-support@allnew.work?subject=TimeLens%20%3A%20" class="contact-email">✉️ メールを送る</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
+                        <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== ENGLISH ==================== -->
+        <div class="lang-content" data-lang="en">
+            <!-- FAQ -->
+            <section id="faq-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">Frequently Asked Questions</div>
+                        <div class="section-subtitle">Answers about features and usage</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">What is TimeLens?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>TimeLens is a fixed-point photography app that lets you overlay past photos on your camera view as a transparent ghost. Compare changes over time by aligning and capturing the same scene.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I use it?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>3 steps:</strong></p>
+                        <ul>
+                            <li><strong>1. Select a photo:</strong> Choose a past photo from your library to compare with.</li>
+                            <li><strong>2. Align the view:</strong> Use the ghost overlay to match the same angle. Pinch, drag, and rotate to fine-tune alignment.</li>
+                            <li><strong>3. Capture:</strong> Take the photo. Save the image, generate a collage, or create a wipe transition video.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iPhone with <strong>iOS 17.0 or later</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is it free?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>Free for the first 5 captures.</strong> After that, a one-time purchase is required. No subscription fees.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Photos, collages, and wipe videos are saved to <strong>your device's Photo Library</strong>. We do not transmit data to our servers.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>Steps:</strong> Open the app → Settings → About → Restore Purchase.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">Privacy Policy</div>
+                        <div class="section-subtitle">How we handle your data</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: February 16, 2026</span>
+
+                <div class="highlight-box">
+                    <p><strong>Important:</strong> This app does not send or store your photos or camera data on our external servers. All data remains on your device.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. Information We Collect</h3>
+                    <ul>
+                        <li><strong>Camera Data:</strong> Used for photo capture. Camera feed is processed in real-time only; not stored or transmitted to servers operated by us.</li>
+                        <li><strong>Photo Library:</strong> Used to load reference photos and save captured results. Access follows iOS permissions.</li>
+                        <li><strong>Motion Data:</strong> Used for the leveler feature. Processed in real-time on device; not stored or transmitted.</li>
+                        <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
+                        <li><strong>What We Don't Collect:</strong> Microphone is not used. We do not use advertising SDKs, analytics services, or user registration in this App.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. How We Use Information</h3>
+                    <p>Fixed-point photography, comparison image generation, and wipe video creation. No other purposes.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. Third-Party Sharing</h3>
+                    <p>We do not provide, sell, or share your photos or camera data with third parties.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Security</h3>
+                    <p>We employ data minimization, on-device processing where possible, Keychain protection.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Children's Privacy</h3>
+                    <p>This App is not intended for independent use by children under 13.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Your Rights</h3>
+                    <ul>
+                        <li><strong>All Users:</strong> Camera and Photo Library access can be revoked anytime in iOS Settings.</li>
+                        <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
+                        <li><strong>California (CCPA/CPRA):</strong> Right to know, delete, opt-out. We don't sell personal information.</li>
+                        <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country.</li>
+                        <li><strong>South Korea (PIPA):</strong> Right to request processing suspension.</li>
+                        <li><strong>Brazil (LGPD):</strong> Right to data portability.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. When You Contact Us</h3>
+                    <p>If you contact us, we may receive your email address and the contents of your message to respond to your inquiry. We use this information solely for customer support and do not share it with third parties except as required by law.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Governing Law</h3>
+                    <p>This policy is governed by Japanese law. Regional laws (GDPR, CCPA/CPRA, PIPL, LGPD, PIPA) apply to respective residents.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Translations</h3>
+                    <p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws or other applicable regulations in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">Terms of Service</div>
+                        <div class="section-subtitle">Conditions for using the App</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: February 16, 2026</span>
+
+                <div class="legal-section">
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>These Terms of Service govern your use of "TimeLens" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Agreement to Terms</h3>
+                    <p>By downloading, installing, or using the App, you agree to be bound by these Terms. If you do not agree, do not use the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. App Description and Compatibility</h3>
+                    <p>The App enables fixed-point photography by overlaying past photos on your camera view. You can capture new photos, generate before/after collages, and create wipe transition videos.</p>
+                    <ul>
+                        <li><strong>Input Method:</strong> Camera capture and photo library image loading.</li>
+                        <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Privacy Policy</h3>
+                    <p>Your use of the App is also governed by our <a href="#privacy-en">Privacy Policy</a>.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Prohibited Activities</h3>
+                    <ul>
+                        <li>Using the App for purposes other than fixed-point photography</li>
+                        <li>Violating any laws or third-party rights</li>
+                        <li>Reverse engineering or decompiling the App</li>
+                        <li>Any other activities we deem inappropriate</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Intellectual Property</h3>
+                    <p>All intellectual property rights in the App belong to us or our licensors.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Disclaimer of Warranties</h3>
+                    <p>The App is provided "as is" without warranties of any kind.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Pricing</h3>
+                    <p>Free for the first 5 captures. Use "Restore Purchase" if you've previously purchased.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Changes to Terms</h3>
+                    <p>We may modify these Terms at any time. Continued use constitutes acceptance.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Governing Law</h3>
+                    <p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Translations</h3>
+                    <p>The Japanese version of these Terms of Service is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-en" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">Seller Information</div>
+                                <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
+                            <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
+                            <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+                            <div class="contact-item"><dt>Contact</dt><dd>timelens-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
+                            <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen</dd></div>
+                            <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
+                            <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
+                            <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase. Subject to Apple's refund policy</dd></div>
+                            <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-en" class="section">
+                <div class="contact-card">
+                    <h2>Contact Us</h2>
+                    <a href="mailto:timelens-support@allnew.work?subject=TimeLens%20%3A%20" class="contact-email">✉️ Send Email</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
+                        <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 合同会社AllNew / AllNew LLC</p>
+    </footer>
+
+    <script>
+        // Clickjacking defense (frame-busting fallback for GitHub Pages)
+        if (window.self !== window.top) { document.body.style.display = 'none'; }
+        // Language Data
+        var langData = {
+            ja: { label: '日本語', hero: 'TimeLens', subtitle: '同じ場所で、時間を重ねる。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'TimeLens', subtitle: 'Same Place. Time Layered.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
+        };
+
+        function getLangFromHash() {
+            var hash = window.location.hash.substring(1);
+            if (hash) {
+                var parts = hash.split('-');
+                if (parts.length >= 2) {
+                    var possibleLang = parts[0];
+                    if (langData[possibleLang]) return possibleLang;
+                }
+            }
+            var params = new URLSearchParams(window.location.search);
+            var langParam = params.get('lang');
+            if (langParam && langData[langParam]) return langParam;
+            var browserLang = navigator.language.split('-')[0];
+            if (langData[browserLang]) return browserLang;
+            return 'ja';
+        }
+
+        var currentLang = getLangFromHash();
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-content').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+            document.querySelectorAll('.lang-option').forEach(function(opt) {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+            document.getElementById('currentLangLabel').textContent = langData[lang].label;
+            document.getElementById('heroTitle').textContent = langData[lang].hero;
+            document.getElementById('heroSubtitle').textContent = langData[lang].subtitle;
+            var tocLinks = document.querySelectorAll('.toc-link');
+            var tocLabels = langData[lang].toc;
+            tocLinks.forEach(function(link, i) {
+                link.textContent = tocLabels[i];
+                var section = link.dataset.section;
+                link.href = '#' + section + '-' + lang;
+            });
+            var currentHash = window.location.hash;
+            if (currentHash && currentHash.includes('-')) {
+                var sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace('-' + getLangFromHash(), '');
+                history.replaceState(null, null, '?lang=' + lang + '#' + sectionName + '-' + lang);
+            } else {
+                history.replaceState(null, null, '?lang=' + lang);
+            }
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+
+        var langBtn = document.getElementById('langBtn');
+        var langDropdown = document.getElementById('langDropdown');
+        langBtn.addEventListener('click', function(e) { e.stopPropagation(); langDropdown.classList.toggle('open'); });
+        document.addEventListener('click', function() { langDropdown.classList.remove('open'); });
+        document.querySelectorAll('.lang-option').forEach(function(opt) {
+            opt.addEventListener('click', function() { switchLanguage(opt.dataset.lang); });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(function(q) {
+            q.addEventListener('click', function() {
+                var item = q.parentElement;
+                var wasOpen = item.classList.contains('open');
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // Commercial accordion (event delegation)
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.commercial-header');
+            if (!header) return;
+            var accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        });
+
+        function checkCommercialAnchor() {
+            var hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(function(acc) { acc.classList.add('open'); });
+            }
+        }
+
+        switchLanguage(currentLang);
+        checkCommercialAnchor();
+
+        window.addEventListener('hashchange', function() {
+            var hash = window.location.hash.substring(1);
+            if (hash) {
+                var parts = hash.split('-');
+                if (parts.length >= 2) {
+                    var possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang] && currentLang !== possibleLang) { switchLanguage(possibleLang); }
+                }
+            }
+        });
+
+        // Copy Protection
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) { e.preventDefault(); }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) { e.preventDefault(); }
+        });
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    </script>
+
+    <footer class="trademark-footer">
+        <div class="trademark-content">
+            <p class="trademark-text">
+                Apple、Appleのロゴ、iPhone、iOS、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                <br>
+                Apple, the Apple logo, iPhone, iOS, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+            </p>
+            <p class="trademark-disclaimer">
+                本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
+                This application is not developed or endorsed by Apple Inc.
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .trademark-footer { margin-top: 60px; padding: 24px 20px 40px; border-top: 1px solid var(--border); background: var(--bg-tertiary); }
+        .trademark-content { max-width: 800px; margin: 0 auto; text-align: center; }
+        .trademark-text { font-size: 0.7rem; color: var(--text-tertiary); line-height: 1.6; margin-bottom: 12px; }
+        .trademark-disclaimer { font-size: 0.7rem; color: var(--text-tertiary); line-height: 1.5; }
+    </style>
+</body>
+</html>
