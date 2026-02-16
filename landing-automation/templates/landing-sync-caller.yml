@@ -1,0 +1,71 @@
+# Landing Sync — Caller Workflow Template
+#
+# Copy this file to your app repo at:
+#   .github/workflows/landing-sync.yml
+#
+# Then replace the placeholder values marked with __APP_*__
+#
+# Required secret in your app repo:
+#   ALLNEW_APPS_DISPATCH_TOKEN — GitHub PAT with `repo` scope for mueno/allnew-apps
+#
+# This workflow does 3 things:
+#   1. validate  — Runs on every push to main (checks allnew-apps registration)
+#   2. dispatch-submitted — Manually triggered when you submit to ASC
+#   3. dispatch-released  — Manually triggered when app goes live
+
+name: Landing Sync
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action to perform"
+        required: true
+        type: choice
+        options:
+          - validate
+          - dispatch-submitted
+          - dispatch-released
+      app_store_url:
+        description: "App Store URL (for release only)"
+        required: false
+        default: ""
+
+jobs:
+  # Auto-validate on every push to main
+  validate-on-push:
+    if: github.event_name == 'push'
+    uses: mueno/allnew-apps/.github/workflows/reusable-landing-sync.yml@main
+    with:
+      bundle_id: "__APP_BUNDLE_ID__"       # e.g. jp.allnew.weightsnap
+      slug: "__APP_SLUG__"                 # e.g. weightsnap
+      action: validate
+    secrets:
+      dispatch_token: ${{ secrets.ALLNEW_APPS_DISPATCH_TOKEN }}
+
+  # Manual dispatch (submitted or released)
+  manual-dispatch:
+    if: github.event_name == 'workflow_dispatch' && inputs.action != 'validate'
+    uses: mueno/allnew-apps/.github/workflows/reusable-landing-sync.yml@main
+    with:
+      bundle_id: "__APP_BUNDLE_ID__"       # e.g. jp.allnew.weightsnap
+      slug: "__APP_SLUG__"                 # e.g. weightsnap
+      action: ${{ inputs.action }}
+      asc_app_id: "__APP_ASC_ID__"         # e.g. 6758825019
+      app_store_url: ${{ inputs.app_store_url }}
+      input_methods: '__APP_INPUT_METHODS__'  # e.g. ["camera_ocr","voice_input"]
+    secrets:
+      dispatch_token: ${{ secrets.ALLNEW_APPS_DISPATCH_TOKEN }}
+
+  # Manual validate
+  manual-validate:
+    if: github.event_name == 'workflow_dispatch' && inputs.action == 'validate'
+    uses: mueno/allnew-apps/.github/workflows/reusable-landing-sync.yml@main
+    with:
+      bundle_id: "__APP_BUNDLE_ID__"
+      slug: "__APP_SLUG__"
+      action: validate
+    secrets:
+      dispatch_token: ${{ secrets.ALLNEW_APPS_DISPATCH_TOKEN }}

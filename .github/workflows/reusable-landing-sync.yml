@@ -1,0 +1,165 @@
+# Reusable workflow: Landing page sync for app submissions
+#
+# Called by individual app repos to:
+# 1. Validate that the app is properly registered in allnew-apps
+# 2. Send a fallback repository_dispatch to trigger LP updates
+#
+# Usage from app repo:
+#   jobs:
+#     landing-sync:
+#       uses: mueno/allnew-apps/.github/workflows/reusable-landing-sync.yml@main
+#       with:
+#         bundle_id: jp.allnew.weightsnap
+#         slug: weightsnap
+#         action: validate  # or "dispatch-submitted" or "dispatch-released"
+#       secrets:
+#         dispatch_token: ${{ secrets.ALLNEW_APPS_DISPATCH_TOKEN }}
+
+name: Reusable Landing Sync
+
+on:
+  workflow_call:
+    inputs:
+      bundle_id:
+        description: "App bundle ID (e.g. jp.allnew.weightsnap)"
+        required: true
+        type: string
+      slug:
+        description: "App slug (e.g. weightsnap)"
+        required: true
+        type: string
+      action:
+        description: "Action: validate | dispatch-submitted | dispatch-released"
+        required: true
+        type: string
+      asc_app_id:
+        description: "ASC App ID (optional, for dispatch payloads)"
+        required: false
+        type: string
+        default: ""
+      app_store_url:
+        description: "App Store URL (optional, for release dispatch)"
+        required: false
+        type: string
+        default: ""
+      release_date:
+        description: "Release date ISO 8601 (optional, for release dispatch)"
+        required: false
+        type: string
+        default: ""
+      input_methods:
+        description: "Input methods JSON array (optional)"
+        required: false
+        type: string
+        default: "[]"
+    secrets:
+      dispatch_token:
+        description: "GitHub PAT with repo scope for mueno/allnew-apps"
+        required: true
+
+jobs:
+  validate:
+    if: inputs.action == 'validate'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout allnew-apps
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          repository: mueno/allnew-apps
+          token: ${{ secrets.dispatch_token }}
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate app readiness
+        env:
+          APP_BUNDLE_ID: ${{ inputs.bundle_id }}
+          APP_SLUG: ${{ inputs.slug }}
+        run: |
+          python3 landing-automation/scripts/validate_app_readiness.py \
+            --bundle-id "${APP_BUNDLE_ID}" \
+            --slug "${APP_SLUG}"
+
+  dispatch:
+    if: inputs.action == 'dispatch-submitted' || inputs.action == 'dispatch-released'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository_dispatch
+        env:
+          DISPATCH_TOKEN: ${{ secrets.dispatch_token }}
+          APP_ACTION: ${{ inputs.action }}
+          APP_SLUG: ${{ inputs.slug }}
+          APP_BUNDLE_ID: ${{ inputs.bundle_id }}
+          APP_ASC_ID: ${{ inputs.asc_app_id }}
+          APP_STORE_URL: ${{ inputs.app_store_url }}
+          APP_RELEASE_DATE: ${{ inputs.release_date }}
+          APP_INPUT_METHODS: ${{ inputs.input_methods }}
+        run: |
+          set -euo pipefail
+
+          # Determine event type and status
+          if [ "${APP_ACTION}" = "dispatch-released" ]; then
+            EVENT_TYPE="asc_app_released"
+            STATUS="READY_FOR_DISTRIBUTION"
+          else
+            EVENT_TYPE="asc_app_submitted"
+            STATUS="WAITING_FOR_REVIEW"
+          fi
+
+          # Generate unique event ID and timestamp
+          TIMESTAMP=$(date -u +%Y%m%dT%H%M%SZ)
+          EVENT_ID="${APP_ACTION}-${APP_SLUG}-${TIMESTAMP}-${GITHUB_RUN_ID}"
+          EVENT_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+          # Default release_date to today for release events
+          RELEASE_DATE="${APP_RELEASE_DATE}"
+          if [ -z "${RELEASE_DATE}" ] && [ "${APP_ACTION}" = "dispatch-released" ]; then
+            RELEASE_DATE=$(date -u +%Y-%m-%d)
+          fi
+
+          # Build payload using Python for safe JSON construction
+          python3 -c "
+          import json, sys
+          payload = {
+              'event_type': '${EVENT_TYPE}',
+              'client_payload': {
+                  'event_id': sys.argv[1],
+                  'event_date': sys.argv[2],
+                  'app': {
+                      'slug': sys.argv[3],
+                      'status': sys.argv[4],
+                      'bundle_id': sys.argv[5],
+                      'asc_app_id': sys.argv[6],
+                      'app_store_url': sys.argv[7],
+                      'first_screenshot_url': '',
+                      'release_date': sys.argv[8],
+                      'input_methods': json.loads(sys.argv[9]) if sys.argv[9] else [],
+                  }
+              }
+          }
+          json.dump(payload, open('/tmp/dispatch.json', 'w'), indent=2)
+          print(json.dumps(payload, indent=2))
+          " "${EVENT_ID}" "${EVENT_DATE}" "${APP_SLUG}" "${STATUS}" \
+            "${APP_BUNDLE_ID}" "${APP_ASC_ID}" "${APP_STORE_URL}" \
+            "${RELEASE_DATE}" "${APP_INPUT_METHODS}"
+
+          # Send dispatch
+          HTTP_STATUS=$(curl -s -o /tmp/dispatch_response.txt -w "%{http_code}" \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${DISPATCH_TOKEN}" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/mueno/allnew-apps/dispatches \
+            -d @/tmp/dispatch.json)
+
+          echo "HTTP status: ${HTTP_STATUS}"
+
+          if [ "${HTTP_STATUS}" -lt 200 ] || [ "${HTTP_STATUS}" -ge 300 ]; then
+            echo "ERROR: dispatch failed"
+            cat /tmp/dispatch_response.txt
+            exit 1
+          fi
+
+          echo "✅ Dispatch sent: ${EVENT_TYPE} for ${APP_SLUG}"

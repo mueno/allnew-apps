@@ -1,0 +1,14 @@
+{
+  "name": "allnew-lp-checks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:browsers": "playwright install chromium firefox webkit",
+    "check": "node run.mjs"
+  },
+  "dependencies": {
+    "axe-core": "4.9.1",
+    "playwright": "1.49.1"
+  }
+}
+
