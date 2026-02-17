@@ -690,6 +690,67 @@ const APP_DATA = {
                 { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" }
             ]
         }
+    },
+    painsnap: {
+        name: "PainSnap",
+        supportEmail: "painsnap-support@allnew.work",
+        icon: "&#x1FA79;",
+        ja: {
+            subtitle: "痛み記録アプリ",
+            description: "身体の痛みを4ステップ（場所・強さ・種類・きっかけ）で記録し、Apple HealthKitに保存する痛み記録アプリ",
+            dataTypes: "痛みデータ",
+            healthKitWrite: "痛みデータの書き込み（一般的な体の痛み）",
+            healthKitRead: "痛みデータの読み取り（履歴表示、統計等）",
+            cameraUsage: "本アプリはカメラを使用しません",
+            importantNote: "本アプリは、痛みデータを当社の外部サーバーに送信・保存しません。データは端末内およびApple HealthKitに保存されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。",
+            appOverview: "身体の痛みを4ステップ（部位選択→強さ→種類→きっかけ）で記録し、ユーザーの許可および設定に基づき、Appleの「ヘルスケア（Apple Health）」に痛みデータを書き込む機能を提供します。",
+            appOverview2: "ユーザーが任意に許可した場合に限り、ヘルスケア上の痛みデータを読み取り、過去の記録一覧の表示等に利用します。",
+            supportedDevices: "<strong>入力方法:</strong> ボディマップ（人体図）をタップして部位を選択、スライダーで痛みの強さを設定。",
+            supportedRange: "<strong>対応痛み強度:</strong> 0（痛みなし）〜10（最大の痛み）の11段階。",
+            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。",
+            freeTier: "本アプリは痛みの記録について無料で利用できる回数に上限（15回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
+            tokushoFreeTier: "本アプリは痛みの記録について無料で利用できる回数に上限（15回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
+            healthCategory: "「ブラウズ」→「症状」→「一般的な体の痛み」",
+            notMedicalDevice: "本アプリは医療機器ではなく、診断・治療・予防等の医療行為を目的としません。本アプリの表示・メッセージ等は一般的な情報提供であり、医療上の判断は医師等の専門家にご相談ください。",
+            faq: [
+                { q: "どのように痛みを記録しますか？", a: "<p><strong>4ステップ</strong>で記録します：</p><ol><li>ボディマップ（人体図）で痛みの部位をタップ</li><li>スライダーで痛みの強さ（0〜10）を設定</li><li>痛みの種類（ズキズキ、チクチク等）を選択</li><li>きっかけ（任意）を入力</li></ol>" },
+                { q: "無料で使えますか？", a: "<p><strong>15回まで無料</strong>で痛みの記録をお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
+                { q: "データはどこに保存されますか？", a: "<p>痛みの記録は<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。当社が運用するサーバーへの送信はありません。</p><p>HealthKitの同期（iCloud等）はお使いの端末の設定に従います。</p>" },
+                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" },
+                { q: "ヘルスケアで痛みのデータを確認するには？", a: "<p>iPhoneの「ヘルスケア」アプリを開き、<strong>「ブラウズ」→「症状」→「一般的な体の痛み」</strong>で確認できます。</p>" },
+                { q: "Doctor's Pass（ドクターズパス）とは？", a: "<p>記録した痛みの情報を<strong>日本語と英語の2言語</strong>で表示する機能です。海外旅行先や外国語を話す方に痛みの状況を伝える際にお使いいただけます。</p>" },
+                { q: "対応しているデバイスは？", a: "<p><strong>iOS 17.0以降</strong>を搭載したiPhoneに対応しています。iPadには対応していません。</p>" },
+                { q: "データを削除するには？", a: "<p>アプリ内の記録一覧から個別の記録を削除できます。Apple HealthKit上のデータは、iPhoneの「ヘルスケア」アプリから直接削除してください。</p>" }
+            ]
+        },
+        en: {
+            subtitle: "Pain Recording App",
+            description: "A pain recording app that logs body pain in 4 steps (location, intensity, type, trigger) and saves to Apple HealthKit",
+            dataTypes: "pain data",
+            healthKitWrite: "writing pain data (generalized body ache)",
+            healthKitRead: "reading pain data (to show history and statistics)",
+            cameraUsage: "This app does not use the camera",
+            importantNote: "This app does not send or store pain data on our external servers. Data is stored on your device and in Apple HealthKit. HealthKit storage and sync behavior (iCloud, etc.) follows your device settings and Apple's specifications.",
+            appOverview: "The App records body pain in 4 steps (body part selection → intensity → type → trigger) and, based on your permissions, writes pain data to Apple Health (HealthKit).",
+            appOverview2: "If you optionally grant read access, the App may also read your pain data from HealthKit to display past records.",
+            supportedDevices: "<strong>Input Method:</strong> Tap body parts on a body map, set pain intensity with a slider.",
+            supportedRange: "<strong>Pain Intensity Range:</strong> 0 (no pain) to 10 (worst pain), 11 levels.",
+            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later.",
+            freeTier: "The App may offer up to 15 free pain recordings and then provide a one-time in-app purchase to unlock unlimited usage.",
+            tokushoFreeTier: "The App offers up to 15 free pain recordings, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
+            healthCategory: "Browse → Symptoms → Generalized Body Ache",
+            notMedicalDevice: "The App is not a medical device and does not provide medical advice, diagnosis, or treatment. All information displayed is for general informational purposes only. Please consult a healthcare professional for medical decisions.",
+            faq: [
+                { q: "How do I record pain?", a: "<p>Record pain in <strong>4 steps</strong>:</p><ol><li>Tap the pain location on the body map</li><li>Set pain intensity (0–10) with a slider</li><li>Choose the pain type (throbbing, sharp, etc.)</li><li>Optionally enter a trigger</li></ol>" },
+                { q: "Is it free?", a: "<p><strong>Free for the first 15 recordings.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Once purchased, it's yours forever.</p>" },
+                { q: "Where is my data stored?", a: "<p>Pain records are stored in <strong>Apple HealthKit on your device</strong>. We do not transmit data to our servers.</p><p>HealthKit sync (iCloud, etc.) follows your device settings.</p>" },
+                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" },
+                { q: "How do I view pain data in Apple Health?", a: "<p>Open the Health app on your iPhone → <strong>Browse → Symptoms → Generalized Body Ache</strong></p>" },
+                { q: "What is Doctor's Pass?", a: "<p>A feature that displays your pain record in <strong>both Japanese and English</strong>. Use it to communicate your pain situation when traveling abroad or with someone who speaks a different language.</p>" },
+                { q: "What devices are supported?", a: "<p>Supported on iPhones running <strong>iOS 17.0 or later</strong>. iPad is not supported.</p>" },
+                { q: "How do I delete my data?", a: "<p>You can delete individual records from the history list in the app. To delete data from Apple HealthKit, use the Health app on your iPhone directly.</p>" }
+            ]
+        }
     }
 };
 
