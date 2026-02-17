@@ -1044,6 +1044,8 @@
     </footer>
 
     <script>
+        // Clickjacking defense (frame-busting fallback for GitHub Pages)
+        if (window.self !== window.top) { document.body.style.display = 'none'; }
         // Language Data
         const langData = {
             ja: { label: '日本語', hero: 'InkInterpreter', subtitle: '撮るだけ。手書きがテキストに。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
