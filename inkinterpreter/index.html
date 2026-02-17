@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkInterpreter Support</title>
+    <meta name="description" content="InkInterpreter - Handwritten note OCR scanner app. FAQ, Privacy Policy, Terms of Service.">
+    <!-- Security Headers (GitHub Pages cannot set HTTP response headers) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+    <meta name="referrer" content="no-referrer">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="bingbot" content="noindex, nofollow, noarchive">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
+    <style>
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.72);
+            --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #2997ff;
+                --accent-hover: #4da8ff;
+                --border: rgba(255,255,255,0.1);
+                --glass: rgba(28,28,30,0.72);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            /* Copy Protection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Sticky Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.02em; }
+
+        /* Language Dropdown */
+        .lang-switcher { position: relative; }
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        .lang-btn:hover { border-color: var(--accent); }
+        .lang-btn-icon { font-size: 0.75rem; transition: transform 0.2s; }
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-4px);
+            pointer-events: none;
+            transition: all 0.2s;
+        }
+        .lang-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .lang-option {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .lang-option:hover { background: var(--bg-tertiary); }
+        .lang-option.active { color: var(--accent); font-weight: 600; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+        .hero-icon {
+            width: 88px;
+            height: 88px;
+            border-radius: 22px;
+            margin: 0 auto 20px;
+            object-fit: cover;
+        }
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+        .hero-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* TOC Nav */
+        .toc {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 20px;
+            flex-wrap: wrap;
+        }
+        .toc-link {
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toc-link:hover { background: var(--accent); color: #fff; }
+
+        /* Main */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        /* Language Content */
+        .lang-content { display: none; }
+        .lang-content.active { display: block; }
+
+        /* Sections */
+        .section {
+            margin-bottom: 48px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            border: 1px solid var(--border);
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .section-icon { font-size: 2rem; }
+        .section-title { font-size: 1.35rem; font-weight: 700; }
+        .section-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px; }
+
+        /* FAQ */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            overflow: hidden;
+        }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .faq-question:hover { color: var(--accent); }
+        .faq-icon {
+            font-size: 1.2rem;
+            color: var(--text-tertiary);
+            transition: transform 0.3s;
+        }
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding-bottom: 16px;
+        }
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+        .faq-answer p:last-child { margin-bottom: 0; }
+
+        /* Legal Sections */
+        .legal-section { margin-bottom: 24px; }
+        .legal-section:last-child { margin-bottom: 0; }
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+        .legal-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+        .legal-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        .legal-section ul li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .legal-section ul li::before {
+            content: '•';
+            position: absolute;
+            left: 4px;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .legal-section a { color: var(--accent); text-decoration: none; }
+        .legal-section a:hover { text-decoration: underline; }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .highlight-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Updated Badge */
+        .updated-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: var(--bg-tertiary);
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        /* Commercial Law Accordion */
+        .commercial-accordion {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .commercial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: var(--bg-tertiary);
+            transition: background 0.2s;
+        }
+        .commercial-header:hover { background: var(--border); }
+        .commercial-icon {
+            font-size: 1rem;
+            color: var(--text-tertiary);
+            transition: transform 0.3s;
+        }
+        .commercial-accordion.open .commercial-icon { transform: rotate(45deg); }
+        .commercial-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .commercial-accordion.open .commercial-body { max-height: 400px; }
+        .commercial-body-inner {
+            padding: 16px;
+        }
+        .commercial-body-inner p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* Contact */
+        .contact-card {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+        }
+        .contact-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+        .contact-email {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .contact-email:hover { background: var(--accent-hover); }
+        .contact-note {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px 20px 48px;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">AllNew LLC</div>
+            <div class="lang-switcher">
+                <div class="lang-btn" id="langBtn">
+                    <span id="currentLangLabel">日本語</span>
+                    <span class="lang-btn-icon">▾</span>
+                </div>
+                <div class="lang-dropdown" id="langDropdown">
+                    <div class="lang-option active" data-lang="ja">日本語</div>
+                    <div class="lang-option" data-lang="en">English</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <img src="../inkinterpreter-icon.png" alt="InkInterpreter" class="hero-icon">
+        <h1 class="hero-title" id="heroTitle">InkInterpreter</h1>
+        <p class="hero-subtitle" id="heroSubtitle">撮るだけ。手書きがテキストに。</p>
+    </section>
+
+    <!-- TOC -->
+    <nav class="toc" id="toc">
+        <a href="#faq" class="toc-link" data-section="faq">FAQ</a>
+        <a href="#privacy" class="toc-link" data-section="privacy">プライバシー</a>
+        <a href="#terms" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#commercial" class="toc-link" data-section="commercial">特定商取引法</a>
+        <a href="#contact" class="toc-link" data-section="contact">お問い合わせ</a>
+    </nav>
+
+    <main class="main">
+        <!-- ==================== JAPANESE ==================== -->
+        <div class="lang-content active" data-lang="ja">
+            <!-- FAQ -->
+            <section id="faq-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">よくある質問</div>
+                        <div class="section-subtitle">使い方や機能についてお答えします</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">どうやって手書きメモをテキスト化しますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>アプリを開き、画面下部のスキャンボタンをタップします。カメラで手書きメモを撮影すると、Apple Vision（文字認識エンジン）が自動でテキストに変換します。写真ライブラリから既存の画像を選択することもできます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">対応している言語は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>日本語と英語</strong>の手書き文字を認識できます。Apple VisionフレームワークのOCR機能を使用しています。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">対応しているiPhoneは？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>iOS 17.0以降</strong>を搭載したiPhone。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">無料で使えますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。サブスクリプションはありません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>認識結果のテキストとスキャン画像は<strong>お使いのデバイス内</strong>に保存されます。当社が運用するサーバーへの送信はありません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">購入を復元したい<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>過去に購入された方は、再購入の必要はありません。</p>
+                        <p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">プライバシーポリシー</div>
+                        <div class="section-subtitle">あなたのデータを大切に扱います</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月17日</span>
+
+                <div class="highlight-box">
+                    <p><strong>重要:</strong> 本アプリは、スキャンデータや認識結果を当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内に保存されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. 収集する情報の種類</h3>
+                    <ul>
+                        <li><strong>カメラ映像:</strong> 手書きメモの撮影のためにリアルタイム処理されます。撮影した画像はデバイス内に保存され、当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>写真ライブラリ:</strong> ユーザーが選択した画像のみを読み取り、テキスト認識に使用します。</li>
+                        <li><strong>認識結果テキスト:</strong> Apple Vision フレームワーク（オンデバイスOCR）が生成するテキストデータ。デバイス内に保存されます。</li>
+                        <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>収集しない情報:</strong> マイクは使用しません。広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 情報の利用目的</h3>
+                    <p>手書きメモのテキスト化と管理支援。これ以外の目的には利用しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 第三者への提供</h3>
+                    <p>当社はスキャンデータや認識結果テキストを第三者に提供、販売、共有しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. カメラ・写真データの取り扱い</h3>
+                    <ul>
+                        <li>カメラ映像・写真データを広告、マーケティング、データマイニング目的で使用しません</li>
+                        <li>カメラ映像・写真データをデータブローカーに販売しません</li>
+                        <li>当社はカメラ映像・写真データを当社の外部サーバーに送信・保存しません</li>
+                        <li>カメラ・写真ライブラリへのアクセスはiOSの設定からいつでも取り消せます</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. セキュリティ対策</h3>
+                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護を採用しています。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 子供のプライバシー</h3>
+                    <p>本アプリは13歳未満のお子様が単独で使用することは想定していません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. ユーザーの権利</h3>
+                    <ul>
+                        <li><strong>すべてのユーザー:</strong> デバイス内のスキャンデータはアプリ内から削除できます。カメラ・写真ライブラリへのアクセス権限はiOSの設定からいつでも取り消せます。</li>
+                        <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
+                        <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
+                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。</li>
+                        <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
+                        <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. お問い合わせについて</h3>
+                    <p>ユーザーが当社へお問い合わせを行う場合、当社は返信対応のために、メールアドレスおよびお問い合わせ内容を取得・利用します。これらの情報はサポート対応の目的にのみ用い、法令に基づく場合を除き第三者に提供しません。対応完了後は合理的な期間で削除または匿名化します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 準拠法と管轄</h3>
+                    <p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 多言語版について</h3>
+                    <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">利用規約</div>
+                        <div class="section-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月17日</span>
+
+                <div class="legal-section">
+                    <h3>1. 規約の適用</h3>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「InkInterpreter」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 利用開始と同意</h3>
+                    <p>ユーザーが本アプリをダウンロードし、インストールまたは利用を開始した時点で、本規約に同意したものとみなされます。本規約に同意しない場合、本アプリをご利用いただくことはできません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 本アプリの概要と対応機器</h3>
+                    <p>本アプリは、カメラまたは写真ライブラリから取得した手書きメモの画像をApple Vision（オンデバイスOCR）でテキストに変換し、認識結果をデバイス内に保存・管理するアプリケーションです。</p>
+                    <ul>
+                        <li><strong>入力方法:</strong> カメラによるリアルタイム撮影、または写真ライブラリからの画像選択。マイクは使用しません。</li>
+                        <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. プライバシーポリシーおよびデータの取り扱い</h3>
+                    <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
+                    <p>カメラ・写真データについて、当社は以下を遵守します:</p>
+                    <ul>
+                        <li>カメラ映像・写真データを広告、マーケティング、またはデータマイニング目的で使用しません</li>
+                        <li>カメラ映像・写真データをデータブローカーや第三者に販売・提供しません</li>
+                        <li>カメラ映像・写真データを当社が運用するサーバーへ送信・保存しません</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 禁止事項</h3>
+                    <ul>
+                        <li>本アプリの目的と異なる利用</li>
+                        <li>法令または公序良俗に反する行為</li>
+                        <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
+                        <li>その他当社が不適切と判断する行為</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 免責事項</h3>
+                    <ul>
+                        <li>テキスト認識結果の正確性については保証しません</li>
+                        <li>本アプリの利用または利用不能により生じた損害について、当社の故意又は重過失がない限り責任を負いません</li>
+                        <li>Apple VisionフレームワークのOCR精度はApple Inc.が管理するものであり、当社の責任範囲外です</li>
+                        <li>本アプリは手書き文字認識の補助ツールであり、認識結果の正確性はご自身で確認してください</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. 知的財産</h3>
+                    <p>本アプリに関する著作権その他の知的財産権は当社に帰属します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 課金</h3>
+                    <p>本アプリは15回までの無料使用を提供し、以降は一回限りの買い切り購入が必要です。購入はApple ID経由のApp Store決済です。サブスクリプションはありません。購入後の返金はApple Inc.のポリシーに従います。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 規約の変更</h3>
+                    <p>当社は本規約を変更することがあります。重要な変更がある場合、本ページで通知します。変更後も本アプリの利用を継続された場合、変更後の規約に同意したものとみなされます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 準拠法と管轄</h3>
+                    <p>本規約は日本法を準拠法とします。本規約に関する紛争については、東京地方裁判所を第一審の専属的合意管轄裁判所とします。ただし、各地域の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 多言語版について</h3>
+                    <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🏛️</div>
+                    <div>
+                        <div class="section-title">特定商取引法に基づく表記</div>
+                        <div class="section-subtitle">特定商取引法第11条に基づく表記</div>
+                    </div>
+                </div>
+
+                <div class="commercial-accordion open">
+                    <div class="commercial-header">販売業者 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>合同会社AllNew</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">代表者 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>上野 正紀</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">所在地 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>請求があったら遅滞なく開示いたします</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">連絡先 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>inkinterpreter-support@allnew.work<br>電話番号は請求があったら遅滞なく開示いたします</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">販売価格 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>App Store の各アプリ詳細ページに記載された価格</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">支払方法 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>Apple ID に登録された支払い方法（App Store 決済）</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">支払時期 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>購入手続き完了時に即時決済</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">商品の引渡時期 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>購入手続き完了後、即時利用可能</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">返品・キャンセル <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>デジタルコンテンツの性質上、購入後のキャンセル・返品はできません。App Store のポリシーに基づく返金については Apple Inc. にお問い合わせください。</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">動作環境 <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>iOS 17.0以降を搭載したiPhone</p></div></div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">✉️</div>
+                    <div>
+                        <div class="section-title">お問い合わせ</div>
+                        <div class="section-subtitle">お気軽にご連絡ください</div>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <p>InkInterpreter に関するご質問やフィードバックをお待ちしています。</p>
+                    <a href="mailto:inkinterpreter-support@allnew.work" class="contact-email">メールで問い合わせ</a>
+                    <p class="contact-note">通常3営業日以内にご返信いたします</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== ENGLISH ==================== -->
+        <div class="lang-content" data-lang="en">
+            <!-- FAQ -->
+            <section id="faq-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">Frequently Asked Questions</div>
+                        <div class="section-subtitle">Answers about features and usage</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">How do I scan handwritten notes?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Open the app and tap the scan button at the bottom of the screen. Point your camera at a handwritten note and it will be automatically converted to text using Apple Vision (OCR engine). You can also select an existing image from your photo library.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which languages are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>InkInterpreter recognizes <strong>Japanese and English</strong> handwriting using Apple's Vision framework OCR.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iPhone with <strong>iOS 17.0 or later</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is it free to use?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>You can use InkInterpreter <strong>up to 15 times for free</strong>. After that, a one-time purchase is required. No subscriptions.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>All recognized text and scanned images are stored <strong>on your device only</strong>. No data is sent to our servers.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>If you previously purchased the full version, there is no need to buy again.</p>
+                        <p><strong>To restore:</strong> Open the app, go to Settings → About This App → Restore Purchase.</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">Privacy Policy</div>
+                        <div class="section-subtitle">We take your data seriously</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last updated: February 17, 2026</span>
+
+                <div class="highlight-box">
+                    <p><strong>Important:</strong> This app does not send or store scan data or recognition results on our external servers. All data is stored on your device.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. Types of Information Collected</h3>
+                    <ul>
+                        <li><strong>Camera Feed:</strong> Processed in real-time for scanning handwritten notes. Captured images are stored on the device and are not transmitted to our servers.</li>
+                        <li><strong>Photo Library:</strong> Only images explicitly selected by the user are read for text recognition.</li>
+                        <li><strong>Recognition Results:</strong> Text data generated by Apple Vision framework (on-device OCR). Stored on device only.</li>
+                        <li><strong>On-device Storage:</strong> Free usage count, purchase status, and settings. Not transmitted to our servers.</li>
+                        <li><strong>Not Collected:</strong> Microphone is not used. No advertising SDK or analytics service is used. No user registration is required.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Purpose of Use</h3>
+                    <p>Digitizing handwritten notes and managing recognition results. We do not use collected information for any other purpose.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. Sharing with Third Parties</h3>
+                    <p>We do not sell, share, or provide scan data or recognition results to any third party.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Camera and Photo Data Handling</h3>
+                    <ul>
+                        <li>Camera and photo data will not be used for advertising, marketing, or data mining</li>
+                        <li>Camera and photo data will not be sold to data brokers</li>
+                        <li>Camera and photo data will not be sent to or stored on our external servers</li>
+                        <li>Camera and photo library access can be revoked at any time from iOS Settings</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Security Measures</h3>
+                    <p>We employ data minimization design, process data on-device as a principle, and protect sensitive information using Keychain.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Children's Privacy</h3>
+                    <p>This app is not intended for independent use by children under 13.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Your Rights</h3>
+                    <ul>
+                        <li><strong>All Users:</strong> Scan data on your device can be deleted from within the app. Camera and photo library permissions can be revoked at any time from iOS Settings.</li>
+                        <li><strong>EU/EEA Residents (GDPR):</strong> Right to lodge a complaint, right to withdraw consent.</li>
+                        <li><strong>California Residents (CCPA/CPRA):</strong> Right to know, right to delete, right to opt-out.</li>
+                        <li><strong>China Residents (PIPL):</strong> Right to know, right to access/copy, right to delete. No cross-border transfer to our servers.</li>
+                        <li><strong>South Korea Residents (PIPA):</strong> Right to request suspension of processing.</li>
+                        <li><strong>Brazil Residents (LGPD):</strong> Right to request data portability.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Inquiries</h3>
+                    <p>When you contact us, we collect and use your email address and inquiry content solely for the purpose of providing a response. We will not share this information with third parties except as required by law. Information will be deleted or anonymized within a reasonable period after resolution.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Governing Law</h3>
+                    <p>This policy is governed by the laws of Japan. Applicable local laws (GDPR, CCPA/CPRA, PIPL, LGPD, PIPA) apply to residents of the respective regions.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Multilingual Versions</h3>
+                    <p>The Japanese version of this Privacy Policy is the authoritative text. In the event of any conflict between the Japanese version and other language versions, the Japanese version shall prevail. However, this provision does not limit users' rights under consumer protection or other mandatory laws of their country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">Terms of Service</div>
+                        <div class="section-subtitle">Conditions for using this service</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last updated: February 17, 2026</span>
+
+                <div class="legal-section">
+                    <h3>1. Scope</h3>
+                    <p>These Terms of Service ("Terms") govern the use of the iOS application "InkInterpreter" ("App") provided by AllNew LLC ("Company"). By using the App, you agree to these Terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Acceptance</h3>
+                    <p>Downloading, installing, or using the App constitutes acceptance of these Terms. If you do not agree, you may not use the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. App Overview and Supported Devices</h3>
+                    <p>The App converts handwritten notes captured via camera or photo library into text using Apple Vision (on-device OCR), and stores and manages recognition results on the device.</p>
+                    <ul>
+                        <li><strong>Input Methods:</strong> Real-time camera capture or image selection from photo library. Microphone is not used.</li>
+                        <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Privacy Policy and Data Handling</h3>
+                    <p>We handle information in accordance with our <a href="#privacy-en">Privacy Policy</a>.</p>
+                    <p>Regarding camera and photo data, we commit to the following:</p>
+                    <ul>
+                        <li>Camera and photo data will not be used for advertising, marketing, or data mining</li>
+                        <li>Camera and photo data will not be sold or provided to data brokers or third parties</li>
+                        <li>Camera and photo data will not be sent to or stored on our servers</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Prohibited Activities</h3>
+                    <ul>
+                        <li>Using the App for purposes other than its intended use</li>
+                        <li>Activities violating laws or public order</li>
+                        <li>Reverse engineering, analysis, modification, reproduction, redistribution</li>
+                        <li>Other activities deemed inappropriate by the Company</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Disclaimer</h3>
+                    <ul>
+                        <li>We do not guarantee the accuracy of text recognition results</li>
+                        <li>We are not liable for damages arising from use or inability to use the App, except in cases of intentional misconduct or gross negligence</li>
+                        <li>OCR accuracy of the Apple Vision framework is managed by Apple Inc. and is outside our responsibility</li>
+                        <li>The App is a handwriting recognition assistance tool; please verify recognition results yourself</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Intellectual Property</h3>
+                    <p>Copyright and other intellectual property rights in the App belong to the Company.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Pricing</h3>
+                    <p>The App offers 15 free uses, after which a one-time purchase is required. Payment is processed through App Store via Apple ID. No subscriptions. Refunds follow Apple Inc.'s policy.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Changes to Terms</h3>
+                    <p>We may modify these Terms. Significant changes will be notified on this page. Continued use of the App after changes constitutes acceptance of the modified Terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Governing Law and Jurisdiction</h3>
+                    <p>These Terms are governed by the laws of Japan. The Tokyo District Court shall have exclusive jurisdiction for the first instance. However, this shall not limit users' rights under mandatory laws of their jurisdiction.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Multilingual Versions</h3>
+                    <p>The Japanese version of these Terms is the authoritative text. In the event of any conflict between the Japanese version and other language versions, the Japanese version shall prevail. However, this provision does not limit users' rights under consumer protection or other mandatory laws of their country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🏛️</div>
+                    <div>
+                        <div class="section-title">Seller Information</div>
+                        <div class="section-subtitle">Disclosure under Specified Commercial Transactions Act (Japan)</div>
+                    </div>
+                </div>
+
+                <div class="commercial-accordion open">
+                    <div class="commercial-header">Seller <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>AllNew LLC</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Representative <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>Masanori Ueno</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Address <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>Disclosed without delay upon request</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Contact <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>inkinterpreter-support@allnew.work<br>Phone number disclosed without delay upon request</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Pricing <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>As listed on each app's App Store page</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Payment Method <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>Payment method registered with Apple ID (App Store billing)</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Payment Timing <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>Charged immediately upon completion of purchase</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Delivery <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>Available immediately after purchase completion</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">Returns and Cancellations <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>Due to the nature of digital content, cancellations and returns after purchase are not accepted. For refunds under App Store policies, please contact Apple Inc.</p></div></div>
+                </div>
+
+                <div class="commercial-accordion">
+                    <div class="commercial-header">System Requirements <span class="commercial-icon">+</span></div>
+                    <div class="commercial-body"><div class="commercial-body-inner"><p>iPhone with iOS 17.0 or later</p></div></div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">✉️</div>
+                    <div>
+                        <div class="section-title">Contact Us</div>
+                        <div class="section-subtitle">We'd love to hear from you</div>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <p>Questions or feedback about InkInterpreter? We're here to help.</p>
+                    <a href="mailto:inkinterpreter-support@allnew.work" class="contact-email">Send Email</a>
+                    <p class="contact-note">We typically respond within 3 business days</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 AllNew LLC</p>
+    </footer>
+
+    <script>
+        // Language Data
+        const langData = {
+            ja: { label: '日本語', hero: 'InkInterpreter', subtitle: '撮るだけ。手書きがテキストに。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'InkInterpreter', subtitle: 'Just Scan. Handwriting to Text.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
+        };
+
+        // Determine initial language from URL params or hash
+        function getLangFromHash() {
+            // Check URL params first (?lang=en)
+            const params = new URLSearchParams(window.location.search);
+            const paramLang = params.get('lang');
+            if (paramLang && langData[paramLang]) return paramLang;
+
+            // Check hash (e.g., #privacy-en)
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                const possibleLang = parts[parts.length - 1];
+                if (langData[possibleLang]) return possibleLang;
+            }
+
+            // Check browser language
+            const browserLang = navigator.language || navigator.userLanguage;
+            if (browserLang && browserLang.startsWith('en')) return 'en';
+            return 'ja';
+        }
+
+        let currentLang = getLangFromHash();
+
+        // Switch Language
+        function switchLanguage(lang) {
+            currentLang = lang;
+
+            // Update content visibility
+            document.querySelectorAll('.lang-content').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+
+            // Update dropdown
+            document.querySelectorAll('.lang-option').forEach(function(opt) {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+            document.getElementById('currentLangLabel').textContent = langData[lang].label;
+
+            // Update hero
+            document.getElementById('heroTitle').textContent = langData[lang].hero;
+            document.getElementById('heroSubtitle').textContent = langData[lang].subtitle;
+
+            // Update TOC
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const tocLabels = langData[lang].toc;
+            tocLinks.forEach(function(link, i) {
+                link.textContent = tocLabels[i];
+                var section = link.dataset.section;
+                link.href = '#' + section + '-' + lang;
+            });
+
+            // Update URL
+            var currentHash = window.location.hash;
+            if (currentHash && currentHash.includes('-')) {
+                var section = currentHash.split('-').pop();
+                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(function(s) { return currentHash.includes(s); })) {
+                    var sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace('-' + getLangFromHash(), '');
+                    history.replaceState(null, null, '?lang=' + lang + '#' + sectionName + '-' + lang);
+                }
+            } else {
+                history.replaceState(null, null, '?lang=' + lang);
+            }
+
+            // Close dropdown
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+
+        // Language Dropdown Toggle
+        var langBtn = document.getElementById('langBtn');
+        var langDropdown = document.getElementById('langDropdown');
+
+        langBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            langDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function() {
+            langDropdown.classList.remove('open');
+        });
+
+        // Language Options
+        document.querySelectorAll('.lang-option').forEach(function(opt) {
+            opt.addEventListener('click', function() { switchLanguage(opt.dataset.lang); });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(function(q) {
+            q.addEventListener('click', function() {
+                var item = q.parentElement;
+                var wasOpen = item.classList.contains('open');
+                // Close all in same lang-content
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // Commercial Accordion (event delegation)
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.commercial-header');
+            if (!header) return;
+            var accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        });
+
+        // Auto-expand commercial section if accessed via anchor
+        function checkCommercialAnchor() {
+            var hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(function(acc) {
+                    acc.classList.add('open');
+                });
+            }
+        }
+
+        // Initialize
+        switchLanguage(currentLang);
+        checkCommercialAnchor();
+
+        // Handle hash changes for section navigation
+        window.addEventListener('hashchange', function() {
+            var hash = window.location.hash.substring(1);
+            if (hash) {
+                var parts = hash.split('-');
+                if (parts.length >= 2) {
+                    var possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang]) {
+                        if (currentLang !== possibleLang) {
+                            switchLanguage(possibleLang);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Copy Protection
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('copy', function(e) { e.preventDefault(); });
+        document.addEventListener('cut', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    </script>
+
+    <!-- Trademark Attribution Footer -->
+    <footer class="trademark-footer">
+        <div class="trademark-content">
+            <p class="trademark-text">
+                Apple、Appleのロゴ、iPhone、iOS、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                <br>
+                Apple, the Apple logo, iPhone, iOS, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+            </p>
+            <p class="trademark-disclaimer">
+                本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
+                This application is not developed or endorsed by Apple Inc.
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .trademark-footer {
+            margin-top: 60px;
+            padding: 24px 20px 40px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+        .trademark-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .trademark-text {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .trademark-disclaimer {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+    </style>
+</body>
+</html>

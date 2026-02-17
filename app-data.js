@@ -528,59 +528,6 @@ const APP_DATA = {
             ]
         }
     },
-    mofulens: {
-        name: "MofuLens",
-        supportEmail: "mofulens-support@allnew.work",
-        icon: "&#x1F43B;",
-        ja: {
-            subtitle: "AR動物コスチュームカメラ",
-            description: "ARKitでカメラに映った人を検出し、かわいい動物コスチュームをリアルタイムでオーバーレイするARカメラアプリ",
-            dataTypes: "",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "ARKitボディトラッキングのためにカメラを使用",
-            importantNote: "本アプリは、撮影画像や映像データを当社の外部サーバーに送信・保存しません。すべての処理（人物検出、コスチュームオーバーレイ、背景エフェクト）はデバイス上で完了します。コスチュームは顔を完全に隠すため、プライバシーが保護されます。Apple HealthKitは使用しません。",
-            appOverview: "ARKitのボディトラッキング技術を使用してカメラに映った人を検出し、かわいい動物コスチューム（くま・ねこ・たまご）をリアルタイムでオーバーレイ表示します。スナップショットの撮影・保存機能も提供します。",
-            appOverview2: "",
-            supportedDevices: "<strong>入力方法:</strong> ARカメラ（A12 Bionic以降のチップが必要）。",
-            supportedRange: "",
-            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載し、ARKit対応のiPhone（A12 Bionic以降）。",
-            freeTier: "本アプリはセッション回数について無料で利用できる回数に上限（3回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
-            tokushoFreeTier: "本アプリはセッション回数について無料で利用できる回数に上限（3回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "無料で使えますか？", a: "<p><strong>3回まで無料</strong>でお使いいただけます。4回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
-                { q: "データはどこに保存されますか？", a: "<p>スナップショットは<strong>お使いのデバイスのフォトライブラリ</strong>に保存されます。</p><p>当社が運用するサーバーへの送信はありません。すべての処理はデバイス上で完了します。</p>" },
-                { q: "顔は隠れますか？", a: "<p>はい。コスチュームは<strong>顔全体を完全に覆うサイズ</strong>で設計されています。撮影したスナップショットでも顔は隠れた状態で保存されます。</p>" },
-                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「購入を復元」をタップしてください。</p>" }
-            ]
-        },
-        en: {
-            subtitle: "AR Animal Costume Camera",
-            description: "Detects people on camera using ARKit and overlays cute animal costumes in real-time",
-            dataTypes: "",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "uses the camera for ARKit body tracking",
-            importantNote: "This app does not send or store your photos or video data on our external servers. All processing (person detection, costume overlay, background effects) is completed on-device. Costumes fully cover faces for privacy protection. Apple HealthKit is not used.",
-            appOverview: "The App uses ARKit body tracking to detect people on camera and overlay cute animal costumes (bears, cats, egg people) in real-time. Snapshot capture and save functionality is also available.",
-            appOverview2: "",
-            supportedDevices: "<strong>Input Method:</strong> AR Camera (requires A12 Bionic chip or later).",
-            supportedRange: "",
-            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later and ARKit support (A12 Bionic or later).",
-            freeTier: "The App may offer a limited number of free sessions (up to 3) and then provide a one-time in-app purchase to unlock unlimited usage.",
-            tokushoFreeTier: "The App offers up to 3 free sessions, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "Is it free?", a: "<p><strong>Free for the first 3 sessions.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
-                { q: "Where is my data stored?", a: "<p>Snapshots are saved to <strong>your device's Photo Library</strong>.</p><p>We do not transmit data to our servers. All processing is completed on-device.</p>" },
-                { q: "Are faces hidden?", a: "<p>Yes. Costumes are <strong>designed to fully cover faces</strong>. Saved snapshots also show faces covered by costumes.</p>" },
-                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → Restore Purchase</p>" }
-            ]
-        }
-    },
     aegismail: {
         name: "Aegis Mail",
         supportEmail: "aegismail-support@allnew.work",
@@ -635,6 +582,59 @@ const APP_DATA = {
                 { q: "Where is my data stored?", a: "<p>Your email data remains on <strong>Gmail's servers</strong>. This app reads emails through the Gmail API but does not store email data on our servers.</p><p>Triage results and app settings are stored on your device.</p>" },
                 { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" },
                 { q: "Tips for better triage accuracy", a: "<ul><li>Email subject lines and opening text are used for classification</li><li>Emails from known senders are classified more accurately</li><li>You can manually re-classify by swiping if results differ from expectations</li></ul>" }
+            ]
+        }
+    },
+    inkinterpreter: {
+        name: "InkInterpreter",
+        supportEmail: "inkinterpreter-support@allnew.work",
+        icon: "&#x1F4DD;",
+        ja: {
+            subtitle: "手書きOCRスキャナー",
+            description: "手書きの文字をカメラまたはフォトライブラリから読み取り、テキストに変換するOCRスキャナーアプリ",
+            dataTypes: "テキストデータ",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "手書き文字の読み取り（OCR）のためにカメラを使用",
+            importantNote: "本アプリは、撮影画像や認識テキストを当社の外部サーバーに送信・保存しません。すべてのOCR処理はデバイス上のApple Vision フレームワークで完了します。インターネット接続は不要です。",
+            appOverview: "カメラで撮影またはフォトライブラリから選択した画像から、Apple Vision フレームワークを使用して手書き文字を認識し、テキストに変換する機能を提供します。認識されたテキストはクリップボードにコピーして利用できます。",
+            appOverview2: "",
+            supportedDevices: "<strong>入力方法:</strong> カメラ撮影 + フォトライブラリ参照。",
+            supportedRange: "<strong>対応言語:</strong> 日本語・英語の手書き文字に対応しています。",
+            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。",
+            freeTier: "本アプリはOCR認識について無料で利用できる回数に上限（15回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
+            tokushoFreeTier: "本アプリはOCR認識について無料で利用できる回数に上限（15回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "無料で使えますか？", a: "<p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
+                { q: "データはどこに保存されますか？", a: "<p>認識されたテキストは<strong>お使いのデバイス内</strong>に保存されます。</p><p>当社が運用するサーバーへの送信はありません。すべてのOCR処理はデバイス上で完了します。撮影した画像もOCR処理後に破棄されます。</p>" },
+                { q: "どの言語に対応していますか？", a: "<p><strong>日本語と英語</strong>の手書き文字に対応しています。Apple Vision フレームワークの認識エンジンを使用しています。</p>" },
+                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" }
+            ]
+        },
+        en: {
+            subtitle: "Handwriting OCR Scanner",
+            description: "Scans handwritten text from camera or photo library and converts it to digital text using OCR",
+            dataTypes: "text data",
+            healthKitWrite: "",
+            healthKitRead: "",
+            cameraUsage: "uses the camera for handwriting recognition (OCR)",
+            importantNote: "This app does not send or store captured images or recognized text on our external servers. All OCR processing is completed on-device using Apple's Vision framework. No internet connection is required.",
+            appOverview: "The App recognizes handwritten text from camera captures or photos selected from your library using Apple's Vision framework, converting handwriting to digital text. Recognized text can be copied to the clipboard for use in other apps.",
+            appOverview2: "",
+            supportedDevices: "<strong>Input Method:</strong> Camera + Photo Library reference.",
+            supportedRange: "<strong>Supported Languages:</strong> Japanese and English handwriting.",
+            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later",
+            freeTier: "The App may offer a limited number of free OCR scans (up to 15) and then provide a one-time in-app purchase to unlock unlimited usage.",
+            tokushoFreeTier: "The App offers up to 15 free OCR scans, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
+            healthCategory: "",
+            notMedicalDevice: "",
+            faq: [
+                { q: "Is it free?", a: "<p><strong>Free for the first 15 scans.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
+                { q: "Where is my data stored?", a: "<p>Recognized text is stored <strong>on your device</strong>.</p><p>We do not transmit data to our servers. All OCR processing is completed on-device. Captured images are discarded after OCR processing.</p>" },
+                { q: "Which languages are supported?", a: "<p><strong>Japanese and English</strong> handwriting is supported, using Apple's Vision framework recognition engine.</p>" },
+                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" }
             ]
         }
     },
