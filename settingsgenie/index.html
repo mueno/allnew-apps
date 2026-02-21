@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SettingsGenie - AI設定アシスタント</title>
+    <meta name="description" content="SettingsGenie - AIがiPhoneの複雑な設定をショートカットで自動化。プライバシーポリシー・利用規約・サポート。">
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+    <meta name="referrer" content="no-referrer">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="bingbot" content="noindex, nofollow, noarchive">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
+    <style>
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f0ff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #6b3fdb;
+            --accent-hover: #7c52e8;
+            --accent-light: #f0ebff;
+            --border: rgba(107,63,219,0.12);
+            --glass: rgba(255,255,255,0.82);
+            --shadow-soft: 0 4px 24px rgba(107,63,219,0.08);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0a0010;
+                --bg-secondary: #1a1025;
+                --bg-tertiary: #1e1535;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #a855f7;
+                --accent-hover: #b97ef9;
+                --accent-light: #1e1535;
+                --border: rgba(168,85,247,0.2);
+                --glass: rgba(26,16,37,0.82);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.4);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 14px 24px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #6b3fdb, #3d82f2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        nav {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 24px 60px;
+            background: linear-gradient(180deg, var(--bg-tertiary) 0%, var(--bg-primary) 100%);
+        }
+
+        .hero-icon {
+            width: 88px;
+            height: 88px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #6b3fdb 0%, #3d82f2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 44px;
+            margin: 0 auto 24px;
+            box-shadow: 0 12px 40px rgba(107,63,219,0.35);
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #6b3fdb, #3d82f2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 420px;
+            margin: 0 auto 32px;
+        }
+
+        .badge-appstore {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .badge-appstore:hover { opacity: 0.85; }
+
+        /* Sections */
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 28px;
+            margin-bottom: 10px;
+        }
+
+        p, li {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+        }
+
+        li { margin-bottom: 6px; }
+
+        /* Info card */
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 16px;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+
+        .info-label {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+            width: 140px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            text-align: right;
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        /* Feature cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        @media (max-width: 480px) {
+            .feature-grid { grid-template-columns: 1fr; }
+            nav { display: none; }
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+        }
+
+        .feature-emoji {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        /* Contact */
+        .contact-link {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .contact-link:hover { text-decoration: underline; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+        }
+
+        footer a:hover { color: var(--accent); }
+
+        /* Effective date */
+        .effective-date {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        /* Warning box */
+        .warning-box {
+            background: #fff9ec;
+            border: 1px solid #f5c842;
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .warning-box {
+                background: #2a2000;
+                border-color: #6b5200;
+            }
+        }
+
+        .warning-box p {
+            color: #7a5800;
+            margin-bottom: 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .warning-box p { color: #e6b800; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-icon">✨</div>
+    <span class="header-title">SettingsGenie</span>
+    <nav>
+        <a href="#support">サポート</a>
+        <a href="#privacy">プライバシー</a>
+        <a href="#terms">利用規約</a>
+    </nav>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-icon">✨</div>
+    <h1>SettingsGenie</h1>
+    <p>AIがiPhoneの設定を自動化するショートカットを生成。複雑な設定もワンタップで。</p>
+    <a href="#" class="badge-appstore">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+        </svg>
+        App Store でダウンロード
+    </a>
+</section>
+
+<!-- Features -->
+<div class="container">
+    <section class="section" id="features">
+        <span class="section-badge">FEATURES</span>
+        <h2>主な機能</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-emoji">🤖</div>
+                <div class="feature-title">AI ショートカット生成</div>
+                <p class="feature-desc">自然言語でリクエストするだけでAIが最適なショートカットを自動生成します</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-emoji">⚡</div>
+                <div class="feature-title">ワンタップ設定</div>
+                <p class="feature-desc">生成されたショートカットをタップするだけでiPhoneに直接インストール</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-emoji">📋</div>
+                <div class="feature-title">シナリオテンプレート</div>
+                <p class="feature-desc">ゲーム・就寝・仕事・旅行など6種類のプリセットシナリオを搭載</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-emoji">🔒</div>
+                <div class="feature-title">プライバシー重視</div>
+                <p class="feature-desc">データはデバイス上で処理。位置情報・健康データへのアクセスなし</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support -->
+    <section class="section" id="support">
+        <span class="section-badge">SUPPORT</span>
+        <h2>サポート</h2>
+        <p>ご質問やお困りのことがあれば、下記メールアドレスよりお気軽にお問い合わせください。</p>
+
+        <div class="info-card">
+            <div class="info-row">
+                <span class="info-label">開発者</span>
+                <span class="info-value">Masanori Ueno / AllNew LLC</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">サポートメール</span>
+                <span class="info-value"><a href="mailto:support@allnew.jp" class="contact-link">support@allnew.jp</a></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">対応言語</span>
+                <span class="info-value">日本語 / English</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">対応時間</span>
+                <span class="info-value">平日 10:00〜18:00 JST</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">バージョン</span>
+                <span class="info-value">1.0</span>
+            </div>
+        </div>
+
+        <h3>よくある質問</h3>
+
+        <h3 style="font-size:16px; margin-top:16px;">Q. ショートカットがインストールできません</h3>
+        <p>iPhoneの「設定」→「ショートカット」→「信頼されていないショートカットを許可」がオンになっているか確認してください。iOS 13以降では初期設定でオフになっています。</p>
+
+        <h3 style="font-size:16px; margin-top:16px;">Q. AIの生成に失敗します</h3>
+        <p>Gemini APIキーが正しく設定されているか確認してください。設定画面の「AI設定」からAPIキーを入力できます。Google AI Studioで無料APIキーを取得できます。</p>
+
+        <h3 style="font-size:16px; margin-top:16px;">Q. 無料プランの生成回数はいつリセットされますか？</h3>
+        <p>無料プランの生成回数（月5回）は毎月1日にリセットされます。無制限に使用したい場合はProプランへのアップグレードをご検討ください。</p>
+
+        <h3 style="font-size:16px; margin-top:16px;">Q. サブスクリプションをキャンセルしたい</h3>
+        <p>サブスクリプションのキャンセルはApp Storeの「サブスクリプション管理」から行えます。アプリ内でキャンセルすることはできません。</p>
+    </section>
+
+    <!-- Privacy Policy -->
+    <section class="section" id="privacy">
+        <span class="section-badge">LEGAL</span>
+        <h2>プライバシーポリシー</h2>
+        <span class="effective-date">最終更新日：2026年2月22日 / 施行日：2026年2月22日</span>
+
+        <p>AllNew LLC（以下「当社」）は、SettingsGenie（以下「本アプリ」）の利用者（以下「ユーザー」）の個人情報の取り扱いについて、以下のプライバシーポリシーを定めます。</p>
+
+        <h3>1. 収集する情報</h3>
+        <p>本アプリは以下の情報を収集・処理します：</p>
+        <ul>
+            <li><strong>ユーザー入力テキスト：</strong>AIショートカット生成のために入力した設定リクエスト文（自然言語テキスト）。このデータはGemini API（Google LLC）に送信されます。</li>
+            <li><strong>生成履歴：</strong>生成したショートカットの名前・内容・生成日時。デバイス上のSwiftDataデータベースにローカル保存されます。</li>
+            <li><strong>使用回数：</strong>無料プランの月次使用回数カウンター。デバイスのUserDefaultsにローカル保存されます。</li>
+            <li><strong>APIキー（任意）：</strong>ユーザーが設定するGemini APIキー。デバイスのKeychain/AppStorageに保存されます。</li>
+        </ul>
+
+        <h3>2. 収集しない情報</h3>
+        <p>本アプリは以下の情報を収集しません：</p>
+        <ul>
+            <li>氏名・メールアドレス・電話番号等の識別情報</li>
+            <li>位置情報</li>
+            <li>健康・フィットネスデータ</li>
+            <li>写真・カメラ・マイクへのアクセス</li>
+            <li>連絡先・カレンダー情報</li>
+            <li>端末識別子（IDFA等）</li>
+            <li>クラッシュレポートや使用統計（分析ツール未導入）</li>
+        </ul>
+
+        <h3>3. 情報の利用目的</h3>
+        <ul>
+            <li>AIショートカットの生成（Gemini APIへのリクエスト送信）</li>
+            <li>無料プランの使用回数管理</li>
+            <li>生成履歴の表示・管理</li>
+        </ul>
+
+        <h3>4. 第三者への情報提供</h3>
+        <p>当社は収集したデータを第三者に販売・共有しません。ただし、以下の場合を除きます：</p>
+        <ul>
+            <li><strong>Gemini API（Google LLC）：</strong>ユーザーが入力したテキストはAI生成のためGemini APIに送信されます。Google LLCのプライバシーポリシーが適用されます。</li>
+            <li><strong>Apple Inc.：</strong>サブスクリプション購入・復元はApp Storeを通じて処理されます。Apple Inc.のプライバシーポリシーが適用されます。</li>
+            <li><strong>法的要請：</strong>法令または有権機関からの要請がある場合。</li>
+        </ul>
+
+        <div class="warning-box">
+            <p>⚠️ Gemini APIに送信するテキストには、個人情報や機密情報を含めないようにしてください。送信されたテキストはGoogleのサーバーで処理されます。</p>
+        </div>
+
+        <h3>5. データの保存と管理</h3>
+        <ul>
+            <li>生成履歴・使用回数はデバイス上のみに保存されます（当社サーバーへの送信なし）</li>
+            <li>アプリを削除するとすべてのローカルデータが削除されます</li>
+            <li>iCloudバックアップの対象になる場合があります（Apple Inc.のポリシーに準拠）</li>
+        </ul>
+
+        <h3>6. 子どものプライバシー</h3>
+        <p>本アプリは17歳未満の方を対象としていません。17歳未満の方は保護者の同意のもとでご使用ください。</p>
+
+        <h3>7. セキュリティ</h3>
+        <p>APIキーはデバイスのKeychain（セキュアストレージ）または暗号化されたUserDefaultsに保存されます。通信はHTTPS（TLS）で暗号化されます。</p>
+
+        <h3>8. プライバシーポリシーの変更</h3>
+        <p>本ポリシーは予告なく変更される場合があります。重要な変更がある場合はアプリのアップデートにてお知らせします。継続してご利用いただくことで変更に同意したものとみなします。</p>
+
+        <h3>9. お問い合わせ</h3>
+        <p>プライバシーに関するお問い合わせは <a href="mailto:support@allnew.jp" class="contact-link">support@allnew.jp</a> までご連絡ください。</p>
+    </section>
+
+    <!-- Terms of Service -->
+    <section class="section" id="terms">
+        <span class="section-badge">LEGAL</span>
+        <h2>利用規約</h2>
+        <span class="effective-date">最終更新日：2026年2月22日 / 施行日：2026年2月22日</span>
+
+        <p>本利用規約（以下「本規約」）は、AllNew LLC（以下「当社」）が提供するSettingsGenie（以下「本アプリ」）の利用条件を定めます。本アプリをダウンロード・使用することで本規約に同意したものとみなします。</p>
+
+        <h3>1. サービスの概要</h3>
+        <p>本アプリは、AIを活用してiPhoneのショートカットを自動生成し、設定変更を簡素化するサービスです。生成されたショートカットはApple純正のショートカットアプリを通じてインストールされます。</p>
+
+        <h3>2. 利用資格</h3>
+        <ul>
+            <li>17歳以上の方（未満の方は保護者の同意が必要）</li>
+            <li>日本国内でのApp Store利用規約に同意している方</li>
+            <li>本規約に同意できる方</li>
+        </ul>
+
+        <h3>3. 無料プランと有料プラン（Pro）</h3>
+        <ul>
+            <li><strong>無料プラン：</strong>月5回のAIショートカット生成が可能。</li>
+            <li><strong>Proプラン：</strong>月額480円または年額3,800円（税込）で無制限のAI生成が可能。</li>
+            <li>プランの料金・内容は予告なく変更される場合があります。</li>
+            <li>サブスクリプションはApple IDに紐付けられ、App Storeを通じて請求されます。</li>
+            <li>各期間終了の24時間前までにキャンセルしない限り、自動更新されます。</li>
+        </ul>
+
+        <h3>4. 返金ポリシー</h3>
+        <p>サブスクリプション料金の返金はApp Storeの返金ポリシーに準拠します。当社は返金を直接処理できません。返金をご希望の場合はApple Supportにお問い合わせください。</p>
+
+        <h3>5. 禁止事項</h3>
+        <ul>
+            <li>本アプリのリバースエンジニアリング・複製・改変</li>
+            <li>違法な目的や他者を害するためのショートカット生成</li>
+            <li>Gemini APIの利用規約に違反する入力テキストの送信</li>
+            <li>自動化ツールを用いた不正なAPI使用回数の回避</li>
+            <li>当社またはサービスへの不正アクセス・妨害行為</li>
+        </ul>
+
+        <h3>6. AIサービスの制限事項</h3>
+        <ul>
+            <li>AIが生成するショートカットは期待通りに動作しない場合があります</li>
+            <li>生成結果の正確性・完全性を保証しません</li>
+            <li>Gemini APIのサービス状況により生成が利用できない場合があります</li>
+            <li>AIが生成したショートカットをデバイスにインストールする前に内容を確認することを推奨します</li>
+        </ul>
+
+        <h3>7. 免責事項</h3>
+        <p>本アプリは「現状のまま」提供されます。当社は以下について責任を負いません：</p>
+        <ul>
+            <li>AIが生成したショートカットによるデバイスの設定変更・不具合</li>
+            <li>Gemini APIへのデータ送信に関するリスク</li>
+            <li>サービスの中断・停止・変更</li>
+            <li>本アプリの使用または使用不能から生じる損害</li>
+        </ul>
+
+        <h3>8. 知的財産権</h3>
+        <p>本アプリのコード・デザイン・商標は当社に帰属します。ユーザーが生成したショートカットの著作権はユーザーに帰属します。</p>
+
+        <h3>9. 準拠法・管轄</h3>
+        <p>本規約は日本法に準拠します。紛争が生じた場合は東京地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
+
+        <h3>10. 規約の変更</h3>
+        <p>当社は本規約を変更できます。重要な変更はアプリ内または当サイトで告知します。変更後も継続して使用することで変更に同意したものとみなします。</p>
+
+        <h3>11. お問い合わせ</h3>
+        <p>本規約に関するご質問は <a href="mailto:support@allnew.jp" class="contact-link">support@allnew.jp</a> までご連絡ください。</p>
+    </section>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p style="margin-bottom: 8px;">
+        <a href="#privacy">プライバシーポリシー</a> ·
+        <a href="#terms">利用規約</a> ·
+        <a href="#support">サポート</a>
+    </p>
+    <p>© 2026 AllNew LLC. All rights reserved.</p>
+    <p style="margin-top: 4px;">SettingsGenie は Apple Inc. とは関係ありません。</p>
+</footer>
+
+</body>
+</html>
