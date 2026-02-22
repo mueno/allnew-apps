@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-02-22T13:18:42+00:00",
+  "updated_at": "2026-02-22T13:19:19+00:00",
   "processed_event_ids": [
     "hash:32cdacc7d42d8d0ee43dba11cafb69f1ddd69ced9b867b6e2d81060674760366",
     "hash:7b3dbd41f0c5e81723642c3ff6124d4b395ffdb4c11698c7337cff036b3a2c6c",
@@ -52,7 +52,8 @@
     "hash:f064eb090a136ca76da123ed70aea1c2b29549cc06783579efc976cab9184008",
     "hash:f6d2880f4087541809663dc76081025a23be463ad577ec5f34206a3f709619ef",
     "hash:f90843ee5f90268ff5abb4dd294d1621e4362b7b1304261dd0c4ee5296b2664f",
-    "hash:b9a4aecbb235756be82d59d489eaecaf641428659614429dea9af08a59dcc75f"
+    "hash:b9a4aecbb235756be82d59d489eaecaf641428659614429dea9af08a59dcc75f",
+    "hash:02975041e9f4ae2d980776fb42b3826e0adb7c497b599df73d259d94473ff898"
   ],
   "statuses": {
     "weightsnap": "released",
