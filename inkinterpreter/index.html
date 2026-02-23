@@ -86,46 +86,104 @@
             align-items: center;
         }
 
-        .logo { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.02em; }
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--border);
+        }
+
+        .app-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
 
         /* Language Dropdown */
-        .lang-switcher { position: relative; }
+        .lang-dropdown {
+            position: relative;
+        }
+
         .lang-btn {
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 12px;
+            padding: 8px 14px;
+            background: var(--bg-tertiary);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            background: var(--bg-secondary);
-            cursor: pointer;
-            font-size: 0.8rem;
+            border-radius: 980px;
+            font-size: 0.85rem;
+            font-weight: 500;
             color: var(--text-primary);
-            transition: all 0.2s;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-        .lang-btn:hover { border-color: var(--accent); }
-        .lang-btn-icon { font-size: 0.75rem; transition: transform 0.2s; }
-        .lang-dropdown {
+
+        .lang-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .lang-btn::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-dropdown.open .lang-btn::after {
+            transform: rotate(180deg);
+        }
+
+        .lang-menu {
             position: absolute;
-            top: calc(100% + 4px);
+            top: calc(100% + 8px);
             right: 0;
+            min-width: 160px;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             box-shadow: var(--shadow-soft);
-            overflow: hidden;
             opacity: 0;
-            transform: translateY(-4px);
-            pointer-events: none;
-            transition: all 0.2s;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+            z-index: 200;
         }
-        .lang-dropdown.open { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+        .lang-dropdown.open .lang-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
         .lang-option {
-            padding: 8px 16px;
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
             font-size: 0.85rem;
             cursor: pointer;
             transition: background 0.15s;
             white-space: nowrap;
+            background: none;
+            border: none;
+            text-align: left;
+            color: var(--text-primary);
         }
         .lang-option:hover { background: var(--bg-tertiary); }
         .lang-option.active { color: var(--accent); font-weight: 600; }
@@ -388,15 +446,18 @@
     <!-- Header -->
     <header class="header">
         <div class="header-inner">
-            <div class="logo">AllNew LLC</div>
-            <div class="lang-switcher">
-                <div class="lang-btn" id="langBtn">
+            <a href="../" class="logo-link">
+                <span class="logo">AllNew</span>
+                <span class="logo-divider"></span>
+                <span class="app-name">InkInterpreter</span>
+            </a>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-btn" id="langBtn">
                     <span id="currentLangLabel">日本語</span>
-                    <span class="lang-btn-icon">▾</span>
-                </div>
-                <div class="lang-dropdown" id="langDropdown">
-                    <div class="lang-option active" data-lang="ja">日本語</div>
-                    <div class="lang-option" data-lang="en">English</div>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <button class="lang-option active" data-lang="ja">日本語</button>
+                    <button class="lang-option" data-lang="en">English</button>
                 </div>
             </div>
         </div>

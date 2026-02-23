@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none';">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <title>PainSnap</title>
+    <style>
+        /* ==================== CSS Variables & Theme ==================== */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --bg-tertiary: #f0f0f2;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #e74c3c;
+            --accent-light: rgba(231, 76, 60, 0.1);
+            --accent-hover: #c0392b;
+            --border: #d2d2d7;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --header-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #e74c3c;
+                --accent-light: rgba(231, 76, 60, 0.15);
+                --accent-hover: #ff6b5a;
+                --border: #38383a;
+                --card-bg: #1c1c1e;
+                --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+                --header-bg: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        /* ==================== Base Styles ==================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* ==================== Header ==================== */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--border);
+        }
+
+        .app-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 980px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover { border-color: var(--accent); }
+
+        .lang-btn::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-dropdown.open .lang-btn::after {
+            transform: rotate(180deg);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 160px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+            z-index: 200;
+        }
+
+        .lang-dropdown.open .lang-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: background 0.2s;
+            background: none;
+            border: none;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .lang-option:hover { background: var(--bg-tertiary); }
+        .lang-option.active { color: var(--accent); font-weight: 600; }
+
+        /* ==================== Hero ==================== */
+        .hero {
+            text-align: center;
+            padding: 48px 20px 32px;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 12px;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* ==================== TOC Navigation ==================== */
+        .toc {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .toc-link {
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .toc-link:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        /* ==================== Main Content ==================== */
+        main { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+
+        .lang-content { display: none; }
+        .lang-content.active { display: block; }
+
+        .section {
+            margin-bottom: 32px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon { font-size: 1.5rem; }
+        .section-title { font-size: 1.2rem; font-weight: 700; }
+        .section-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px; }
+
+        .updated-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .highlight-box {
+            padding: 16px;
+            border-radius: 12px;
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ==================== FAQ Accordion ==================== */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:last-child { border-bottom: none; }
+
+        .faq-question {
+            padding: 16px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover { color: var(--accent); }
+
+        .faq-icon {
+            font-size: 1.2rem;
+            color: var(--text-tertiary);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+
+        .faq-item.open .faq-icon { transform: rotate(45deg); color: var(--accent); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer p, .faq-answer ul {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-bottom: 16px;
+        }
+
+        .faq-answer ul { padding-left: 20px; }
+        .faq-answer li { margin-bottom: 6px; }
+
+        /* ==================== Legal Sections ==================== */
+        .legal-section { margin-bottom: 20px; }
+
+        .legal-section h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .legal-section p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .legal-section ul {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-left: 20px;
+        }
+
+        .legal-section li { margin-bottom: 6px; }
+
+        .legal-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .legal-section a:hover { text-decoration: underline; }
+
+        /* ==================== Commercial Accordion ==================== */
+        .commercial-accordion .commercial-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .commercial-accordion.open .commercial-content {
+            max-height: 800px;
+        }
+
+        .commercial-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .commercial-toggle {
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .commercial-accordion.open .commercial-toggle {
+            transform: rotate(45deg);
+            color: var(--accent);
+        }
+
+        /* ==================== Contact Card ==================== */
+        .contact-card {
+            text-align: center;
+        }
+
+        .contact-card h2 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .contact-email {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .contact-email:hover { background: var(--accent-hover); }
+
+        .contact-details {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+
+        .contact-details-top { border-top: none; }
+
+        .contact-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .contact-item dt {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 120px;
+        }
+
+        .contact-item dd {
+            color: var(--text-secondary);
+            text-align: right;
+        }
+
+        /* ==================== Footer ==================== */
+        .footer {
+            text-align: center;
+            padding: 24px 20px;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+
+        /* ==================== Translation Notice ==================== */
+        .translation-notice {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-align: center;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        /* ==================== Responsive ==================== */
+        @media (max-width: 600px) {
+            .hero { padding: 32px 16px 24px; }
+            .hero h1 { font-size: 1.6rem; }
+            .section { padding: 20px 16px; }
+            .toc { gap: 6px; }
+            .toc-link { padding: 5px 10px; font-size: 0.75rem; }
+            .contact-item { flex-direction: column; gap: 2px; }
+            .contact-item dd { text-align: left; }
+        }
+
+        /* Scroll offset for sticky header */
+        :target { scroll-margin-top: 60px; }
+
+        /* ==================== Wiggle Animation ==================== */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        .hero-icon:hover { animation: wiggle 0.5s ease-in-out; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="../" class="logo-link">
+            <span class="logo">AllNew</span>
+            <span class="logo-divider"></span>
+            <span class="app-name">PainSnap</span>
+        </a>
+        <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-btn" id="langBtn">
+                <span id="currentLangLabel">日本語</span>
+            </button>
+            <div class="lang-menu" id="langMenu">
+                <button class="lang-option active" data-lang="ja">日本語</button>
+                <button class="lang-option" data-lang="en">English</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+        <div class="hero-icon">&#x1FA79;</div>
+        <h1 id="heroTitle">PainSnap</h1>
+        <p class="hero-subtitle" id="heroSubtitle">4ステップで痛みを記録。<br>伝えにくい痛みを、見える形に。</p>
+    </div>
+
+    <!-- TOC -->
+    <nav class="toc">
+        <a href="#faq-ja" class="toc-link" data-section="faq">FAQ</a>
+        <a href="#privacy-ja" class="toc-link" data-section="privacy">プライバシー</a>
+        <a href="#terms-ja" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#commercial-ja" class="toc-link" data-section="commercial">特定商取引法</a>
+        <a href="#contact-ja" class="toc-link" data-section="contact">お問い合わせ</a>
+    </nav>
+
+    <main>
+        <!-- ==================== JAPANESE ==================== -->
+        <div class="lang-content active" data-lang="ja">
+            <!-- FAQ -->
+            <section id="faq-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">よくあるご質問</div>
+                        <div class="section-subtitle">機能や使い方についてお答えします</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">痛みはどうやって記録しますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>4ステップで記録します：</p>
+                        <ul>
+                            <li><strong>ステップ1:</strong> ボディマップから痛みの場所を選択</li>
+                            <li><strong>ステップ2:</strong> 痛みの強さを0〜10で評価</li>
+                            <li><strong>ステップ3:</strong> 痛みの種類を選択（ズキズキ、チクチク、鈍い痛みなど）</li>
+                            <li><strong>ステップ4:</strong> きっかけを入力（任意）</li>
+                        </ul>
+                        <p>記録した痛みデータはApple HealthKit（ヘルスケア）に保存されます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">無料で使えますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>15回まで無料</strong>でお使いいただけます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>痛みデータは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。</p>
+                        <p>当社が運用するサーバーへの送信はありません。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">購入を復元したい<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップする。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">ヘルスケアアプリで痛みデータを見るには？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iOSのヘルスケアアプリを開き、<strong>「ブラウズ」→「症状」→「一般的な体の痛み」</strong>の順に進むと、PainSnapで記録した痛みデータを確認できます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Doctor's Pass（ドクターズパス）とは？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>記録した痛みの情報を、日本語と英語の両方で表示する機能です。</p>
+                        <p>この画面を見せることで、痛みの症状を伝えることができます。言語ボタンで日本語と英語を切り替えられます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">対応しているiPhoneは？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>iOS 17.0以降</strong>を搭載し、Apple HealthKitに対応したiPhoneで動作します。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">データを削除したい場合は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iOSのヘルスケアアプリから該当データを削除してください。アプリを削除する際、iOSがヘルスケアデータの削除を確認します。詳しい操作方法についてはヘルスケアアプリでご確認ください。</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">プライバシーポリシー</div>
+                        <div class="section-subtitle">あなたのデータを大切に扱います</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月17日</span>
+
+                <div class="highlight-box">
+                    <p><strong>重要:</strong> 本アプリは、ユーザーの痛みデータを当社の外部サーバーに送信・保存しません。すべてのデータはお使いのデバイス内およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. 収集する情報の種類</h3>
+                    <ul>
+                        <li><strong>健康関連データ（HealthKit）:</strong> 痛みデータ（一般的な体の痛み）の書き込み・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
+                        <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>収集しない情報:</strong> 本アプリではカメラ・マイクを使用せず、広告SDKやアナリティクスサービスを使用せず、ユーザー登録機能もありません。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 情報の利用目的</h3>
+                    <p>痛みの記録と健康管理支援、痛みの履歴・傾向の表示。これ以外の目的には利用しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 第三者への提供</h3>
+                    <p>当社はHealthKitデータを第三者に提供、販売、共有しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Apple HealthKit特記事項</h3>
+                    <ul>
+                        <li>HealthKitデータを広告、マーケティング、データマイニング目的で使用しません</li>
+                        <li>HealthKitデータをデータブローカーに販売しません</li>
+                        <li>当社はHealthKitデータを当社の外部サーバーに送信・保存しません。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います</li>
+                        <li>HealthKitへのアクセスはiOSの設定からいつでも取り消せます</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. セキュリティ対策</h3>
+                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 子供のプライバシー</h3>
+                    <p>本アプリは13歳未満のお子様を対象としていません。アプリの機能利用において、当社は個人情報を収集しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. ユーザーの権利</h3>
+                    <ul>
+                        <li><strong>すべてのユーザー:</strong> HealthKitデータの管理・削除はiOSのApple Health（ヘルスケア）アプリから可能です。表示項目はiOSバージョンにより異なる場合があります。アプリ削除時、iOSがヘルスケアデータの削除を確認します。</li>
+                        <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
+                        <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。</li>
+                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。ただし、iCloud同期等のAppleサービスは、ユーザー設定およびAppleの仕様に依存します。</li>
+                        <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
+                        <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. お問い合わせについて</h3>
+                    <p>ユーザーが当社へお問い合わせを行う場合、当社は返信対応のために、メールアドレスおよびお問い合わせ内容を取得・利用します。これらの情報はサポート対応の目的にのみ用い、法令に基づく場合を除き第三者に提供しません。対応完了後は合理的な期間で削除または匿名化します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 準拠法と管轄</h3>
+                    <p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 多言語版について</h3>
+                    <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">利用規約</div>
+                        <div class="section-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年2月17日</span>
+
+                <div class="legal-section">
+                    <h3>1. 規約の適用</h3>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「PainSnap」（以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 利用開始と同意</h3>
+                    <p>ユーザーが本アプリをダウンロードし、インストールまたは利用を開始した時点で、本規約に同意したものとみなされます。本規約に同意しない場合、本アプリをご利用いただくことはできません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 本アプリの概要と対応機器</h3>
+                    <p>本アプリは、身体の痛みを4ステップ（場所・強さ・種類・きっかけ）で記録し、Apple HealthKit（ヘルスケア）に保存する痛み記録アプリケーションです。</p>
+                    <ul>
+                        <li><strong>記録方法:</strong> ボディマップから痛みの場所を選択し、強さ（0〜10）、種類、きっかけを入力して記録します。</li>
+                        <li><strong>Doctor's Pass:</strong> 記録した痛みの情報を日本語・英語で表示する機能です。</li>
+                        <li><strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. プライバシーポリシーおよびHealthKitデータの取り扱い</h3>
+                    <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
+                    <p>Apple HealthKitに記録されたデータについて、当社は以下を遵守します:</p>
+                    <ul>
+                        <li>HealthKitデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
+                        <li>HealthKitデータをデータブローカーや第三者に販売・提供しません</li>
+                        <li>HealthKitデータを当社が運用するサーバーへ送信・保存しません</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 禁止事項</h3>
+                    <ul>
+                        <li>本アプリの目的と異なる利用</li>
+                        <li>法令または公序良俗に反する行為</li>
+                        <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
+                        <li>第三者の痛みデータを無断で記録する行為</li>
+                        <li>その他当社が不適切と判断する行為</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 健康情報に関する注意</h3>
+                    <p>本アプリは一般的なウェルネスおよびフィットネス支援を目的としたものであり、医療機器ではありません。健康状態に関する疑問や不安がある場合は医師にご相談ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. 記録の正確性について</h3>
+                    <ul>
+                        <li><strong>ユーザーの責任:</strong> 痛みの記録はユーザー自身の主観的な入力に基づきます。記録内容の正確性はユーザーの判断に依存します。</li>
+                        <li><strong>記録後の訂正方法:</strong> 誤ったデータを修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除してください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 知的財産権</h3>
+                    <p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 免責事項</h3>
+                    <p>当社は、本アプリの機能が中断なく動作することを保証しません。</p>
+                    <p>当社が損害賠償責任を負う場合でも、当社の故意または重過失がある場合を除き、当社の責任は通常かつ直接の損害に限られます。なお、消費者契約法その他の強行法規により制限される範囲では本項は適用されません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 料金および支払</h3>
+                    <p>15回まで無料でお使いいただけます。過去に購入された場合は「購入を復元」機能をご利用ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 規約の変更</h3>
+                    <p>当社は、必要に応じて本規約を変更することがあります。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. 準拠法・管轄</h3>
+                    <p>本規約は日本法に準拠し、東京地方裁判所を専属的合意管轄裁判所とします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. 多言語版について</h3>
+                    <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-ja" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">特定商取引法に基づく表記</div>
+                                <div class="section-subtitle">販売事業者情報</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
+                            <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
+                            <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
+                            <div class="contact-item"><dt>お問い合わせ先</dt><dd>painsnap-support@allnew.work<br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+                            <div class="contact-item"><dt>販売価格</dt><dd>アプリ内の購入画面に記載された価格</dd></div>
+                            <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
+                            <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
+                            <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセルはお受けできません。返金の可否・手続はAppleの返金ポリシーに従います。</dd></div>
+                            <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-ja" class="section">
+                <div class="contact-card">
+                    <h2>お問い合わせ</h2>
+                    <a href="mailto:painsnap-support@allnew.work?subject=PainSnap%20%3A%20" class="contact-email">✉️ メールを送る</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
+                        <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== ENGLISH ==================== -->
+        <div class="lang-content" data-lang="en">
+            <!-- FAQ -->
+            <section id="faq-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">Frequently Asked Questions</div>
+                        <div class="section-subtitle">Answers about features and usage</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">How do I record pain?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Record in 4 steps:</p>
+                        <ul>
+                            <li><strong>Step 1:</strong> Select the pain location from the body map</li>
+                            <li><strong>Step 2:</strong> Rate pain intensity from 0 to 10</li>
+                            <li><strong>Step 3:</strong> Choose the pain type (throbbing, sharp, dull, etc.)</li>
+                            <li><strong>Step 4:</strong> Enter the trigger (optional)</li>
+                        </ul>
+                        <p>Recorded pain data is saved to Apple HealthKit.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is it free?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>Free for the first 15 uses.</strong></p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Pain data is stored in <strong>Apple HealthKit on your device</strong>.</p>
+                        <p>We do not transmit data to servers operated by us. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>Steps:</strong> Open the app → Settings → About → Restore Purchase.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I view pain data in the Health app?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Open the iOS Health app and navigate to <strong>Browse → Symptoms → Generalized Body Ache</strong> to see pain data recorded by PainSnap.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What is Doctor's Pass?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>A feature that displays your recorded pain information in both Japanese and English.</p>
+                        <p>You can show this screen to communicate your pain symptoms. Use the language button to switch between Japanese and English.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iPhones running <strong>iOS 17.0 or later</strong> with Apple HealthKit support.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I delete my data?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Delete the relevant data from the iOS Health app. When uninstalling the app, iOS will ask whether to delete health data. Please refer to the Health app for detailed instructions.</p>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">Privacy Policy</div>
+                        <div class="section-subtitle">How we handle your data</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: February 17, 2026</span>
+
+                <div class="highlight-box">
+                    <p><strong>Important:</strong> This app does not send or store your pain data on our external servers. All data is stored on your device and in Apple HealthKit. Health data storage/sync behavior (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. Information We Collect</h3>
+                    <ul>
+                        <li><strong>Health Data (HealthKit):</strong> Pain data (generalized body ache) read/write. Stored on your device and in Apple HealthKit. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</li>
+                        <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
+                        <li><strong>What We Don't Collect:</strong> This app does not use camera or microphone. We do not use advertising SDKs, analytics services, or user registration in this App.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. How We Use Information</h3>
+                    <p>Pain recording, health management support, displaying pain history and trends. No other purposes.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. Third-Party Sharing</h3>
+                    <p>We do not provide, sell, or share HealthKit data with third parties.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Apple HealthKit</h3>
+                    <ul>
+                        <li>HealthKit data is not used for advertising, marketing, or data mining</li>
+                        <li>HealthKit data is not sold to data brokers</li>
+                        <li>We do not transmit or store HealthKit data on our own external servers. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior</li>
+                        <li>HealthKit access can be revoked anytime in iOS Settings</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Security</h3>
+                    <p>We employ data minimization, on-device processing where possible, Keychain protection, and HealthKit encryption.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Children's Privacy</h3>
+                    <p>This App is not intended for children under 13. We do not collect personal information through the App's functionality.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Your Rights</h3>
+                    <ul>
+                        <li><strong>All Users:</strong> You can manage or delete HealthKit data through the iOS Apple Health app. Navigation paths may vary depending on your iOS version. When uninstalling, iOS asks whether to delete health data.</li>
+                        <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
+                        <li><strong>California (CCPA/CPRA):</strong> Right to know, delete, opt-out. We don't sell personal information.</li>
+                        <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country. Note that Apple services (such as iCloud sync) may involve processing outside your region depending on your settings and Apple's system behavior.</li>
+                        <li><strong>South Korea (PIPA):</strong> Right to request processing suspension.</li>
+                        <li><strong>Brazil (LGPD):</strong> Right to data portability.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. When You Contact Us</h3>
+                    <p>If you contact us, we may receive your email address and the contents of your message to respond to your inquiry. We use this information solely for customer support and do not share it with third parties except as required by law.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Governing Law</h3>
+                    <p>This policy is governed by Japanese law. Regional laws (GDPR, CCPA/CPRA, PIPL, LGPD, PIPA) apply to respective residents.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Translations</h3>
+                    <p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws or other applicable regulations in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">Terms of Service</div>
+                        <div class="section-subtitle">Conditions for using the App</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: February 17, 2026</span>
+
+                <div class="legal-section">
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>These Terms of Service govern your use of "PainSnap" (the "App"), provided by AllNew LLC ("we", "us", or "our"). By using the App, you agree to these terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Agreement to Terms</h3>
+                    <p>By downloading, installing, or using the App, you agree to be bound by these Terms. If you do not agree, do not use the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. App Description and Compatibility</h3>
+                    <p>The App records body pain in 4 steps (location, intensity, type, trigger) and saves data to Apple HealthKit.</p>
+                    <ul>
+                        <li><strong>Recording Method:</strong> Select a pain location from the body map, rate intensity (0-10), choose pain type, and enter a trigger.</li>
+                        <li><strong>Doctor's Pass:</strong> Displays recorded pain information in both Japanese and English.</li>
+                        <li><strong>Supported Devices:</strong> iPhone with iOS 17.0 or later.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Privacy Policy and HealthKit Data Handling</h3>
+                    <p>Your use of the App is also governed by our <a href="#privacy-en">Privacy Policy</a>.</p>
+                    <p>Regarding data recorded in Apple HealthKit, we commit to the following:</p>
+                    <ul>
+                        <li>We do not use HealthKit data for advertising, marketing, or data mining purposes</li>
+                        <li>We do not sell or provide HealthKit data to data brokers or third parties</li>
+                        <li>We do not transmit or store HealthKit data on servers operated by us</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Prohibited Activities</h3>
+                    <ul>
+                        <li>Using the App for purposes other than pain tracking</li>
+                        <li>Violating any laws or third-party rights</li>
+                        <li>Reverse engineering or decompiling the App</li>
+                        <li>Recording third parties' pain data without consent</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Health Disclaimer</h3>
+                    <p>This App is for general wellness and fitness purposes only. It is not a medical device. Consult a healthcare professional for medical advice.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Recording Accuracy</h3>
+                    <ul>
+                        <li><strong>User Responsibility:</strong> Pain records are based on the user's subjective input. The accuracy of records depends on the user's judgment.</li>
+                        <li><strong>How to Correct Entries:</strong> To correct data, delete the incorrect entry in the iOS Health app. Please refer to the Health app for detailed instructions.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Intellectual Property</h3>
+                    <p>All intellectual property rights in the App belong to us or our licensors.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Disclaimer of Warranties</h3>
+                    <p>The App is provided "as is" without warranties of any kind. We do not guarantee uninterrupted operation of the App.</p>
+                    <p>Our liability, if any, is limited to direct damages, except in cases of willful misconduct or gross negligence. This limitation does not apply where restricted by mandatory consumer protection laws.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Pricing</h3>
+                    <p>Free for the first 15 uses. Use "Restore Purchase" if you've previously purchased.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Changes to Terms</h3>
+                    <p>We may modify these Terms at any time. Continued use constitutes acceptance.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. Governing Law</h3>
+                    <p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. Translations</h3>
+                    <p>The Japanese version of these Terms of Service is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-en" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">Seller Information</div>
+                                <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
+                            <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
+                            <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+                            <div class="contact-item"><dt>Contact</dt><dd>painsnap-support@allnew.work<br><small>Phone number available upon request</small></dd></div>
+                            <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen</dd></div>
+                            <div class="contact-item"><dt>Payment Method & Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
+                            <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
+                            <div class="contact-item"><dt>Returns & Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase</dd></div>
+                            <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-en" class="section">
+                <div class="contact-card">
+                    <h2>Contact Us</h2>
+                    <a href="mailto:painsnap-support@allnew.work?subject=PainSnap%20%3A%20" class="contact-email">✉️ Send Email</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
+                        <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 合同会社AllNew / AllNew LLC</p>
+    </footer>
+
+    <script>
+        // Clickjacking defense (frame-busting fallback for GitHub Pages)
+        if (window.self !== window.top) { document.body.style.display = 'none'; }
+
+        // Language Data
+        const langData = {
+            ja: {
+                label: '日本語', hero: 'PainSnap',
+                subtitleLine1: '4ステップで痛みを記録。',
+                subtitleLine2: '伝えにくい痛みを、見える形に。',
+                toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ']
+            },
+            en: {
+                label: 'English', hero: 'PainSnap',
+                subtitleLine1: 'Record pain in 4 steps.',
+                subtitleLine2: 'Make your pain visible and communicable.',
+                toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact']
+            }
+        };
+
+        // Get current language from URL hash or default to ja
+        function getLangFromHash() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[0];
+                    if (langData[possibleLang]) return possibleLang;
+                }
+            }
+            // Check URL params
+            const params = new URLSearchParams(window.location.search);
+            const langParam = params.get('lang');
+            if (langParam && langData[langParam]) return langParam;
+            // Default based on browser language
+            const browserLang = navigator.language.split('-')[0];
+            if (langData[browserLang]) return browserLang;
+            return 'ja';
+        }
+
+        let currentLang = getLangFromHash();
+
+        // Switch Language
+        function switchLanguage(lang) {
+            currentLang = lang;
+
+            // Update content visibility
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+
+            // Update dropdown
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+            document.getElementById('currentLangLabel').textContent = langData[lang].label;
+
+            // Update hero
+            document.getElementById('heroTitle').textContent = langData[lang].hero;
+            var subtitleEl = document.getElementById('heroSubtitle');
+            subtitleEl.textContent = '';
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine1));
+            subtitleEl.appendChild(document.createElement('br'));
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine2));
+
+            // Update TOC
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const tocLabels = langData[lang].toc;
+            tocLinks.forEach((link, i) => {
+                link.textContent = tocLabels[i];
+                const section = link.dataset.section;
+                link.href = `#${section}-${lang}`;
+            });
+
+            // Update URL
+            const currentHash = window.location.hash;
+            const currentParams = new URLSearchParams(window.location.search);
+            currentParams.set('lang', lang);
+            const queryString = currentParams.toString();
+            if (currentHash && currentHash.includes('-')) {
+                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(s => currentHash.includes(s))) {
+                    const sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace(`-${getLangFromHash()}`, '');
+                    history.replaceState(null, null, `?${queryString}#${sectionName}-${lang}`);
+                }
+            } else {
+                history.replaceState(null, null, `?${queryString}`);
+            }
+
+            // Close dropdown
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+
+        // Language Dropdown Toggle
+        const langBtn = document.getElementById('langBtn');
+        const langDropdown = document.getElementById('langDropdown');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            langDropdown.classList.remove('open');
+        });
+
+        // Language Options
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => switchLanguage(opt.dataset.lang));
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all in same lang-content
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // Commercial Accordion (event delegation)
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.commercial-header');
+            if (!header) return;
+            var accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        });
+
+        // Auto-expand commercial section if accessed via anchor
+        function checkCommercialAnchor() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(acc => {
+                    acc.classList.add('open');
+                });
+            }
+        }
+
+        // Initialize
+        switchLanguage(currentLang);
+        checkCommercialAnchor();
+
+        // Handle hash changes for section navigation
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang]) {
+                        if (currentLang !== possibleLang) {
+                            switchLanguage(possibleLang);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Copy Protection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', e => e.preventDefault());
+    </script>
+
+    <!-- Trademark Attribution Footer -->
+    <footer class="trademark-footer">
+        <div class="trademark-content">
+            <p class="trademark-text">
+                Apple、Appleのロゴ、iPhone、iOS、HealthKit、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                <br>
+                Apple, the Apple logo, iPhone, iOS, HealthKit, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+            </p>
+            <p class="trademark-disclaimer">
+                本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
+                This application is not developed or endorsed by Apple Inc.
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .trademark-footer {
+            margin-top: 60px;
+            padding: 24px 20px 40px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+        .trademark-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .trademark-text {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .trademark-disclaimer {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+    </style>
+</body>
+</html>
