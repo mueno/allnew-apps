@@ -3,6 +3,9 @@ assets/asc-screenshots/.tmp*
 landing-automation/state/*.tmp
 landing-automation/cloudflare-worker/node_modules/
 
+# Wrangler (Cloudflare CLI)
+.wrangler/
+
 # Claude session/handoff files (internal working files)
 CLAUDE_*
 HANDOFF_*
