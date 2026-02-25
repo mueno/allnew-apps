@@ -40,7 +40,6 @@ SLUG_TO_PROJECT = {
     "coughwav": "CoughWav",
     "botto": "ZenFlip",
     "mofulens": "MofuLens",
-    "timelens": "TimeLens",
 }
 
 ASC_APP_IDS = {
@@ -54,7 +53,6 @@ ASC_APP_IDS = {
     "coughwav": "6759076606",
     "pupweight": "6759076505",
     "botto": "6759169189",
-    "timelens": "6759194873",
 }
 
 

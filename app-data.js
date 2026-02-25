@@ -6,7 +6,7 @@
 const APP_DATA = {
     weightsnap: {
         name: "WeightSnap",
-        supportEmail: "weightsnap-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x2696;&#xFE0F;",
         ja: {
             subtitle: "体重記録アプリ",
@@ -71,7 +71,7 @@ const APP_DATA = {
     },
     bpsnap: {
         name: "BPSnap",
-        supportEmail: "bpsnap-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1FA7A;",
         ja: {
             subtitle: "血圧記録アプリ",
@@ -122,7 +122,7 @@ const APP_DATA = {
     },
     glucosnap: {
         name: "GlucoSnap",
-        supportEmail: "glucosnap-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1FA78;",
         ja: {
             subtitle: "血糖値記録アプリ",
@@ -173,7 +173,7 @@ const APP_DATA = {
     },
     oxisnap: {
         name: "OxiSnap",
-        supportEmail: "oxisnap-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1F9EC;",
         ja: {
             subtitle: "SpO2記録アプリ",
@@ -224,7 +224,7 @@ const APP_DATA = {
     },
     thermosnap: {
         name: "ThermoSnap",
-        supportEmail: "thermosnap-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1F321;&#xFE0F;",
         ja: {
             subtitle: "体温記録アプリ",
@@ -275,7 +275,7 @@ const APP_DATA = {
     },
     waistvox: {
         name: "WaistVox",
-        supportEmail: "waistvox-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1F4CF;",
         ja: {
             subtitle: "ウエスト記録アプリ",
@@ -326,7 +326,7 @@ const APP_DATA = {
     },
     babyvox: {
         name: "BabyVox",
-        supportEmail: "babyvox-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1F476;",
         ja: {
             subtitle: "赤ちゃんの成長記録アプリ",
@@ -377,7 +377,7 @@ const APP_DATA = {
     },
     coughwav: {
         name: "CoughWav",
-        supportEmail: "coughwav-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1F637;",
         ja: {
             subtitle: "咳モニタリングアプリ",
@@ -428,7 +428,7 @@ const APP_DATA = {
     },
     pupweight: {
         name: "PupWeight",
-        supportEmail: "pupweight-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1F436;",
         ja: {
             subtitle: "ペットの体重記録アプリ",
@@ -479,7 +479,7 @@ const APP_DATA = {
     },
     botto: {
         name: "BOTTO",
-        supportEmail: "botto-support@allnew.work",
+        supportEmail: "app-support@allnew.work",
         icon: "&#x1F9D8;",
         ja: {
             subtitle: "集中タイマーアプリ",
@@ -528,230 +528,6 @@ const APP_DATA = {
             ]
         }
     },
-    aegismail: {
-        name: "Aegis Mail",
-        supportEmail: "aegismail-support@allnew.work",
-        icon: "&#x1F6E1;&#xFE0F;",
-        ja: {
-            subtitle: "AIメールトリアージアプリ",
-            description: "Gmailのメールをオンデバイス AI が自動で3段階（重要・報告・ノイズ）に分類し、大事なメールを見逃さないメールクライアントアプリ",
-            dataTypes: "",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "本アプリはカメラを使用しません",
-            importantNote: "本アプリは Gmail API を使用してお客様のメールデータにアクセスします。メールの分類（トリアージ）は原則としてデバイス上の AI で処理されます。高度な要約・翻訳機能をご利用の場合に限り、個人情報を自動マスクしたうえでクラウド AI（Google Gemini）に送信されます。メールデータは当社の外部サーバーに保存されません。Apple HealthKitは使用しません。",
-            appOverview: "Google アカウントでサインインし、Gmail のメールを取得します。デバイス上の AI（Apple FoundationModels）がメールを「重要（Critical）」「報告（Report）」「ノイズ（Noise）」の3段階に自動分類し、優先度に応じた受信トレイを提供します。",
-            appOverview2: "高度な要約・翻訳機能は、メール本文から個人情報（PII）を自動検出・マスクした上でクラウド AI に送信します。クラウド AI の利用はユーザーの明示的な操作時のみ行われます。",
-            supportedDevices: "<strong>入力方法:</strong> Google アカウント（Gmail）でサインイン。",
-            supportedRange: "",
-            supportedOS: "<strong>対応デバイス:</strong> iOS 26.0以降を搭載し、Apple Intelligence に対応した iPhone（A17 Pro 以降）。",
-            freeTier: "本アプリはメールトリアージ回数について無料で利用できる回数に上限（50回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
-            tokushoFreeTier: "本アプリはメールトリアージ回数について無料で利用できる回数に上限（50回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "どのようなメールサービスに対応していますか？", a: "<p>現在は <strong>Gmail</strong> のみに対応しています。Google アカウントでサインインしてご利用ください。</p>" },
-                { q: "メールの内容は外部に送信されますか？", a: "<p>メールの分類（トリアージ）は<strong>デバイス上の AI</strong> で処理されるため、メール内容は外部に送信されません。</p><p>高度な要約・翻訳機能をご利用の場合のみ、<strong>個人情報を自動マスクした上で</strong>クラウド AI（Google Gemini）に送信されます。クラウド AI の利用はユーザーの明示的な操作時のみ行われます。</p>" },
-                { q: "無料で使えますか？", a: "<p><strong>50回まで無料</strong>でメールトリアージをお使いいただけます。51回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
-                { q: "データはどこに保存されますか？", a: "<p>メールデータは <strong>Gmail のサーバー</strong>に保存されています。本アプリは Gmail API を通じてメールを読み取りますが、当社が運用するサーバーにメールデータを保存することはありません。</p><p>トリアージ結果やアプリの設定はお使いのデバイス内に保存されます。</p>" },
-                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" },
-                { q: "トリアージの精度を上げるコツは？", a: "<ul><li>メールの件名と本文の冒頭が分類の判断材料になります</li><li>既知の送信者からのメールほど正確に分類されます</li><li>分類結果が期待と異なる場合はスワイプで手動再分類できます</li></ul>" }
-            ]
-        },
-        en: {
-            subtitle: "AI Email Triage App",
-            description: "An AI-powered Gmail client that automatically sorts your inbox into three priority levels—Critical, Report, and Noise—so you never miss important emails",
-            dataTypes: "",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "This app does not use the camera",
-            importantNote: "This app accesses your email data via the Gmail API. Email classification (triage) is processed on-device by AI. For advanced summarization and translation features, personal information is automatically redacted before being sent to cloud AI (Google Gemini). Email data is not stored on our external servers. Apple HealthKit is not used.",
-            appOverview: "The App uses your Google account to access Gmail, then classifies emails into three priority levels—Critical, Report, and Noise—using on-device AI (Apple FoundationModels), providing a priority-sorted inbox.",
-            appOverview2: "Advanced summarization and translation features automatically detect and redact personally identifiable information (PII) before sending to cloud AI. Cloud AI is only used when explicitly triggered by the user.",
-            supportedDevices: "<strong>Input Method:</strong> Sign in with Google account (Gmail).",
-            supportedRange: "",
-            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 26.0 or later and Apple Intelligence support (A17 Pro or later).",
-            freeTier: "The App may offer a limited number of free email triages (up to 50) and then provide a one-time in-app purchase to unlock unlimited usage.",
-            tokushoFreeTier: "The App offers up to 50 free email triages, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "Which email services are supported?", a: "<p>Currently, only <strong>Gmail</strong> is supported. Sign in with your Google account to get started.</p>" },
-                { q: "Is my email content sent to external servers?", a: "<p>Email classification (triage) is processed by <strong>on-device AI</strong>, so your email content is not sent externally.</p><p>Only when using advanced summarization or translation features is content sent to cloud AI (Google Gemini), <strong>after personal information is automatically redacted</strong>. Cloud AI is only used when you explicitly trigger these features.</p>" },
-                { q: "Is it free?", a: "<p><strong>Free for the first 50 email triages.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
-                { q: "Where is my data stored?", a: "<p>Your email data remains on <strong>Gmail's servers</strong>. This app reads emails through the Gmail API but does not store email data on our servers.</p><p>Triage results and app settings are stored on your device.</p>" },
-                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" },
-                { q: "Tips for better triage accuracy", a: "<ul><li>Email subject lines and opening text are used for classification</li><li>Emails from known senders are classified more accurately</li><li>You can manually re-classify by swiping if results differ from expectations</li></ul>" }
-            ]
-        }
-    },
-    inkinterpreter: {
-        name: "InkInterpreter",
-        supportEmail: "inkinterpreter-support@allnew.work",
-        icon: "&#x1F4DD;",
-        ja: {
-            subtitle: "手書きOCRスキャナー",
-            description: "手書きの文字をカメラまたはフォトライブラリから読み取り、テキストに変換するOCRスキャナーアプリ",
-            dataTypes: "テキストデータ",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "手書き文字の読み取り（OCR）のためにカメラを使用",
-            importantNote: "本アプリは、撮影画像や認識テキストを当社の外部サーバーに送信・保存しません。すべてのOCR処理はデバイス上のApple Vision フレームワークで完了します。インターネット接続は不要です。",
-            appOverview: "カメラで撮影またはフォトライブラリから選択した画像から、Apple Vision フレームワークを使用して手書き文字を認識し、テキストに変換する機能を提供します。認識されたテキストはクリップボードにコピーして利用できます。",
-            appOverview2: "",
-            supportedDevices: "<strong>入力方法:</strong> カメラ撮影 + フォトライブラリ参照。",
-            supportedRange: "<strong>対応言語:</strong> 日本語・英語の手書き文字に対応しています。",
-            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。",
-            freeTier: "本アプリはOCR認識について無料で利用できる回数に上限（15回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
-            tokushoFreeTier: "本アプリはOCR認識について無料で利用できる回数に上限（15回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "無料で使えますか？", a: "<p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
-                { q: "データはどこに保存されますか？", a: "<p>認識されたテキストは<strong>お使いのデバイス内</strong>に保存されます。</p><p>当社が運用するサーバーへの送信はありません。すべてのOCR処理はデバイス上で完了します。撮影した画像もOCR処理後に破棄されます。</p>" },
-                { q: "どの言語に対応していますか？", a: "<p><strong>日本語と英語</strong>の手書き文字に対応しています。Apple Vision フレームワークの認識エンジンを使用しています。</p>" },
-                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" }
-            ]
-        },
-        en: {
-            subtitle: "Handwriting OCR Scanner",
-            description: "Scans handwritten text from camera or photo library and converts it to digital text using OCR",
-            dataTypes: "text data",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "uses the camera for handwriting recognition (OCR)",
-            importantNote: "This app does not send or store captured images or recognized text on our external servers. All OCR processing is completed on-device using Apple's Vision framework. No internet connection is required.",
-            appOverview: "The App recognizes handwritten text from camera captures or photos selected from your library using Apple's Vision framework, converting handwriting to digital text. Recognized text can be copied to the clipboard for use in other apps.",
-            appOverview2: "",
-            supportedDevices: "<strong>Input Method:</strong> Camera + Photo Library reference.",
-            supportedRange: "<strong>Supported Languages:</strong> Japanese and English handwriting.",
-            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later",
-            freeTier: "The App may offer a limited number of free OCR scans (up to 15) and then provide a one-time in-app purchase to unlock unlimited usage.",
-            tokushoFreeTier: "The App offers up to 15 free OCR scans, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "Is it free?", a: "<p><strong>Free for the first 15 scans.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
-                { q: "Where is my data stored?", a: "<p>Recognized text is stored <strong>on your device</strong>.</p><p>We do not transmit data to our servers. All OCR processing is completed on-device. Captured images are discarded after OCR processing.</p>" },
-                { q: "Which languages are supported?", a: "<p><strong>Japanese and English</strong> handwriting is supported, using Apple's Vision framework recognition engine.</p>" },
-                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" }
-            ]
-        }
-    },
-    timelens: {
-        name: "TimeLens",
-        supportEmail: "timelens-support@allnew.work",
-        icon: "&#x1F4F7;",
-        ja: {
-            subtitle: "写真オーバーレイカメラ",
-            description: "過去の写真をカメラに半透明で重ねて表示し、同じ構図で撮影できるカメラアプリ",
-            dataTypes: "写真データ",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "過去の写真との構図合わせのためにカメラを使用",
-            importantNote: "本アプリは、写真データを当社の外部サーバーに送信・保存しません。すべての処理（画像のオーバーレイ表示、AI一致度分析、コラージュ・動画生成）はデバイス上で完了します。インターネット接続は不要です。",
-            appOverview: "フォトライブラリから選んだ写真をカメラに半透明で重ねて表示し、同じアングル・構図で撮影できる機能を提供します。AIが元画像とカメラ映像の一致度をリアルタイム分析し、ビフォー・アフターのコラージュやワイプ動画を生成できます。",
-            appOverview2: "",
-            supportedDevices: "<strong>入力方法:</strong> カメラ撮影 + フォトライブラリ参照。",
-            supportedRange: "",
-            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。",
-            freeTier: "本アプリは撮影回数について無料で利用できる回数に上限（15回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
-            tokushoFreeTier: "本アプリは撮影回数について無料で利用できる回数に上限（15回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "無料で使えますか？", a: "<p><strong>15回まで無料</strong>でお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
-                { q: "データはどこに保存されますか？", a: "<p>撮影した写真やコラージュ・動画は<strong>お使いのデバイスのフォトライブラリ</strong>に保存されます。</p><p>当社が運用するサーバーへの送信はありません。すべての処理はデバイス上で完了します。</p>" },
-                { q: "どんな使い方ができますか？", a: "<ul><li>同じ場所で定期的に写真を撮る（定点観測）</li><li>聖地巡礼やロケ地巡りで同じ構図で撮影</li><li>建設現場や不動産の進捗記録</li><li>成長記録やビフォー・アフターの比較</li></ul>" },
-                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" }
-            ]
-        },
-        en: {
-            subtitle: "Photo Overlay Camera",
-            description: "Overlay past photos semi-transparently on your camera to capture the exact same angle and composition",
-            dataTypes: "photo data",
-            healthKitWrite: "",
-            healthKitRead: "",
-            cameraUsage: "uses the camera for composition matching with past photos",
-            importantNote: "This app does not send or store your photos on our external servers. All processing (image overlay, AI matching analysis, collage and video generation) is completed on-device. No internet connection is required.",
-            appOverview: "The App overlays a selected photo from your library semi-transparently on the live camera, enabling you to capture the exact same angle and composition. AI analyzes the similarity between the reference and camera view in real time, and you can create before-and-after collages or wipe transition videos.",
-            appOverview2: "",
-            supportedDevices: "<strong>Input Method:</strong> Camera + Photo Library reference.",
-            supportedRange: "",
-            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later",
-            freeTier: "The App may offer a limited number of free captures (up to 15) and then provide a one-time in-app purchase to unlock unlimited usage.",
-            tokushoFreeTier: "The App offers up to 15 free captures, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
-            healthCategory: "",
-            notMedicalDevice: "",
-            faq: [
-                { q: "Is it free?", a: "<p><strong>Free for the first 15 captures.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Pay once, use forever.</p>" },
-                { q: "Where is my data stored?", a: "<p>Photos, collages, and videos are saved to <strong>your device's Photo Library</strong>.</p><p>We do not transmit data to our servers. All processing is completed on-device.</p>" },
-                { q: "What can I use this for?", a: "<ul><li>Revisiting the same location over time</li><li>Anime/movie pilgrimage photography</li><li>Construction site progress documentation</li><li>Growth records and before-after comparisons</li></ul>" },
-                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" }
-            ]
-        }
-    },
-    painsnap: {
-        name: "PainSnap",
-        supportEmail: "painsnap-support@allnew.work",
-        icon: "&#x1FA79;",
-        ja: {
-            subtitle: "痛み記録アプリ",
-            description: "身体の痛みを4ステップ（場所・強さ・種類・きっかけ）で記録し、Apple HealthKitに保存する痛み記録アプリ",
-            dataTypes: "痛みデータ",
-            healthKitWrite: "痛みデータの書き込み（一般的な体の痛み）",
-            healthKitRead: "痛みデータの読み取り（履歴表示、統計等）",
-            cameraUsage: "本アプリはカメラを使用しません",
-            importantNote: "本アプリは、痛みデータを当社の外部サーバーに送信・保存しません。データは端末内およびApple HealthKitに保存されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。",
-            appOverview: "身体の痛みを4ステップ（部位選択→強さ→種類→きっかけ）で記録し、ユーザーの許可および設定に基づき、Appleの「ヘルスケア（Apple Health）」に痛みデータを書き込む機能を提供します。",
-            appOverview2: "ユーザーが任意に許可した場合に限り、ヘルスケア上の痛みデータを読み取り、過去の記録一覧の表示等に利用します。",
-            supportedDevices: "<strong>入力方法:</strong> ボディマップ（人体図）をタップして部位を選択、スライダーで痛みの強さを設定。",
-            supportedRange: "<strong>対応痛み強度:</strong> 0（痛みなし）〜10（最大の痛み）の11段階。",
-            supportedOS: "<strong>対応デバイス:</strong> iOS 17.0以降を搭載したiPhone。",
-            freeTier: "本アプリは痛みの記録について無料で利用できる回数に上限（15回）を設けたうえで、追加利用のための買い切り（アプリ内課金）を提供する場合があります。",
-            tokushoFreeTier: "本アプリは痛みの記録について無料で利用できる回数に上限（15回）があり、上限到達後は買い切りのアプリ内課金により利用制限が解除されます。無料回数、価格、条件の詳細はApp Store上の表示に従います。",
-            healthCategory: "「ブラウズ」→「症状」→「一般的な体の痛み」",
-            notMedicalDevice: "本アプリは医療機器ではなく、診断・治療・予防等の医療行為を目的としません。本アプリの表示・メッセージ等は一般的な情報提供であり、医療上の判断は医師等の専門家にご相談ください。",
-            faq: [
-                { q: "どのように痛みを記録しますか？", a: "<p><strong>4ステップ</strong>で記録します：</p><ol><li>ボディマップ（人体図）で痛みの部位をタップ</li><li>スライダーで痛みの強さ（0〜10）を設定</li><li>痛みの種類（ズキズキ、チクチク等）を選択</li><li>きっかけ（任意）を入力</li></ol>" },
-                { q: "無料で使えますか？", a: "<p><strong>15回まで無料</strong>で痛みの記録をお使いいただけます。16回目以降は一回限りの買い切り購入が必要です。</p><p>サブスクリプション（月額・年額課金）はありません。一度購入すれば、ずっとお使いいただけます。</p>" },
-                { q: "データはどこに保存されますか？", a: "<p>痛みの記録は<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。当社が運用するサーバーへの送信はありません。</p><p>HealthKitの同期（iCloud等）はお使いの端末の設定に従います。</p>" },
-                { q: "購入を復元したい", a: "<p>過去に購入された方は、再購入の必要はありません。</p><p><strong>復元手順:</strong> アプリを開き「設定」→「アプリについて」→「購入を復元」をタップしてください。</p>" },
-                { q: "ヘルスケアで痛みのデータを確認するには？", a: "<p>iPhoneの「ヘルスケア」アプリを開き、<strong>「ブラウズ」→「症状」→「一般的な体の痛み」</strong>で確認できます。</p>" },
-                { q: "Doctor's Pass（ドクターズパス）とは？", a: "<p>記録した痛みの情報を<strong>日本語と英語の2言語</strong>で表示する機能です。海外旅行先や外国語を話す方に痛みの状況を伝える際にお使いいただけます。</p>" },
-                { q: "対応しているデバイスは？", a: "<p><strong>iOS 17.0以降</strong>を搭載したiPhoneに対応しています。iPadには対応していません。</p>" },
-                { q: "データを削除するには？", a: "<p>アプリ内の記録一覧から個別の記録を削除できます。Apple HealthKit上のデータは、iPhoneの「ヘルスケア」アプリから直接削除してください。</p>" }
-            ]
-        },
-        en: {
-            subtitle: "Pain Recording App",
-            description: "A pain recording app that logs body pain in 4 steps (location, intensity, type, trigger) and saves to Apple HealthKit",
-            dataTypes: "pain data",
-            healthKitWrite: "writing pain data (generalized body ache)",
-            healthKitRead: "reading pain data (to show history and statistics)",
-            cameraUsage: "This app does not use the camera",
-            importantNote: "This app does not send or store pain data on our external servers. Data is stored on your device and in Apple HealthKit. HealthKit storage and sync behavior (iCloud, etc.) follows your device settings and Apple's specifications.",
-            appOverview: "The App records body pain in 4 steps (body part selection → intensity → type → trigger) and, based on your permissions, writes pain data to Apple Health (HealthKit).",
-            appOverview2: "If you optionally grant read access, the App may also read your pain data from HealthKit to display past records.",
-            supportedDevices: "<strong>Input Method:</strong> Tap body parts on a body map, set pain intensity with a slider.",
-            supportedRange: "<strong>Pain Intensity Range:</strong> 0 (no pain) to 10 (worst pain), 11 levels.",
-            supportedOS: "<strong>Supported Devices:</strong> iPhone with iOS 17.0 or later.",
-            freeTier: "The App may offer up to 15 free pain recordings and then provide a one-time in-app purchase to unlock unlimited usage.",
-            tokushoFreeTier: "The App offers up to 15 free pain recordings, after which a one-time in-app purchase unlocks unlimited use. Details follow the App Store listing.",
-            healthCategory: "Browse → Symptoms → Generalized Body Ache",
-            notMedicalDevice: "The App is not a medical device and does not provide medical advice, diagnosis, or treatment. All information displayed is for general informational purposes only. Please consult a healthcare professional for medical decisions.",
-            faq: [
-                { q: "How do I record pain?", a: "<p>Record pain in <strong>4 steps</strong>:</p><ol><li>Tap the pain location on the body map</li><li>Set pain intensity (0–10) with a slider</li><li>Choose the pain type (throbbing, sharp, etc.)</li><li>Optionally enter a trigger</li></ol>" },
-                { q: "Is it free?", a: "<p><strong>Free for the first 15 recordings.</strong> After that, a one-time purchase is required.</p><p>No subscription fees. Once purchased, it's yours forever.</p>" },
-                { q: "Where is my data stored?", a: "<p>Pain records are stored in <strong>Apple HealthKit on your device</strong>. We do not transmit data to our servers.</p><p>HealthKit sync (iCloud, etc.) follows your device settings.</p>" },
-                { q: "How do I restore my purchase?", a: "<p>If you've previously purchased, you don't need to buy again.</p><p><strong>To restore:</strong> Open the app → Settings → About → Restore Purchase</p>" },
-                { q: "How do I view pain data in Apple Health?", a: "<p>Open the Health app on your iPhone → <strong>Browse → Symptoms → Generalized Body Ache</strong></p>" },
-                { q: "What is Doctor's Pass?", a: "<p>A feature that displays your pain record in <strong>both Japanese and English</strong>. Use it to communicate your pain situation when traveling abroad or with someone who speaks a different language.</p>" },
-                { q: "What devices are supported?", a: "<p>Supported on iPhones running <strong>iOS 17.0 or later</strong>. iPad is not supported.</p>" },
-                { q: "How do I delete my data?", a: "<p>You can delete individual records from the history list in the app. To delete data from Apple HealthKit, use the Health app on your iPhone directly.</p>" }
-            ]
-        }
-    }
 };
 
 /**
