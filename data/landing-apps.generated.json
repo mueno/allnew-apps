@@ -12,7 +12,7 @@
       "category_label": "Camera + OCR",
       "description_ja": "体重計のディスプレイをカメラで撮るだけ。数値を自動認識して Apple HealthKit に記録します。毎日の体重管理を、かんたんに。",
       "description_en": "Use camera OCR or voice input to log your weight to Apple HealthKit in seconds.",
-      "icon_path": "weightsnap-icon.png",
+      "icon_path": "weightsnap-icon.png?v=2",
       "promo_image_path": "assets/asc-screenshots/weightsnap.png",
       "card_image_path": "assets/onboarding/weightsnap-onboarding1.jpeg",
       "promo_image_source": "asc_first_screenshot",
