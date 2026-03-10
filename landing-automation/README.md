@@ -28,7 +28,7 @@
 {
   "slug": "weightsnap",
   "status": "READY_FOR_DISTRIBUTION",
-  "app_store_url": "https://apps.apple.com/app/weightsnap/id6743864029",
+  "app_store_url": "https://apps.apple.com/app/weightsnap/id6758825019",
   "first_screenshot_url": "https://.../first-screenshot.jpg",
   "card_image_path": "assets/onboarding/weightsnap-onboarding1.jpeg",
   "release_date": "2026-02-15",
@@ -69,7 +69,7 @@ curl -X POST \
       "app": {
         "slug": "weightsnap",
         "status": "READY_FOR_DISTRIBUTION",
-        "app_store_url": "https://apps.apple.com/app/weightsnap/id6743864029",
+        "app_store_url": "https://apps.apple.com/app/weightsnap/id6758825019",
         "first_screenshot_url": "https://example.com/first-screenshot.jpg"
       }
     }

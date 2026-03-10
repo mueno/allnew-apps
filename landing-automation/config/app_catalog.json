@@ -15,9 +15,9 @@
       "input_methods": ["camera_ocr", "voice_input"],
       "is_health_app": true,
       "support_path": "weightsnap/?lang=ja",
-      "app_store_url": "https://apps.apple.com/app/weightsnap/id6743864029",
+      "app_store_url": "https://apps.apple.com/app/weightsnap/id6758825019",
       "bundle_id": "jp.allnew.weightsnap",
-      "asc_app_id": "6743864029",
+      "asc_app_id": "6758825019",
       "sort_order": 10,
       "featured_priority": 1,
       "bootstrap_visible": true
