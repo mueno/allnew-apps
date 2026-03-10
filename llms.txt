@@ -1,0 +1,59 @@
+# AllNew Apps
+
+> Everyday tasks, effortlessly. iOS apps that simplify daily life.
+
+AllNew LLC (合同会社AllNew) develops iOS applications focused on simplifying everyday health tracking, pet care, and productivity. All apps prioritize privacy (on-device data processing, zero server transmission) and integrate with the Apple ecosystem (HealthKit, Calendar).
+
+## Company
+
+- Name: AllNew LLC (合同会社AllNew)
+- Website: https://www.allnew.work
+- App Catalog: https://apps.allnew.work
+- Mission: あたりまえを、もっとかんたんに。(Make the ordinary, even easier.)
+
+## Apps
+
+### Health Category (8 apps)
+
+- **WeightSnap** (体重): Camera OCR or voice input to log weight to Apple HealthKit. Available on App Store: https://apps.apple.com/app/weightsnap/id6758825019
+- **ThermoSnap** (体温): Capture thermometer display to auto-recognize and log body temperature to HealthKit.
+- **BPSnap** (血圧): Photograph blood pressure monitor to auto-recognize systolic, diastolic, and pulse to HealthKit.
+- **GlucoSnap** (血糖値): Capture glucose meter reading to auto-recognize and log blood glucose to HealthKit.
+- **OxiSnap** (血中酸素): Photograph pulse oximeter to auto-recognize SpO2 and log to HealthKit.
+- **BabyVox** (Baby記録): Voice input for baby height, weight, head and chest circumference. Saves growth records to Calendar.
+- **WaistVox** (ウエスト): Speak waist circumference measurement for voice-recognized auto-extraction and HealthKit logging.
+- **CoughWav** (咳): ML-based real-time cough sound detection. Logs cough count trends to HealthKit.
+
+### Pet Category (1 app)
+
+- **PupWeight** (ペット体重): Voice input for owner weight and combined weight. Calculates pet weight by difference and saves to Calendar.
+
+### Productivity Category (1 app)
+
+- **BOTTO** (集中タイマー): Place phone face-down to start a focus timer. Minimal interaction focus and digital detox tool.
+
+## Key Differentiators
+
+1. **Privacy First**: All data processed on-device. Zero data sent to external servers.
+2. **Apple Ecosystem**: Native integration with HealthKit and Calendar.
+3. **Simple by Design**: Minimal steps — camera snap, voice command, or just place the phone down.
+
+## Input Methods
+
+- Camera OCR: Photograph medical device displays for automatic number recognition
+- Voice Input: Speak measurements for hands-free recording
+- Sound Detection: ML-powered ambient sound analysis (cough detection)
+- Proximity Detection: Phone orientation sensing (face-down detection)
+
+## Technical Details
+
+- Platform: iOS (iPhone)
+- Frameworks: SwiftUI, HealthKit, Speech, AVFoundation, CoreML
+- Data Storage: On-device only (HealthKit, Calendar, UserDefaults)
+- Languages: Japanese, English
+
+## Contact
+
+- Privacy Policy: https://www.allnew.work/ja/privacy.html
+- Terms of Service: https://www.allnew.work/ja/terms.html
+- Support: Available on each app's detail page at https://apps.allnew.work/{app-slug}/
