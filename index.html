@@ -630,6 +630,73 @@
             transform: translate(1px, -1px);
         }
 
+        /* ==================== Accordion ==================== */
+        .accordion-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            gap: 16px;
+        }
+
+        .accordion-toggle-left {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .accordion-chevron {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background 0.2s;
+        }
+
+        .accordion-chevron svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--fg-secondary);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .accordion-toggle:hover .accordion-chevron {
+            background: var(--border-light);
+        }
+
+        .accordion-body {
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                        opacity 0.3s ease;
+        }
+
+        .accordion-body.collapsed {
+            max-height: 0 !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .accordion-body.expanded {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .section.accordion-closed .accordion-chevron {
+            transform: rotate(0deg);
+        }
+
+        .section.accordion-open .accordion-chevron {
+            transform: rotate(180deg);
+        }
+
         /* ==================== (What matters) — Values ==================== */
         .values-row {
             display: grid;
@@ -1008,12 +1075,18 @@
     </section>
 
     <!-- (Apps) — Health -->
-    <section class="section" id="section-health" data-section="health">
+    <section class="section accordion-open" id="section-health" data-section="health">
         <div class="section-inner">
-            <p class="section-label reveal" id="health-section-label">(Apps) — Health</p>
-            <h2 class="section-heading reveal reveal-d1" id="health-section-title">健康管理アプリ</h2>
-            <p class="section-text reveal reveal-d2" id="health-section-text">カメラ認識・音声入力・音検出で、毎日の健康データを Apple HealthKit にかんたん記録。</p>
+            <div class="accordion-toggle" data-accordion="health">
+                <div class="accordion-toggle-left">
+                    <p class="section-label reveal" id="health-section-label">(Apps) — Health</p>
+                    <h2 class="section-heading reveal reveal-d1" id="health-section-title">健康管理アプリ</h2>
+                    <p class="section-text reveal reveal-d2" id="health-section-text">カメラ認識・音声入力・音検出で、毎日の健康データを Apple HealthKit にかんたん記録。</p>
+                </div>
+                <div class="accordion-chevron"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></div>
+            </div>
 
+            <div class="accordion-body expanded" id="health-accordion-body">
             <div class="work-grid" id="health-grid">
                 <a class="work-card" href="weightsnap/?lang=ja">
                     <div class="work-card-img" style="background:#f5f5f5;">
@@ -1159,16 +1232,23 @@
                     <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
             </div>
+            </div><!-- /accordion-body -->
         </div>
     </section>
 
     <!-- (Apps) — Pet -->
-    <section class="section" id="section-pet" data-section="pet" style="background: var(--white); border-top: 1px solid var(--border);">
+    <section class="section accordion-open" id="section-pet" data-section="pet" style="background: var(--white); border-top: 1px solid var(--border);">
         <div class="section-inner">
-            <p class="section-label reveal" id="pet-section-label">(Apps) — Pet</p>
-            <h2 class="section-heading reveal reveal-d1" id="pet-section-title">ペットケアアプリ</h2>
-            <p class="section-text reveal reveal-d2" id="pet-section-text">大切な家族の健康管理を、もっとかんたんに。</p>
+            <div class="accordion-toggle" data-accordion="pet">
+                <div class="accordion-toggle-left">
+                    <p class="section-label reveal" id="pet-section-label">(Apps) — Pet</p>
+                    <h2 class="section-heading reveal reveal-d1" id="pet-section-title">ペットケアアプリ</h2>
+                    <p class="section-text reveal reveal-d2" id="pet-section-text">大切な家族の健康管理を、もっとかんたんに。</p>
+                </div>
+                <div class="accordion-chevron"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></div>
+            </div>
 
+            <div class="accordion-body expanded" id="pet-accordion-body">
             <div class="work-grid" id="pet-grid">
                 <a class="work-card" href="pupweight/?lang=ja">
                     <div class="work-card-img" style="background:#f5f5f5;">
@@ -1188,19 +1268,27 @@
                     <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
             </div>
+            </div><!-- /accordion-body -->
         </div>
     </section>
 
     <!-- (Apps) — Productivity -->
-    <section class="section" id="section-productivity" data-section="productivity">
+    <section class="section accordion-open" id="section-productivity" data-section="productivity">
         <div class="section-inner">
-            <p class="section-label reveal" id="productivity-section-label">(Apps) — Productivity</p>
-            <h2 class="section-heading reveal reveal-d1" id="productivity-section-title">生産性アプリ</h2>
-            <p class="section-text reveal reveal-d2" id="productivity-section-text">集中とデジタルデトックスで、本当に大切な時間を取り戻す。</p>
+            <div class="accordion-toggle" data-accordion="productivity">
+                <div class="accordion-toggle-left">
+                    <p class="section-label reveal" id="productivity-section-label">(Apps) — Productivity</p>
+                    <h2 class="section-heading reveal reveal-d1" id="productivity-section-title">生産性アプリ</h2>
+                    <p class="section-text reveal reveal-d2" id="productivity-section-text">集中とデジタルデトックスで、本当に大切な時間を取り戻す。</p>
+                </div>
+                <div class="accordion-chevron"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></div>
+            </div>
 
+            <div class="accordion-body expanded" id="productivity-accordion-body">
             <div class="work-grid" id="productivity-grid">
                 <a class="work-card" href="botto/?lang=ja">
                     <div class="work-card-img" style="background:#f5f5f5;">
+                        <img src="assets/onboarding/botto-onboarding1.png" alt="BOTTO" loading="lazy">
                     </div>
                     <div class="work-card-body">
                         <div class="work-card-meta">
@@ -1216,6 +1304,7 @@
                     <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
             </div>
+            </div><!-- /accordion-body -->
         </div>
     </section>
 
@@ -1555,6 +1644,44 @@
 
         window.refreshLandingReveal = refreshLandingReveal;
         refreshLandingReveal();
+
+        // ===== Accordion toggle =====
+        document.querySelectorAll('.accordion-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const section = toggle.closest('.section');
+                const body = section.querySelector('.accordion-body');
+                if (!section || !body) return;
+
+                const isOpen = section.classList.contains('accordion-open');
+                if (isOpen) {
+                    body.style.maxHeight = body.scrollHeight + 'px';
+                    requestAnimationFrame(() => {
+                        body.classList.remove('expanded');
+                        body.classList.add('collapsed');
+                        body.style.maxHeight = '0px';
+                    });
+                    section.classList.remove('accordion-open');
+                    section.classList.add('accordion-closed');
+                } else {
+                    body.classList.remove('collapsed');
+                    body.classList.add('expanded');
+                    body.style.maxHeight = body.scrollHeight + 'px';
+                    section.classList.remove('accordion-closed');
+                    section.classList.add('accordion-open');
+                    body.addEventListener('transitionend', function handler() {
+                        if (section.classList.contains('accordion-open')) {
+                            body.style.maxHeight = 'none';
+                        }
+                        body.removeEventListener('transitionend', handler);
+                    });
+                }
+            });
+        });
+
+        // Initialize expanded bodies with no max-height constraint
+        document.querySelectorAll('.accordion-body.expanded').forEach(body => {
+            body.style.maxHeight = 'none';
+        });
     </script>
 
 </body>

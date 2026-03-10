@@ -200,7 +200,7 @@
       "description_en": "A minimal focus timer that starts when you place your phone face down.",
       "icon_path": "botto-icon.png",
       "fallback_image_path": "",
-      "card_image_path": "",
+      "card_image_path": "assets/onboarding/botto-onboarding1.png",
       "input_methods": [],
       "is_health_app": false,
       "support_path": "botto/?lang=ja",
