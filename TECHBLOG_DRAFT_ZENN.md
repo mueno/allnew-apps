@@ -39,7 +39,7 @@
 const APP_DATA = {
   weightsnap: {
     name: "WeightSnap",
-    supportEmail: "weightsnap-support@allnew.work",
+    supportEmail: "app-support@allnew.work",
     ja: { subtitle: "体重記録アプリ", ... },
     en: { subtitle: "Weight Recording App", ... }
   },

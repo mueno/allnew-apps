@@ -101,6 +101,10 @@ cp -r weightsnap/ newapp/
 - frame-busting JS
 - onclick → addEventListener イベント委譲
 
+お問い合わせメールの運用:
+- `mailto` は共通で `app-support@allnew.work` を使う
+- subject にアプリ名を含める（例: `?subject=WeightSnap%20%3A%20`）
+
 ### 1-5. バリデーション実行
 
 ```bash
@@ -216,3 +220,4 @@ gh workflow run landing-sync.yml \
 
 - [ ] Webhook が Cloudflare Worker に到達することを確認（Worker ログ）
 - [ ] LP が更新されることを確認（`data/landing-apps.generated.json`）
+- [ ] 問い合わせメールが `app-support@allnew.work` で統一されていることを確認

@@ -95,6 +95,11 @@ python3 landing-automation/scripts/update_landing_data.py --event-file /path/to/
 - カードのタグに `審査中` を付与する
 - Featured が `submitted` の場合、App Store ボタンは非表示にする
 
+## 問い合わせメール運用
+
+- 各アプリの問い合わせ先メールは共通で `app-support@allnew.work` を使用する
+- `mailto` はアプリ名付き subject を付与する（例: `?subject=WeightSnap%20%3A%20`）
+
 ## 外部Webhookリレー運用
 
 ASC Webhook は外部で受信し、GitHub `repository_dispatch` へ中継する。
