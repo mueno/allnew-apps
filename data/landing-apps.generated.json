@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-03-10T06:24:00+00:00",
+  "generated_at": "2026-03-10T06:39:38+00:00",
   "source": "bootstrap",
   "apps": [
     {
@@ -30,7 +30,7 @@
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "thermosnap",
@@ -59,7 +59,7 @@
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "bloodpressuresnap",
@@ -88,7 +88,7 @@
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "glucosnap",
@@ -117,7 +117,7 @@
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "oxisnap",
@@ -146,7 +146,7 @@
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "pupweight",
@@ -174,7 +174,7 @@
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "babyvox",
@@ -202,7 +202,7 @@
       "featured_priority": 70,
       "sort_order": 70,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "waistvox",
@@ -230,7 +230,7 @@
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "coughwav",
@@ -258,7 +258,7 @@
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     },
     {
       "slug": "botto",
@@ -271,7 +271,7 @@
       "description_en": "A minimal focus timer that starts when you place your phone face down.",
       "icon_path": "botto-icon.png",
       "promo_image_path": "",
-      "card_image_path": "assets/onboarding/botto-onboarding1.png",
+      "card_image_path": "assets/onboarding/botto-onboarding1.png?v=2",
       "promo_image_source": "catalog",
       "input_methods": [],
       "input_methods_label": "",
@@ -284,7 +284,7 @@
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T06:24:00+00:00"
+      "updated_at": "2026-03-10T06:39:38+00:00"
     }
   ]
 }
