@@ -41,13 +41,13 @@ jobs:
           ${{ toJson(github.event) }}
           JSON
 
-      - name: Bootstrap mode
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true' }}
+      - name: Bootstrap mode (schedule or manual)
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true') }}
         run: |
           python3 landing-automation/scripts/update_landing_data.py --bootstrap
 
-      - name: Event mode
-        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true') }}
+      - name: Event mode (repository_dispatch)
+        if: ${{ github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.bootstrap != 'true') }}
         run: |
           python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
 
@@ -92,7 +92,7 @@ jobs:
             git fetch origin "${TARGET_BRANCH}"
             git reset --hard "origin/${TARGET_BRANCH}"
 
-            if [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ]; then
+            if [ "${EVENT_NAME}" = "schedule" ] || { [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ]; }; then
               python3 landing-automation/scripts/update_landing_data.py --bootstrap
             else
               python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
