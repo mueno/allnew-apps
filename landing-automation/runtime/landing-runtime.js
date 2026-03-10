@@ -4,7 +4,7 @@
   const DATA_PATH = 'data/landing-apps.generated.json';
   const SUPPORTED_LANGS = new Set(['ja', 'en']);
   const VISIBLE_STATUSES = new Set(['submitted', 'released']);
-  const HEALTH_CATEGORIES = new Set(['camera', 'voice', 'sound']);
+  const HEALTH_CATEGORIES = new Set(['health']);
   const INPUT_METHOD_LABELS = {
     camera_ocr: 'Camera + OCR',
     voice_input: 'Voice Input',
@@ -13,9 +13,9 @@
   };
 
   const CATEGORY_TARGETS = {
-    camera: { gridId: 'camera-grid', tag: 'Camera + OCR' },
-    voice: { gridId: 'voice-grid', tag: 'Voice Input' },
-    sound: { gridId: 'sound-grid', tag: 'Sound Detection' }
+    health: { gridId: 'health-grid', tag: 'Health' },
+    pet: { gridId: 'pet-grid', tag: 'Pet' },
+    productivity: { gridId: 'productivity-grid', tag: 'Productivity' }
   };
   let cachedPayload = null;
   let currentLang = 'ja';
@@ -165,13 +165,19 @@
     return (app && app.category_label) || fallbackTag || '';
   }
 
-  function updateHealthAppCount(apps) {
-    const countEl = document.getElementById('health-app-count');
+  function updateAppCount(apps) {
+    var countEl = document.getElementById('total-app-count');
     if (countEl) {
-      const publishedHealthCount = apps.filter(function (app) {
-        return app.status === 'released' && isHealthApp(app);
+      var publishedCount = apps.filter(function (app) {
+        return app.status === 'released';
       }).length;
-      countEl.textContent = String(publishedHealthCount);
+      countEl.textContent = String(publishedCount);
+    }
+    var catCountEl = document.getElementById('category-count');
+    if (catCountEl) {
+      var categories = new Set();
+      apps.forEach(function (app) { if (app.category) categories.add(app.category); });
+      catCountEl.textContent = String(categories.size);
     }
   }
 
@@ -289,21 +295,21 @@
   }
 
   function updateFooterLists(apps) {
-    const camera = apps.filter(function (app) { return resolveGridCategory(app) === 'camera'; }).map(function (app) { return app.name; });
-    const voice = apps.filter(function (app) { return resolveGridCategory(app) === 'voice'; }).map(function (app) { return app.name; });
-    const sound = apps.filter(function (app) { return resolveGridCategory(app) === 'sound'; }).map(function (app) { return app.name; });
-    const labels = currentLang === 'en'
-      ? { camera: 'Camera', voice: 'Voice', sound: 'Sound' }
-      : { camera: 'カメラ', voice: '音声', sound: '音検出' };
+    var health = apps.filter(function (app) { return app.category === 'health'; }).map(function (app) { return app.name; });
+    var pet = apps.filter(function (app) { return app.category === 'pet'; }).map(function (app) { return app.name; });
+    var productivity = apps.filter(function (app) { return app.category === 'productivity'; }).map(function (app) { return app.name; });
+    var labels = currentLang === 'en'
+      ? { health: 'Health', pet: 'Pet', productivity: 'Productivity' }
+      : { health: '健康', pet: 'ペット', productivity: '生産性' };
 
-    const footerCamera = document.getElementById('footer-apps-camera');
-    if (footerCamera && camera.length > 0) footerCamera.textContent = labels.camera + ': ' + camera.join(', ');
+    var footerHealth = document.getElementById('footer-apps-health');
+    if (footerHealth && health.length > 0) footerHealth.textContent = labels.health + ': ' + health.join(', ');
 
-    const footerVoice = document.getElementById('footer-apps-voice');
-    if (footerVoice && voice.length > 0) footerVoice.textContent = labels.voice + ': ' + voice.join(', ');
+    var footerPet = document.getElementById('footer-apps-pet');
+    if (footerPet && pet.length > 0) footerPet.textContent = labels.pet + ': ' + pet.join(', ');
 
-    const footerSound = document.getElementById('footer-apps-sound');
-    if (footerSound && sound.length > 0) footerSound.textContent = labels.sound + ': ' + sound.join(', ');
+    var footerProductivity = document.getElementById('footer-apps-productivity');
+    if (footerProductivity && productivity.length > 0) footerProductivity.textContent = labels.productivity + ': ' + productivity.join(', ');
   }
 
   function applyData(payload) {
@@ -311,7 +317,7 @@
     const apps = normalizeVisibleApps(payload.apps || []);
     if (apps.length === 0) return;
 
-    updateHealthAppCount(apps);
+    updateAppCount(apps);
     renderCategoryGrids(apps);
     updateFeatured(pickFeaturedApp(apps));
     updateFooterLists(apps);

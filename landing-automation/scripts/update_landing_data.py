@@ -38,7 +38,7 @@ ALLOWED_SCREENSHOT_DOMAINS = tuple(
 MAX_SCREENSHOT_BYTES = int(os.getenv("LANDING_MAX_SCREENSHOT_BYTES", str(10 * 1024 * 1024)))
 
 VISIBLE_STATUSES = {"submitted", "released"}
-HEALTH_APP_CATEGORIES = {"camera", "voice", "sound"}
+HEALTH_APP_CATEGORIES = {"health"}
 INPUT_METHOD_LABELS = {
     "camera_ocr": "Camera + OCR",
     "voice_input": "Voice Input",

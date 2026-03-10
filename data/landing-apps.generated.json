@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-03-10T03:28:36+00:00",
+  "generated_at": "2026-03-10T06:09:42+00:00",
   "source": "bootstrap",
   "apps": [
     {
@@ -8,11 +8,11 @@
       "name": "WeightSnap",
       "name_ja": "体重",
       "status": "released",
-      "category": "camera",
-      "category_label": "Camera + OCR",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "体重計のディスプレイをカメラで撮るだけ。数値を自動認識して Apple HealthKit に記録します。毎日の体重管理を、かんたんに。",
       "description_en": "Use camera OCR or voice input to log your weight to Apple HealthKit in seconds.",
-      "icon_path": "weightsnap-icon.png",
+      "icon_path": "weightsnap-icon.png?v=2",
       "promo_image_path": "weightsnap-promo.png",
       "card_image_path": "assets/onboarding/weightsnap-onboarding1.jpeg",
       "promo_image_source": "catalog",
@@ -30,15 +30,15 @@
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "thermosnap",
       "name": "ThermoSnap",
       "name_ja": "体温",
       "status": "released",
-      "category": "camera",
-      "category_label": "Camera + OCR",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "体温計のディスプレイを撮るだけ。体温を自動認識して Apple HealthKit に記録。",
       "description_en": "Capture a thermometer reading or speak the value. Body temperature is saved to Apple HealthKit automatically.",
       "icon_path": "thermosnap-icon.png",
@@ -59,15 +59,15 @@
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "bloodpressuresnap",
       "name": "BPSnap",
       "name_ja": "血圧",
       "status": "released",
-      "category": "camera",
-      "category_label": "Camera + OCR",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "血圧計を撮るだけ。最高・最低血圧と脈拍を自動認識して Apple HealthKit に記録。",
       "description_en": "Capture your monitor or say the readings. Systolic, diastolic, and pulse are logged to Apple HealthKit.",
       "icon_path": "bpsnap-icon.png",
@@ -88,15 +88,15 @@
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "glucosnap",
       "name": "GlucoSnap",
       "name_ja": "血糖値",
       "status": "released",
-      "category": "camera",
-      "category_label": "Camera + OCR",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "血糖値計を撮るだけ。数値を自動認識して Apple HealthKit に記録。",
       "description_en": "Capture your glucose meter or speak the value to record blood glucose to Apple HealthKit.",
       "icon_path": "glucosnap-icon.png",
@@ -117,15 +117,15 @@
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "oxisnap",
       "name": "OxiSnap",
       "name_ja": "血中酸素",
       "status": "released",
-      "category": "camera",
-      "category_label": "Camera + OCR",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "パルスオキシメーターを撮るだけ。SpO2 を自動認識して Apple HealthKit に記録。",
       "description_en": "Capture your pulse oximeter or speak the value to log SpO2 to Apple HealthKit.",
       "icon_path": "oxisnap-icon.png",
@@ -146,15 +146,15 @@
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "pupweight",
       "name": "PupWeight",
       "name_ja": "ペット体重",
       "status": "released",
-      "category": "voice",
-      "category_label": "Voice Input",
+      "category": "pet",
+      "category_label": "Pet",
       "description_ja": "飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出し、カレンダーに記録。*",
       "description_en": "Speak owner and pet weights, then automatically calculate and save pet weight to Calendar.",
       "icon_path": "pupweight-icon.png",
@@ -169,20 +169,20 @@
       "app_store_url": "",
       "bundle_id": "jp.allnew.pupweight",
       "asc_app_id": "",
-      "is_health_app": true,
+      "is_health_app": false,
       "release_date": "",
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "babyvox",
       "name": "BabyVox",
       "name_ja": "Baby記録",
       "status": "released",
-      "category": "voice",
-      "category_label": "Voice Input",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存。*",
       "description_en": "Record baby height, weight, head and chest circumference by voice and save growth history to Calendar.",
       "icon_path": "babyvox-icon.png",
@@ -202,15 +202,15 @@
       "featured_priority": 70,
       "sort_order": 70,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "waistvox",
       "name": "WaistVox",
       "name_ja": "ウエスト",
       "status": "released",
-      "category": "voice",
-      "category_label": "Voice Input",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "ウエスト周囲径を声で言うだけ。音声認識で数値を自動抽出して Apple HealthKit に記録。",
       "description_en": "Speak waist circumference and record it to Apple HealthKit with on-device voice recognition.",
       "icon_path": "waistvox-icon.png",
@@ -230,15 +230,15 @@
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
     },
     {
       "slug": "coughwav",
       "name": "CoughWav",
       "name_ja": "咳",
       "status": "released",
-      "category": "sound",
-      "category_label": "Sound Detection",
+      "category": "health",
+      "category_label": "Health",
       "description_ja": "咳の音を機械学習でリアルタイム検出。咳の回数を Apple HealthKit に記録するモニタリングアプリ。",
       "description_en": "Detect cough sounds in real time and record cough count trends to Apple HealthKit.",
       "icon_path": "coughwav-icon.png",
@@ -258,7 +258,33 @@
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-03-10T03:28:36+00:00"
+      "updated_at": "2026-03-10T06:09:42+00:00"
+    },
+    {
+      "slug": "botto",
+      "name": "BOTTO",
+      "name_ja": "集中タイマー",
+      "status": "released",
+      "category": "productivity",
+      "category_label": "Productivity",
+      "description_ja": "スマホを伏せるだけで集中を開始できる、シンプルな集中タイマー。",
+      "description_en": "A minimal focus timer that starts when you place your phone face down.",
+      "icon_path": "botto-icon.png",
+      "promo_image_path": "",
+      "card_image_path": "",
+      "promo_image_source": "catalog",
+      "input_methods": [],
+      "input_methods_label": "",
+      "support_path": "botto/?lang=ja",
+      "app_store_url": "",
+      "bundle_id": "jp.allnew.botto",
+      "asc_app_id": "",
+      "is_health_app": false,
+      "release_date": "",
+      "featured_priority": 10,
+      "sort_order": 100,
+      "published_to_landing": true,
+      "updated_at": "2026-03-10T06:09:42+00:00"
     }
   ]
 }

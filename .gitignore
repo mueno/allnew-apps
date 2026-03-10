@@ -9,3 +9,4 @@ landing-automation/cloudflare-worker/node_modules/
 # Claude session/handoff files (internal working files)
 CLAUDE_*
 HANDOFF_*
+.vercel
