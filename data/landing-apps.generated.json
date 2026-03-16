@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-03-16T17:34:31+00:00",
-  "source": "event",
+  "generated_at": "2026-03-16T19:20:21+00:00",
+  "source": "bootstrap",
   "apps": [
     {
       "slug": "weightsnap",
@@ -26,11 +26,11 @@
       "bundle_id": "jp.allnew.weightsnap",
       "asc_app_id": "6758825019",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "thermosnap",
@@ -55,11 +55,11 @@
       "bundle_id": "jp.allnew.thermosnap",
       "asc_app_id": "",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "bloodpressuresnap",
@@ -84,11 +84,11 @@
       "bundle_id": "jp.allnew.bloodpressuresnap",
       "asc_app_id": "",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "glucosnap",
@@ -113,11 +113,11 @@
       "bundle_id": "jp.allnew.glucosnap",
       "asc_app_id": "",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "oxisnap",
@@ -142,11 +142,11 @@
       "bundle_id": "jp.allnew.oxisnap",
       "asc_app_id": "",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "pupweight",
@@ -170,11 +170,11 @@
       "bundle_id": "jp.allnew.pupweight",
       "asc_app_id": "",
       "is_health_app": false,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "babyvox",
@@ -198,11 +198,11 @@
       "bundle_id": "jp.allnew.babyvox",
       "asc_app_id": "",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 70,
       "sort_order": 70,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "waistvox",
@@ -226,11 +226,11 @@
       "bundle_id": "jp.allnew.waistvox",
       "asc_app_id": "",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "coughwav",
@@ -254,11 +254,11 @@
       "bundle_id": "jp.allnew.coughwav",
       "asc_app_id": "",
       "is_health_app": true,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     },
     {
       "slug": "botto",
@@ -280,11 +280,11 @@
       "bundle_id": "jp.allnew.botto",
       "asc_app_id": "",
       "is_health_app": false,
-      "release_date": "2026-03-15",
+      "release_date": "",
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-03-15T18:58:45+00:00"
+      "updated_at": "2026-03-16T19:20:21+00:00"
     }
   ]
 }
