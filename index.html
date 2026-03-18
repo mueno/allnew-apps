@@ -1193,7 +1193,10 @@
         .nav-link:focus-visible,
         .btn-primary:focus-visible,
         .btn-secondary:focus-visible,
-        .work-card:focus-visible {
+        .work-card:focus-visible,
+        .footer-col a:focus-visible,
+        .lang-chip:focus-visible,
+        .accordion-toggle:focus-visible {
             outline: 2px solid var(--fg);
             outline-offset: 2px;
         }
@@ -1323,7 +1326,7 @@
                     <h2 class="section-heading reveal reveal-d1" id="health-section-title">健康管理アプリ</h2>
                     <p class="section-text reveal reveal-d2" id="health-section-text">カメラ認識・音声入力・音検出で、毎日の健康データを Apple HealthKit にかんたん記録。</p>
                 </div>
-                <div class="accordion-chevron"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></div>
+                <div class="accordion-chevron"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><polyline points="4 6 8 10 12 6"/></svg></div>
             </div>
 
             <div class="accordion-body expanded" id="health-accordion-body">
@@ -1343,7 +1346,7 @@
                         <span class="work-card-tag">Camera + OCR</span>
                         <p class="work-card-desc">体重計のディスプレイをカメラで撮るだけ。数値を自動認識して Apple HealthKit に記録します。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
 
                 <a class="work-card" href="thermosnap/?lang=ja">
@@ -1361,7 +1364,7 @@
                         <span class="work-card-tag">Camera + OCR</span>
                         <p class="work-card-desc">体温計のディスプレイを撮るだけ。体温を自動認識して Apple HealthKit に記録。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
 
                 <a class="work-card" href="bloodpressuresnap/?lang=ja">
@@ -1379,7 +1382,7 @@
                         <span class="work-card-tag">Camera + OCR</span>
                         <p class="work-card-desc">血圧計を撮るだけ。最高・最低血圧と脈拍を自動認識して Apple HealthKit に記録。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
 
                 <a class="work-card" href="glucosnap/?lang=ja">
@@ -1397,7 +1400,7 @@
                         <span class="work-card-tag">Camera + OCR</span>
                         <p class="work-card-desc">血糖値計を撮るだけ。数値を自動認識して Apple HealthKit に記録。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
 
                 <a class="work-card" href="oxisnap/?lang=ja">
@@ -1415,7 +1418,7 @@
                         <span class="work-card-tag">Camera + OCR</span>
                         <p class="work-card-desc">パルスオキシメーターを撮るだけ。SpO2 を自動認識して Apple HealthKit に記録。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
 
                 <a class="work-card" href="babyvox/?lang=ja">
@@ -1433,7 +1436,7 @@
                         <span class="work-card-tag">Voice Input</span>
                         <p class="work-card-desc">赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存。*</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
 
                 <a class="work-card" href="waistvox/?lang=ja">
@@ -1451,7 +1454,7 @@
                         <span class="work-card-tag">Voice Input</span>
                         <p class="work-card-desc">ウエスト周囲径を声で言うだけ。音声認識で数値を自動抽出して Apple HealthKit に記録。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
 
                 <a class="work-card" href="coughwav/?lang=ja">
@@ -1469,7 +1472,7 @@
                         <span class="work-card-tag">Sound Detection</span>
                         <p class="work-card-desc">咳の音を機械学習でリアルタイム検出。咳の回数を Apple HealthKit に記録するモニタリングアプリ。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
             </div>
             </div><!-- /accordion-body -->
@@ -1485,7 +1488,7 @@
                     <h2 class="section-heading reveal reveal-d1" id="pet-section-title">ペットケアアプリ</h2>
                     <p class="section-text reveal reveal-d2" id="pet-section-text">大切な家族の健康管理を、もっとかんたんに。</p>
                 </div>
-                <div class="accordion-chevron"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></div>
+                <div class="accordion-chevron"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><polyline points="4 6 8 10 12 6"/></svg></div>
             </div>
 
             <div class="accordion-body expanded" id="pet-accordion-body">
@@ -1505,7 +1508,7 @@
                         <span class="work-card-tag">Voice Input</span>
                         <p class="work-card-desc">飼い主の体重とペットを抱いた体重を音声で入力。差分からペットの体重を算出し、カレンダーに記録。*</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
             </div>
             </div><!-- /accordion-body -->
@@ -1521,7 +1524,7 @@
                     <h2 class="section-heading reveal reveal-d1" id="productivity-section-title">生産性アプリ</h2>
                     <p class="section-text reveal reveal-d2" id="productivity-section-text">集中とデジタルデトックスで、本当に大切な時間を取り戻す。</p>
                 </div>
-                <div class="accordion-chevron"><svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg></div>
+                <div class="accordion-chevron"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><polyline points="4 6 8 10 12 6"/></svg></div>
             </div>
 
             <div class="accordion-body expanded" id="productivity-accordion-body">
@@ -1541,7 +1544,7 @@
                         <span class="work-card-tag">Productivity</span>
                         <p class="work-card-desc">スマホを伏せるだけで集中を開始できる、シンプルな集中タイマー。</p>
                     </div>
-                    <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
+                    <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"/></svg></div>
                 </a>
             </div>
             </div><!-- /accordion-body -->
