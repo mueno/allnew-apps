@@ -299,18 +299,153 @@ async function checkReplay(eventId, ttlSeconds) {
   return false;
 }
 
+/**
+ * Decode the payload segment of a JWS (JSON Web Signature) token.
+ * JWS tokens have the form: header.payload.signature (each Base64url-encoded).
+ * Returns the parsed JSON from the payload segment, or null on failure.
+ *
+ * NOTE: This only decodes -- it does NOT verify the JWS signature.
+ * Signature verification of the outer HTTP request is handled separately
+ * by verifySignature() using HMAC. The JWS token signature (ES256/RS256
+ * from Apple) would require Apple's public key and is not verified here.
+ */
+function decodeJwsPayload(jws) {
+  if (typeof jws !== "string") return null;
+  const parts = jws.split(".");
+  if (parts.length !== 3) return null;
+
+  try {
+    const bytes = base64ToBytes(parts[1]);
+    const text = new TextDecoder().decode(bytes);
+    return JSON.parse(text);
+  } catch (_error) {
+    return null;
+  }
+}
+
+/**
+ * Map App Store Server Notifications v2 notification types to
+ * version state strings that normalizeStatus() understands.
+ *
+ * ASC v2 notifications use notificationType/subtype instead of
+ * appStoreVersion.state. This maps the relevant notification types
+ * to the state strings the rest of the pipeline expects.
+ */
+function notificationTypeToStatus(notificationType, subtype) {
+  const upper = (notificationType || "").toUpperCase();
+  const sub = (subtype || "").toUpperCase();
+
+  // App lifecycle notifications
+  if (upper === "DID_CHANGE_RENEWAL_STATUS" || upper === "SUBSCRIBED" || upper === "DID_RENEW") {
+    return "READY_FOR_SALE";
+  }
+  if (upper === "EXPIRED" || upper === "REVOKE") {
+    return "REMOVED_FROM_SALE";
+  }
+
+  // Version state change notifications (ASC API webhooks)
+  if (upper === "APP_STORE_VERSION_STATE_CHANGED") {
+    // subtype may carry the actual state
+    if (sub) return sub;
+    return "READY_FOR_DISTRIBUTION";
+  }
+
+  // Fallback: pass through the notification type itself
+  return upper || "unknown";
+}
+
+/**
+ * Unwrap an ASC payload that may be wrapped in a JWS signedPayload envelope.
+ *
+ * App Store Server Notifications v2 sends: { "signedPayload": "<JWS>" }
+ * The JWS body contains: { notificationType, subtype, data: { appAppleId, bundleId, ... } }
+ *
+ * This function detects the signedPayload wrapper, decodes the JWS,
+ * and reshapes the v2 fields into the normalizeAscPayload-compatible format
+ * (matching the sample at examples/asc-webhook.sample.json).
+ *
+ * Returns the original input unchanged if no signedPayload is present.
+ */
+function unwrapSignedPayload(input) {
+  const outer = asObject(input);
+  const signed = outer.signedPayload;
+  if (!signed || typeof signed !== "string") {
+    return input;
+  }
+
+  const decoded = decodeJwsPayload(signed);
+  if (!decoded) {
+    // JWS decode failed -- fall through to existing normalizer
+    // which will produce an empty result (caller handles gracefully)
+    console.warn("signedPayload JWS decode failed, falling through");
+    return input;
+  }
+
+  const decodedData = asObject(decoded.data);
+
+  // App Store Server Notifications v2 uses numeric appAppleId, not string app.id.
+  // It also may lack the nested app/appStoreVersion structure.
+  // Reshape into the format normalizeAscPayload() already handles.
+  const appAppleId = decodedData.appAppleId ?? decoded.appAppleId ?? "";
+  const bundleId = asString(decodedData.bundleId) || asString(decoded.bundleId);
+
+  const notificationType = asString(decoded.notificationType);
+  const subtype = asString(decoded.subtype);
+  const inferredStatus = notificationTypeToStatus(notificationType, subtype);
+
+  // Try to decode signedTransactionInfo for additional context (optional)
+  let transactionAppName = "";
+  const signedTx = decodedData.signedTransactionInfo;
+  if (signedTx && typeof signedTx === "string") {
+    const txInfo = decodeJwsPayload(signedTx);
+    if (txInfo) {
+      transactionAppName = asString(txInfo.appName);
+    }
+  }
+
+  // Build a payload in the "Shape 1" format that normalizeAscPayload already handles
+  return {
+    eventId: asString(decoded.notificationUUID) || asString(decoded.notificationId),
+    eventType: notificationType || "SIGNED_NOTIFICATION",
+    eventDate: asString(decoded.signedDate)
+      ? new Date(Number(decoded.signedDate) || 0).toISOString().replace(/\.\d{3}Z$/, "Z")
+      : nowIso(),
+    data: {
+      app: {
+        id: String(appAppleId),
+        bundleId: bundleId,
+        name: transactionAppName,
+      },
+      appStoreVersion: {
+        state: inferredStatus,
+      },
+      // Preserve v2-specific fields for downstream consumers
+      environment: asString(decodedData.environment),
+    },
+    // Preserve the original notification fields for logging/debugging
+    _v2_notification: {
+      notificationType: notificationType,
+      subtype: subtype,
+      decoded: true,
+    },
+  };
+}
+
 function resolveSlug(app, data, payload) {
   const direct = asString(payload.slug);
   if (direct) return direct;
 
+  // Try string-based app ID first, then coerce numeric appAppleId to string
   const appId =
     asString(app.id) ||
     asString(data.appId) ||
     asString(payload.asc_app_id) ||
     asString(payload.appStoreId) ||
     asString(payload.app_id);
-  if (appId && APP_SLUG_BY_ID[appId]) {
-    return APP_SLUG_BY_ID[appId];
+  // Also handle numeric appAppleId from App Store Server Notifications v2
+  const appIdStr = appId || (data.appAppleId != null ? String(data.appAppleId) : "");
+  if (appIdStr && APP_SLUG_BY_ID[appIdStr]) {
+    return APP_SLUG_BY_ID[appIdStr];
   }
 
   const bundleId =
@@ -327,7 +462,9 @@ function resolveSlug(app, data, payload) {
 }
 
 function normalizeAscPayload(input) {
-  const payload = asObject(input);
+  // Unwrap JWS signedPayload envelope if present (ASC v2 notifications)
+  const unwrapped = unwrapSignedPayload(input);
+  const payload = asObject(unwrapped);
   const data = asObject(payload.data);
   const app = asObject(data.app);
   const appStoreVersion = asObject(data.appStoreVersion);
@@ -344,7 +481,9 @@ function normalizeAscPayload(input) {
     asString(data.appId) ||
     asString(payload.asc_app_id) ||
     asString(payload.appStoreId) ||
-    asString(payload.app_id);
+    asString(payload.app_id) ||
+    // App Store Server Notifications v2: appAppleId is numeric
+    (data.appAppleId != null ? String(data.appAppleId) : "");
 
   const bundleId =
     asString(app.bundleId) ||
