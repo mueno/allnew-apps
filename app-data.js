@@ -562,11 +562,39 @@ function applyAppData(lang) {
     // Replace title
     document.title = document.title.replace(/WeightSnap/g, config.name);
 
-    // Replace text content in elements with data-app attribute
+    // Replace content in elements with data-app attribute (XSS-safe)
     document.querySelectorAll('[data-app]').forEach(el => {
         const key = el.getAttribute('data-app');
         if (config[key] !== undefined) {
-            el.innerHTML = config[key];
+            const value = config[key];
+            // Check if value contains any HTML-like content
+            if (/<[^>]+>/.test(value)) {
+                // Sanitize: only allow <strong> tags, strip everything else
+                const fragment = document.createDocumentFragment();
+                const strongRe = /<strong>(.*?)<\/strong>/gi;
+                let match;
+                let lastIndex = 0;
+                while ((match = strongRe.exec(value)) !== null) {
+                    // Text before the <strong> tag
+                    if (match.index > lastIndex) {
+                        fragment.appendChild(document.createTextNode(value.slice(lastIndex, match.index)));
+                    }
+                    // The <strong> content (set via textContent -- safe)
+                    const strong = document.createElement('strong');
+                    strong.textContent = match[1];
+                    fragment.appendChild(strong);
+                    lastIndex = strongRe.lastIndex;
+                }
+                // Remaining text after last match
+                if (lastIndex < value.length) {
+                    fragment.appendChild(document.createTextNode(value.slice(lastIndex)));
+                }
+                el.textContent = ''; // Clear existing content
+                el.appendChild(fragment);
+            } else {
+                // Plain text: safe to use textContent
+                el.textContent = value;
+            }
         }
     });
 
