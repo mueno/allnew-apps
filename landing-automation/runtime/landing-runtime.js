@@ -209,7 +209,7 @@
       '    <span class="work-card-tag">' + safeText(tag) + '</span>',
       '    <p class="work-card-desc">' + safeText(pickAppDescription(app)) + '</p>',
       '  </div>',
-      '  <div class="work-card-arrow"><svg viewBox="0 0 16 16"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"></path></svg></div>',
+      '  <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"></path></svg></div>',
       '</a>'
     ].join('\n');
   }
