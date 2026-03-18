@@ -1,6 +1,15 @@
 {
   "by_app_id": {
-    "6758825019": "weightsnap"
+    "6758825019": "weightsnap",
+    "6759076372": "thermosnap",
+    "6759076255": "bloodpressuresnap",
+    "6759076419": "glucosnap",
+    "6759076145": "oxisnap",
+    "6759076505": "pupweight",
+    "6759076543": "babyvox",
+    "6759076494": "waistvox",
+    "6759076606": "coughwav",
+    "6759169189": "botto"
   },
   "by_bundle_id": {
     "jp.allnew.weightsnap": "weightsnap",

@@ -38,7 +38,7 @@
       "support_path": "thermosnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.thermosnap",
-      "asc_app_id": "",
+      "asc_app_id": "6759076372",
       "sort_order": 20,
       "featured_priority": 20,
       "bootstrap_visible": true
@@ -59,7 +59,7 @@
       "support_path": "bloodpressuresnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.bloodpressuresnap",
-      "asc_app_id": "",
+      "asc_app_id": "6759076255",
       "sort_order": 30,
       "featured_priority": 30,
       "bootstrap_visible": true
@@ -80,7 +80,7 @@
       "support_path": "glucosnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.glucosnap",
-      "asc_app_id": "",
+      "asc_app_id": "6759076419",
       "sort_order": 40,
       "featured_priority": 40,
       "bootstrap_visible": true
@@ -101,10 +101,10 @@
       "support_path": "oxisnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.oxisnap",
-      "asc_app_id": "",
+      "asc_app_id": "6759076145",
       "sort_order": 50,
       "featured_priority": 50,
-      "bootstrap_visible": true
+      "bootstrap_visible": false
     },
     {
       "slug": "pupweight",
@@ -120,9 +120,9 @@
       "input_methods": ["voice_input"],
       "is_health_app": false,
       "support_path": "pupweight/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/pupweight/id6759076505",
       "bundle_id": "jp.allnew.pupweight",
-      "asc_app_id": "",
+      "asc_app_id": "6759076505",
       "sort_order": 60,
       "featured_priority": 60,
       "bootstrap_visible": true
@@ -143,10 +143,10 @@
       "support_path": "babyvox/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.babyvox",
-      "asc_app_id": "",
+      "asc_app_id": "6759076543",
       "sort_order": 70,
       "featured_priority": 70,
-      "bootstrap_visible": true
+      "bootstrap_visible": false
     },
     {
       "slug": "waistvox",
@@ -164,7 +164,7 @@
       "support_path": "waistvox/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.waistvox",
-      "asc_app_id": "",
+      "asc_app_id": "6759076494",
       "sort_order": 80,
       "featured_priority": 80,
       "bootstrap_visible": true
@@ -185,7 +185,7 @@
       "support_path": "coughwav/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.coughwav",
-      "asc_app_id": "",
+      "asc_app_id": "6759076606",
       "sort_order": 90,
       "featured_priority": 90,
       "bootstrap_visible": true
@@ -206,7 +206,7 @@
       "support_path": "botto/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.botto",
-      "asc_app_id": "",
+      "asc_app_id": "6759169189",
       "sort_order": 100,
       "featured_priority": 10,
       "bootstrap_visible": true
