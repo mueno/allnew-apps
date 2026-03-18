@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-03-18T07:58:26+00:00",
+  "generated_at": "2026-03-18T08:09:44+00:00",
   "source": "bootstrap",
   "apps": [
     {
@@ -30,7 +30,7 @@
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     },
     {
       "slug": "thermosnap",
@@ -51,7 +51,7 @@
       ],
       "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "thermosnap/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/thermosnap/id6759076372",
       "bundle_id": "jp.allnew.thermosnap",
       "asc_app_id": "6759076372",
       "is_health_app": true,
@@ -59,7 +59,7 @@
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     },
     {
       "slug": "bloodpressuresnap",
@@ -80,7 +80,7 @@
       ],
       "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "bloodpressuresnap/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/bpsnap/id6759076255",
       "bundle_id": "jp.allnew.bloodpressuresnap",
       "asc_app_id": "6759076255",
       "is_health_app": true,
@@ -88,7 +88,7 @@
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     },
     {
       "slug": "glucosnap",
@@ -109,7 +109,7 @@
       ],
       "input_methods_label": "Camera + OCR + Voice Input",
       "support_path": "glucosnap/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/glucosnap/id6759076419",
       "bundle_id": "jp.allnew.glucosnap",
       "asc_app_id": "6759076419",
       "is_health_app": true,
@@ -117,7 +117,7 @@
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     },
     {
       "slug": "pupweight",
@@ -145,7 +145,7 @@
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     },
     {
       "slug": "waistvox",
@@ -165,7 +165,7 @@
       ],
       "input_methods_label": "Voice Input",
       "support_path": "waistvox/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/waistvox/id6759076494",
       "bundle_id": "jp.allnew.waistvox",
       "asc_app_id": "6759076494",
       "is_health_app": true,
@@ -173,7 +173,7 @@
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     },
     {
       "slug": "coughwav",
@@ -193,7 +193,7 @@
       ],
       "input_methods_label": "Sound Detection",
       "support_path": "coughwav/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/coughwav/id6759076606",
       "bundle_id": "jp.allnew.coughwav",
       "asc_app_id": "6759076606",
       "is_health_app": true,
@@ -201,7 +201,7 @@
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     },
     {
       "slug": "botto",
@@ -219,7 +219,7 @@
       "input_methods": [],
       "input_methods_label": "",
       "support_path": "botto/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/botto/id6759169189",
       "bundle_id": "jp.allnew.botto",
       "asc_app_id": "6759169189",
       "is_health_app": false,
@@ -227,7 +227,7 @@
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-03-18T07:58:26+00:00"
+      "updated_at": "2026-03-18T08:09:44+00:00"
     }
   ]
 }
