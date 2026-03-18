@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-03-17T19:20:12+00:00",
+  "generated_at": "2026-03-18T07:58:26+00:00",
   "source": "bootstrap",
   "apps": [
     {
@@ -30,7 +30,7 @@
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     },
     {
       "slug": "thermosnap",
@@ -53,13 +53,13 @@
       "support_path": "thermosnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.thermosnap",
-      "asc_app_id": "",
+      "asc_app_id": "6759076372",
       "is_health_app": true,
       "release_date": "",
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     },
     {
       "slug": "bloodpressuresnap",
@@ -82,13 +82,13 @@
       "support_path": "bloodpressuresnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.bloodpressuresnap",
-      "asc_app_id": "",
+      "asc_app_id": "6759076255",
       "is_health_app": true,
       "release_date": "",
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     },
     {
       "slug": "glucosnap",
@@ -111,42 +111,13 @@
       "support_path": "glucosnap/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.glucosnap",
-      "asc_app_id": "",
+      "asc_app_id": "6759076419",
       "is_health_app": true,
       "release_date": "",
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
-    },
-    {
-      "slug": "oxisnap",
-      "name": "OxiSnap",
-      "name_ja": "血中酸素",
-      "status": "released",
-      "category": "health",
-      "category_label": "Health",
-      "description_ja": "パルスオキシメーターを撮るだけ。SpO2 を自動認識して Apple HealthKit に記録。",
-      "description_en": "Capture your pulse oximeter or speak the value to log SpO2 to Apple HealthKit.",
-      "icon_path": "oxisnap-icon.png",
-      "promo_image_path": "oxisnap-promo.png",
-      "card_image_path": "assets/onboarding/oxisnap-onboarding1.jpeg",
-      "promo_image_source": "catalog",
-      "input_methods": [
-        "camera_ocr",
-        "voice_input"
-      ],
-      "input_methods_label": "Camera + OCR + Voice Input",
-      "support_path": "oxisnap/?lang=ja",
-      "app_store_url": "",
-      "bundle_id": "jp.allnew.oxisnap",
-      "asc_app_id": "",
-      "is_health_app": true,
-      "release_date": "",
-      "featured_priority": 50,
-      "sort_order": 50,
-      "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     },
     {
       "slug": "pupweight",
@@ -166,43 +137,15 @@
       ],
       "input_methods_label": "Voice Input",
       "support_path": "pupweight/?lang=ja",
-      "app_store_url": "",
+      "app_store_url": "https://apps.apple.com/app/pupweight/id6759076505",
       "bundle_id": "jp.allnew.pupweight",
-      "asc_app_id": "",
+      "asc_app_id": "6759076505",
       "is_health_app": false,
       "release_date": "",
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
-    },
-    {
-      "slug": "babyvox",
-      "name": "BabyVox",
-      "name_ja": "Baby記録",
-      "status": "released",
-      "category": "health",
-      "category_label": "Health",
-      "description_ja": "赤ちゃんの身長・体重・頭囲・胸囲を音声で入力。成長記録をカレンダーに保存。*",
-      "description_en": "Record baby height, weight, head and chest circumference by voice and save growth history to Calendar.",
-      "icon_path": "babyvox-icon.png",
-      "promo_image_path": "babyvox-promo.png",
-      "card_image_path": "assets/onboarding/babyvox-onboarding1.jpeg",
-      "promo_image_source": "catalog",
-      "input_methods": [
-        "voice_input"
-      ],
-      "input_methods_label": "Voice Input",
-      "support_path": "babyvox/?lang=ja",
-      "app_store_url": "",
-      "bundle_id": "jp.allnew.babyvox",
-      "asc_app_id": "",
-      "is_health_app": true,
-      "release_date": "",
-      "featured_priority": 70,
-      "sort_order": 70,
-      "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     },
     {
       "slug": "waistvox",
@@ -224,13 +167,13 @@
       "support_path": "waistvox/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.waistvox",
-      "asc_app_id": "",
+      "asc_app_id": "6759076494",
       "is_health_app": true,
       "release_date": "",
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     },
     {
       "slug": "coughwav",
@@ -252,13 +195,13 @@
       "support_path": "coughwav/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.coughwav",
-      "asc_app_id": "",
+      "asc_app_id": "6759076606",
       "is_health_app": true,
       "release_date": "",
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     },
     {
       "slug": "botto",
@@ -278,13 +221,13 @@
       "support_path": "botto/?lang=ja",
       "app_store_url": "",
       "bundle_id": "jp.allnew.botto",
-      "asc_app_id": "",
+      "asc_app_id": "6759169189",
       "is_health_app": false,
       "release_date": "",
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-03-17T19:20:12+00:00"
+      "updated_at": "2026-03-18T07:58:26+00:00"
     }
   ]
 }
