@@ -327,6 +327,21 @@
     }
   }
 
+  function showFetchError() {
+    var grids = document.querySelectorAll('.category-grid');
+    grids.forEach(function (grid) {
+      if (grid.children.length === 0) {
+        var msg = document.createElement('p');
+        msg.className = 'fetch-error-message';
+        msg.style.cssText = 'text-align:center;padding:2rem 1rem;color:#888;font-size:0.95rem;';
+        msg.textContent = currentLang === 'en'
+          ? 'Could not load app list. Please refresh the page.'
+          : 'アプリ一覧を読み込めませんでした。ページを再読み込みしてください。';
+        grid.appendChild(msg);
+      }
+    });
+  }
+
   function loadAndApply() {
     fetch(DATA_PATH, { cache: 'no-store' })
       .then(function (response) {
@@ -341,6 +356,7 @@
       })
       .catch(function (error) {
         console.warn('[landing-runtime] using static fallback:', error);
+        showFetchError();
       });
   }
 
