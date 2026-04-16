@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-04-15T19:42:42+00:00",
+  "generated_at": "2026-04-16T19:37:23+00:00",
   "source": "bootstrap",
   "apps": [
     {
@@ -30,7 +30,7 @@
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     },
     {
       "slug": "thermosnap",
@@ -59,7 +59,7 @@
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     },
     {
       "slug": "bloodpressuresnap",
@@ -88,7 +88,7 @@
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     },
     {
       "slug": "glucosnap",
@@ -117,7 +117,7 @@
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     },
     {
       "slug": "pupweight",
@@ -145,7 +145,7 @@
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     },
     {
       "slug": "waistvox",
@@ -173,7 +173,7 @@
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     },
     {
       "slug": "coughwav",
@@ -201,7 +201,7 @@
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     },
     {
       "slug": "botto",
@@ -227,7 +227,7 @@
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-04-15T19:42:42+00:00"
+      "updated_at": "2026-04-16T19:37:23+00:00"
     }
   ]
 }
