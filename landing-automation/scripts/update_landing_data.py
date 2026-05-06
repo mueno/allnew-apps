@@ -36,6 +36,8 @@ ALLOWED_SCREENSHOT_DOMAINS = tuple(
     if domain.strip()
 )
 MAX_SCREENSHOT_BYTES = int(os.getenv("LANDING_MAX_SCREENSHOT_BYTES", str(10 * 1024 * 1024)))
+APP_STORE_LOOKUP_URL = "https://itunes.apple.com/lookup"
+APP_STORE_LOOKUP_TIMEOUT = int(os.getenv("LANDING_APP_STORE_LOOKUP_TIMEOUT", "30"))
 
 VISIBLE_STATUSES = {"submitted", "released"}
 HEALTH_APP_CATEGORIES = {"health"}
@@ -114,6 +116,16 @@ def parse_args() -> argparse.Namespace:
         "--bootstrap",
         action="store_true",
         help="Generate data from catalog bootstrap set only",
+    )
+    parser.add_argument(
+        "--reconcile-app-store",
+        action="store_true",
+        help="Reconcile released app metadata from Apple's public App Store Lookup API",
+    )
+    parser.add_argument(
+        "--lookup-country",
+        default=os.getenv("LANDING_APP_STORE_LOOKUP_COUNTRY", "jp"),
+        help="App Store Lookup country code for public metadata reconciliation",
     )
     return parser.parse_args()
 
@@ -513,6 +525,33 @@ def sort_entries(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(entries, key=lambda item: (int(item.get("sort_order", 999)), item.get("slug", "")))
 
 
+def output_payload(existing_output: dict[str, Any], source: str, apps: list[dict[str, Any]]) -> dict[str, Any]:
+    next_output = {
+        "schema_version": 1,
+        "generated_at": now_iso(),
+        "source": source,
+        "apps": sort_entries(apps),
+    }
+    if (
+        existing_output.get("schema_version") == next_output["schema_version"]
+        and existing_output.get("source") == next_output["source"]
+        and existing_output.get("apps") == next_output["apps"]
+        and existing_output.get("generated_at")
+    ):
+        next_output["generated_at"] = existing_output["generated_at"]
+    return next_output
+
+
+def entry_without_updated_at(entry: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in entry.items() if key != "updated_at"}
+
+
+def keep_updated_at_if_semantically_same(entry: dict[str, Any], existing_entry: dict[str, Any] | None) -> dict[str, Any]:
+    if existing_entry and entry_without_updated_at(entry) == entry_without_updated_at(existing_entry):
+        entry["updated_at"] = existing_entry.get("updated_at", entry.get("updated_at", now_iso()))
+    return entry
+
+
 def ensure_bootstrap_data(catalog: dict[str, Any], existing_output: dict[str, Any]) -> dict[str, Any]:
     apps: list[dict[str, Any]] = []
     for catalog_app in catalog.get("apps", []):
@@ -520,12 +559,180 @@ def ensure_bootstrap_data(catalog: dict[str, Any], existing_output: dict[str, An
             continue
         apps.append(default_output_entry(catalog_app))
 
-    return {
+    return output_payload(existing_output, "bootstrap", apps)
+
+
+def normalize_lookup_country(country: str) -> str:
+    normalized = "".join(ch for ch in country.strip().lower() if ch.isalpha())
+    if len(normalized) != 2:
+        raise ValueError("lookup country must be a two-letter country code")
+    return normalized
+
+
+def fetch_app_store_lookup(app_ids: list[str], country: str) -> dict[str, dict[str, Any]]:
+    if not app_ids:
+        return {}
+
+    params = urllib.parse.urlencode(
+        {
+            "id": ",".join(app_ids),
+            "country": normalize_lookup_country(country),
+            "entity": "software",
+        },
+        safe=",",
+    )
+    request = urllib.request.Request(
+        f"{APP_STORE_LOOKUP_URL}?{params}",
+        headers={"User-Agent": "allnew-landing-sync/1.0"},
+    )
+    with urllib.request.urlopen(request, timeout=APP_STORE_LOOKUP_TIMEOUT) as response:  # nosec: fixed Apple Lookup endpoint
+        payload = json.loads(response.read().decode("utf-8"))
+
+    results: dict[str, dict[str, Any]] = {}
+    for item in payload.get("results", []):
+        if not isinstance(item, dict):
+            continue
+        track_id = item.get("trackId")
+        if track_id is not None:
+            results[str(track_id)] = item
+    return results
+
+
+def build_entry_from_app_store(
+    existing_entry: dict[str, Any] | None,
+    catalog_entry: dict[str, Any],
+    lookup_entry: dict[str, Any],
+    country: str,
+) -> dict[str, Any]:
+    entry = default_output_entry(catalog_entry)
+    if existing_entry:
+        entry.update(existing_entry)
+
+    entry["status"] = "released"
+    entry["published_to_landing"] = True
+
+    track_id = lookup_entry.get("trackId")
+    if track_id is not None:
+        entry["asc_app_id"] = str(track_id)
+
+    bundle_id = lookup_entry.get("bundleId")
+    if bundle_id:
+        entry["bundle_id"] = str(bundle_id)
+
+    track_url = lookup_entry.get("trackViewUrl")
+    if track_url:
+        entry["app_store_url"] = str(track_url)
+
+    version = lookup_entry.get("version")
+    if version:
+        entry["app_store_version"] = str(version)
+
+    track_name = lookup_entry.get("trackName")
+    if track_name:
+        entry["app_store_name"] = str(track_name)
+
+    current_version_date = lookup_entry.get("currentVersionReleaseDate")
+    if current_version_date:
+        entry["app_store_current_version_release_date"] = str(current_version_date)
+        entry["release_date"] = normalize_release_date(current_version_date)
+    else:
+        entry["release_date"] = normalize_release_date(lookup_entry.get("releaseDate")) or entry.get("release_date", "")
+
+    entry["app_store_lookup_country"] = normalize_lookup_country(country)
+    entry = apply_catalog_defaults(entry, catalog_entry)
+    entry["updated_at"] = now_iso()
+    return keep_updated_at_if_semantically_same(entry, existing_entry)
+
+
+def state_payload(
+    current_state: dict[str, Any],
+    statuses: dict[str, str],
+    *,
+    app_store_reconcile: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    next_state = {
         "schema_version": 1,
-        "generated_at": now_iso(),
-        "source": "bootstrap",
-        "apps": sort_entries(apps),
+        "updated_at": now_iso(),
+        "processed_event_ids": current_state.get("processed_event_ids", []),
+        "statuses": statuses,
     }
+    if app_store_reconcile is not None:
+        next_state["app_store_reconcile"] = app_store_reconcile
+
+    comparable_current = {
+        key: value
+        for key, value in current_state.items()
+        if key != "updated_at"
+    }
+    comparable_next = {
+        key: value
+        for key, value in next_state.items()
+        if key != "updated_at"
+    }
+    if comparable_current == comparable_next and current_state.get("updated_at"):
+        next_state["updated_at"] = current_state["updated_at"]
+
+    return next_state
+
+
+def update_from_app_store(
+    catalog: dict[str, Any],
+    state: dict[str, Any],
+    existing_output: dict[str, Any],
+    country: str,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    existing_by_slug: dict[str, dict[str, Any]] = {
+        app["slug"]: app for app in existing_output.get("apps", []) if isinstance(app, dict) and "slug" in app
+    }
+    catalog_apps = [app for app in catalog.get("apps", []) if isinstance(app, dict) and app.get("slug")]
+    app_ids = [str(app.get("asc_app_id")) for app in catalog_apps if app.get("asc_app_id")]
+    lookup_by_id = fetch_app_store_lookup(app_ids, country)
+    if app_ids and not lookup_by_id:
+        raise RuntimeError("App Store Lookup returned no app results")
+
+    normalized_entries: list[dict[str, Any]] = []
+    statuses: dict[str, str] = {}
+    public_app_ids = set(lookup_by_id.keys())
+
+    for catalog_entry in catalog_apps:
+        slug = str(catalog_entry["slug"])
+        existing_entry = existing_by_slug.get(slug)
+        app_id = str(catalog_entry.get("asc_app_id") or "")
+        lookup_entry = lookup_by_id.get(app_id)
+
+        if lookup_entry:
+            entry = build_entry_from_app_store(existing_entry, catalog_entry, lookup_entry, country)
+        elif existing_entry and existing_entry.get("status") == "submitted":
+            entry = apply_catalog_defaults(dict(existing_entry), catalog_entry)
+            entry = keep_updated_at_if_semantically_same(entry, existing_entry)
+        else:
+            entry = default_output_entry(catalog_entry)
+            entry["status"] = "draft"
+            entry["published_to_landing"] = False
+            entry = keep_updated_at_if_semantically_same(entry, existing_entry)
+            if app_id:
+                print(f"[INFO] app is not public in App Store Lookup: {slug} ({app_id})")
+
+        normalized_entries.append(entry)
+        statuses[slug] = str(entry.get("status", "unknown"))
+
+    filtered_entries = [
+        entry
+        for entry in normalized_entries
+        if entry.get("published_to_landing") and entry.get("status") in VISIBLE_STATUSES
+    ]
+
+    next_output = output_payload(existing_output, "app_store_reconcile", filtered_entries)
+    next_state = state_payload(
+        state,
+        statuses,
+        app_store_reconcile={
+            "country": normalize_lookup_country(country),
+            "public_app_ids": sorted(public_app_ids),
+            "missing_app_ids": sorted(set(app_ids) - public_app_ids),
+        },
+    )
+    return next_output, next_state
 
 
 def parse_event_payload(event_data: dict[str, Any]) -> list[dict[str, Any]]:
@@ -703,12 +910,7 @@ def update_from_event(
         if entry.get("published_to_landing") and entry.get("status") in VISIBLE_STATUSES
     ]
 
-    next_output = {
-        "schema_version": 1,
-        "generated_at": now_iso(),
-        "source": "event",
-        "apps": sort_entries(filtered_entries),
-    }
+    next_output = output_payload(existing_output, "event", filtered_entries)
 
     processed_ids.append(str(event_key))
     processed_ids = processed_ids[-500:]
@@ -719,6 +921,8 @@ def update_from_event(
         "processed_event_ids": processed_ids,
         "statuses": {entry["slug"]: entry.get("status", "unknown") for entry in normalized_entries},
     }
+    if "app_store_reconcile" in state:
+        next_state["app_store_reconcile"] = state["app_store_reconcile"]
 
     return next_output, next_state
 
@@ -733,14 +937,14 @@ def main() -> int:
     current_output = load_json(args.output, {})
     current_state = load_json(args.state, {"schema_version": 1, "processed_event_ids": [], "statuses": {}})
 
-    if args.bootstrap or not args.event_file:
+    if args.reconcile_app_store:
+        next_output, next_state = update_from_app_store(catalog, current_state, current_output, args.lookup_country)
+    elif args.bootstrap or not args.event_file:
         next_output = ensure_bootstrap_data(catalog, current_output)
-        next_state = {
-            "schema_version": 1,
-            "updated_at": now_iso(),
-            "processed_event_ids": current_state.get("processed_event_ids", []),
-            "statuses": {entry["slug"]: entry.get("status", "unknown") for entry in next_output["apps"]},
-        }
+        next_state = state_payload(
+            current_state,
+            {entry["slug"]: entry.get("status", "unknown") for entry in next_output["apps"]},
+        )
     else:
         event_data = load_json(args.event_file, {})
         next_output, next_state = update_from_event(catalog, current_state, current_output, event_data)
