@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-05-06T13:50:26+00:00",
+  "generated_at": "2026-05-06T20:00:24+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -157,14 +157,14 @@
       "bundle_id": "jp.allnew.pupweight",
       "asc_app_id": "6759076505",
       "is_health_app": false,
-      "release_date": "2026-05-01",
+      "release_date": "2026-05-06",
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-05-06T13:50:26+00:00",
-      "app_store_version": "1.0.4",
+      "updated_at": "2026-05-06T20:00:24+00:00",
+      "app_store_version": "1.0.5",
       "app_store_name": "PupWeight ワンコとニャンコの体重記録",
-      "app_store_current_version_release_date": "2026-05-01T14:48:06Z",
+      "app_store_current_version_release_date": "2026-05-06T16:33:28Z",
       "app_store_lookup_country": "jp"
     },
     {
