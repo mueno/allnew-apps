@@ -1768,6 +1768,16 @@
             });
         }
 
+        function setTextWithBreaks(element, value) {
+            element.textContent = '';
+            String(value || '').split(/<br\s*\/?>|\n/i).forEach((line, index) => {
+                if (index > 0) {
+                    element.appendChild(document.createElement('br'));
+                }
+                element.appendChild(document.createTextNode(line));
+            });
+        }
+
         function applyI18n(lang) {
             const copy = I18N[lang] || I18N.ja;
             document.documentElement.lang = lang;
@@ -1802,7 +1812,7 @@
                 const element = document.getElementById(id);
                 if (!element) return;
                 if (id === 'footer-tagline') {
-                    element.innerHTML = value.replace('\n', '<br>');
+                    setTextWithBreaks(element, value);
                     return;
                 }
                 element.textContent = value;
@@ -1811,7 +1821,7 @@
             Object.entries(copy.html).forEach(([id, value]) => {
                 const element = document.getElementById(id);
                 if (!element) return;
-                element.innerHTML = value;
+                setTextWithBreaks(element, value);
             });
 
             Object.entries(copy.legalLinks).forEach(([id, href]) => {

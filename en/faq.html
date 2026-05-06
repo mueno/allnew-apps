@@ -59,8 +59,14 @@
             config.faq.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'faq-item' + (index === 0 ? ' open' : '');
-                div.innerHTML = '<div class="faq-question">' + item.q + '</div>' +
-                    '<div class="faq-answer">' + item.a + '</div>';
+                const question = document.createElement('div');
+                question.className = 'faq-question';
+                question.textContent = item.q;
+                const answer = document.createElement('div');
+                answer.className = 'faq-answer';
+                window.appendSafeRichText(answer, item.a);
+                div.appendChild(question);
+                div.appendChild(answer);
                 container.appendChild(div);
             });
 
