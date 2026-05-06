@@ -52,32 +52,27 @@
     return HEALTH_CATEGORIES.has(app.category);
   }
 
-  function safeText(value) {
-    return String(value || '').replace(/[&<>"']/g, function (char) {
-      switch (char) {
-        case '&':
-          return '&amp;';
-        case '<':
-          return '&lt;';
-        case '>':
-          return '&gt;';
-        case '"':
-          return '&quot;';
-        case "'":
-          return '&#39;';
-        default:
-          return char;
-      }
-    });
-  }
-
   function isExternalPath(path) {
     return /^https?:\/\//i.test(path || '');
   }
 
+  function sanitizePath(path, fallback) {
+    const value = String(path || '').trim();
+    if (!value || /[\u0000-\u001F\u007F\\]/.test(value) || value.startsWith('//')) return fallback || '';
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value)) {
+      try {
+        const url = new URL(value);
+        return url.protocol === 'https:' ? url.toString() : (fallback || '');
+      } catch (error) {
+        return fallback || '';
+      }
+    }
+    return value;
+  }
+
   function normalizeImagePath(path) {
     if (!path) return '';
-    return isExternalPath(path) ? path : path.replace(/^\.\//, '');
+    return sanitizePath(isExternalPath(path) ? path : path.replace(/^\.\//, ''), '');
   }
 
   function normalizeVisibleApps(apps) {
@@ -143,7 +138,7 @@
 
   function resolveSupportPath(app) {
     const basePath = (app && app.support_path) || ((app && app.slug ? app.slug : '') + '/');
-    return withLangParam(basePath, currentLang);
+    return sanitizePath(withLangParam(basePath, currentLang), '#');
   }
 
   function buildInputMethodLabel(app, fallbackTag) {
@@ -181,6 +176,17 @@
     }
   }
 
+  function createSvgArrow() {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', 'M4.5 12L12 4.5M12 4.5H6M12 4.5V11');
+    svg.appendChild(path);
+    return svg;
+  }
+
   function buildWorkCard(app, fallbackTag) {
     const supportPath = resolveSupportPath(app);
     const promoImage = normalizeImagePath(app.card_image_path || app.promo_image_path);
@@ -189,29 +195,69 @@
     const statusTag = app.status === 'submitted' ? (currentLang === 'en' ? 'In Review' : '審査中') : '';
     const tag = statusTag ? (baseTag ? (baseTag + ' / ' + statusTag) : statusTag) : baseTag;
 
-    return [
-      '<a class="work-card visible" href="' + safeText(supportPath) + '">',
-      '  <div class="work-card-img" style="background:#f5f5f5;">',
-      promoImage
-        ? '    <img src="' + safeText(promoImage) + '" alt="' + safeText(app.name) + '" loading="lazy">'
-        : '',
-      '  </div>',
-      '  <div class="work-card-body">',
-      '    <div class="work-card-meta">',
-      iconPath
-        ? '      <img src="' + safeText(iconPath) + '" alt="" class="work-card-icon">'
-        : '      <div class="work-card-icon" aria-hidden="true"></div>',
-      '      <div class="work-card-names">',
-      '        <div class="work-card-name">' + safeText(app.name) + '</div>',
-      '        <div class="work-card-ja">' + safeText(app.name_ja || '') + '</div>',
-      '      </div>',
-      '    </div>',
-      '    <span class="work-card-tag">' + safeText(tag) + '</span>',
-      '    <p class="work-card-desc">' + safeText(pickAppDescription(app)) + '</p>',
-      '  </div>',
-      '  <div class="work-card-arrow"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4.5 12L12 4.5M12 4.5H6M12 4.5V11"></path></svg></div>',
-      '</a>'
-    ].join('\n');
+    const card = document.createElement('a');
+    card.className = 'work-card visible';
+    card.setAttribute('href', supportPath);
+
+    const imageWrap = document.createElement('div');
+    imageWrap.className = 'work-card-img';
+    imageWrap.style.background = '#f5f5f5';
+    if (promoImage) {
+      const img = document.createElement('img');
+      img.src = promoImage;
+      img.alt = app.name || '';
+      img.loading = 'lazy';
+      imageWrap.appendChild(img);
+    }
+    card.appendChild(imageWrap);
+
+    const body = document.createElement('div');
+    body.className = 'work-card-body';
+    const meta = document.createElement('div');
+    meta.className = 'work-card-meta';
+    if (iconPath) {
+      const icon = document.createElement('img');
+      icon.src = iconPath;
+      icon.alt = '';
+      icon.className = 'work-card-icon';
+      meta.appendChild(icon);
+    } else {
+      const icon = document.createElement('div');
+      icon.className = 'work-card-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      meta.appendChild(icon);
+    }
+
+    const names = document.createElement('div');
+    names.className = 'work-card-names';
+    const name = document.createElement('div');
+    name.className = 'work-card-name';
+    name.textContent = app.name || '';
+    const ja = document.createElement('div');
+    ja.className = 'work-card-ja';
+    ja.textContent = app.name_ja || '';
+    names.appendChild(name);
+    names.appendChild(ja);
+    meta.appendChild(names);
+    body.appendChild(meta);
+
+    const tagEl = document.createElement('span');
+    tagEl.className = 'work-card-tag';
+    tagEl.textContent = tag;
+    body.appendChild(tagEl);
+
+    const desc = document.createElement('p');
+    desc.className = 'work-card-desc';
+    desc.textContent = pickAppDescription(app);
+    body.appendChild(desc);
+    card.appendChild(body);
+
+    const arrow = document.createElement('div');
+    arrow.className = 'work-card-arrow';
+    arrow.appendChild(createSvgArrow());
+    card.appendChild(arrow);
+
+    return card;
   }
 
   function renderCategoryGrids(apps) {
@@ -228,11 +274,12 @@
         return;
       }
 
-      grid.innerHTML = categoryApps
-        .map(function (app) {
+      grid.replaceChildren.apply(
+        grid,
+        categoryApps.map(function (app) {
           return buildWorkCard(app, target.tag);
         })
-        .join('\n\n');
+      );
     });
   }
 
@@ -274,7 +321,7 @@
     const appStoreBtn = document.getElementById('featured-app-store-link');
     if (appStoreBtn) {
       if (app.status === 'released' && app.app_store_url) {
-        appStoreBtn.href = app.app_store_url;
+        appStoreBtn.href = sanitizePath(app.app_store_url, '#');
         appStoreBtn.style.display = '';
       } else {
         appStoreBtn.style.display = 'none';

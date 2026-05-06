@@ -538,7 +538,7 @@ const APP_DATA = {
 function getAppConfig(lang) {
     const params = new URLSearchParams(window.location.search);
     const appId = params.get('app') || 'weightsnap';
-    const app = APP_DATA[appId];
+    const app = Object.prototype.hasOwnProperty.call(APP_DATA, appId) ? APP_DATA[appId] : null;
     if (!app) return null;
     const langData = app[lang];
     if (!langData) return null;
@@ -549,6 +549,41 @@ function getAppConfig(lang) {
         icon: app.icon,
         ...langData
     };
+}
+
+function appendSafeRichText(target, value) {
+    target.textContent = '';
+    const stack = [target];
+    const tokenRe = /<(\/?)(p|strong)\s*>|<br\s*\/?>/gi;
+    let lastIndex = 0;
+    let match;
+
+    function appendText(text) {
+        if (text) {
+            stack[stack.length - 1].appendChild(document.createTextNode(text));
+        }
+    }
+
+    while ((match = tokenRe.exec(String(value || ''))) !== null) {
+        appendText(String(value || '').slice(lastIndex, match.index));
+
+        if (match[0].toLowerCase().startsWith('<br')) {
+            stack[stack.length - 1].appendChild(document.createElement('br'));
+        } else if (match[1] === '/') {
+            const tagName = match[2].toLowerCase();
+            if (stack.length > 1 && stack[stack.length - 1].tagName.toLowerCase() === tagName) {
+                stack.pop();
+            }
+        } else {
+            const element = document.createElement(match[2].toLowerCase());
+            stack[stack.length - 1].appendChild(element);
+            stack.push(element);
+        }
+
+        lastIndex = tokenRe.lastIndex;
+    }
+
+    appendText(String(value || '').slice(lastIndex));
 }
 
 /**
@@ -569,28 +604,7 @@ function applyAppData(lang) {
             const value = config[key];
             // Check if value contains any HTML-like content
             if (/<[^>]+>/.test(value)) {
-                // Sanitize: only allow <strong> tags, strip everything else
-                const fragment = document.createDocumentFragment();
-                const strongRe = /<strong>(.*?)<\/strong>/gi;
-                let match;
-                let lastIndex = 0;
-                while ((match = strongRe.exec(value)) !== null) {
-                    // Text before the <strong> tag
-                    if (match.index > lastIndex) {
-                        fragment.appendChild(document.createTextNode(value.slice(lastIndex, match.index)));
-                    }
-                    // The <strong> content (set via textContent -- safe)
-                    const strong = document.createElement('strong');
-                    strong.textContent = match[1];
-                    fragment.appendChild(strong);
-                    lastIndex = strongRe.lastIndex;
-                }
-                // Remaining text after last match
-                if (lastIndex < value.length) {
-                    fragment.appendChild(document.createTextNode(value.slice(lastIndex)));
-                }
-                el.textContent = ''; // Clear existing content
-                el.appendChild(fragment);
+                appendSafeRichText(el, value);
             } else {
                 // Plain text: safe to use textContent
                 el.textContent = value;
@@ -612,3 +626,5 @@ function applyAppData(lang) {
 
     return config;
 }
+
+window.appendSafeRichText = appendSafeRichText;
