@@ -671,6 +671,8 @@ def update_from_event(
         print("[WARN] no app payload found in event")
         return existing_output, state
 
+    resolved_any = False
+
     for payload in payload_apps:
         slug = resolve_slug(payload, by_slug, by_bundle, by_app_id)
         if not slug:
@@ -681,6 +683,11 @@ def update_from_event(
         existing_entry = entries_by_slug.get(slug)
         entry = build_entry_from_event(existing_entry, catalog_entry, payload, event_data)
         entries_by_slug[slug] = entry
+        resolved_any = True
+
+    if not resolved_any:
+        print("[WARN] no resolvable app payload found in event")
+        return existing_output, state
 
     normalized_entries: list[dict[str, Any]] = []
     for slug, entry in entries_by_slug.items():

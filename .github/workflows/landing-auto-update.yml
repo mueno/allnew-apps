@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: write
+  deployments: write
 
 concurrency:
   group: landing-auto-update-${{ github.ref }}
@@ -52,6 +53,7 @@ jobs:
           python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
 
       - name: Commit changes
+        id: commit-changes
         env:
           TARGET_BRANCH: ${{ github.ref_name }}
           EVENT_NAME: ${{ github.event_name }}
@@ -61,6 +63,7 @@ jobs:
 
           if git diff --quiet; then
             echo "No changes"
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
 
@@ -70,6 +73,7 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "No staged changes"
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
 
@@ -80,6 +84,7 @@ jobs:
           for attempt in 1 2 3; do
             if git push origin "HEAD:${TARGET_BRANCH}"; then
               echo "Push succeeded on attempt ${attempt}"
+              echo "changed=true" >> "${GITHUB_OUTPUT}"
               exit 0
             fi
 
@@ -101,8 +106,17 @@ jobs:
             git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots
             if git diff --cached --quiet; then
               echo "No staged changes after refresh"
+              echo "changed=false" >> "${GITHUB_OUTPUT}"
               exit 0
             fi
             git commit -m "chore: auto update landing apps data"
             sleep $((attempt * 2))
           done
+
+      - name: Deploy to Cloudflare Pages
+        if: ${{ steps.commit-changes.outputs.changed == 'true' }}
+        uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=allnew-apps
