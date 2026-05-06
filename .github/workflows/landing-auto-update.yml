@@ -8,6 +8,10 @@ on:
       - asc_status_changed
   workflow_dispatch:
     inputs:
+      reconcile:
+        description: "Reconcile released app metadata from App Store Lookup"
+        required: false
+        default: "false"
       bootstrap:
         description: "Rebuild from catalog bootstrap set"
         required: false
@@ -42,13 +46,18 @@ jobs:
           ${{ toJson(github.event) }}
           JSON
 
-      - name: Bootstrap mode (schedule or manual)
-        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true') }}
+      - name: App Store reconcile mode (schedule or manual)
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.reconcile == 'true') }}
+        run: |
+          python3 landing-automation/scripts/update_landing_data.py --reconcile-app-store
+
+      - name: Bootstrap mode (manual)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true' && inputs.reconcile != 'true' }}
         run: |
           python3 landing-automation/scripts/update_landing_data.py --bootstrap
 
       - name: Event mode (repository_dispatch)
-        if: ${{ github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.bootstrap != 'true') }}
+        if: ${{ github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.bootstrap != 'true' && inputs.reconcile != 'true') }}
         run: |
           python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
 
@@ -57,6 +66,7 @@ jobs:
         env:
           TARGET_BRANCH: ${{ github.ref_name }}
           EVENT_NAME: ${{ github.event_name }}
+          RECONCILE_INPUT: ${{ inputs.reconcile }}
           BOOTSTRAP_INPUT: ${{ inputs.bootstrap }}
         run: |
           set -euo pipefail
@@ -97,7 +107,9 @@ jobs:
             git fetch origin "${TARGET_BRANCH}"
             git reset --hard "origin/${TARGET_BRANCH}"
 
-            if [ "${EVENT_NAME}" = "schedule" ] || { [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ]; }; then
+            if [ "${EVENT_NAME}" = "schedule" ] || { [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${RECONCILE_INPUT}" = "true" ]; }; then
+              python3 landing-automation/scripts/update_landing_data.py --reconcile-app-store
+            elif [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ]; then
               python3 landing-automation/scripts/update_landing_data.py --bootstrap
             else
               python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json

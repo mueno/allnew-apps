@@ -19,6 +19,7 @@
 9. Adopt docs-first operations via dedicated skills for GitHub and Cloudflare before changing CI/CD or webhook infrastructure settings.
 10. Serialize `landing-auto-update` workflow runs and add push retry-with-rebase logic to absorb bursty `repository_dispatch` events and reduce transient push failures.
 11. Use `card_image_path` (onboarding first image) for app cards, while keeping ASC screenshot in `promo_image_path` for Featured.
+12. Use a daily App Store Lookup reconcile to correct public release metadata when webhook events are missing or incomplete.
 12. Compute `Health Apps` metric from `released` entries with `is_health_app=true` only.
 13. Featured section is treated as `New Release`: select the latest `released` app by `release_date` (fallback to `updated_at`) and show the release date in `YYYY.MM.DD`.
 14. App card tags are generated from normalized `input_methods` metadata instead of hardcoded `category_label` strings.
@@ -45,3 +46,4 @@
 - 2026-02-15: Hardened workflow reliability with `concurrency` control and `git push` retry/rebase in `.github/workflows/landing-auto-update.yml`.
 - 2026-02-15: Switched featured date display to `YYYY.MM.DD` and added landing-level JA/EN switching with `?lang=`.
 - 2026-02-15: Hardened webhook and ingestion security (secret-required signature verification, payload limits, replay protection, screenshot URL allowlist, SHA-pinned GitHub Actions).
+- 2026-05-06: Added scheduled App Store Lookup reconcile for public metadata drift (URL, bundle id, version, current-version release date).

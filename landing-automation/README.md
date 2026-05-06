@@ -7,6 +7,7 @@
 - ランディングページの**見た目は維持**したまま、アプリ紹介データを自動更新する
 - 個別サポートページ（`/<app>/` 配下）には影響を与えない
 - ASCイベント（審査提出 / 公開）をトリガーにデータ更新する
+- 毎日の定期実行で App Store Lookup の公開情報と照合する
 
 ## 変更対象
 
@@ -82,12 +83,14 @@ curl -X POST \
 cd /Users/masa/Development/projects/allnew-apps
 python3 landing-automation/scripts/update_landing_data.py --bootstrap
 python3 landing-automation/scripts/update_landing_data.py --event-file /path/to/event.json
+python3 landing-automation/scripts/update_landing_data.py --reconcile-app-store
 ```
 
 セキュリティ関連のオプション環境変数:
 
 - `LANDING_ALLOWED_SCREENSHOT_DOMAINS` (default: `mzstatic.com,apple.com`)
 - `LANDING_MAX_SCREENSHOT_BYTES` (default: `10485760`)
+- `LANDING_APP_STORE_LOOKUP_COUNTRY` (default: `jp`)
 
 ## submitted 表示ルール
 
