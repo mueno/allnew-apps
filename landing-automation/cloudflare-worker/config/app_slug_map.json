@@ -15,6 +15,7 @@
     "jp.allnew.weightsnap": "weightsnap",
     "jp.allnew.thermosnap": "thermosnap",
     "jp.allnew.bloodpressuresnap": "bloodpressuresnap",
+    "jp.allnew.bpsnap": "bloodpressuresnap",
     "jp.allnew.glucosnap": "glucosnap",
     "jp.allnew.oxisnap": "oxisnap",
     "jp.allnew.pupweight": "pupweight",
@@ -22,6 +23,7 @@
     "jp.allnew.waistvox": "waistvox",
     "jp.allnew.coughwav": "coughwav",
     "jp.allnew.botto": "botto",
+    "jp.allnew.zenflip": "botto",
     "jp.allnew.mofulens": "mofulens"
   }
 }
