@@ -102,6 +102,7 @@ python3 landing-automation/scripts/update_landing_data.py --reconcile-app-store
 
 - 各アプリの問い合わせ先メールは共通で `app-support@allnew.work` を使用する
 - `mailto` はアプリ名付き subject を付与する（例: `?subject=WeightSnap%20%3A%20`）
+- 公開HTMLのメール表示・`mailto` リンクは Cloudflare Email Protection を避けるため `<!--email_off-->...<!--/email_off-->` で囲む
 
 ## 外部Webhookリレー運用
 

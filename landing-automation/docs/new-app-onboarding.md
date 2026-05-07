@@ -104,6 +104,7 @@ cp -r weightsnap/ newapp/
 お問い合わせメールの運用:
 - `mailto` は共通で `app-support@allnew.work` を使う
 - subject にアプリ名を含める（例: `?subject=WeightSnap%20%3A%20`）
+- 公開HTMLではメール表示・`mailto` リンクを `<!--email_off-->...<!--/email_off-->` で囲み、Cloudflare Email Protection による `/cdn-cgi/l/email-protection` への置換を避ける
 
 ### 1-5. バリデーション実行
 

@@ -3,10 +3,12 @@
  * Used by common legal pages (privacy, terms, tokusho, faq, legal-notice)
  * URL parameter: ?app=weightsnap
  */
+const SHARED_SUPPORT_EMAIL = ['app-support', 'allnew.work'].join('@');
+
 const APP_DATA = {
     weightsnap: {
         name: "WeightSnap",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x2696;&#xFE0F;",
         ja: {
             subtitle: "体重記録アプリ",
@@ -71,7 +73,7 @@ const APP_DATA = {
     },
     bpsnap: {
         name: "BPSnap",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1FA7A;",
         ja: {
             subtitle: "血圧記録アプリ",
@@ -122,7 +124,7 @@ const APP_DATA = {
     },
     glucosnap: {
         name: "GlucoSnap",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1FA78;",
         ja: {
             subtitle: "血糖値記録アプリ",
@@ -173,7 +175,7 @@ const APP_DATA = {
     },
     oxisnap: {
         name: "OxiSnap",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1F9EC;",
         ja: {
             subtitle: "SpO2記録アプリ",
@@ -224,7 +226,7 @@ const APP_DATA = {
     },
     thermosnap: {
         name: "ThermoSnap",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1F321;&#xFE0F;",
         ja: {
             subtitle: "体温記録アプリ",
@@ -275,7 +277,7 @@ const APP_DATA = {
     },
     waistvox: {
         name: "WaistVox",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1F4CF;",
         ja: {
             subtitle: "ウエスト記録アプリ",
@@ -326,7 +328,7 @@ const APP_DATA = {
     },
     babyvox: {
         name: "BabyVox",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1F476;",
         ja: {
             subtitle: "赤ちゃんの成長記録アプリ",
@@ -377,7 +379,7 @@ const APP_DATA = {
     },
     coughwav: {
         name: "CoughWav",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1F637;",
         ja: {
             subtitle: "咳モニタリングアプリ",
@@ -428,7 +430,7 @@ const APP_DATA = {
     },
     pupweight: {
         name: "PupWeight",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1F436;",
         ja: {
             subtitle: "ペットの体重記録アプリ",
@@ -479,7 +481,7 @@ const APP_DATA = {
     },
     botto: {
         name: "BOTTO",
-        supportEmail: "app-support@allnew.work",
+        supportEmail: SHARED_SUPPORT_EMAIL,
         icon: "&#x1F9D8;",
         ja: {
             subtitle: "集中タイマーアプリ",
@@ -600,8 +602,9 @@ function applyAppData(lang) {
 
     // Replace href in mailto links
     document.querySelectorAll('a[data-app-email]').forEach(el => {
-        el.href = 'mailto:' + config.supportEmail + '?subject=' + encodeURIComponent(config.name + ' : ');
-        el.textContent = config.supportEmail;
+        const supportEmail = config.supportEmail || SHARED_SUPPORT_EMAIL;
+        el.href = 'mailto:' + supportEmail + '?subject=' + encodeURIComponent(config.name + ' : ');
+        el.textContent = supportEmail;
     });
 
     // Update header app name
