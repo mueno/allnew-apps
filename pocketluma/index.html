@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>80&#x27;s Camera Support</title>
+  <meta name="description" content="80&#x27;s Camera is a pocket-sized retro compact camera inspired by the
+feel of 1980s keychain compacts. A cream plastic shell, a black
+lens-style preview window, a small LCD-style status strip, a
+physical-feeling shutter button, and a film-cartridge filter
+selector recreate that nostalgic point-and-shoot moment.
+
+Combine seven original filters (Classic C-400, Warm W-400,
+Flash F-200, Mono B&amp;W, Cool C-200, Toy Blue, Night Halation) with
+four playful frames (Rounded Compact, Date Stamp, Slide Border,
+Contact Sheet) to turn small everyday moments into warm,
+memorable photos.
+
+Everything happens on your iPhone. No accounts, no network calls,
+no analytics, no ads, no in-app purchases, no subscriptions. Your
+captures stay in the in-app gallery and only move to the Photos
+app when you tap Save.
+">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="bingbot" content="noindex, nofollow, noarchive">
+  <meta name="GPTBot" content="noindex, nofollow">
+  <meta name="CCBot" content="noindex, nofollow">
+  <meta name="anthropic-ai" content="noindex, nofollow">
+  <meta name="Google-Extended" content="noindex, nofollow">
+  <style>
+    :root {
+      --bg: #fafafa; --panel: #ffffff; --muted: #6e6e73; --text: #1d1d1f;
+      --accent: #0071e3; --border: rgba(0,0,0,.08); --glass: rgba(255,255,255,.78);
+      --radius: 20px; --shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #000; --panel: #1c1c1e; --muted: #a1a1a6; --text: #f5f5f7; --border: rgba(255,255,255,.12); --glass: rgba(28,28,30,.78); }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    header { position: sticky; top: 0; z-index: 10; background: var(--glass); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); }
+    .nav { max-width: 860px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { font-weight: 700; letter-spacing: .01em; }
+    .lang button { border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 999px; padding: 7px 12px; font-weight: 600; }
+    main { max-width: 860px; margin: 0 auto; padding: 42px 20px 80px; }
+    .hero { padding: 22px 0 30px; }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 7vw, 4rem); line-height: 1; letter-spacing: -.03em; }
+    .lead { color: var(--muted); max-width: 680px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 10px; margin: 26px 0 34px; }
+    .card { display: block; padding: 14px 16px; color: var(--text); text-decoration: none; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); font-weight: 650; }
+    section { margin: 26px 0; padding: 24px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); scroll-margin-top: 80px; }
+    section h2 { margin: 0 0 14px; font-size: 1.45rem; letter-spacing: -.015em; }
+    section h3 { margin: 22px 0 8px; font-size: 1.1rem; }
+    p { margin: 10px 0; }
+    ul { padding-left: 1.25rem; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; overflow-wrap: anywhere; }
+    th, td { border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; padding: 9px 6px; }
+    .muted { color: var(--muted); }
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="ja"] { display: none; }
+    body.lang-en [data-lang="en"] { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div><span class="brand">AllNew</span> <span class="muted">/ 80&#x27;s Camera</span></div>
+      <div class="lang">
+        <button type="button" onclick="setLang('ja')">日本語</button>
+        <button type="button" onclick="setLang('en')">English</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="hero" data-lang="ja">
+      <h1>80&#x27;s Camera</h1>
+      <p class="lead">80&#x27;s Cameraは、1980年代の空気をまとったポケットサイズの
+レトロコンパクトカメラです。クリーム色のシェル、黒いレンズ窓、
+小さなLCD表示、物理シャッター風のボタン、フィルムカートリッジ風の
+フィルターセレクターで、なつかしい撮影体験を再現します。
+
+7種類のオリジナルフィルター（Classic C-400 / Warm W-400 /
+Flash F-200 / Mono B&amp;W / Cool C-200 / Toy Blue / Night Halation）と、
+4種類のフレーム（Rounded Compact / Date Stamp / Slide Border /
+Contact Sheet）を組み合わせて、日常の小さな瞬間を温かみのある
+一枚に変えられます。
+
+80&#x27;s Cameraはすべての処理を端末内で完結します。アカウント登録、
+ネットワーク通信、解析、広告、課金、サブスクリプションは一切ありません。
+撮影した写真はアプリ内ギャラリーに残り、必要なときだけあなたの
+操作で「写真」アプリへ保存できます。
+</p>
+    </div>
+    <div class="hero" data-lang="en">
+      <h1>80&#x27;s Camera</h1>
+      <p class="lead">80&#x27;s Camera is a pocket-sized retro compact camera inspired by the
+feel of 1980s keychain compacts. A cream plastic shell, a black
+lens-style preview window, a small LCD-style status strip, a
+physical-feeling shutter button, and a film-cartridge filter
+selector recreate that nostalgic point-and-shoot moment.
+
+Combine seven original filters (Classic C-400, Warm W-400,
+Flash F-200, Mono B&amp;W, Cool C-200, Toy Blue, Night Halation) with
+four playful frames (Rounded Compact, Date Stamp, Slide Border,
+Contact Sheet) to turn small everyday moments into warm,
+memorable photos.
+
+Everything happens on your iPhone. No accounts, no network calls,
+no analytics, no ads, no in-app purchases, no subscriptions. Your
+captures stay in the in-app gallery and only move to the Photos
+app when you tap Save.
+</p>
+    </div>
+    <nav class="cards" data-lang="ja">
+<a class="card" href="#faq-ja">FAQ</a>
+<a class="card" href="#privacy-ja">プライバシー</a>
+<a class="card" href="#terms-ja">利用規約</a>
+<a class="card" href="#commercial-ja">特商法表記</a>
+<a class="card" href="#contact-ja">お問い合わせ</a>
+</nav>
+    <nav class="cards" data-lang="en">
+<a class="card" href="#faq-en">FAQ</a>
+<a class="card" href="#privacy-en">Privacy</a>
+<a class="card" href="#terms-en">Terms</a>
+<a class="card" href="#commercial-en">Commercial</a>
+<a class="card" href="#contact-en">Contact</a>
+</nav>
+    <section id="faq-ja" data-lang="ja"><h2>FAQ</h2><h3>このページで確認できる内容は？</h3><p>FAQ、プライバシーポリシー、利用規約、特定商取引法に基づく表記、お問い合わせ方法を確認できます。</p><h3>データはどこで処理されますか？</h3><p>ユーザーデータは原則として端末内で処理され、当社の外部サーバーへ送信・保存されません。</p><h3>問い合わせ先は？</h3><p>サポート窓口は pocketluma-support@allnew.work です。</p></section>
+    <section id="faq-en" data-lang="en"><h2>FAQ</h2><h3>What can I find here?</h3><p>This page includes FAQ, Privacy Policy, Terms of Service, commercial disclosure, and contact details.</p><h3>Where is data processed?</h3><p>User data is processed on device by default and is not sent to or stored on AllNew servers.</p><h3>How can I contact support?</h3><p>Please contact pocketluma-support@allnew.work.</p></section>
+    <section id="privacy-ja" data-lang="ja"><h2>プライバシーポリシー</h2><p>最終更新日: 2026-05-07</p>
+<p>**重要:** 本アプリは、ヘルスケアデータを当社の外部サーバーへ送信・保存しません。</p>
+<p>合同会社AllNew（以下「当社」）は、本アプリにおけるユーザー情報の取り扱いについて本ポリシーを定めます。当社の名称、住所、代表者等の事業者情報は、特定商取引法に基づく表示をご確認ください。</p>
+<h3>1. 取り扱う情報</h3>
+<p>当社は、本アプリを提供するために、次の情報を取り扱う場合があります。</p>
+<h3>(A) ヘルスケア（Apple Health）データ</h3>
+<ul><li>本アプリは、ユーザーの許可に基づき、（該当なし）をヘルスケアへ行います。</li><li>本アプリは、ユーザーが任意に許可した場合に限り、ヘルスケア上のデータを読み取り、（該当なし）に利用します。</li><li>当社は、ヘルスケアデータを当社が運用する外部サーバーへ送信・保存しません。</li></ul>
+<h3>(B) カメラ画像（撮影画像）</h3>
+<ul><li>本アプリはカメラを使用しません。</li><li>当社は撮影画像を当社が運用する外部サーバーへ送信・保存しません。</li></ul>
+<h3>(C) お問い合わせ情報（サポート）</h3>
+<ul><li>ユーザーがメール等で問い合わせを行う場合、メールアドレス、問い合わせ内容、ユーザーが任意で提供した情報（端末情報等）を受領します。</li></ul>
+<h3>(D) 購入に関する情報</h3>
+<ul><li>アプリ内課金に関する購入処理はAppleの仕組みにより行われます。当社はユーザーのクレジットカード情報等を取得しません。</li></ul>
+<h3>2. 利用目的</h3>
+<p>当社は、上記情報を以下の目的で利用します。</p>
+<ul><li>本アプリの機能提供（ポケットのレトロカメラ）</li><li>サポート対応、問い合わせへの返信</li><li>不具合調査・品質改善（ユーザーが提供した範囲に限る）</li><li>法令遵守・紛争対応</li></ul>
+<h3>3. 第三者提供・外部送信</h3>
+<ul><li>当社は、（当社が収集する個人データはありません）、ヘルスケアから読み取ったデータ、および撮影画像を、当社が運用する外部サーバーへ送信・保存しません。</li><li>当社は、お問い合わせ情報等を、ユーザーの同意なく第三者へ提供しません。ただし、法令に基づく場合等を除きます。</li><li>ヘルスケアデータの保存・同期（iCloud等）やApple側処理の挙動は、ユーザーの端末設定およびAppleの仕様に従います。当社はAppleの挙動を制御できません。</li><li>当社は、（当社が収集する個人データはありません）を広告・マーケティング・プロファイリング目的で利用せず、第三者へ販売・貸与等もしません。</li><li>当社はiOSアプリ内に解析SDK（アナリティクスSDK）を導入していません。</li><li>本ウェブサイトでは、Vercel Web Analyticsを使用しています。Vercel Web AnalyticsはCookieを使用せず、個人を特定する情報を収集しません。ページビュー数、参照元、デバイスの種類などの集計データのみを収集します。</li></ul>
+<h3>4. 保管期間</h3>
+<ul><li>お問い合わせ情報は、原則として対応完了後12か月以内に削除します。</li><li>ただし、未解決の問い合わせ、紛争対応、法令上の保存義務がある場合は、必要な期間保管する場合があります。</li><li>ヘルスケアデータはユーザーの端末およびヘルスケア上で管理され、当社は当社サーバー上に保管しません。</li></ul>
+<h3>5. セキュリティ</h3>
+<p>当社は、お問い合わせ対応等で取り扱う情報について、合理的な安全管理措置を講じます。ヘルスケアデータはAppleの仕組みにより保護されます（詳細はユーザーの端末設定およびAppleの仕様に依存します）。</p>
+<h3>6. ユーザーの権利</h3>
+<p>当社が保有するお問い合わせ情報等について、ユーザーは、適用法令の範囲で、開示・訂正・削除等を求めることができます。ご希望は「9. お問い合わせ」へご連絡ください。</p>
+<p>※当社はヘルスケアデータを保有しないため、ヘルスケア上のデータはヘルスケアアプリ等で管理・削除してください。</p>
+<ul><li>**すべてのユーザー:** HealthKitデータの管理・削除はiOSのApple Health（ヘルスケア）アプリから可能です。表示項目はiOSバージョンにより異なる場合があります。アプリ削除時、iOSがヘルスケアデータの削除を確認します。</li><li>**EU/EEA居住者（GDPR）:** 苦情申立て権、同意の撤回権。</li><li>**カリフォルニア州居住者（CCPA/CPRA）:** 知る権利、削除権、オプトアウト権。</li><li>**中国居住者（PIPL）:** 知る権利、閲覧・複製権、削除権。当社はユーザーデータを当社の外部サーバーへ移転しません。ただし、HealthKitの同期（iCloud等）等、Appleのサービスにより、ユーザーの国・地域外で処理／保存される可能性があります。</li><li>**韓国居住者（PIPA）:** 処理中止要求権。</li><li>**ブラジル居住者（LGPD）:** データ移行要求権。</li></ul>
+<h3>7. 子どものプライバシー</h3>
+<p>本アプリは13歳未満（または居住国の最低年齢）の子どもを対象としていません。</p>
+<h3>8. 改定</h3>
+<p>当社は必要に応じて本ポリシーを改定します。改定後は当社サイト等で公表します。</p>
+<h3>9. お問い合わせ</h3>
+<p>pocketluma-support@allnew.work</p>
+<h3>10. 準拠法と管轄</h3>
+<p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
+<h3>11. 多言語版について</h3>
+<p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+<p>---</p>
+<p>運営: 合同会社AllNew</p>
+<p>Apple、iPhone、iOS、Apple Health、HealthKitは、米国およびその他の国で登録されたApple Inc.の商標です。その他の会社名・製品名は各社の商標または登録商標です。</p>
+<p>© 2026 合同会社AllNew</p></section>
+    <section id="privacy-en" data-lang="en"><h2>Privacy Policy</h2><p>Last Updated: 2026-05-07</p>
+<p>**Important:** This app does not transmit or store your Apple Health data on our servers.</p>
+<p>This Privacy Policy explains how AllNew LLC (&quot;we&quot;) handles information in the 80&#x27;s Camera app. For our company name, address, and representative details, please refer to our Legal Notice (Specified Commercial Transactions Act disclosure).</p>
+<h3>1. Information We Handle</h3>
+<h3>(A) Apple Health data</h3>
+<ul><li>With your permission, the App performs (not applicable) to the Apple Health app (via HealthKit).</li><li>If you optionally grant read access, the App may use (not applicable).</li><li>We do not transmit or store Apple Health data on servers operated by us.</li></ul>
+<h3>(B) Camera images</h3>
+<ul><li>The App does not use the camera.</li><li>We do not transmit or store captured images on servers operated by us.</li></ul>
+<h3>(C) Support communications</h3>
+<ul><li>If you email us, we may receive your email address, message content, and any information you include (e.g., device details), and use it to respond.</li></ul>
+<h3>(D) Purchases</h3>
+<ul><li>Payments are processed by Apple. We do not receive your card details.</li></ul>
+<h3>2. Purposes</h3>
+<p>We use information only to:</p>
+<ul><li>Provide app functionality (A retro compact in your pocket)</li><li>Respond to support requests</li><li>Troubleshoot issues (based on what you provide)</li><li>Comply with law</li></ul>
+<h3>3. Sharing &amp; Apple Services</h3>
+<ul><li>We do not use Apple Health data for advertising, marketing profiling, or data brokerage, and we do not sell such data.</li><li>We do not transmit or store your (we do not collect personal data), Apple Health read data, captured images, or motion data on servers operated by us.</li><li>Apple Health storage/sync (including iCloud) and Apple-side processing depend on your device settings and Apple&#x27;s system behavior. We do not control Apple&#x27;s behavior.</li><li>We do not use any analytics SDK in the iOS App.</li><li>This website uses Vercel Web Analytics. Vercel Web Analytics is cookie-free and does not collect personally identifiable information. It only collects aggregate data such as page views, referrers, and device types.</li></ul>
+<h3>4. Retention</h3>
+<ul><li>Support emails are retained for up to 12 months after resolution, unless longer retention is required for disputes or legal obligations.</li><li>We do not retain Apple Health data on our servers.</li></ul>
+<h3>5. Security</h3>
+<p>We employ reasonable security measures for support communications we handle. HealthKit data is protected by Apple&#x27;s systems (details depend on your device settings and Apple&#x27;s specifications).</p>
+<h3>6. Your Rights</h3>
+<p>Where applicable, you may request access, correction, or deletion of support information we hold. Contact us via &quot;9. Contact&quot; below.</p>
+<p>Note: Apple Health data should be managed in the Apple Health app since we do not retain it.</p>
+<ul><li>**All Users:** You can manage or delete HealthKit data through the iOS Apple Health app. Navigation paths may vary depending on your iOS version. When uninstalling, iOS asks whether to delete health data.</li><li>**EU/EEA (GDPR):** Right to lodge complaints, withdraw consent.</li><li>**California (CCPA/CPRA):** Right to know, delete, opt-out. We don&#x27;t sell personal information.</li><li>**China (PIPL):** Right to know, access, correct, delete. We do not transfer your data to our external servers. However, depending on your Apple/iCloud settings and Apple services (e.g., iCloud sync), data may be processed or stored outside your country/region.</li><li>**South Korea (PIPA):** Right to request processing suspension.</li><li>**Brazil (LGPD):** Right to data portability.</li></ul>
+<h3>7. Children&#x27;s Privacy</h3>
+<p>This App is not intended for children under 13 (or the minimum age in your country of residence).</p>
+<h3>8. Changes to This Policy</h3>
+<p>We may update this Privacy Policy as needed. Changes will be posted on our website.</p>
+<h3>9. Contact</h3>
+<p>pocketluma-support@allnew.work</p>
+<h3>10. Governing Law</h3>
+<p>This policy is governed by Japanese law. Regional laws (GDPR, CCPA/CPRA, PIPL, LGPD, PIPA) apply to respective residents.</p>
+<h3>11. Translations</h3>
+<p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws or other applicable regulations in your country or region of residence.</p>
+<p>---</p>
+<p>Operator: AllNew LLC</p>
+<p>Apple, iPhone, iOS, Apple Health, and HealthKit are trademarks of Apple Inc., registered in the U.S. and other countries. Other company and product names may be trademarks of their respective owners.</p>
+<p>© 2026 AllNew LLC</p></section>
+    <section id="terms-ja" data-lang="ja"><h2>利用規約</h2><p>最終更新日: 2026-05-07</p>
+<p>本利用規約（以下「本規約」）は、合同会社AllNew（以下「当社」）が提供するiOSアプリ「80&#x27;s Camera」（以下「本アプリ」）の利用条件を定めるものです。</p>
+<h3>1. 同意</h3>
+<p>ユーザーは、本アプリをダウンロード、インストール、または利用した時点で、本規約に同意したものとみなされます。同意しない場合は利用しないでください。</p>
+<h3>2. サービス概要</h3>
+<p>本アプリは、App Store記載内容およびアプリ内説明に基づく機能を提供します。機能の提供状況は、端末環境、地域、権限設定、プラットフォームポリシー等により異なる場合があります。</p>
+<h3>3. 利用資格・アカウント</h3>
+<p>ユーザーは、適用法令およびプラットフォーム規約を遵守して本アプリを利用するものとします。アカウント機能がある場合、認証情報の管理責任はユーザーにあります。</p>
+<h3>4. 課金・支払</h3>
+<p>1. 本アプリに課金機能がある場合、決済はAppleの仕組みを通じて処理されます。 2. 価格、請求、更新、解約、返金、税務の取扱いはApp Storeポリシーおよび適用法令に従います。 3. サブスクリプションがある場合、更新・解約はAppleアカウント設定で管理されます。</p>
+<h3>5. 利用許諾</h3>
+<p>当社は、ユーザーに対し、本規約に従うことを条件として、本アプリを適法な目的で利用するための限定的・非独占的・譲渡不能・取消可能な使用権を付与します。</p>
+<h3>6. 禁止事項</h3>
+<p>ユーザーは、以下の行為をしてはなりません。</p>
+<ul><li>法令違反、公序良俗違反、第三者権利侵害</li><li>リバースエンジニアリング、不正アクセス、サービス妨害</li><li>不正利用、詐欺、嫌がらせ、悪質行為</li><li>違法・権利侵害・有害コンテンツの送信または掲載</li></ul>
+<h3>7. 知的財産権</h3>
+<p>本アプリおよび関連資料に関する知的財産権は、当社またはライセンサーに帰属します。本規約により権利の移転は生じません。</p>
+<h3>8. プライバシー</h3>
+<p>情報の取扱いは別途定めるプライバシーポリシーに従います。ユーザーは本アプリの利用により、同ポリシー記載の処理を認識したものとします。</p>
+<h3>9. 提供内容の変更・停止</h3>
+<p>当社は、法令で許容される範囲で、本アプリの全部または一部を変更、制限、停止、終了することがあります。</p>
+<h3>10. 免責・責任制限</h3>
+<p>1. 当社は、本アプリがユーザーの特定目的に適合すること、誤認識が発生しないこと、完全性・正確性・有用性等を保証しません。 2. 当社は、ユーザーの端末、OS、Appleのサービス（ヘルスケア、iCloud等）の仕様や障害に起因する損害について責任を負いません。 3. 当社が責任を負う場合でも、当社の故意または重過失がある場合を除き、当社の責任は通常かつ直接の損害に限られます。なお、消費者契約法その他の強行法規により制限される範囲では本項は適用されません。</p>
+<h3>11. 補償</h3>
+<p>ユーザーの法令違反または本規約違反に起因して当社に損害が生じた場合、ユーザーはこれを補償するものとします。</p>
+<h3>12. 利用停止・終了</h3>
+<p>ユーザーが本規約、法令、またはプラットフォーム要件に重大に違反した場合、当社は利用停止または終了措置をとることがあります。</p>
+<h3>13. 規約変更</h3>
+<p>当社は、必要に応じて本規約を変更できます。変更後の規約は当社サイト等での掲示により効力を生じます。重要な変更の場合は合理的な方法で事前告知に努めます。</p>
+<h3>14. Appleに関する条項</h3>
+<p>本規約はユーザーと当社の間で成立し、Appleは当事者ではありません。保守・サポート責任は当社が負います。必要な範囲でAppleおよびその子会社は第三者受益者となる場合があります。</p>
+<h3>15. 準拠法・管轄</h3>
+<p>法令に別段の定めがある場合を除き、本規約は日本法に準拠し、紛争は東京地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
+<h3>16. 多言語版の優先言語</h3>
+<p>本規約の正文は日本語版です。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、各居住国・地域の消費者保護法その他の強行法規に基づく利用者の権利を制限するものではありません。</p>
+<h3>17. 連絡先</h3>
+<p>合同会社AllNew お問い合わせ: pocketluma-support@allnew.work</p>
+<p>---</p>
+<p>運営: 合同会社AllNew</p>
+<p>© 2026 合同会社AllNew</p></section>
+    <section id="terms-en" data-lang="en"><h2>Terms of Service</h2><p>Last Updated: 2026-05-07</p>
+<p>These Terms of Service (&quot;Terms&quot;) govern your use of the iOS application &quot;80&#x27;s Camera&quot; (&quot;App&quot;) provided by AllNew LLC (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).</p>
+<h3>1. Acceptance</h3>
+<p>By downloading, installing, or using the App, you agree to these Terms. If you do not agree, do not use the App.</p>
+<h3>2. Service Overview</h3>
+<p>The App provides software features as described in the App listing and in-app documentation. Feature availability may vary by device, region, account status, permissions, and platform policies.</p>
+<h3>3. Eligibility and Accounts</h3>
+<p>You must comply with applicable laws and platform requirements (including Apple account policies). If account features exist, you are responsible for account credentials and activity.</p>
+<h3>4. App Store, Purchases, and Billing</h3>
+<p>1. Purchases in the App are processed via Apple&#x27;s payment platform where applicable. 2. Prices, billing conditions, renewals, refunds, and taxes follow App Store policies and applicable law. 3. If the App offers subscriptions, renewal and cancellation are managed through your Apple account settings.</p>
+<h3>5. License and Permitted Use</h3>
+<p>We grant you a limited, non-exclusive, non-transferable, revocable license to use the App for personal or internal lawful purposes, subject to these Terms.</p>
+<h3>6. Prohibited Conduct</h3>
+<p>You must not:</p>
+<ul><li>Violate laws or third-party rights</li><li>Reverse engineer, decompile, or attempt unauthorized access</li><li>Disrupt service operation, security, or integrity</li><li>Use the App for fraud, abuse, harassment, or harmful activities</li><li>Upload or transmit unlawful, infringing, or malicious content</li></ul>
+<h3>7. Intellectual Property</h3>
+<p>All intellectual property rights in the App and related materials belong to us or our licensors. These Terms do not transfer ownership rights.</p>
+<h3>8. Privacy</h3>
+<p>Information handling is described in our Privacy Policy. By using the App, you acknowledge that processing may occur as described there.</p>
+<h3>9. Availability, Changes, and Suspension</h3>
+<p>We may update, modify, limit, or discontinue part or all of the App at any time where legally permitted.</p>
+<h3>10. Disclaimer and Limitation of Liability</h3>
+<p>1. We do not guarantee that the App will meet your specific needs, that recognition errors will not occur, or that the App will be complete, accurate, or useful in all circumstances. 2. We are not liable for damages arising from specifications or issues related to your device, OS, or Apple services (Apple Health, iCloud, etc.). 3. Where we are liable, our liability shall be limited to ordinary and direct damages, except in cases of willful misconduct or gross negligence. This clause does not apply to the extent restricted by the Consumer Contract Act or other mandatory laws.</p>
+<h3>11. Indemnity</h3>
+<p>You agree to indemnify and hold us harmless from claims arising from your unlawful use of the App or your violation of these Terms.</p>
+<h3>12. Termination</h3>
+<p>We may suspend or terminate access if you materially violate these Terms, applicable law, or platform requirements.</p>
+<h3>13. Changes to Terms</h3>
+<p>We may amend these Terms as necessary. Amended Terms take effect upon posting on our website or other appropriate channels. For material changes, we will endeavor to provide advance notice through reasonable means.</p>
+<h3>14. Apple-Specific Terms</h3>
+<p>These Terms are between you and us, not Apple. Apple is not responsible for the App&#x27;s maintenance or support. Apple and its subsidiaries may be third-party beneficiaries of these Terms where applicable.</p>
+<h3>15. Governing Law and Jurisdiction</h3>
+<p>Unless mandatory local law provides otherwise, these Terms are governed by the laws of Japan, and disputes are subject to the exclusive jurisdiction of the Tokyo District Court as the court of first instance.</p>
+<h3>16. Translations</h3>
+<p>The Japanese version of these Terms is the authoritative text. If any translated version conflicts with the Japanese version, the Japanese version prevails. This does not limit rights granted to users under mandatory consumer-protection laws or other non-waivable regulations in their jurisdiction.</p>
+<h3>17. Contact</h3>
+<p>AllNew LLC Contact: pocketluma-support@allnew.work</p>
+<p>---</p>
+<p>Operator: AllNew LLC</p>
+<p>© 2026 AllNew LLC</p></section>
+    <section id="commercial-ja" data-lang="ja"><h2>特定商取引法に基づく表記</h2><p>最終更新日: 2026-05-06</p>
+<table><tbody><tr><td>項目</td><td>内容</td></tr><tr><td>販売事業者</td><td>合同会社AllNew</td></tr><tr><td>運営責任者</td><td>植野 正徳</td></tr><tr><td>所在地</td><td>消費者からの請求があった場合に遅滞なく開示します。開示請求は下記メールアドレスまでご連絡ください。</td></tr><tr><td>電話番号</td><td>消費者からの請求があった場合に遅滞なく開示します。開示請求は下記メールアドレスまでご連絡ください。</td></tr><tr><td>メールアドレス</td><td>pocketluma-support@allnew.work</td></tr><tr><td>販売価格</td><td>App Storeの表示価格に基づきます。（地域・税・為替等により変動する場合があります）</td></tr><tr><td>商品代金以外の必要料金</td><td>インターネット接続料金、通信料金等はユーザー負担となります。</td></tr><tr><td>支払方法・支払時期</td><td>Appleが提供する決済手段により、購入手続完了時に課金されます。</td></tr><tr><td>提供時期（引渡時期）</td><td>購入手続完了後、直ちに利用可能となります。</td></tr><tr><td>動作環境</td><td>対応OS等はApp Storeの当該アプリページおよび本アプリ内の案内をご確認ください。</td></tr><tr><td>返品・キャンセル（申込みの撤回/解除）</td><td>デジタルコンテンツの性質上、原則として返品・キャンセルはできません。返金の可否・手続はAppleのポリシーに従います。</td></tr><tr><td>不具合等</td><td>本アプリが正常に動作しない場合、修正・改善を行う場合があります。お問い合わせは上記メールアドレスまでご連絡ください。</td></tr><tr><td>無料利用・課金条件</td><td>本アプリは無料で提供されており、購入・定期購読はありません。</td></tr></tbody></table>
+<p>**所在地・電話番号の開示について:** 当社の所在地および電話番号は、消費者からの請求があった場合に遅滞なく開示いたします。開示をご希望の方は、上記メールアドレスまでご連絡ください。</p>
+<p>---</p>
+<p>Apple、iPhone、iOS、Apple Health、HealthKitは、米国およびその他の国で登録されたApple Inc.の商標です。その他の会社名・製品名は各社の商標または登録商標です。</p>
+<p>© 2026 合同会社AllNew</p></section>
+    <section id="commercial-en" data-lang="en"><h2>Commercial Transaction Disclosure</h2><table><tbody><tr><td>Seller</td><td>AllNew LLC</td></tr><tr><td>Representative</td><td>Masanori Ueno</td></tr><tr><td>Address</td><td>Tokyo, Japan</td></tr><tr><td>Contact</td><td>pocketluma-support@allnew.work; phone number disclosed upon request where required</td></tr><tr><td>Price</td><td>The price displayed on the App Store, including applicable tax</td></tr><tr><td>Payment method</td><td>Payment method registered with Apple ID</td></tr><tr><td>Delivery</td><td>Available immediately after purchase completion</td></tr><tr><td>Returns/Cancellations</td><td>Digital content is not returnable after purchase. Refunds follow Apple&#x27;s policy.</td></tr></tbody></table></section>
+    <section id="contact-ja" data-lang="ja"><h2>お問い合わせ</h2><p><a href="mailto:pocketluma-support@allnew.work">pocketluma-support@allnew.work</a></p><table><tbody><tr><td>メール</td><td>pocketluma-support@allnew.work</td></tr><tr><td>受付時間</td><td>平日 11:00〜15:00（日本時間）</td></tr><tr><td>対応言語</td><td>日本語 / English</td></tr><tr><td>運営者</td><td>合同会社AllNew</td></tr><tr><td>所在地</td><td>東京都</td></tr></tbody></table></section>
+    <section id="contact-en" data-lang="en"><h2>Contact</h2><p><a href="mailto:pocketluma-support@allnew.work">pocketluma-support@allnew.work</a></p><table><tbody><tr><td>Email</td><td>pocketluma-support@allnew.work</td></tr><tr><td>Business hours</td><td>Mon-Fri 11:00-15:00 (JST)</td></tr><tr><td>Languages</td><td>Japanese / English</td></tr><tr><td>Operator</td><td>AllNew LLC</td></tr><tr><td>Address</td><td>Tokyo, Japan</td></tr></tbody></table></section>
+    <p class="muted">Hosted legal page: https://apps.allnew.work/pocketluma/</p>
+  </main>
+  <script>
+    function setLang(lang) {
+      document.body.classList.toggle('lang-en', lang === 'en');
+      document.documentElement.lang = lang;
+      try { localStorage.setItem('allnewLegalLang', lang); } catch (_) {}
+    }
+    const params = new URLSearchParams(location.search);
+    const requested = params.get('lang') || (navigator.language || '').slice(0, 2);
+    setLang(requested === 'ja' ? 'ja' : 'en');
+  </script>
+</body>
+</html>
