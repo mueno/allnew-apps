@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-05-10T19:33:07+00:00",
+  "generated_at": "2026-05-11T20:03:20+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -59,14 +59,14 @@
       "bundle_id": "jp.allnew.thermosnap",
       "asc_app_id": "6759076372",
       "is_health_app": true,
-      "release_date": "2026-05-01",
+      "release_date": "2026-05-11",
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-05-06T13:50:26+00:00",
-      "app_store_version": "1.0.2",
+      "updated_at": "2026-05-11T20:03:20+00:00",
+      "app_store_version": "1.0.4",
       "app_store_name": "ThermoSnap かんたん体温記録",
-      "app_store_current_version_release_date": "2026-05-01T16:14:17Z",
+      "app_store_current_version_release_date": "2026-05-11T01:34:52Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -190,14 +190,14 @@
       "bundle_id": "jp.allnew.pupweight",
       "asc_app_id": "6759076505",
       "is_health_app": false,
-      "release_date": "2026-05-09",
+      "release_date": "2026-05-11",
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-05-09T19:33:04+00:00",
-      "app_store_version": "1.0.6",
+      "updated_at": "2026-05-11T20:03:20+00:00",
+      "app_store_version": "1.0.7",
       "app_store_name": "PupWeight ワンコとニャンコの体重記録",
-      "app_store_current_version_release_date": "2026-05-09T04:14:59Z",
+      "app_store_current_version_release_date": "2026-05-11T03:34:26Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -254,14 +254,14 @@
       "bundle_id": "jp.allnew.waistvox",
       "asc_app_id": "6759076494",
       "is_health_app": true,
-      "release_date": "2026-05-01",
+      "release_date": "2026-05-11",
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-05-06T13:50:26+00:00",
-      "app_store_version": "1.0.3",
+      "updated_at": "2026-05-11T20:03:20+00:00",
+      "app_store_version": "1.0.5",
       "app_store_name": "WaistVox ウェストサイズかんたん記録",
-      "app_store_current_version_release_date": "2026-05-01T16:17:04Z",
+      "app_store_current_version_release_date": "2026-05-11T01:34:37Z",
       "app_store_lookup_country": "jp"
     },
     {
