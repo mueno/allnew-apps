@@ -4,345 +4,412 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MedReminder Support</title>
-  <meta name="description" content="MedReminder is an iPhone medication reminder. It reads Japanese prescriptions on device with Apple Intelligence where available, helps register medication reminders, and includes MedReminder Pro with a 1-month free trial and App Store subscription pricing.">
+  <meta name="description" content="MedReminder support, FAQ, Privacy Policy, Terms of Service, and Specified Commercial Transactions Act disclosure.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="bingbot" content="noindex, nofollow, noarchive">
+  <meta name="GPTBot" content="noindex, nofollow">
+  <meta name="CCBot" content="noindex, nofollow">
+  <meta name="anthropic-ai" content="noindex, nofollow">
+  <meta name="Google-Extended" content="noindex, nofollow">
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #f7faf8;
-      --panel: #ffffff;
-      --text: #1d1d1f;
-      --muted: #5f6b66;
+      --bg-primary: #fafafa;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f5f5f7;
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
       --accent: #279679;
-      --border: rgba(28, 75, 61, .14);
-      --shadow: 0 18px 46px rgba(34, 84, 68, .08);
-      --radius: 18px;
+      --border: rgba(0,0,0,0.08);
+      --glass: rgba(255,255,255,0.72);
+      --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+      --radius-sm: 12px;
+      --radius-lg: 28px;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0b1110;
-        --panel: #141c1a;
-        --text: #f4f7f5;
-        --muted: #a5b3ae;
+        --bg-primary: #000;
+        --bg-secondary: #1c1c1e;
+        --bg-tertiary: #2c2c2e;
+        --text-primary: #f5f5f7;
+        --text-secondary: #a1a1a6;
         --accent: #62d1b4;
-        --border: rgba(255,255,255,.12);
-        --shadow: none;
+        --border: rgba(255,255,255,0.1);
+        --glass: rgba(28,28,30,0.72);
+        --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
       }
     }
-    * { box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.72;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.65;
       -webkit-font-smoothing: antialiased;
     }
-    header {
+    .header {
       position: sticky;
       top: 0;
-      z-index: 10;
-      backdrop-filter: blur(18px);
-      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      z-index: 100;
+      padding: 12px 20px;
+      background: var(--glass);
+      backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border);
     }
-    .header-inner, main, .hero {
-      width: min(920px, calc(100% - 32px));
-      margin: 0 auto;
-    }
     .header-inner {
-      min-height: 72px;
+      max-width: 840px;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
     }
-    .brand {
+    .logo-link {
+      color: var(--text-primary);
+      text-decoration: none;
       display: flex;
       align-items: center;
       gap: 12px;
-      font-weight: 800;
-      letter-spacing: 0;
     }
-    .brand-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
+    .logo { font-size: 1.15rem; font-weight: 700; letter-spacing: 0; }
+    .logo-divider { width: 1px; height: 18px; background: var(--border); }
+    .app-name { font-size: .85rem; color: var(--text-secondary); font-weight: 600; }
+    .lang-btn {
+      padding: 8px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 980px;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .hero {
+      text-align: center;
+      padding: 56px 20px 36px;
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+    .hero-mark {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      margin: 0 auto 20px;
       display: grid;
       place-items: center;
       color: white;
       background: linear-gradient(135deg, #62b5f4, #236dc9);
+      box-shadow: 0 8px 32px rgba(35, 109, 201, .18);
+      font-size: 2rem;
       font-weight: 900;
     }
-    button.lang {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 14px;
-      background: var(--panel);
-      color: var(--text);
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .hero {
-      padding: 56px 0 28px;
-    }
-    h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2.15rem, 8vw, 4.2rem);
-      line-height: 1.05;
-      letter-spacing: 0;
-    }
-    .lead {
-      margin: 0;
-      max-width: 720px;
-      color: var(--muted);
-      font-size: 1.08rem;
-    }
-    nav {
+    .hero h1 { font-size: 2rem; font-weight: 800; letter-spacing: 0; margin-bottom: 8px; }
+    .hero-subtitle { color: var(--text-secondary); font-size: 1rem; max-width: 680px; margin: 0 auto; }
+    .toc {
       display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
       flex-wrap: wrap;
-      gap: 10px;
-      margin: 22px 0 18px;
     }
-    nav a {
-      color: var(--accent);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 12px;
+    .toc-link {
+      padding: 8px 16px;
+      color: var(--text-secondary);
       text-decoration: none;
-      font-size: .92rem;
+      font-size: .85rem;
       font-weight: 700;
-      background: var(--panel);
+      border-radius: 980px;
     }
-    section {
-      scroll-margin-top: 92px;
-      background: var(--panel);
+    .toc-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .main { max-width: 840px; margin: 0 auto; padding: 0 20px 80px; }
+    .lang-content { display: none; }
+    .lang-content.active { display: block; }
+    .section { padding: 48px 0; border-bottom: 1px solid var(--border); scroll-margin-top: 92px; }
+    .section:last-child { border-bottom: none; }
+    .section-title { font-size: 1.4rem; font-weight: 700; letter-spacing: 0; margin-bottom: 8px; }
+    .section-subtitle, p, li, dd { color: var(--text-secondary); }
+    h3 { font-size: 1rem; margin: 26px 0 10px; }
+    p, ul, dl { margin-bottom: 14px; }
+    ul { padding-left: 22px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .updated-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-tertiary);
+      padding: 6px 12px;
+      border-radius: 980px;
+      font-size: .75rem;
+      color: var(--text-secondary);
+      margin: 12px 0 20px;
+    }
+    .highlight-box {
+      background: color-mix(in srgb, var(--accent) 10%, var(--bg-secondary));
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+      border-radius: var(--radius-sm);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+    .faq-item, .commercial-card {
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      margin: 18px 0;
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-soft);
     }
-    h2 { margin: 0 0 12px; font-size: 1.5rem; letter-spacing: 0; }
-    h3 { margin: 20px 0 8px; font-size: 1.05rem; }
-    p, ul { margin: 10px 0; color: var(--muted); }
-    a { color: var(--accent); }
-    dl { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 10px 18px; }
-    dt { color: var(--muted); font-weight: 700; }
-    dd { margin: 0; }
-    [data-lang="en"] { display: none; }
-    body.lang-en [data-lang="ja"] { display: none; }
-    body.lang-en [data-lang="en"] { display: block; }
-    body.lang-en nav[data-lang="en"] { display: flex; }
-    .footer { color: var(--muted); text-align: center; padding: 30px 0 56px; font-size: .9rem; }
+    .faq-item strong { color: var(--text-primary); }
+    dl { display: grid; grid-template-columns: minmax(150px, 230px) 1fr; gap: 10px 18px; }
+    dt { color: var(--text-primary); font-weight: 700; }
+    .footer {
+      text-align: center;
+      padding: 32px 20px;
+      color: var(--text-secondary);
+      font-size: .8rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
     @media (max-width: 640px) {
+      .hero { padding: 40px 20px 30px; }
+      .hero h1 { font-size: 1.6rem; }
+      .toc-link { padding: 6px 12px; font-size: .8rem; }
+      .section { padding: 34px 0; }
       dl { grid-template-columns: 1fr; }
-      section { padding: 18px; }
     }
   </style>
 </head>
 <body>
-  <header>
+  <header class="header">
     <div class="header-inner">
-      <div class="brand"><span class="brand-mark">M</span><span>MedReminder</span></div>
-      <button class="lang" type="button" onclick="toggleLanguage()">日本語 / English</button>
+      <a href="../" class="logo-link">
+        <span class="logo">AllNew</span>
+        <span class="logo-divider"></span>
+        <span class="app-name">MedReminder</span>
+      </a>
+      <button class="lang-btn" type="button" onclick="toggleLanguage()" id="langBtn">日本語 / English</button>
     </div>
   </header>
 
-  <div class="hero" data-lang="ja">
+  <section class="hero">
+    <div class="hero-mark">M</div>
     <h1>MedReminder</h1>
-    <p class="lead">App Store では「AI服薬通知 - お薬飲みましたか？を通知してくれるアプリ」と表示されます。処方箋を撮影し、対応端末では Apple Intelligence が端末内で薬名・用量・服用時刻を読み取り、服薬予定の登録を支援します。服薬データ、撮影画像、AI読み取り結果は当社サーバーへ送信されません。</p>
-    <nav data-lang="ja">
-      <a href="#faq-ja">FAQ</a>
-      <a href="#privacy-ja">プライバシー</a>
-      <a href="#terms-ja">利用規約</a>
-      <a href="#commercial-ja">特定商取引法</a>
-      <a href="#contact-ja">お問い合わせ</a>
-    </nav>
-  </div>
+    <p class="hero-subtitle" data-lang-text="ja">App Store では「AI服薬通知 - お薬飲みましたか？を通知してくれるアプリ」と表示されます。処方箋を撮影し、対応端末では Apple Intelligence が端末内で薬名・用量・服用時刻を読み取り、服薬予定の登録を支援します。</p>
+    <p class="hero-subtitle" data-lang-text="en" hidden>The App Store display name is "AI MedReminder - Pill Reminder." MedReminder helps you scan prescriptions and, on supported devices, use Apple Intelligence on device to register medication names, dosage, and reminder times.</p>
+  </section>
 
-  <div class="hero" data-lang="en">
-    <h1>MedReminder</h1>
-    <p class="lead">The App Store display name is "AI MedReminder - Pill Reminder." MedReminder helps you scan Japanese prescriptions. On supported devices, Apple Intelligence reads medication names, dosage, and reminder times on device. Medication data, photos, and AI extraction results are not sent to AllNew servers.</p>
-    <nav data-lang="en">
-      <a href="#faq-en">FAQ</a>
-      <a href="#privacy-en">Privacy</a>
-      <a href="#terms-en">Terms</a>
-      <a href="#commercial-en">Commercial</a>
-      <a href="#contact-en">Contact</a>
-    </nav>
-  </div>
+  <nav class="toc" id="toc">
+    <a href="#faq-ja" class="toc-link" data-ja="#faq-ja" data-en="#faq-en">FAQ</a>
+    <a href="#privacy-ja" class="toc-link" data-ja="#privacy-ja" data-en="#privacy-en">プライバシー</a>
+    <a href="#terms-ja" class="toc-link" data-ja="#terms-ja" data-en="#terms-en">利用規約</a>
+    <a href="#commercial-ja" class="toc-link" data-ja="#commercial-ja" data-en="#commercial-en">特定商取引法</a>
+    <a href="#contact-ja" class="toc-link" data-ja="#contact-ja" data-en="#contact-en">お問い合わせ</a>
+  </nav>
 
-  <main>
-    <section id="faq-ja" data-lang="ja">
-      <h2>FAQ</h2>
-      <h3>このページで確認できる内容は？</h3>
-      <p>FAQ、プライバシーポリシー、利用規約、特定商取引法に基づく表記、お問い合わせ方法を確認できます。</p>
-      <h3>データはどこで処理されますか？</h3>
-      <p>服薬データ、撮影画像、AI読み取り結果は端末内で処理され、当社の外部サーバーへ送信・保存されません。</p>
-      <h3>iCloudやHealthKitを使いますか？</h3>
-      <p>初回リリースでは、服薬データの iCloud 同期および HealthKit 連携は提供しません。</p>
-      <h3>問い合わせ先は？</h3>
-      <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a> までご連絡ください。</p>
-    </section>
+  <main class="main">
+    <div class="lang-content active" data-lang="ja">
+      <section id="faq-ja" class="section">
+        <div class="section-title">よくある質問</div>
+        <p class="section-subtitle">使い方、データ管理、サブスクリプションについて</p>
+        <div class="faq-item">
+          <p><strong>データはどこで処理されますか？</strong></p>
+          <p>服薬データ、撮影画像、AI読み取り結果は端末内で処理・保存され、当社の外部サーバーへ送信・保存されません。</p>
+        </div>
+        <div class="faq-item">
+          <p><strong>iCloudやHealthKitを使いますか？</strong></p>
+          <p>初回App Storeリリースでは、服薬データのiCloud同期およびApple Health / HealthKit連携は提供しません。</p>
+        </div>
+        <div class="faq-item">
+          <p><strong>AI読み取りは医療判断に使えますか？</strong></p>
+          <p>いいえ。本アプリは服薬予定の記録・通知を補助するツールです。認識結果は必ず確認し、服薬に関する判断は医師または薬剤師に相談してください。</p>
+        </div>
+        <div class="faq-item">
+          <p><strong>料金はどこで確認できますか？</strong></p>
+          <p>MedReminder Pro の価格、期間、無料体験の条件は App Store の購入画面に表示されます。</p>
+        </div>
+      </section>
 
-    <section id="faq-en" data-lang="en">
-      <h2>FAQ</h2>
-      <h3>What can I find here?</h3>
-      <p>This page includes FAQ, Privacy Policy, Terms of Service, commercial disclosure, and contact details.</p>
-      <h3>Where is data processed?</h3>
-      <p>Medication data, photos, and AI extraction results are processed on device and are not sent to or stored on AllNew servers.</p>
-      <h3>Does the App use iCloud or HealthKit?</h3>
-      <p>In the first App Store release, the App does not provide medication-data iCloud sync or HealthKit integration.</p>
-      <h3>How can I contact support?</h3>
-      <p>Please contact <a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a>.</p>
-    </section>
+      <section id="privacy-ja" class="section">
+        <div class="section-title">プライバシーポリシー</div>
+        <div class="updated-badge">最終更新日: 2026年5月12日</div>
+        <div class="highlight-box"><p><strong>重要:</strong> 本アプリは、服薬データ、処方箋の撮影画像、AI読み取り結果を当社の外部サーバーに送信・保存しません。データはお使いのデバイス内で処理・保存されます。</p></div>
+        <h3>1. 収集する情報</h3>
+        <ul>
+          <li>処方箋やお薬ラベルを撮影または選択するためのカメラ・写真ライブラリ画像</li>
+          <li>薬名、用量、服用回数、服用時刻、服薬記録、メモ、プロフィール名等の服薬・プロフィール情報</li>
+          <li>対応端末で Apple Intelligence / Foundation Models が端末内で読み取った結果</li>
+          <li>App Store が提供するサブスクリプション資格状態</li>
+          <li>お問い合わせ時にユーザーが任意で提供する情報</li>
+        </ul>
+        <h3>2. 利用目的</h3>
+        <p>服薬予定の登録と通知、服薬記録とレポート表示、サブスクリプション資格確認、サポート対応、不具合調査、法令遵守のために利用します。</p>
+        <h3>3. 保存場所と期間</h3>
+        <p>撮影画像、AI読み取り結果、服薬データは端末内で処理・保存されます。お問い合わせ情報は、原則として対応完了後12か月以内に削除します。</p>
+        <h3>4. 第三者提供・外部送信</h3>
+        <p>当社は、服薬データ、撮影画像、AI読み取り結果を第三者に提供、販売、共有しません。広告SDK、アナリティクスSDK、トラッキングSDKも組み込みません。</p>
+        <h3>5. Appleのサービス</h3>
+        <p>購入処理、通知、カメラ、写真ライブラリ、Apple Intelligence等のApple側の処理は、Appleの規約、プライバシーポリシー、端末設定に従います。</p>
+        <h3>6. セキュリティ</h3>
+        <p>本アプリはデータ最小化、端末内処理、広告・トラッキングなしの設計方針を採用しています。端末内データの保護は、端末のパスコード、Face ID / Touch ID、iOSのセキュリティ設定に依存します。</p>
+        <h3>7. お問い合わせ</h3>
+        <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
+      </section>
 
-    <section id="privacy-ja" data-lang="ja">
-      <h2>プライバシーポリシー</h2>
-      <p>最終更新日: 2026-05-12</p>
-      <p><strong>重要:</strong> MedReminder は、服薬データ、処方箋の撮影画像、AI読み取り結果を当社の外部サーバーへ送信・保存しません。</p>
-      <h3>1. 取り扱う情報</h3>
-      <ul>
-        <li>薬名、用量、服用時刻、服薬記録、メモ、プロフィール名などの服薬・プロフィール情報</li>
-        <li>ユーザーが許可したカメラ画像または写真ライブラリ画像</li>
-        <li>対応端末で Apple Intelligence / Foundation Models が端末内で読み取った結果</li>
-        <li>App Store が提供するサブスクリプション資格状態</li>
-        <li>ユーザーが任意で送信するお問い合わせ情報</li>
-      </ul>
-      <h3>2. iCloud・HealthKit</h3>
-      <p>初回リリースでは、服薬データを iCloud に同期せず、Apple Health / HealthKit への読み書きも行いません。</p>
-      <h3>3. サブスクリプション・支払情報</h3>
-      <p>MedReminder Pro は1ヶ月無料体験後、App Store の購入画面に表示される価格で自動更新されます。購入、課金、解約、返金は Apple の App Store / Apple ID の仕組みにより処理されます。当社はクレジットカード番号等の支払情報を取得しません。</p>
-      <h3>4. 利用目的</h3>
-      <p>本アプリの機能提供、服薬リマインダー、AI読み取り、サブスクリプション資格確認、サポート対応、不具合調査、法令遵守のために利用します。</p>
-      <h3>5. 第三者提供・外部送信</h3>
-      <p>当社は、服薬データ、撮影画像、AI読み取り結果を当社の外部サーバーへ送信・保存せず、広告、トラッキング、プロファイリング、第三者販売に利用しません。</p>
-      <h3>6. 保管期間・安全管理</h3>
-      <p>服薬データは端末内に保存され、ユーザーがアプリ内操作またはアプリ削除により管理できます。お問い合わせ情報は、原則として対応完了後12か月以内に削除します。</p>
-      <h3>7. お問い合わせ</h3>
-      <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
-    </section>
+      <section id="terms-ja" class="section">
+        <div class="section-title">利用規約</div>
+        <div class="updated-badge">最終更新日: 2026年5月12日</div>
+        <h3>1. はじめに</h3>
+        <p>本利用規約は、合同会社AllNewが提供するiOSアプリケーション「MedReminder」（App Store上の日本語表示名: 「AI服薬通知 - お薬飲みましたか？を通知してくれるアプリ」、英語表示名: 「AI MedReminder - Pill Reminder」）の利用条件を定めるものです。</p>
+        <h3>2. サービスの概要</h3>
+        <p>本アプリは、処方箋やお薬ラベルを撮影し、薬名・用量・服用回数・服用時刻の登録、通知、服薬記録、複数プロフィール、カレンダー、レポート、エクスポートを支援します。</p>
+        <h3>3. 利用料金</h3>
+        <p>MedReminder Pro は、App Store の購入画面に表示される条件に従い、無料体験後に自動更新されるサブスクリプションとして提供される場合があります。課金はApple IDに対して行われ、解約は「設定 > Apple ID > サブスクリプション」から行えます。返金はAppleの手続きに従います。</p>
+        <h3>4. 医療目的での使用禁止</h3>
+        <p>本アプリは服薬管理をサポートするツールであり、医療診断、治療、処方、服薬指示、医学的アドバイスを提供するものではありません。服薬に関する判断は医師または薬剤師に相談してください。</p>
+        <h3>5. AI読み取り・通知の注意</h3>
+        <p>AI読み取り、OCR、ルールベース抽出、自動分類の精度は100%ではありません。保存前および服用前に、薬名、用量、服用回数、服用時刻、期間、メモ等を必ず確認してください。通知は端末設定やOSの仕様等により遅延または不着となる場合があります。</p>
+        <h3>6. データ管理</h3>
+        <p>服薬データ、プロフィール、服薬記録、撮影画像、AI読み取り結果は、原則として端末内で処理・保存されます。初回App Storeリリースでは、iCloud同期およびApple Health / HealthKit連携は提供しません。</p>
+        <h3>7. 免責</h3>
+        <p>本アプリは現状有姿で提供されます。当社は、読み取り結果、保存結果、通知、記録、エクスポート内容が常に正確であることを保証しません。当社の故意または重過失に起因する場合を除き、当社の責任は法令上認められる範囲に限定されます。</p>
+        <h3>8. Appleに関する条項</h3>
+        <p>本アプリはApple App Storeを通じて配布されます。本規約は当社とユーザー間で締結されるものであり、Appleは当事者ではありません。AppleおよびAppleの子会社は、本規約の第三者受益者です。</p>
+      </section>
 
-    <section id="privacy-en" data-lang="en">
-      <h2>Privacy Policy</h2>
-      <p>Last Updated: May 12, 2026</p>
-      <p><strong>Important:</strong> MedReminder does not send or store medication data, prescription photos, or AI extraction results on AllNew servers.</p>
-      <h3>1. Information handled</h3>
-      <ul>
-        <li>Medication names, dosage, reminder times, intake records, notes, and profile names</li>
-        <li>Camera or photo-library images you allow the App to use</li>
-        <li>On-device Apple Intelligence / Foundation Models extraction results on supported devices</li>
-        <li>Subscription entitlement status provided by the App Store</li>
-        <li>Support information you voluntarily send to us</li>
-      </ul>
-      <h3>2. iCloud and HealthKit</h3>
-      <p>In the first App Store release, the App does not sync medication data to iCloud and does not read from or write to Apple Health / HealthKit.</p>
-      <h3>3. Subscription and payment information</h3>
-      <p>MedReminder Pro includes a 1-month free trial. After that, it renews automatically at the price shown in the App Store purchase sheet unless canceled. Purchases, billing, cancellation, and refund requests are processed by Apple through the App Store / Apple ID. We do not receive credit card numbers or other payment credentials.</p>
-      <h3>4. Purposes of use</h3>
-      <p>We use information to provide App features, reminders, AI extraction, subscription entitlement checks, support, bug investigation, and legal compliance.</p>
-      <h3>5. Third-party disclosure</h3>
-      <p>We do not send or store medication data, photos, or AI extraction results on AllNew servers, and we do not use user information for advertising, tracking, profiling, sale, or rental to third parties.</p>
-      <h3>6. Retention and security</h3>
-      <p>Medication data is stored on your device and can be managed in the App or by deleting the App. Support emails are retained for up to 12 months after resolution unless longer retention is required.</p>
-      <h3>7. Contact</h3>
-      <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
-    </section>
+      <section id="commercial-ja" class="section">
+        <div class="section-title">特定商取引法に基づく表記</div>
+        <div class="commercial-card">
+          <dl>
+            <dt>販売事業者</dt><dd>合同会社AllNew</dd>
+            <dt>運営統括責任者</dt><dd>植野 正徳</dd>
+            <dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd>
+            <dt>法人番号</dt><dd>8020003014806</dd>
+            <dt>お問い合わせ先</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br>電話番号は請求があれば遅滞なく開示します。</dd>
+            <dt>販売価格</dt><dd>アプリ本体は無料。MedReminder Pro の価格は App Store の購入画面に表示されます。</dd>
+            <dt>支払方法・時期</dt><dd>Apple ID / App Store による決済。無料体験終了後、解約しない限り自動更新されます。</dd>
+            <dt>提供時期</dt><dd>App Storeからダウンロード後すぐに利用できます。Pro機能は購入・資格確認後に利用できます。</dd>
+            <dt>解約・返金</dt><dd>解約は「設定 > Apple ID > サブスクリプション」から行えます。返金申請はAppleの手続きに従います。</dd>
+            <dt>動作環境</dt><dd>iOS 26.0以降のiPhone。Apple Intelligenceによる自動入力は対応端末・言語・地域に依存します。</dd>
+            <dt>受付時間</dt><dd>10:00〜17:00（土・日・祝祭日を除く）</dd>
+          </dl>
+        </div>
+      </section>
 
-    <section id="terms-ja" data-lang="ja">
-      <h2>利用規約</h2>
-      <p>最終更新日: 2026-05-12</p>
-      <h3>1. 本アプリの内容</h3>
-      <p>本アプリは、処方箋やお薬ラベルの撮影、AI読み取り、服薬予定の登録、通知、服薬記録、複数プロフィール管理、服薬状況の確認を支援する服薬リマインダーです。対応デバイスは iOS 26.0以降を搭載した iPhone です。App Store 上の日本語表示名は「AI服薬通知 - お薬飲みましたか？を通知してくれるアプリ」です。</p>
-      <h3>2. サブスクリプション</h3>
-      <p>MedReminder Pro は、1ヶ月の無料体験後、App Store の購入画面に表示される価格で自動更新されるサブスクリプションです。課金は Apple ID に対して行われ、解約は「設定 > Apple ID > サブスクリプション」から行えます。解約は現在の課金期間の終了時に反映されます。</p>
-      <h3>3. AI読み取り・自動入力の注意</h3>
-      <p>AI読み取り、OCR、ルールベース抽出、自動分類の精度は100%ではありません。保存前および服用前に、薬名、用量、服用時刻、服用回数、期間等を必ず確認し、誤りがある場合は手動で修正してください。</p>
-      <h3>4. 医療上の免責</h3>
-      <p>本アプリは服薬予定の記録・通知を補助するツールであり、医療行為、診断、治療、処方、服薬判断を行うものではありません。服薬に関する判断は医師または薬剤師に相談してください。</p>
-      <h3>5. 通知・記録に関する注意</h3>
-      <p>通知は、端末設定、通知許可、集中モード、OSの仕様、バッテリー状態等により、遅延または不着となる場合があります。</p>
-      <h3>6. データ管理</h3>
-      <p>服薬データは端末内に保存されます。初回リリースでは、服薬データの iCloud 同期および HealthKit 連携は提供しません。</p>
-      <h3>7. お問い合わせ</h3>
-      <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
-    </section>
+      <section id="contact-ja" class="section">
+        <div class="section-title">お問い合わせ</div>
+        <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
+        <p>受付時間: 10:00〜17:00（土・日・祝祭日を除く） / 対応言語: 日本語・英語</p>
+      </section>
+    </div>
 
-    <section id="terms-en" data-lang="en">
-      <h2>Terms of Service</h2>
-      <p>Last Updated: May 12, 2026</p>
-      <h3>1. App description</h3>
-      <p>The App is a medication reminder that helps users capture prescription or medication-label images, review AI extraction results, register reminder schedules, receive notifications, record intake, manage multiple profiles, and review adherence. It supports iPhone running iOS 26.0 or later. Its English App Store display name is "AI MedReminder - Pill Reminder."</p>
-      <h3>2. Subscription</h3>
-      <p>MedReminder Pro includes a 1-month free trial. After that, it renews automatically at the price shown in the App Store purchase sheet unless canceled. Billing is charged to your Apple ID. You can cancel in Settings > Apple ID > Subscriptions. Cancellation takes effect at the end of the current billing period.</p>
-      <h3>3. AI extraction and auto-fill</h3>
-      <p>AI extraction, OCR, rule-based extraction, and automated classification are not 100% accurate. Review all medication names, dosage, reminder times, frequency, and duration before saving and before taking medication.</p>
-      <h3>4. Medical disclaimer</h3>
-      <p>The App is a reminder and record-support tool only. It does not provide medical practice, diagnosis, treatment, prescriptions, or medication decisions. Consult a doctor or pharmacist about medication decisions.</p>
-      <h3>5. Notifications and records</h3>
-      <p>Notifications may be delayed or fail to arrive depending on device settings, notification permission, Focus modes, OS behavior, and battery state.</p>
-      <h3>6. Data management</h3>
-      <p>Medication data is stored on device. In the first App Store release, the App does not provide medication-data iCloud sync or HealthKit integration.</p>
-      <h3>7. Contact</h3>
-      <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
-    </section>
+    <div class="lang-content" data-lang="en">
+      <section id="faq-en" class="section">
+        <div class="section-title">FAQ</div>
+        <p class="section-subtitle">Usage, data handling, and subscription</p>
+        <div class="faq-item"><p><strong>Where is data processed?</strong></p><p>Medication data, photos, and AI extraction results are processed and stored on device and are not sent to or stored on AllNew external servers.</p></div>
+        <div class="faq-item"><p><strong>Does the App use iCloud or HealthKit?</strong></p><p>In the first App Store release, the App does not provide medication-data iCloud sync and does not read from or write to Apple Health / HealthKit.</p></div>
+        <div class="faq-item"><p><strong>Can AI extraction be used for medical decisions?</strong></p><p>No. The App is a reminder and record-support tool only. Review extracted results yourself and consult a doctor or pharmacist for medication decisions.</p></div>
+        <div class="faq-item"><p><strong>Where can I check the price?</strong></p><p>MedReminder Pro pricing, duration, and free-trial conditions are shown in the App Store purchase sheet.</p></div>
+      </section>
 
-    <section id="commercial-ja" data-lang="ja">
-      <h2>特定商取引法に基づく表記</h2>
-      <dl>
-        <dt>販売事業者</dt><dd>合同会社AllNew</dd>
-        <dt>運営統括責任者</dt><dd>植野 正徳</dd>
-        <dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd>
-        <dt>お問い合わせ先</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br>電話番号は請求があれば遅滞なく開示します。</dd>
-        <dt>販売価格</dt><dd>アプリ本体は無料。MedReminder Pro の価格は App Store の購入画面に表示されます。</dd>
-        <dt>支払方法・時期</dt><dd>Apple ID / App Store による決済。無料体験終了後、解約しない限り1年ごとに自動更新されます。</dd>
-        <dt>提供時期</dt><dd>App Storeからダウンロード後すぐに利用できます。Pro機能は購入・資格確認後に利用できます。</dd>
-        <dt>解約・返金</dt><dd>解約は「設定 > Apple ID > サブスクリプション」から行えます。返金申請はAppleの手続きに従います。</dd>
-        <dt>動作環境</dt><dd>iOS 26.0以降のiPhone。Apple Intelligenceによる自動入力は対応端末・言語・地域に依存します。</dd>
-      </dl>
-    </section>
+      <section id="privacy-en" class="section">
+        <div class="section-title">Privacy Policy</div>
+        <div class="updated-badge">Last Updated: May 12, 2026</div>
+        <div class="highlight-box"><p><strong>Important:</strong> The App does not send or store medication data, prescription photos, or AI extraction results on AllNew external servers. Data is processed and stored on your device.</p></div>
+        <h3>1. Information handled</h3>
+        <ul>
+          <li>Camera or photo-library images used to capture prescriptions or medication labels</li>
+          <li>Medication names, dosage, frequency, reminder times, intake records, notes, and profile names</li>
+          <li>On-device Apple Intelligence / Foundation Models extraction results on supported devices</li>
+          <li>Subscription entitlement status provided by the App Store</li>
+          <li>Support information you voluntarily provide</li>
+        </ul>
+        <h3>2. Purposes of use</h3>
+        <p>We use information to register medication schedules, send notifications, display records and reports, check subscription entitlement, provide support, investigate bugs, and comply with law.</p>
+        <h3>3. Storage and retention</h3>
+        <p>Photos, AI extraction results, and medication data are processed and stored on device. Support information is generally deleted within 12 months after resolution unless longer retention is necessary.</p>
+        <h3>4. Third-party disclosure</h3>
+        <p>We do not provide, sell, or share medication data, photos, or AI extraction results with third parties. The App does not include advertising, analytics, or tracking SDKs.</p>
+        <h3>5. Apple services</h3>
+        <p>Apple-side processing for purchases, notifications, camera, photo library, and Apple Intelligence is governed by Apple's terms, privacy policy, and your device settings.</p>
+        <h3>6. Security</h3>
+        <p>The App is designed around data minimization, on-device processing, and no ads or tracking. Protection of on-device data depends on your passcode, Face ID / Touch ID, and iOS security settings.</p>
+        <h3>7. Contact</h3>
+        <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
+      </section>
 
-    <section id="commercial-en" data-lang="en">
-      <h2>Seller Information</h2>
-      <dl>
-        <dt>Seller</dt><dd>AllNew LLC</dd>
-        <dt>Representative</dt><dd>Masanori Ueno</dd>
-        <dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd>
-        <dt>Contact</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br>Phone number disclosed upon request where required.</dd>
-        <dt>Price</dt><dd>Free app. MedReminder Pro pricing is shown in the App Store purchase sheet after a 1-month free trial.</dd>
-        <dt>Payment method and timing</dt><dd>Apple ID / App Store billing. After the free trial, the subscription renews annually unless canceled.</dd>
-        <dt>Delivery</dt><dd>Available after download from the App Store. Pro features are available after purchase and entitlement confirmation.</dd>
-        <dt>Cancellation and refunds</dt><dd>Cancel in Settings > Apple ID > Subscriptions. Refund requests are handled through Apple's process.</dd>
-        <dt>Requirements</dt><dd>iPhone running iOS 26.0 or later. Apple Intelligence auto-fill depends on supported device, language, and region.</dd>
-      </dl>
-    </section>
+      <section id="terms-en" class="section">
+        <div class="section-title">Terms of Service</div>
+        <div class="updated-badge">Last Updated: May 12, 2026</div>
+        <h3>1. Introduction</h3>
+        <p>These Terms govern your use of the iOS application "MedReminder" (Japanese App Store display name: "AI服薬通知 - お薬飲みましたか？を通知してくれるアプリ"; English App Store display name: "AI MedReminder - Pill Reminder") provided by AllNew LLC.</p>
+        <h3>2. Service overview</h3>
+        <p>The App helps capture prescriptions or medication labels, register medication names, dosage, frequency, reminder times, notifications, intake records, profiles, calendar views, reports, and exports.</p>
+        <h3>3. Fees</h3>
+        <p>MedReminder Pro may be offered as an auto-renewing subscription after a free trial under the conditions shown in the App Store purchase sheet. Billing is charged to your Apple ID. You can cancel in Settings > Apple ID > Subscriptions. Refund requests are handled through Apple's process.</p>
+        <h3>4. Not for medical use</h3>
+        <p>The App is a medication-management support tool only. It does not provide diagnosis, treatment, prescriptions, medication instructions, or medical advice. Consult a doctor or pharmacist for medication decisions.</p>
+        <h3>5. AI extraction and notifications</h3>
+        <p>AI extraction, OCR, rule-based extraction, and automated classification are not guaranteed to be 100% accurate. Review medication names, dosage, frequency, reminder times, duration, notes, and all other fields before saving and before taking medication. Notifications may be delayed or fail to arrive depending on device settings and OS behavior.</p>
+        <h3>6. Data management</h3>
+        <p>Medication data, profiles, intake records, photos, and AI extraction results are generally processed and stored on device. In the first App Store release, the App does not provide iCloud sync or HealthKit integration.</p>
+        <h3>7. Disclaimer</h3>
+        <p>The App is provided as is. We do not warrant the accuracy of extraction results, saved data, notifications, records, or exports. Except in cases of intentional misconduct or gross negligence, our liability is limited to the extent permitted by law.</p>
+        <h3>8. Apple terms</h3>
+        <p>The App is distributed through the Apple App Store. These Terms are between you and AllNew only, and Apple is not a party. Apple and Apple's subsidiaries are third-party beneficiaries of these Terms.</p>
+      </section>
 
-    <section id="contact-ja" data-lang="ja">
-      <h2>お問い合わせ</h2>
-      <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
-      <p>受付時間: 平日 11:00-15:00 JST / 対応言語: 日本語・英語</p>
-    </section>
+      <section id="commercial-en" class="section">
+        <div class="section-title">Seller Information</div>
+        <div class="commercial-card">
+          <dl>
+            <dt>Seller</dt><dd>AllNew LLC</dd>
+            <dt>Representative</dt><dd>Masanori Ueno</dd>
+            <dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd>
+            <dt>Corporate Number</dt><dd>8020003014806</dd>
+            <dt>Contact</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br>Phone number disclosed without delay upon request where required.</dd>
+            <dt>Price</dt><dd>Free app. MedReminder Pro pricing is shown in the App Store purchase sheet.</dd>
+            <dt>Payment method and timing</dt><dd>Apple ID / App Store billing. After the free trial, the subscription auto-renews unless canceled.</dd>
+            <dt>Delivery</dt><dd>Available immediately after download from the App Store. Pro features are available after purchase and entitlement confirmation.</dd>
+            <dt>Cancellation and refunds</dt><dd>Cancel in Settings > Apple ID > Subscriptions. Refund requests are handled through Apple's process.</dd>
+            <dt>Requirements</dt><dd>iPhone running iOS 26.0 or later. Apple Intelligence auto-fill depends on supported device, language, and region.</dd>
+            <dt>Hours</dt><dd>10:00-17:00 JST, weekdays excluding holidays</dd>
+          </dl>
+        </div>
+      </section>
 
-    <section id="contact-en" data-lang="en">
-      <h2>Contact Us</h2>
-      <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
-      <p>Hours: Weekdays 11:00-15:00 JST / Languages: Japanese and English</p>
-    </section>
-
-    <p class="footer">Hosted legal page: https://apps.allnew.work/medreminder/</p>
+      <section id="contact-en" class="section">
+        <div class="section-title">Contact Us</div>
+        <p><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a></p>
+        <p>Hours: 10:00-17:00 JST, weekdays excluding holidays / Languages: Japanese and English</p>
+      </section>
+    </div>
   </main>
+
+  <footer class="footer">© 2026 AllNew LLC. All rights reserved.</footer>
 
   <script>
     function applyLanguage(lang) {
-      document.body.classList.toggle('lang-en', lang === 'en');
       document.documentElement.lang = lang;
+      document.querySelectorAll('.lang-content').forEach(function (el) {
+        el.classList.toggle('active', el.getAttribute('data-lang') === lang);
+      });
+      document.querySelectorAll('[data-lang-text]').forEach(function (el) {
+        el.hidden = el.getAttribute('data-lang-text') !== lang;
+      });
+      document.querySelectorAll('.toc-link').forEach(function (el) {
+        el.setAttribute('href', el.getAttribute(lang === 'ja' ? 'data-ja' : 'data-en'));
+      });
       try { localStorage.setItem('medreminder-lang', lang); } catch (_) {}
     }
     function toggleLanguage() {
-      applyLanguage(document.body.classList.contains('lang-en') ? 'ja' : 'en');
+      const next = document.documentElement.lang === 'ja' ? 'en' : 'ja';
+      applyLanguage(next);
     }
     (function initLanguage() {
       const params = new URLSearchParams(location.search);
