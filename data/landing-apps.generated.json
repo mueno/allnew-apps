@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-05-11T20:03:20+00:00",
+  "generated_at": "2026-05-12T20:07:50+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -158,14 +158,14 @@
       "bundle_id": "jp.allnew.oxisnap",
       "asc_app_id": "6759076145",
       "is_health_app": true,
-      "release_date": "2026-05-10",
+      "release_date": "2026-05-12",
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-05-10T19:33:07+00:00",
-      "app_store_version": "1.0.4",
+      "updated_at": "2026-05-12T20:07:50+00:00",
+      "app_store_version": "1.0.5",
       "app_store_name": "OxiSnap 酸素飽和度をかんたん記録",
-      "app_store_current_version_release_date": "2026-05-10T06:43:06Z",
+      "app_store_current_version_release_date": "2026-05-12T14:13:17Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -316,14 +316,14 @@
       "bundle_id": "jp.allnew.zenflip",
       "asc_app_id": "6759169189",
       "is_health_app": false,
-      "release_date": "2026-05-09",
+      "release_date": "2026-05-12",
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-05-09T19:33:04+00:00",
-      "app_store_version": "1.0.1",
+      "updated_at": "2026-05-12T20:07:50+00:00",
+      "app_store_version": "1.0.2",
       "app_store_name": "BOTTO - 没頭タイマー",
-      "app_store_current_version_release_date": "2026-05-09T00:48:36Z",
+      "app_store_current_version_release_date": "2026-05-12T14:10:55Z",
       "app_store_lookup_country": "jp"
     }
   ]
