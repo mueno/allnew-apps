@@ -130,7 +130,25 @@
     .lang-content.active { display: block; }
     .section { padding: 48px 0; border-bottom: 1px solid var(--border); scroll-margin-top: 92px; }
     .section:last-child { border-bottom: none; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-tertiary);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
     .section-title { font-size: 1.4rem; font-weight: 700; letter-spacing: 0; margin-bottom: 8px; }
+    .section-header .section-title { margin-bottom: 0; }
     .section-subtitle, p, li, dd { color: var(--text-secondary); }
     h3 { font-size: 1rem; margin: 26px 0 10px; }
     p, ul, dl { margin-bottom: 14px; }
@@ -156,7 +174,7 @@
       padding: 20px 24px;
       margin-bottom: 24px;
     }
-    .faq-item, .commercial-card {
+    .faq-item {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
@@ -165,6 +183,65 @@
       box-shadow: var(--shadow-soft);
     }
     .faq-item strong { color: var(--text-primary); }
+    .commercial-accordion {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+    .commercial-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: background .2s ease;
+    }
+    .commercial-header:hover { background: var(--bg-tertiary); }
+    .commercial-toggle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 20px;
+      font-weight: 300;
+      transition: all .3s ease;
+      flex-shrink: 0;
+    }
+    .commercial-accordion.open .commercial-toggle {
+      background: var(--accent);
+      color: white;
+      transform: rotate(45deg);
+    }
+    .commercial-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease;
+    }
+    .commercial-accordion.open .commercial-content {
+      max-height: 700px;
+      padding: 0 24px 24px;
+    }
+    .contact-details {
+      display: block;
+      margin-top: 16px;
+      padding-top: 0;
+      border-top: none;
+    }
+    .contact-item {
+      display: grid;
+      grid-template-columns: minmax(150px, 230px) 1fr;
+      gap: 10px 18px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-item small { color: var(--text-secondary); }
     dl { display: grid; grid-template-columns: minmax(150px, 230px) 1fr; gap: 10px 18px; }
     dt { color: var(--text-primary); font-weight: 700; }
     .footer {
@@ -180,6 +257,8 @@
       .hero h1 { font-size: 1.6rem; }
       .toc-link { padding: 6px 12px; font-size: .8rem; }
       .section { padding: 34px 0; }
+      .commercial-header { padding: 18px 20px; }
+      .contact-item { grid-template-columns: 1fr; gap: 4px; }
       dl { grid-template-columns: 1fr; }
     }
   </style>
@@ -282,21 +361,30 @@
       </section>
 
       <section id="commercial-ja" class="section">
-        <div class="section-title">特定商取引法に基づく表記</div>
-        <div class="commercial-card">
-          <dl>
-            <dt>販売事業者</dt><dd>合同会社AllNew</dd>
-            <dt>運営統括責任者</dt><dd>植野 正徳</dd>
-            <dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd>
-            <dt>法人番号</dt><dd>8020003014806</dd>
-            <dt>お問い合わせ先</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br>電話番号は請求があれば遅滞なく開示します。</dd>
-            <dt>販売価格</dt><dd>アプリ本体は無料。MedReminder Pro の価格は App Store の購入画面に表示されます。</dd>
-            <dt>支払方法・時期</dt><dd>Apple ID / App Store による決済。無料体験終了後、解約しない限り自動更新されます。</dd>
-            <dt>提供時期</dt><dd>App Storeからダウンロード後すぐに利用できます。Pro機能は購入・資格確認後に利用できます。</dd>
-            <dt>解約・返金</dt><dd>解約は「設定 > Apple ID > サブスクリプション」から行えます。返金申請はAppleの手続きに従います。</dd>
-            <dt>動作環境</dt><dd>iOS 26.0以降のiPhone。Apple Intelligenceによる自動入力は対応端末・言語・地域に依存します。</dd>
-            <dt>受付時間</dt><dd>10:00〜17:00（土・日・祝祭日を除く）</dd>
-          </dl>
+        <div class="commercial-accordion">
+          <div class="commercial-header">
+            <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+              <div class="section-icon">🏢</div>
+              <div>
+                <div class="section-title">特定商取引法に基づく表記</div>
+                <div class="section-subtitle">販売事業者情報</div>
+              </div>
+            </div>
+            <span class="commercial-toggle">+</span>
+          </div>
+          <div class="commercial-content">
+            <dl class="contact-details">
+              <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
+              <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
+              <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
+              <div class="contact-item"><dt>お問い合わせ先</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br><small>※電話番号は請求があれば遅滞なく開示します</small></dd></div>
+              <div class="contact-item"><dt>販売価格</dt><dd>App Storeの購入画面に表示される価格、無料体験の有無・期間、更新条件が適用されます</dd></div>
+              <div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div>
+              <div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div>
+              <div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセルはお受けできません。返金の可否・手続はAppleの返金ポリシーに従います。</dd></div>
+              <div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div>
+            </dl>
+          </div>
         </div>
       </section>
 
@@ -365,21 +453,30 @@
       </section>
 
       <section id="commercial-en" class="section">
-        <div class="section-title">Seller Information</div>
-        <div class="commercial-card">
-          <dl>
-            <dt>Seller</dt><dd>AllNew LLC</dd>
-            <dt>Representative</dt><dd>Masanori Ueno</dd>
-            <dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd>
-            <dt>Corporate Number</dt><dd>8020003014806</dd>
-            <dt>Contact</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br>Phone number disclosed without delay upon request where required.</dd>
-            <dt>Price</dt><dd>Free app. MedReminder Pro pricing is shown in the App Store purchase sheet.</dd>
-            <dt>Payment method and timing</dt><dd>Apple ID / App Store billing. After the free trial, the subscription auto-renews unless canceled.</dd>
-            <dt>Delivery</dt><dd>Available immediately after download from the App Store. Pro features are available after purchase and entitlement confirmation.</dd>
-            <dt>Cancellation and refunds</dt><dd>Cancel in Settings > Apple ID > Subscriptions. Refund requests are handled through Apple's process.</dd>
-            <dt>Requirements</dt><dd>iPhone running iOS 26.0 or later. Apple Intelligence auto-fill depends on supported device, language, and region.</dd>
-            <dt>Hours</dt><dd>10:00-17:00 JST, weekdays excluding holidays</dd>
-          </dl>
+        <div class="commercial-accordion">
+          <div class="commercial-header">
+            <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+              <div class="section-icon">🏢</div>
+              <div>
+                <div class="section-title">Seller Information</div>
+                <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+              </div>
+            </div>
+            <span class="commercial-toggle">+</span>
+          </div>
+          <div class="commercial-content">
+            <dl class="contact-details">
+              <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
+              <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
+              <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+              <div class="contact-item"><dt>Contact</dt><dd><a href="mailto:app-support@allnew.work?subject=MedReminder">app-support@allnew.work</a><br><small>Phone number available upon request</small></dd></div>
+              <div class="contact-item"><dt>Price</dt><dd>As displayed on the in-app purchase screen</dd></div>
+              <div class="contact-item"><dt>Payment Method &amp; Timing</dt><dd>Via App Store payment methods. Charged by Apple upon purchase confirmation</dd></div>
+              <div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div>
+              <div class="contact-item"><dt>Returns &amp; Cancellations</dt><dd>Due to the nature of digital products, no returns, cancellations, or refunds after purchase</dd></div>
+              <div class="contact-item"><dt>Special Conditions</dt><dd>Minors must obtain parental consent before purchasing</dd></div>
+            </dl>
+          </div>
         </div>
       </section>
 
@@ -411,12 +508,27 @@
       const next = document.documentElement.lang === 'ja' ? 'en' : 'ja';
       applyLanguage(next);
     }
+    document.addEventListener('click', function(e) {
+      const header = e.target.closest('.commercial-header');
+      if (!header) return;
+      const accordion = header.closest('.commercial-accordion');
+      if (accordion) accordion.classList.toggle('open');
+    });
+    function checkCommercialAnchor() {
+      if (location.hash && location.hash.includes('commercial')) {
+        document.querySelectorAll('.commercial-accordion').forEach(function (accordion) {
+          accordion.classList.add('open');
+        });
+      }
+    }
+    window.addEventListener('hashchange', checkCommercialAnchor);
     (function initLanguage() {
       const params = new URLSearchParams(location.search);
       const requested = params.get('lang');
       let saved = null;
       try { saved = localStorage.getItem('medreminder-lang'); } catch (_) {}
       applyLanguage(requested === 'en' || saved === 'en' ? 'en' : 'ja');
+      checkCommercialAnchor();
     })();
   </script>
 </body>
