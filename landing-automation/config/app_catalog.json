@@ -128,6 +128,27 @@
       "bootstrap_visible": true
     },
     {
+      "slug": "pawpass",
+      "name": "PawPass",
+      "name_ja": "PawPass",
+      "category": "pet",
+      "category_label": "Pet Health",
+      "description_ja": "ペットの健康記録、通院、ワクチン、薬、体重、診察券や保険証をひとつに管理。",
+      "description_en": "Manage pet health records, visits, vaccines, medication, weight, and important cards in one place.",
+      "icon_path": "pawpass-icon.png",
+      "fallback_image_path": "assets/onboarding/pawpass-onboarding1.png",
+      "card_image_path": "assets/onboarding/pawpass-onboarding1.png",
+      "input_methods": ["camera_ocr"],
+      "is_health_app": false,
+      "support_path": "pawpass/?lang=ja",
+      "app_store_url": "",
+      "bundle_id": "jp.allnew.pawpass",
+      "asc_app_id": "6768502509",
+      "sort_order": 65,
+      "featured_priority": 65,
+      "bootstrap_visible": false
+    },
+    {
       "slug": "babyvox",
       "name": "BabyVox",
       "name_ja": "Baby記録",

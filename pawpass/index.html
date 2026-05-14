@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawPass Support</title>
+    <meta name="description" content="PawPass support page. FAQ, Privacy Policy, Terms of Service, Seller Information, and contact information.">
+    <!-- Security Headers (GitHub Pages cannot set HTTP response headers) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+    <meta name="referrer" content="no-referrer">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="bingbot" content="noindex, nofollow, noarchive">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
+    <style>
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #279679;
+            --accent-hover: #1f7f67;
+            --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.72);
+            --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #62d1b4;
+                --accent-hover: #7ee0c8;
+                --border: rgba(255,255,255,0.1);
+                --glass: rgba(28,28,30,0.72);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--border);
+        }
+
+        .app-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 980px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .lang-btn::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-dropdown.open .lang-btn::after {
+            transform: rotate(180deg);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 160px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-soft);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+            z-index: 200;
+        }
+
+        .lang-dropdown.open .lang-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .lang-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .lang-option.active {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .lang-option:first-child { border-radius: 11px 11px 0 0; }
+        .lang-option:last-child { border-radius: 0 0 11px 11px; }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .toc {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .toc-link {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 980px;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        .section {
+            padding: 48px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .updated-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-tertiary);
+            padding: 6px 12px;
+            border-radius: 980px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .updated-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #34c759;
+            border-radius: 50%;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(39,150,121,0.08) 0%, rgba(98,209,180,0.08) 100%);
+            border: 1px solid rgba(39,150,121,0.2);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .highlight-box p {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(39,150,121,0.3);
+        }
+
+        .faq-question {
+            padding: 18px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 800px;
+            padding: 0 24px 24px;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .faq-answer p:last-child { margin-bottom: 0; }
+
+        .faq-answer ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .legal-section {
+            margin-bottom: 28px;
+        }
+
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legal-section h3::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .legal-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .legal-section li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .legal-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .legal-section a:hover {
+            text-decoration: underline;
+        }
+
+        .commercial-accordion {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .commercial-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .commercial-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .commercial-toggle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .commercial-accordion.open .commercial-toggle {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .commercial-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .commercial-accordion.open .commercial-content {
+            max-height: 700px;
+            padding: 0 24px 24px;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .contact-card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .contact-card > p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .contact-email:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .contact-details {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .contact-details-top {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            padding-top: 0;
+            padding-bottom: 16px;
+            border-top: none;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contact-item {
+            font-size: 0.85rem;
+        }
+
+        .contact-item dt {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .contact-item dd {
+            color: var(--text-primary);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .translation-notice {
+            background: #fff3cd;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .translation-notice {
+                background: rgba(255, 193, 7, 0.15);
+                color: #ffc107;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-inner {
+                gap: 12px;
+            }
+
+            .hero { padding: 40px 20px 30px; }
+            .hero h1 { font-size: 1.6rem; }
+
+            .toc { gap: 4px; }
+            .toc-link { padding: 6px 12px; font-size: 0.8rem; }
+
+            .section { padding: 32px 0; }
+            .section-header { flex-direction: column; text-align: center; }
+
+            .contact-card { padding: 28px; }
+            .contact-details { grid-template-columns: 1fr; }
+        }
+
+        :target {
+            scroll-margin-top: 80px;
+        }
+
+        .hero-icon:hover {
+            animation: wiggle 0.5s ease;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="../" class="logo-link">
+                <span class="logo">AllNew</span>
+                <span class="logo-divider"></span>
+                <span class="app-name">PawPass</span>
+            </a>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-btn" id="langBtn">
+                    <span id="currentLangLabel">日本語</span>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <button class="lang-option active" data-lang="ja">日本語</button>
+                    <button class="lang-option" data-lang="en">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <img src="../pawpass-icon.png?v=2" alt="PawPass" class="hero-icon">
+        <h1 id="heroTitle">PawPass</h1>
+        <p class="hero-subtitle" id="heroSubtitle">ペットの健康情報をひとつに。<br>記録・予定・カードを安全に管理。</p>
+    </section>
+
+    <nav class="toc" id="toc">
+        <a href="#faq" class="toc-link" data-section="faq">FAQ</a>
+        <a href="#privacy" class="toc-link" data-section="privacy">プライバシー</a>
+        <a href="#terms" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#commercial" class="toc-link" data-section="commercial">特定商取引法</a>
+        <a href="#contact" class="toc-link" data-section="contact">お問い合わせ</a>
+    </nav>
+
+    <main class="main">
+        <!-- ==================== JAPANESE ==================== -->
+        <div class="lang-content active" data-lang="ja">
+            <!-- FAQ -->
+            <section id="faq-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">よくある質問</div>
+                        <div class="section-subtitle">使い方、データ管理、サブスクリプションについて</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">何を自動登録できますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>診察券、保険証、トリミングサロンの会員証、ワクチン証明書や処方袋を撮影すると、端末内のOCRにより、名称、電話番号、URL、番号、日付などの候補入力を支援します。</p>
+                        <p>読み取り結果は確認・修正してから保存してください。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">対応しているiPhoneは？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>App Store の対応OS条件を満たす iPhone で動作します。写真からの読み取り精度は、端末、OS、撮影条件、書類の状態により変わります。</p>
+                        <p>読み取り結果は保存前に確認・修正してください。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>ペットプロフィール、健康記録、カード画像、ペットの服薬記録、撮影画像、OCR読み取り結果は、お使いのデバイス内で処理・保存されます。当社が運用する外部サーバーへ送信・保存しません。</p>
+                        <p>iCloud 同期や iCloud同期を利用する場合は、ユーザーの許可と Apple の設定に従って処理・保存・同期されます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">AI読み取りが間違っていた場合は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>保存前に、薬名、用量、服用回数、服用時刻、期間、メモを必ず確認し、必要に応じて手入力で修正してください。</p>
+                        <p>本アプリはペットの健康記録、予定管理、カード管理を補助するツールであり、医療判断を行うものではありません。ペットの服薬に関する判断は獣医師に相談してください。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">通知が届かない場合は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iOS の「設定」アプリで PawPass の通知が許可されているか確認してください。集中モード、低電力モード、端末の電源状態、OSの仕様により通知が遅延または不着となる場合があります。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">料金や無料体験はどこで確認できますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>料金、無料体験、更新条件は、購入前に App Store の購入画面および本ページの「利用規約」内の有料機能の項目で確認できます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">サブスクリプションの手続きはどこでできますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>購入、更新、解約、返金等の手続きは Apple の App Store / Apple ID の管理画面に従います。購入済み資格の復元は、同じ Apple ID でサインインした上でアプリ内の復元機能を利用してください。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">プライバシーポリシー</div>
+                        <div class="section-subtitle">あなたのデータを大切に扱います</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年5月12日</span>
+
+                <div class="highlight-box">
+                    <p><strong>重要:</strong> 本アプリは、ペットプロフィール、健康記録、カード画像、処方袋や証明書の撮影画像、OCR読み取り結果を当社の外部サーバーに送信・保存しません。処理と保存は原則としてお使いのデバイス内で行われます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. 取り扱う情報の種類</h3>
+                    <ul>
+                        <li><strong>カメラ・写真ライブラリ画像:</strong> 診察券、保険証、サロン会員証、ワクチン証明書や処方袋を撮影または選択するために利用します。AI読み取りまたは登録補助のために端末内で処理されます。</li>
+                        <li><strong>ペットの服薬・プロフィール情報:</strong> 薬名、用量、服用回数、服用時刻、ペットの服薬記録、メモ、プロフィール名等。</li>
+                        <li><strong>OCR読み取り結果:</strong> 端末内で抽出した候補情報、およびユーザーが確認・修正した入力内容。</li>
+                        <li><strong>購入状態:</strong> App Store が提供するサブスクリプション資格状態。決済情報そのものは当社では取り扱いません。</li>
+                        <li><strong>お問い合わせ情報:</strong> ユーザーが任意で送信するメールアドレス、端末・OS情報、問い合わせ内容等。</li>
+                        <li><strong>収集しない情報:</strong> 本アプリでは広告SDK、アナリティクスSDK、トラッキングSDKを使用しません。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 情報の利用目的</h3>
+                    <p>ペットの健康記録、カード管理、予定登録、通知、レポート表示、複数プロフィール管理、サブスクリプション資格確認、サポート対応、不具合調査、法令遵守のために利用します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 保存場所と期間</h3>
+                    <p>ペットプロフィール、健康記録、カード画像、ペットの服薬記録、撮影画像、OCR読み取り結果は、原則として端末内で処理・保存されます。お問い合わせ情報は、対応完了後、合理的な期間内に削除または匿名化します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. 第三者への提供</h3>
+                    <p>当社は、ペットの服薬データ、撮影画像、AI読み取り結果を第三者に提供、販売、共有しません。法令に基づく場合を除き、お問い合わせ情報も第三者に提供しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Appleのサービス</h3>
+                    <p>購入処理、通知、カメラ、写真ライブラリ、iCloud同期等の Apple 側の処理は、Apple の規約、プライバシーポリシー、端末設定に従います。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. iCloudおよびについて</h3>
+                    <p>iCloud 同期や iCloud同期を利用する場合は、ユーザーの許可と端末設定に従い、Apple が提供する仕組みで処理・保存・同期されます。当社の外部サーバーには送信・保存しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. セキュリティ対策</h3>
+                    <p>本アプリは、データ最小化、端末内処理、広告・トラッキングなしの設計を採用しています。端末内データの保護は、端末のパスコード、Face ID / Touch ID、iOS のセキュリティ設定にも依存します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 子供のプライバシー</h3>
+                    <p>本アプリは13歳未満のお子様を対象としていません。未成年者が利用または購入する場合は、親権者等の同意を得てください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. ユーザーの権利</h3>
+                    <ul>
+                        <li><strong>すべてのユーザー:</strong> 端末内のペットの服薬データは、アプリ内の削除機能またはアプリのアンインストールにより管理できます。</li>
+                        <li><strong>EU/EEA居住者（GDPR）:</strong> 苦情申立て権、同意の撤回権。</li>
+                        <li><strong>カリフォルニア州居住者（CCPA/CPRA）:</strong> 知る権利、削除権、オプトアウト権。本アプリは個人情報を販売しません。</li>
+                        <li><strong>中国居住者（PIPL）:</strong> 知る権利、閲覧・複製権、削除権。当社が運営するサーバーへの国外移転は行いません。</li>
+                        <li><strong>韓国居住者（PIPA）:</strong> 処理中止要求権。</li>
+                        <li><strong>ブラジル居住者（LGPD）:</strong> データ移行要求権。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. お問い合わせについて</h3>
+                    <p>ユーザーが当社へお問い合わせを行う場合、当社は返信対応のために、メールアドレスおよびお問い合わせ内容を取得・利用します。これらの情報はサポート対応の目的にのみ用い、法令に基づく場合を除き第三者に提供しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 準拠法と管轄</h3>
+                    <p>本ポリシーは日本法を準拠法とします。各地域の居住者には該当する法律（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA）が適用されます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. 多言語版について</h3>
+                    <p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">利用規約</div>
+                        <div class="section-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新: 2026年5月12日</span>
+
+                <div class="legal-section">
+                    <h3>1. 規約の適用</h3>
+                    <p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するiOSアプリケーション「PawPass」（App Store 上の表示名: 「PawPass」）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. 利用開始と同意</h3>
+                    <p>ユーザーが本アプリをダウンロードし、インストールまたは利用を開始した時点で、本規約に同意したものとみなされます。本規約に同意しない場合、本アプリをご利用いただくことはできません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. 本アプリの概要と対応機器</h3>
+                    <p>本アプリは、診察券、保険証、サロン会員証、ワクチン証明書や処方袋を撮影し、薬名、用量、服用回数、服用時刻の登録、通知、ペットの服薬記録、複数プロフィール、カレンダー、レポートを支援するアプリケーションです。</p>
+                    <ul>
+                        <li><strong>OCR読み取り:</strong> 端末内OCRにより、撮影した書類やカードから候補情報の入力を支援します。</li>
+                        <li><strong>フォールバック:</strong> 非対応端末ではルールベース抽出を利用する場合があります。認識精度は低くなる場合があります。</li>
+                        <li><strong>対応デバイス:</strong> App Store に表示される対応OS条件を満たす iPhone。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. プライバシーポリシー</h3>
+                    <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 有料機能</h3>
+                    <p>本アプリの有料機能は App Store のアプリ内課金として提供される場合があります。</p>
+                    <ul>
+                        <li><strong>販売価格:</strong> App Store の購入画面に表示される価格、無料体験の有無・期間、更新条件が適用されます。</li>
+                        <li><strong>支払方法・時期:</strong> App Store が提供する決済手段によります。購入確定時または更新時に Apple から課金されます。</li>
+                        <li><strong>提供時期:</strong> 購入手続き完了後、対象の有料機能をすぐにご利用いただけます。</li>
+                        <li><strong>解約・返金:</strong> 解約、更新停止、返金等の手続きは Apple の App Store / Apple ID の管理画面および Apple の返金ポリシーに従います。</li>
+                        <li><strong>未成年者の利用:</strong> 未成年者が購入する場合、親権者の同意を得た上でご利用ください。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 禁止事項</h3>
+                    <ul>
+                        <li>本アプリの目的と異なる利用</li>
+                        <li>法令または公序良俗に反する行為</li>
+                        <li>リバースエンジニアリング、解析、改変、複製、再配布</li>
+                        <li>第三者のペットの服薬情報を本人または正当な権限なく登録・閲覧・共有する行為</li>
+                        <li>獣医師その他医療従事者の指示に反する利用</li>
+                        <li>その他当社が不適切と判断する行為</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. 医療情報に関する注意</h3>
+                    <p>本アプリはペットの服薬予定の記録と通知を補助するツールであり、医療機器ではありません。診断、治療、処方、ペットの服薬指示、医学的助言を提供するものではありません。ペットの服薬に関する判断、服用量や服用方法の変更、ペットの服薬中止については、必ず獣医師に相談してください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. AI読み取り・OCR認識の精度について</h3>
+                    <ul>
+                        <li><strong>認識精度の非保証:</strong> AI読み取り、OCR、ルールベース抽出、自動分類の精度は100%ではありません。</li>
+                        <li><strong>確認義務:</strong> 保存前および服用前に、薬名、用量、服用回数、服用時刻、期間、メモ等を必ず確認してください。</li>
+                        <li><strong>訂正方法:</strong> 誤った情報がある場合は、アプリ内で手入力により修正してください。</li>
+                        <li><strong>免責:</strong> 誤認識、入力誤り、確認漏れにより生じた不利益について、当社は法令上認められる範囲で責任を負いません。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 通知について</h3>
+                    <p>通知は、端末設定、集中モード、低電力モード、ネットワーク状態、OSの仕様、端末の電源状態等により、遅延または不着となる場合があります。当社は通知が常に予定時刻に届くことを保証しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 知的財産権</h3>
+                    <p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. 免責事項</h3>
+                    <p>当社は、本アプリの機能が中断なく動作すること、読み取り結果、保存結果、通知、記録、レポートが常に正確であることを保証しません。当社が損害賠償責任を負う場合でも、当社の故意または重過失がある場合を除き、当社の責任は通常かつ直接の損害に限られます。なお、消費者契約法その他の強行法規により制限される範囲では本項は適用されません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. Appleに関する条項</h3>
+                    <p>本アプリは Apple App Store を通じて配布されます。本規約は当社とユーザー間で締結されるものであり、Apple は本規約の当事者ではありません。Apple および Apple の子会社は、本規約の第三者受益者です。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. 規約の変更</h3>
+                    <p>当社は、必要に応じて本規約を変更することがあります。変更後の規約は、本ページまたはアプリ内で表示した時点から効力を生じます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>14. 準拠法・管轄</h3>
+                    <p>本規約は日本法に準拠し、東京地方裁判所を専属的合意管轄裁判所とします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>15. 多言語版について</h3>
+                    <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-ja" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">特定商取引法に基づく表記</div>
+                                <div class="section-subtitle">販売事業者情報</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div>
+                            <div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div>
+                            <div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div>
+                            <div class="contact-item"><dt>電話番号</dt><dd>請求があれば遅滞なく開示します</dd></div>
+                            <div class="contact-item"><dt>取引条件</dt><dd>販売価格、支払方法、提供時期、解約・返金等は、本ページの「利用規約」内の有料機能の項目および App Store の購入画面に表示します。</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-ja" class="section">
+                <div class="contact-card">
+                    <h2>お問い合わせ</h2>
+                    <p>アプリ名、OS、端末名、発生手順を添えてご連絡いただくと確認が速くなります。</p>
+                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=PawPass%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off-->
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
+                        <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== ENGLISH ==================== -->
+        <div class="lang-content" data-lang="en">
+            <!-- FAQ -->
+            <section id="faq-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">Frequently Asked Questions</div>
+                        <div class="section-subtitle">Answers about features, data handling, and subscriptions</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">What can PawPass register automatically?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>When you capture clinic cards, insurance cards, grooming salon cards, vaccination certificates, or medication bags, on-device OCR helps suggest names, phone numbers, URLs, IDs, and dates.</p>
+                        <p>Please review and correct extraction results before saving them.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which iPhones are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>The App runs on iPhones that meet the OS requirements shown on the App Store. Recognition accuracy depends on the device, OS, lighting, camera conditions, and the condition of the document.</p>
+                        <p>On unsupported devices, the App may fall back to on-device rule-based extraction. Accuracy depends on device, OS, and capture conditions.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Medication data, profiles, intake records, photos, and AI extraction results are processed and stored on your device. They are not sent to or stored on external servers operated by AllNew.</p>
+                        <p>If you use iCloud sync or Apple Health /  integration, processing, storage, and syncing follow your permissions and Apple settings.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What if AI extraction is wrong?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Before saving, always review medication names, dosage, frequency, reminder times, duration, and notes. Correct any wrong fields manually.</p>
+                        <p>The App is a reminder and registration-support tool only. It does not make medical decisions. Consult a doctor or pharmacist about medication decisions.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What if notifications do not arrive?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Check that notifications are allowed for PawPass in the iOS Settings app. Notifications may be delayed or fail depending on Focus mode, Low Power Mode, device power state, and OS behavior.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where can I check pricing and free-trial terms?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Pricing, free-trial terms, and renewal conditions are shown before purchase in the App Store purchase sheet and in the Paid Features section of these Terms.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where do I manage subscription procedures?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Purchase, renewal, cancellation, and refund procedures follow Apple's App Store / Apple ID management flow. To restore entitlement, sign in with the same Apple ID and use the restore option in the App.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">Privacy Policy</div>
+                        <div class="section-subtitle">How your data is handled</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: May 12, 2026</span>
+
+                <div class="highlight-box">
+                    <p><strong>Important:</strong> The App does not send or store medication data, prescription photos, or AI extraction results on external servers operated by AllNew. Processing and storage generally happen on your device.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. Information We Handle</h3>
+                    <ul>
+                        <li><strong>Camera and photo library images:</strong> Used to capture or select prescriptions and medication labels. They are processed on device to assist AI extraction or registration.</li>
+                        <li><strong>Medication and profile information:</strong> Medication names, dosage, frequency, reminder times, intake records, notes, and profile names.</li>
+                        <li><strong>OCR extraction results:</strong> Candidate information extracted on device, and information that you review or edit before saving.</li>
+                        <li><strong>Purchase status:</strong> Subscription entitlement status provided by the App Store. We do not handle your payment card or billing details.</li>
+                        <li><strong>Support information:</strong> Email address, device/OS information, and message content that you voluntarily send to us.</li>
+                        <li><strong>Information we do not collect:</strong> The App does not use advertising SDKs, analytics SDKs, or tracking SDKs.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Purposes of Use</h3>
+                    <p>We use information to manage pet health records, cards, schedules, notifications, reports, multiple profiles, subscription entitlement, support, bug investigation, and legal compliance.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. Storage and Retention</h3>
+                    <p>Medication data, profiles, intake records, photos, and AI extraction results are generally processed and stored on device. Support information is deleted or anonymized within a reasonable period after the support matter is resolved.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Third-Party Disclosure</h3>
+                    <p>We do not provide, sell, or share medication data, photos, or AI extraction results with third parties. We do not provide support information to third parties except when required by law.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Apple Services</h3>
+                    <p>Apple-side processing for purchases, notifications, camera, photo library, and iCloud sync is governed by Apple's terms, privacy policy, and your device settings.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. iCloud and </h3>
+                    <p>If you use iCloud sync or Apple Health /  integration, processing, storage, and syncing follow your permissions and Apple device settings. The data is not sent to or stored on external servers operated by AllNew.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Security</h3>
+                    <p>The App is designed around data minimization, on-device processing, and no ads or tracking. Protection of on-device data also depends on your passcode, Face ID / Touch ID, and iOS security settings.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Children's Privacy</h3>
+                    <p>The App is not intended for children under 13. Minors must obtain consent from a parent or guardian before using or purchasing the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Your Rights</h3>
+                    <ul>
+                        <li><strong>All users:</strong> On-device medication data can be managed through the App's deletion features or by uninstalling the App.</li>
+                        <li><strong>EU/EEA residents (GDPR):</strong> Right to lodge a complaint and right to withdraw consent.</li>
+                        <li><strong>California residents (CCPA/CPRA):</strong> Right to know, delete, and opt out. The App does not sell personal information.</li>
+                        <li><strong>China residents (PIPL):</strong> Right to know, access, copy, and delete. We do not transfer App data to servers operated by us outside your country or region.</li>
+                        <li><strong>Korea residents (PIPA):</strong> Right to request suspension of processing.</li>
+                        <li><strong>Brazil residents (LGPD):</strong> Right to request data portability.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Support Contacts</h3>
+                    <p>When you contact us, we use your email address and message content only for support. We do not provide that information to third parties except when required by law.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Governing Law</h3>
+                    <p>This Policy is governed by Japanese law. Residents of each country or region may also have rights under applicable laws such as GDPR, CCPA/CPRA, PIPL, LGPD, and PIPA.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. Translations</h3>
+                    <p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">Terms of Service</div>
+                        <div class="section-subtitle">Conditions for using the App</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last Updated: May 12, 2026</span>
+
+                <div class="legal-section">
+                    <h3>1. Application of Terms</h3>
+                    <p>These Terms of Service govern your use of the iOS application "PawPass" provided by AllNew LLC. By using the App, you agree to these Terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Start of Use and Consent</h3>
+                    <p>You are deemed to have agreed to these Terms when you download, install, or start using the App. If you do not agree, you may not use the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. App Overview and Supported Devices</h3>
+                    <p>The App helps capture prescriptions and medication labels, register medication names, dosage, frequency, reminder times, notifications, intake records, profiles, calendar views, and reports.</p>
+                    <ul>
+                        <li><strong>OCR extraction:</strong> On-device OCR helps suggest information from captured documents and cards.</li>
+                        <li><strong>Fallback:</strong> Unsupported devices may use rule-based extraction. Recognition accuracy may be lower.</li>
+                        <li><strong>Supported devices:</strong> iPhones that meet the OS requirements shown on the App Store.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Privacy Policy</h3>
+                    <p>We handle information related to your use of the App in accordance with our <a href="#privacy-en">Privacy Policy</a>.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Paid Features</h3>
+                    <p>Paid features may be offered through App Store in-app purchase.</p>
+                    <ul>
+                        <li><strong>Price:</strong> The price, free-trial availability and duration, and renewal conditions shown in the App Store purchase sheet apply.</li>
+                        <li><strong>Payment method and timing:</strong> Payment is made through App Store payment methods. Apple charges you when purchase or renewal is confirmed.</li>
+                        <li><strong>Delivery:</strong> Paid features are available immediately after purchase completion.</li>
+                        <li><strong>Cancellation and refunds:</strong> Cancellation, renewal management, and refund procedures follow Apple's App Store / Apple ID management flow and Apple's refund policy.</li>
+                        <li><strong>Minors:</strong> Minors must obtain parental consent before purchasing.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Prohibited Activities</h3>
+                    <ul>
+                        <li>Using the App for purposes other than its intended purpose</li>
+                        <li>Violating laws or public order and morals</li>
+                        <li>Reverse engineering, analyzing, modifying, copying, or redistributing the App</li>
+                        <li>Registering, viewing, or sharing another person's medication information without consent or proper authority</li>
+                        <li>Using the App contrary to instructions from a doctor, pharmacist, or other healthcare professional</li>
+                        <li>Any other activity we deem inappropriate</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Medical Disclaimer</h3>
+                    <p>The App is a medication schedule and notification support tool only. It is not a medical device and does not provide diagnosis, treatment, prescriptions, medication instructions, or medical advice. Consult a doctor or pharmacist before making medication decisions, changing dosage or use, or stopping medication.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. AI and OCR Accuracy</h3>
+                    <ul>
+                        <li><strong>No guarantee:</strong> AI extraction, OCR, rule-based extraction, and automated classification are not 100% accurate.</li>
+                        <li><strong>Review required:</strong> Before saving and before taking medication, review medication names, dosage, frequency, reminder times, duration, notes, and all other fields.</li>
+                        <li><strong>Correction:</strong> Correct any wrong information manually in the App.</li>
+                        <li><strong>Disclaimer:</strong> To the extent permitted by law, we are not liable for disadvantages arising from misrecognition, input errors, or failure to review results.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Notifications</h3>
+                    <p>Notifications may be delayed or fail depending on device settings, Focus mode, Low Power Mode, network conditions, OS behavior, and device power state. We do not guarantee that notifications will always arrive at the scheduled time.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Intellectual Property</h3>
+                    <p>All intellectual property rights in the App belong to us or our licensors.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Disclaimer of Warranties</h3>
+                    <p>The App is provided as is. We do not guarantee uninterrupted operation, or that extraction results, saved data, notifications, records, or reports will always be accurate. If we are liable for damages, except in cases of intentional misconduct or gross negligence, our liability is limited to ordinary and direct damages to the extent permitted by law.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. Apple Terms</h3>
+                    <p>The App is distributed through the Apple App Store. These Terms are between you and AllNew only, and Apple is not a party. Apple and Apple's subsidiaries are third-party beneficiaries of these Terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. Changes to Terms</h3>
+                    <p>We may modify these Terms when necessary. Modified Terms become effective when displayed on this page or in the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>14. Governing Law</h3>
+                    <p>These Terms are governed by Japanese law. The Tokyo District Court has exclusive jurisdiction.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>15. Translations</h3>
+                    <p>The Japanese version of these Terms of Service is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws in your country or region of residence.</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-en" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">Seller Information</div>
+                                <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;">
+                            <div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div>
+                            <div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div>
+                            <div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div>
+                            <div class="contact-item"><dt>Phone</dt><dd>Available without delay upon request</dd></div>
+                            <div class="contact-item"><dt>Transaction Terms</dt><dd>Price, payment method, delivery timing, cancellation, and refund terms are shown in the Paid Features section of these Terms and in the App Store purchase sheet.</dd></div>
+                        </dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-en" class="section">
+                <div class="contact-card">
+                    <h2>Contact Us</h2>
+                    <p>Including the app name, OS version, device model, and reproduction steps helps us investigate faster.</p>
+                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=PawPass%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off-->
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
+                        <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 合同会社AllNew / AllNew LLC</p>
+    </footer>
+
+    <script>
+        // Clickjacking defense (frame-busting fallback for GitHub Pages)
+        if (window.self !== window.top) { document.body.style.display = 'none'; }
+
+        const langData = {
+            ja: {
+                label: '日本語', hero: 'PawPass',
+                subtitleLine1: 'ペットの健康情報をひとつに。', subtitleLine2: '記録・予定・カードを安全に管理。',
+                toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ']
+            },
+            en: {
+                label: 'English', hero: 'PawPass',
+                subtitleLine1: 'Snap your prescription.', subtitleLine2: 'Register medication reminders faster.',
+                toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact']
+            }
+        };
+
+        function getLangFromHash() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang]) return possibleLang;
+                }
+            }
+            const params = new URLSearchParams(window.location.search);
+            const langParam = params.get('lang');
+            if (langParam && langData[langParam]) return langParam;
+            const browserLang = navigator.language.split('-')[0];
+            if (langData[browserLang]) return browserLang;
+            return 'ja';
+        }
+
+        let currentLang = getLangFromHash();
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+            document.getElementById('currentLangLabel').textContent = langData[lang].label;
+
+            document.documentElement.lang = lang;
+            document.getElementById('heroTitle').textContent = langData[lang].hero;
+            const subtitleEl = document.getElementById('heroSubtitle');
+            subtitleEl.textContent = '';
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine1));
+            subtitleEl.appendChild(document.createElement('br'));
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine2));
+
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const tocLabels = langData[lang].toc;
+            tocLinks.forEach((link, i) => {
+                link.textContent = tocLabels[i];
+                const section = link.dataset.section;
+                link.href = `#${section}-${lang}`;
+            });
+
+            const params = new URLSearchParams(window.location.search);
+            params.set('lang', lang);
+            const queryString = params.toString();
+            const hash = window.location.hash;
+            if (hash) {
+                const section = hash.substring(1).split('-')[0];
+                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].includes(section)) {
+                    history.replaceState(null, null, `?${queryString}#${section}-${lang}`);
+                } else {
+                    history.replaceState(null, null, `?${queryString}`);
+                }
+            } else {
+                history.replaceState(null, null, `?${queryString}`);
+            }
+
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+
+        const langBtn = document.getElementById('langBtn');
+        const langDropdown = document.getElementById('langDropdown');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            langDropdown.classList.remove('open');
+        });
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => switchLanguage(opt.dataset.lang));
+        });
+
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const wasOpen = item.classList.contains('open');
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.commercial-header');
+            if (!header) return;
+            var accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        });
+
+        function checkCommercialAnchor() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(acc => {
+                    acc.classList.add('open');
+                });
+            }
+        }
+
+        window.addEventListener('hashchange', () => {
+            const newLang = getLangFromHash();
+            if (newLang !== currentLang) switchLanguage(newLang);
+            checkCommercialAnchor();
+        });
+
+        switchLanguage(currentLang);
+        checkCommercialAnchor();
+
+        // Basic content protection, matching the shared support-page implementation.
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if ((e.metaKey || e.ctrlKey) && ['c', 's', 'p', 'a'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || ((e.metaKey || e.ctrlKey) && e.shiftKey && ['i', 'j'].includes(e.key.toLowerCase()))) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', e => e.preventDefault());
+    </script>
+</body>
+</html>
