@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeightSnap Support</title>
     <meta name="description" content="WeightSnap - Smart weight tracking app with camera recognition. FAQ, Privacy Policy, Terms of Service.">
-    <!-- Security Headers (GitHub Pages cannot set HTTP response headers) -->
+    <!-- Security Headers (static hosting fallback for Vercel) -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
     <meta name="referrer" content="no-referrer">
     <!-- Bot/Crawler Protection -->
@@ -1380,7 +1380,7 @@
     </footer>
 
     <script>
-        // Clickjacking defense (frame-busting fallback for GitHub Pages)
+        // Clickjacking defense (frame-busting fallback for static hosting)
         if (window.self !== window.top) { document.body.style.display = 'none'; }
         // Language Data
         const langData = {
@@ -1404,7 +1404,7 @@
             if (hash) {
                 const parts = hash.split('-');
                 if (parts.length >= 2) {
-                    const possibleLang = parts[0];
+                    const possibleLang = parts[parts.length - 1];
                     if (langData[possibleLang]) return possibleLang;
                 }
             }
