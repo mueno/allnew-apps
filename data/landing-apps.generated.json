@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-05-13T20:10:10+00:00",
+  "generated_at": "2026-05-14T20:01:21+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -158,14 +158,14 @@
       "bundle_id": "jp.allnew.oxisnap",
       "asc_app_id": "6759076145",
       "is_health_app": true,
-      "release_date": "2026-05-13",
+      "release_date": "2026-05-14",
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-05-13T20:10:10+00:00",
-      "app_store_version": "1.0.6",
+      "updated_at": "2026-05-14T20:01:21+00:00",
+      "app_store_version": "1.0.7",
       "app_store_name": "OxiSnap - SpO2を声で記録",
-      "app_store_current_version_release_date": "2026-05-13T16:29:48Z",
+      "app_store_current_version_release_date": "2026-05-14T16:33:22Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -198,6 +198,38 @@
       "app_store_version": "1.0.8",
       "app_store_name": "PupWeight ワンコとニャンコの体重記録",
       "app_store_current_version_release_date": "2026-05-13T05:34:44Z",
+      "app_store_lookup_country": "jp"
+    },
+    {
+      "slug": "pawpass",
+      "name": "PawPass",
+      "name_ja": "PawPass",
+      "status": "released",
+      "category": "pet",
+      "category_label": "Pet Health",
+      "description_ja": "ペットの健康記録、通院、ワクチン、薬、体重、診察券や保険証をひとつに管理。",
+      "description_en": "Manage pet health records, visits, vaccines, medication, weight, and important cards in one place.",
+      "icon_path": "pawpass-icon.png",
+      "promo_image_path": "assets/onboarding/pawpass-onboarding1.png",
+      "card_image_path": "assets/onboarding/pawpass-onboarding1.png",
+      "promo_image_source": "catalog",
+      "input_methods": [
+        "camera_ocr"
+      ],
+      "input_methods_label": "Camera + OCR",
+      "support_path": "pawpass/?lang=ja",
+      "app_store_url": "https://apps.apple.com/jp/app/pawpass/id6768502509?uo=4",
+      "bundle_id": "jp.allnew.pawpass",
+      "asc_app_id": "6768502509",
+      "is_health_app": false,
+      "release_date": "2026-05-14",
+      "featured_priority": 65,
+      "sort_order": 65,
+      "published_to_landing": true,
+      "updated_at": "2026-05-14T20:01:21+00:00",
+      "app_store_version": "1.1",
+      "app_store_name": "PawPass",
+      "app_store_current_version_release_date": "2026-05-14T18:16:52Z",
       "app_store_lookup_country": "jp"
     },
     {
