@@ -27,7 +27,11 @@
 /config.json 404
 /credentials.json 404
 
-# Hide internal/runtime paths from crawlers (also Disallowed in robots.txt)
+# Hide internal/runtime paths from crawlers (also Disallowed in robots.txt).
+# IMPORTANT: index.html references `landing-automation/runtime/landing-runtime.js`
+# — that exact path must still serve 200. Allowlist it BEFORE the wildcard block
+# (first-match-wins).
+/landing-automation/runtime/landing-runtime.js /landing-automation/runtime/landing-runtime.js 200
 /landing-automation/* 404
 /debug/* 404
 /test-results/* 404
