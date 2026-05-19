@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-05-16T19:32:47+00:00",
+  "generated_at": "2026-05-19T20:03:16+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -92,14 +92,14 @@
       "bundle_id": "jp.allnew.bpsnap",
       "asc_app_id": "6759076255",
       "is_health_app": true,
-      "release_date": "2026-05-14",
+      "release_date": "2026-05-19",
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-05-15T19:53:50+00:00",
-      "app_store_version": "1.0.7",
+      "updated_at": "2026-05-19T20:03:16+00:00",
+      "app_store_version": "1.0.8",
       "app_store_name": "BPSnap 血圧かんたんノート",
-      "app_store_current_version_release_date": "2026-05-14T23:06:18Z",
+      "app_store_current_version_release_date": "2026-05-19T01:42:21Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -158,14 +158,14 @@
       "bundle_id": "jp.allnew.oxisnap",
       "asc_app_id": "6759076145",
       "is_health_app": true,
-      "release_date": "2026-05-15",
+      "release_date": "2026-05-19",
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-05-15T19:53:50+00:00",
-      "app_store_version": "1.0.8",
+      "updated_at": "2026-05-19T20:03:16+00:00",
+      "app_store_version": "1.0.9",
       "app_store_name": "OxiSnap - SpO2を声で記録",
-      "app_store_current_version_release_date": "2026-05-15T19:04:04Z",
+      "app_store_current_version_release_date": "2026-05-19T14:41:45Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -222,14 +222,14 @@
       "bundle_id": "jp.allnew.pawpass",
       "asc_app_id": "6768502509",
       "is_health_app": false,
-      "release_date": "2026-05-15",
+      "release_date": "2026-05-19",
       "featured_priority": 65,
       "sort_order": 65,
       "published_to_landing": true,
-      "updated_at": "2026-05-16T19:32:47+00:00",
-      "app_store_version": "1.3",
+      "updated_at": "2026-05-19T20:03:16+00:00",
+      "app_store_version": "1.4",
       "app_store_name": "PawPass",
-      "app_store_current_version_release_date": "2026-05-15T22:46:35Z",
+      "app_store_current_version_release_date": "2026-05-19T14:42:48Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -348,14 +348,14 @@
       "bundle_id": "jp.allnew.zenflip",
       "asc_app_id": "6759169189",
       "is_health_app": false,
-      "release_date": "2026-05-14",
+      "release_date": "2026-05-19",
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-05-15T19:53:50+00:00",
-      "app_store_version": "1.0.3",
+      "updated_at": "2026-05-19T20:03:16+00:00",
+      "app_store_version": "1.0.4",
       "app_store_name": "BOTTO - 没頭タイマー",
-      "app_store_current_version_release_date": "2026-05-14T20:52:47Z",
+      "app_store_current_version_release_date": "2026-05-19T14:43:00Z",
       "app_store_lookup_country": "jp"
     }
   ]
