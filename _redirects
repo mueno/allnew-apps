@@ -1,0 +1,34 @@
+# _redirects — Cloudflare Pages
+#
+# Return 404 for known attack paths and recursive SPA bait so crawlers
+# stop chasing them. Without this, every unknown path falls through to
+# the SPA root and returns 200, which causes:
+#   - GPTBot to chase /landing-automation/runtime/* recursively
+#   - Probing scripts (WP/PHP/git) to think the site is alive
+#
+# Cloudflare Pages syntax: `<source> <status>` returns that status
+# directly. `<source> <destination> <status>` rewrites first.
+
+# WordPress / PHP probes (we are pure static, no PHP)
+/wp-login.php 404
+/wp-admin/* 404
+/wp-includes/* 404
+/wp-config.php 404
+/xmlrpc.php 404
+/*.php 404
+
+# Dotfile / VCS / config probes
+/.env 404
+/.env.* 404
+/.git/* 404
+/.svn/* 404
+/.aws/* 404
+/.ssh/* 404
+/config.json 404
+/credentials.json 404
+
+# Hide internal/runtime paths from crawlers (also Disallowed in robots.txt)
+/landing-automation/* 404
+/debug/* 404
+/test-results/* 404
+/.planning/* 404
