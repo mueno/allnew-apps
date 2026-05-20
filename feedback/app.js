@@ -62,6 +62,7 @@
       "adult", "weapon", "drug", "fraud", "politic", "religion", "violent", "war", "nazi", "kill"
     ];
     let activeStatus = "すべて";
+    let boardSearchQuery = "";
     let authenticated = false;
     let defaultVisibility = "private";
     let accountNickname = "陽気な応援団長 ぷに助";
@@ -81,7 +82,7 @@
         votes: 142,
         updated: "2026-05-18",
         summary: "日ごとの変化だけでなく、週単位で傾向を確認したいという要望。",
-        report: "グラフ描画とアクセシビリティ表示を検証中。完成や公開は保証しません。"
+        report: "グラフ描画とアクセシビリティ表示を検証しています。結果が決まり次第、更新します。"
       },
       {
         id: "AF-1037",
@@ -358,11 +359,34 @@
         if (sortSelect.value === "votes") return b.votes - a.votes;
         return b.updated.localeCompare(a.updated);
       });
-      const visible = activeStatus === "すべて" ? sorted : sorted.filter((item) => item.status === activeStatus);
+      const visibleByStatus = activeStatus === "すべて" ? sorted : sorted.filter((item) => item.status === activeStatus);
+      const visible = visibleByStatus.filter((item) => {
+        if (!boardSearchQuery) return true;
+        const haystack = [
+          item.id,
+          item.type,
+          item.app,
+          item.nickname,
+          item.title,
+          item.status,
+          item.summary,
+          item.report
+        ].join(" ").toLowerCase();
+        return haystack.includes(boardSearchQuery);
+      });
       const articles = visible.map((item) => {
         const article = document.createElement("article");
         article.className = "request";
         article.dataset.status = item.status;
+        article.dataset.searchable = [
+          item.id,
+          item.type,
+          item.app,
+          item.nickname,
+          item.title,
+          item.status,
+          item.summary
+        ].join(" ");
 
         const stateRow = document.createElement("div");
         stateRow.className = "request-state";
@@ -464,7 +488,7 @@
         updated: now.toISOString().slice(0, 10),
         summary: document.getElementById("body").value.trim(),
         report: visibility === "public"
-          ? "公開前審査後に公開受付します。検討、対応、完成、公開を約束するものではありません。"
+          ? "公開前の確認後、公開ボードに掲載されます。詳しい条件は投稿前の確認事項にまとめています。"
           : "非公開で受け付けました。公開ボードには表示しません。"
       };
       requests = [request, ...requests];
@@ -475,7 +499,7 @@
       event.target.reset();
       applyDefaultVisibilityToForm();
       if (visibility === "public") {
-        showNotice(`投稿を受け付けました。公開前審査後、${publicNickname} として公開されます。`);
+        showNotice(`投稿を受け付けました。公開前の確認後、${publicNickname} として公開されます。`);
         showScreen("board");
         return;
       }
@@ -593,12 +617,8 @@
     });
 
     topicSearch.addEventListener("input", () => {
-      const query = topicSearch.value.trim().toLowerCase();
-      document.querySelectorAll("[data-searchable]").forEach((item) => {
-        const text = item.dataset.searchable.toLowerCase();
-        item.hidden = query.length > 0 && !text.includes(query);
-      });
-      requestAnimationFrame(updateAppScrollControls);
+      boardSearchQuery = topicSearch.value.trim().toLowerCase();
+      renderRequests();
     });
 
     renderFilters();

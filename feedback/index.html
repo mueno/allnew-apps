@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="AllNew App Factory製アプリの改善要望と新しいアプリ案を受け付け、公開可能な範囲で状況と結果を共有するフィードバックポータルです。">
   <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://apps.allnew.work/feedback/">
+  <link rel="canonical" href="https://allnew-apps.vercel.app/feedback/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AllNew App Factory Feedback">
-  <meta property="og:description" content="小さな困りごとが、次のアプリの種になります。">
-  <meta property="og:url" content="https://apps.allnew.work/feedback/">
+  <meta property="og:description" content="あなたの「あったらいいな」が、新しいアプリのカタチに。">
+  <meta property="og:url" content="https://allnew-apps.vercel.app/feedback/">
   <meta property="og:site_name" content="AllNew Apps">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>AllNew App Factory Feedback</title>
@@ -42,7 +42,7 @@
       --radius-card: 24px;
       --radius-row: 22px;
       --shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.07);
-      --page-width: 900px;
+      --page-width: 1120px;
       --large-title: 34px;
       --section-title: 26px;
       --headline: 17px;
@@ -67,7 +67,7 @@
         radial-gradient(ellipse at 50% -10%, rgba(10, 125, 255, 0.14), transparent 42%),
         linear-gradient(115deg, rgba(255, 255, 255, 0.58) 0 16%, transparent 16% 100%),
         linear-gradient(180deg, #ffffff 0%, #f8fcff 38%, #edf7ff 100%);
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Segoe UI", Meiryo, sans-serif;
       font-size: var(--body);
       letter-spacing: 0;
       -webkit-font-smoothing: antialiased;
@@ -106,8 +106,8 @@
       justify-content: space-between;
       gap: 12px;
       min-height: 48px;
-      margin: -18px -18px 10px;
-      padding: max(10px, env(safe-area-inset-top)) 18px 8px;
+      margin: -18px -18px 16px;
+      padding: max(14px, env(safe-area-inset-top)) 24px 12px;
       background: color-mix(in srgb, var(--paper) 86%, transparent);
       backdrop-filter: blur(18px);
     }
@@ -257,12 +257,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      min-height: 52px;
-      margin: 22px 0 32px;
-      padding: 0 18px;
-      border-radius: 999px;
-      background: #ececf1;
-      color: var(--tertiary);
+      min-height: 46px;
+      margin: 0;
+      padding: 0 14px;
+      border-radius: 14px;
+      background: #eff4fb;
+      color: #64748b;
+      box-shadow: inset 0 0 0 1px rgba(51, 65, 85, 0.08);
     }
 
     .search-shell svg {
@@ -278,158 +279,145 @@
       border: 0;
       background: transparent;
       color: var(--ink);
-      font-size: 17px;
+      font-size: 15px;
       outline: none;
     }
 
-    .play-hero {
+    .welcome-card {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      align-items: end;
-      gap: 12px;
-      min-height: 148px;
-      margin: -8px 0 30px;
-      padding: 16px;
+      gap: 16px;
+      margin: 8px 0 42px;
+      padding: 24px 20px;
       overflow: hidden;
-      border-radius: 26px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 24px;
       background:
-        linear-gradient(126deg, rgba(255, 255, 255, 0.16) 0 11%, transparent 11% 28%, rgba(255, 255, 255, 0.1) 28% 39%, transparent 39% 100%),
-        radial-gradient(circle at 76% 12%, rgba(89, 211, 255, 0.38) 0 34px, transparent 35px),
-        linear-gradient(135deg, var(--brand-blue-deep), var(--brand-blue) 52%, var(--brand-cyan));
-      color: white;
+        radial-gradient(circle at 86% 8%, rgba(56, 189, 248, 0.18), transparent 34%),
+        linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(129, 140, 248, 0.03) 100%),
+        rgba(255, 255, 255, 0.74);
+      backdrop-filter: blur(12px);
       box-shadow:
-        inset 0 -5px 0 rgba(0, 20, 56, 0.18),
-        0 16px 36px rgba(0, 82, 163, 0.22);
-      isolation: isolate;
+        0 16px 34px rgba(0, 82, 163, 0.07);
     }
 
-    .play-hero::before {
+    .welcome-card::after {
       content: "";
       position: absolute;
-      inset: 0;
-      z-index: -1;
-      background:
-        radial-gradient(circle at 75% 28%, rgba(255, 255, 255, 0.35) 0 5px, transparent 6px),
-        radial-gradient(circle at 88% 72%, rgba(255, 255, 255, 0.28) 0 8px, transparent 9px),
-        linear-gradient(90deg, transparent 0 70%, rgba(255, 255, 255, 0.18));
+      right: -38px;
+      bottom: -54px;
+      width: 160px;
+      height: 160px;
+      border-radius: 48px;
+      background: linear-gradient(135deg, rgba(0, 82, 163, 0.08), rgba(48, 209, 208, 0.18));
+      transform: rotate(18deg);
+      pointer-events: none;
     }
 
-    .play-hero-copy {
-      display: grid;
-      gap: 4px;
-      max-width: 72%;
-      min-width: 0;
+    .welcome-copy,
+    .welcome-actions,
+    .welcome-chips {
+      position: relative;
+      z-index: 1;
     }
 
-    .play-hero-kicker {
+    .welcome-kicker {
+      display: inline-flex;
       width: fit-content;
+      min-height: 24px;
+      align-items: center;
+      margin-bottom: 7px;
       padding: 4px 9px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.2);
-      color: rgba(255, 255, 255, 0.94);
-      font-size: 12px;
-      font-weight: 800;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
-    }
-
-    .play-hero strong {
-      font-size: 18px;
-      line-height: 1.25;
+      background: rgba(0, 82, 163, 0.1);
+      color: var(--brand-blue-deep);
+      font-size: var(--footnote);
       font-weight: 850;
     }
 
-    .play-hero span:last-child {
-      color: rgba(255, 255, 255, 0.78);
-      font-size: 13px;
-      line-height: 1.35;
+    .welcome-card h1 {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .welcome-card p {
+      max-width: 720px;
+      margin: 10px 0 0;
+      color: var(--secondary);
+      font-size: var(--caption);
+      line-height: 1.72;
       font-weight: 650;
     }
 
-    .play-hero-actions {
-      position: absolute;
-      right: 14px;
-      bottom: 14px;
+    .welcome-actions {
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
-      width: 112px;
     }
 
-    .play-hero-button {
+    .welcome-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
+      gap: 7px;
       min-height: 42px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 16px;
-      background: #ffffff;
-      color: var(--brand-blue-deep);
-      font-size: 14px;
-      font-weight: 850;
-      box-shadow:
-        inset 0 -3px 0 rgba(0, 82, 163, 0.12),
-        0 10px 22px rgba(0, 36, 84, 0.18);
-    }
-
-    .play-hero-button.secondary {
-      border-color: rgba(255, 255, 255, 0.24);
-      background: rgba(255, 255, 255, 0.22);
-      color: white;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(14px);
-    }
-
-    .joy-piece {
-      position: absolute;
-      display: grid;
-      place-items: center;
-      width: 24px;
-      height: 24px;
-      border-radius: 7px;
-      background: rgba(255, 255, 255, 0.92);
-      color: white;
-      font-size: 14px;
-      font-weight: 900;
-      pointer-events: none;
-      color: var(--brand-blue);
-      box-shadow: 0 8px 18px rgba(0, 20, 56, 0.16);
-    }
-
-    .joy-piece.one {
-      right: 114px;
-      top: 11px;
-      transform: rotate(-12deg);
-    }
-
-    .joy-piece.two {
-      right: 14px;
-      bottom: 10px;
-      background: rgba(219, 246, 255, 0.94);
-      transform: rotate(10deg);
-    }
-
-    .hero-signal {
-      position: absolute;
-      right: 122px;
-      bottom: 24px;
-      display: flex;
-      gap: 5px;
-      align-items: end;
-      pointer-events: none;
-    }
-
-    .hero-signal span {
-      display: block;
-      width: 7px;
+      padding: 10px 12px;
+      border: 0;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.74);
-      box-shadow: 0 6px 14px rgba(0, 20, 56, 0.14);
+      background: var(--blue);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 10px 22px rgba(0, 122, 255, 0.2);
     }
 
-    .hero-signal span:nth-child(1) { height: 14px; }
-    .hero-signal span:nth-child(2) { height: 22px; background: rgba(188, 242, 255, 0.82); }
-    .hero-signal span:nth-child(3) { height: 30px; }
+    .welcome-button.secondary {
+      background: transparent;
+      color: var(--brand-blue-deep);
+      box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.34);
+    }
+
+    .welcome-button svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      stroke-width: 2.2;
+    }
+
+    .welcome-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .welcome-chips li {
+      min-height: 26px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--brand-blue-deep);
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: none;
+    }
+
+    .welcome-chips li::before {
+      content: "";
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.4;
+    }
 
     .wonder-track,
     .journey-map {
@@ -592,7 +580,7 @@
     .journey-step.done { --stage-color: #30b45a; }
 
     .section {
-      margin: 0 0 34px;
+      margin: 0 0 42px;
     }
 
     .section-title-row {
@@ -1088,6 +1076,10 @@
 
     .board-toolbar .toolbar {
       margin-bottom: 0;
+    }
+
+    .board-search {
+      flex: 1 1 240px;
     }
 
     .toolbar select,
@@ -1648,6 +1640,13 @@
       margin-top: 16px;
     }
 
+    .fine-note {
+      margin: 14px 0 0;
+      color: var(--secondary);
+      font-size: var(--caption);
+      line-height: 1.55;
+    }
+
     .rules-digest {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -1916,7 +1915,7 @@
 
       .top-chrome {
         margin-inline: -16px;
-        padding-inline: 16px;
+        padding-inline: 20px;
       }
 
       .brand-copy {
@@ -1970,42 +1969,20 @@
         padding: 0 16px;
       }
 
+      .board-search {
+        margin: 0;
+      }
+
       .search-shell input {
         font-size: 16px;
       }
 
       .section {
-        margin-bottom: 28px;
+        margin-bottom: 40px;
       }
 
       .section-title-row {
         margin-bottom: 10px;
-      }
-
-      .play-hero {
-        min-height: 136px;
-        margin-bottom: 26px;
-        padding: 15px;
-        border-radius: 24px;
-      }
-
-      .play-hero-copy {
-        max-width: 66%;
-      }
-
-      .play-hero-actions {
-        right: 12px;
-        bottom: 12px;
-        width: 98px;
-      }
-
-      .play-hero-button {
-        min-height: 40px;
-      }
-
-      .hero-signal {
-        right: 110px;
-        bottom: 22px;
       }
 
       .wonder-card {
@@ -2161,10 +2138,6 @@
         background: rgba(0, 82, 163, 0.055);
       }
 
-      .play-hero-button:hover {
-        transform: translateY(-1px);
-      }
-
       .wonder-card:hover,
       .journey-step:hover {
         transform: translateY(-3px);
@@ -2174,31 +2147,15 @@
     @media (prefers-reduced-motion: no-preference) {
       .screen.active .screen-head,
       .screen.active .search-shell,
-      .screen.active .play-hero,
       .screen.active .section {
         animation: rise-in 340ms ease both;
       }
 
       .screen.active .search-shell { animation-delay: 35ms; }
-      .screen.active .play-hero { animation-delay: 70ms; }
       .screen.active .section:nth-of-type(1) { animation-delay: 100ms; }
       .screen.active .section:nth-of-type(2) { animation-delay: 135ms; }
       .screen.active .section:nth-of-type(3) { animation-delay: 170ms; }
 
-      .joy-piece.one {
-        animation: float-one 3.8s ease-in-out infinite;
-      }
-
-      .joy-piece.two {
-        animation: float-two 4.2s ease-in-out infinite;
-      }
-
-      .hero-signal span {
-        animation: signal-rise 2.8s ease-in-out infinite;
-      }
-
-      .hero-signal span:nth-child(2) { animation-delay: 160ms; }
-      .hero-signal span:nth-child(3) { animation-delay: 320ms; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -2221,21 +2178,6 @@
         opacity: 1;
         transform: translateY(0);
       }
-    }
-
-    @keyframes float-one {
-      0%, 100% { transform: translateY(0) rotate(-12deg); }
-      50% { transform: translateY(5px) rotate(5deg); }
-    }
-
-    @keyframes float-two {
-      0%, 100% { transform: translateY(0) rotate(10deg); }
-      50% { transform: translateY(-6px) rotate(-8deg); }
-    }
-
-    @keyframes signal-rise {
-      0%, 100% { transform: scaleY(0.78); opacity: 0.68; }
-      50% { transform: scaleY(1); opacity: 1; }
     }
 
     @keyframes press-pop {
@@ -2263,6 +2205,122 @@
         margin-top: 24px;
       }
     }
+
+    @media (min-width: 960px) {
+      :root {
+        --large-title: 42px;
+        --section-title: 27px;
+      }
+
+      .app-shell {
+        padding-inline: 28px;
+      }
+
+      .screen[data-screen="home"].active {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(330px, 0.72fr);
+        column-gap: 26px;
+        align-items: start;
+      }
+
+      .home-welcome {
+        grid-column: 1 / -1;
+      }
+
+      .home-apps,
+      .home-wonder {
+        grid-column: 1;
+      }
+
+      .home-tools,
+      .home-journey,
+      .home-store,
+      .home-quick {
+        grid-column: 2;
+      }
+
+      .welcome-card {
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        padding: 22px;
+      }
+
+      .welcome-actions {
+        justify-content: end;
+        width: 360px;
+      }
+
+      .welcome-button {
+        width: 100%;
+      }
+
+      .wonder-track,
+      .app-scroller,
+      .journey-map,
+      .store-showcase {
+        margin: 0;
+        padding: 0 2px 2px;
+        overflow: visible;
+      }
+
+      .wonder-track {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .wonder-card {
+        width: auto;
+        min-width: 0;
+      }
+
+      .app-scroller {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .app-card {
+        width: auto;
+        min-width: 0;
+      }
+
+      .scroll-hint,
+      .app-scroller-shell::before,
+      .app-scroller-shell::after {
+        display: none;
+      }
+
+      .journey-map {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .journey-step {
+        width: auto;
+        min-width: 0;
+        min-height: 120px;
+      }
+
+      .store-showcase {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .store-card {
+        width: auto;
+        min-width: 0;
+        min-height: 236px;
+        grid-template-rows: 92px minmax(0, 1fr);
+      }
+
+      .quick-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .screen:not([data-screen="home"]) {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -2282,36 +2340,77 @@
     </header>
 
     <main>
-      <section class="screen active" data-screen="home" aria-labelledby="homeTitle">
-        <div class="screen-head">
-          <h1 class="page-title" id="homeTitle">サポート</h1>
-          <p class="lead home-lead">改善要望と新しいアプリ案を投稿し、公開された範囲で状況を確認できます。</p>
-        </div>
-
-        <label class="search-shell" for="topicSearch">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-            <circle cx="11" cy="11" r="7"></circle>
-            <path d="m16.5 16.5 3.5 3.5"></path>
-          </svg>
-          <input id="topicSearch" type="search" placeholder="トピックを検索" autocomplete="off">
-        </label>
-
-        <div class="play-hero" data-searchable="今日のひらめき 新しいアプリ 改善要望 投稿">
-          <div class="play-hero-copy">
-            <span class="play-hero-kicker">ひらめきファクトリー</span>
-            <strong>小さな願いが、次のアプリのはじまりになります。</strong>
-            <span>メモ感覚で送信。公開アイデアは旅のように進みます。</span>
+      <section class="screen active" data-screen="home" aria-labelledby="welcomeTitle">
+        <section class="home-welcome welcome-card" aria-labelledby="welcomeTitle">
+          <div class="welcome-copy">
+            <span class="welcome-kicker">AllNew App Factory へようこそ</span>
+            <h1 id="welcomeTitle">あなたの「あったらいいな」を、アプリの次の一歩へ。</h1>
+            <p>このサイトは、AllNewのアプリをもっと使いやすく育てるためのアイデア共有スペースです。不具合、改善要望、新しいアプリ案を、メモ感覚で気軽に送れます。</p>
+            <ul class="welcome-chips" aria-label="投稿できる内容">
+              <li>改善要望</li>
+              <li>不具合メモ</li>
+              <li>新アプリ案</li>
+            </ul>
           </div>
-          <div class="play-hero-actions">
-            <button class="play-hero-button" type="button" data-screen-target="submit">送る</button>
-            <button class="play-hero-button secondary" type="button" data-screen-target="board">見る</button>
+          <div class="welcome-actions">
+            <button class="welcome-button" type="button" data-screen-target="submit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+              </svg>
+              アイデアを投稿する
+            </button>
+            <button class="welcome-button secondary" type="button" data-screen-target="board">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M9 6h11"></path>
+                <path d="M9 12h11"></path>
+                <path d="M9 18h11"></path>
+                <path d="M4 6h.01"></path>
+                <path d="M4 12h.01"></path>
+                <path d="M4 18h.01"></path>
+              </svg>
+              公開ボードを見る
+            </button>
           </div>
-          <span class="hero-signal" aria-hidden="true"><span></span><span></span><span></span></span>
-          <span class="joy-piece one" aria-hidden="true">+</span>
-          <span class="joy-piece two" aria-hidden="true">✓</span>
-        </div>
+        </section>
 
-        <section class="section" aria-labelledby="wonderTitle">
+        <section class="section home-apps" aria-labelledby="appsTitle">
+          <div class="section-title-row">
+            <h2 class="section-title" id="appsTitle">対象アプリ</h2>
+          </div>
+          <div class="app-scroller-shell">
+            <button class="scroll-hint prev" type="button" id="appsScrollPrev" aria-label="前の対象アプリを表示" disabled>
+              <span aria-hidden="true">‹</span>
+            </button>
+            <div class="app-scroller" id="appsScroller" aria-label="対象アプリ一覧">
+              <button class="app-card" type="button" data-screen-target="submit" data-searchable="ThermoSnap 体温記録 改善要望">
+                <img src="../../assets/icon-catalog/ThermoSnap.png" alt="ThermoSnap icon">
+                <strong>ThermoSnap</strong><span>体温記録</span>
+              </button>
+              <button class="app-card" type="button" data-screen-target="submit" data-searchable="GlucoSnap 血糖メモ 改善要望">
+                <img src="../../assets/icon-catalog/GlucoSnap.png" alt="GlucoSnap icon">
+                <strong>GlucoSnap</strong><span>血糖メモ</span>
+              </button>
+              <button class="app-card" type="button" data-screen-target="submit" data-searchable="WeightSnap 体重管理 改善要望">
+                <img src="../../assets/icon-catalog/WeightSnap.png" alt="WeightSnap icon">
+                <strong>WeightSnap</strong><span>体重管理</span>
+              </button>
+              <button class="app-card" type="button" data-screen-target="submit" data-searchable="WaistVox 腹囲記録 改善要望">
+                <img src="../../assets/icon-catalog/WaistVox.png" alt="WaistVox icon">
+                <strong>WaistVox</strong><span>腹囲記録</span>
+              </button>
+              <button class="app-card" type="button" data-screen-target="submit" data-searchable="New App Idea 新規アプリ案 新しい提案">
+                <span class="idea-icon" aria-hidden="true">+</span>
+                <strong>New App Idea</strong><span>新しい提案</span>
+              </button>
+            </div>
+            <button class="scroll-hint next" type="button" id="appsScrollNext" aria-label="次の対象アプリを表示">
+              <span aria-hidden="true">›</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="section home-wonder" aria-labelledby="wonderTitle">
           <div class="section-title-row">
             <h2 class="section-title" id="wonderTitle">今週のひらめき</h2>
           </div>
@@ -2349,43 +2448,7 @@
           </div>
         </section>
 
-        <section class="section" aria-labelledby="appsTitle">
-          <div class="section-title-row">
-            <h2 class="section-title" id="appsTitle">対象アプリ</h2>
-          </div>
-          <div class="app-scroller-shell">
-            <button class="scroll-hint prev" type="button" id="appsScrollPrev" aria-label="前の対象アプリを表示" disabled>
-              <span aria-hidden="true">‹</span>
-            </button>
-            <div class="app-scroller" id="appsScroller" aria-label="対象アプリ一覧">
-              <button class="app-card" type="button" data-screen-target="submit" data-searchable="ThermoSnap 体温記録 改善要望">
-                <img src="../../assets/icon-catalog/ThermoSnap.png" alt="ThermoSnap icon">
-                <strong>ThermoSnap</strong><span>体温記録</span>
-              </button>
-              <button class="app-card" type="button" data-screen-target="submit" data-searchable="GlucoSnap 血糖メモ 改善要望">
-                <img src="../../assets/icon-catalog/GlucoSnap.png" alt="GlucoSnap icon">
-                <strong>GlucoSnap</strong><span>血糖メモ</span>
-              </button>
-              <button class="app-card" type="button" data-screen-target="submit" data-searchable="WeightSnap 体重管理 改善要望">
-                <img src="../../assets/icon-catalog/WeightSnap.png" alt="WeightSnap icon">
-                <strong>WeightSnap</strong><span>体重管理</span>
-              </button>
-              <button class="app-card" type="button" data-screen-target="submit" data-searchable="WaistVox 腹囲記録 改善要望">
-                <img src="../../assets/icon-catalog/WaistVox.png" alt="WaistVox icon">
-                <strong>WaistVox</strong><span>腹囲記録</span>
-              </button>
-              <button class="app-card" type="button" data-screen-target="submit" data-searchable="New App Idea 新規アプリ案 新しい提案">
-                <span class="idea-icon" aria-hidden="true">+</span>
-                <strong>New App Idea</strong><span>新しい提案</span>
-              </button>
-            </div>
-            <button class="scroll-hint next" type="button" id="appsScrollNext" aria-label="次の対象アプリを表示">
-              <span aria-hidden="true">›</span>
-            </button>
-          </div>
-        </section>
-
-        <section class="section" aria-labelledby="toolsTitle">
+        <section class="section home-tools" aria-labelledby="toolsTitle">
           <div class="section-title-row">
             <h2 class="section-title" id="toolsTitle">サポートツール</h2>
           </div>
@@ -2402,13 +2465,13 @@
             </button>
             <button class="support-row" type="button" data-screen-target="rules" data-searchable="ルール 規約 受付不可 医療助言">
               <img class="support-action-icon" src="./assets/support-rules-icon.png" alt="" aria-hidden="true">
-              <span class="row-text"><strong>投稿前のルール</strong><span>受付不可カテゴリ、権利譲渡、非保証</span></span>
+              <span class="row-text"><strong>投稿前のルール</strong><span>投稿できる内容と大切な確認</span></span>
               <span class="chevron" aria-hidden="true"></span>
             </button>
           </div>
         </section>
 
-        <section class="section" aria-labelledby="journeyTitle">
+        <section class="section home-journey" aria-labelledby="journeyTitle">
           <div class="section-title-row">
             <h2 class="section-title" id="journeyTitle">アイデアの旅</h2>
             <button type="button" data-screen-target="status">詳しく</button>
@@ -2416,28 +2479,28 @@
           <div class="journey-map" aria-label="公開ステータスの流れ">
             <article class="journey-step accept" data-searchable="受け付けました">
               <h3>受け付けました</h3>
-              <p>投稿を受領。公開前に安全確認します。</p>
+              <p>アイデアが届きました。まずは運営チームで内容を確認します。</p>
             </article>
             <article class="journey-step review" data-searchable="検討しています">
               <h3>検討しています</h3>
-              <p>実現性、優先度、体験への影響を確認中。</p>
+              <p>実現性、優先度、使い心地への影響を見ています。</p>
             </article>
             <article class="journey-step pass" data-searchable="ごめんなさい">
               <h3>ごめんなさい</h3>
-              <p>今回は見送り。理由は公開できる範囲で表示します。</p>
+              <p>今回は見送り。理由は伝えられる範囲で共有します。</p>
             </article>
             <article class="journey-step build" data-searchable="対応しています">
               <h3>対応しています</h3>
-              <p>設計、開発、検証へ進行中。完成は保証しません。</p>
+              <p>アプリへの組み込みや新機能として開発・検証を進めています。</p>
             </article>
             <article class="journey-step done" data-searchable="出来ました">
               <h3>出来ました</h3>
-              <p>一定の対応を実施し、結果を公開します。</p>
+              <p>アップデートが完了しました。対応結果をボードで公開します。</p>
             </article>
           </div>
         </section>
 
-        <section class="section" aria-labelledby="storeTitle">
+        <section class="section home-store" aria-labelledby="storeTitle">
           <div class="section-title-row">
             <h2 class="section-title" id="storeTitle">AllNewのアプリ</h2>
           </div>
@@ -2478,7 +2541,7 @@
           </div>
         </section>
 
-        <section class="section" aria-labelledby="quickTitle">
+        <section class="section home-quick" aria-labelledby="quickTitle">
           <div class="section-title-row">
             <h2 class="section-title" id="quickTitle">よく見る項目</h2>
           </div>
@@ -2604,31 +2667,31 @@
 
           <section class="form-section" aria-labelledby="consentTitle">
             <span class="section-eyebrow">3 同意</span>
-            <h2 id="consentTitle">同意が必要です</h2>
-            <p class="phase-copy">ここだけは投稿前に必ず確認します。採用・実装・公開・特典を約束するものではありません。</p>
+            <h2 id="consentTitle">投稿前の確認事項</h2>
+            <p class="phase-copy">より良いアプリ開発と円滑な運営のため、投稿直前に大切な内容だけ確認してください。</p>
             <div class="submission-summary" aria-label="投稿前の確認">
               <div>
                 <span class="section-eyebrow">投稿前チェック</span>
-                <h2>公開範囲、権利、非保証を確認してください。</h2>
+                <h2>公開範囲とアイデアの扱いを確認してください。</h2>
               </div>
-              <p>公開希望の場合は公開ニックネームのみを表示します。非公開投稿は公開ボード、公開統計、公開ステータスの対象外です。</p>
+              <p>公開希望の場合は公開ニックネームのみを表示します。非公開投稿は公開ボードや公開ステータスには表示しません。</p>
             </div>
             <div class="consent-grid">
               <label class="consent-card">
                 <input id="postConsent" type="checkbox" required>
-                <span>この投稿は投稿直前の同意に基づき、当社が無償で自由に利用・改変・翻案・実装・商品化できます。著作権法第27条および第28条に規定する権利を含め、実装されても報酬、対価、ロイヤリティ、利益分配を請求しません。</span>
+                <span>投稿されたアイデアの著作権等の権利は、AllNewに帰属し、無償で利用・開発できることに同意します。</span>
               </label>
               <label class="consent-card">
                 <input id="ageConsent" type="checkbox" required>
-                <span>私は18歳以上で、日本国内在住者として利用します。Apple ID連携のみでは年齢確認にならないことを理解しています。</span>
+                <span>私は18歳以上で、日本国内在住者として利用します。</span>
               </label>
               <label class="consent-card">
                 <input id="patentPlanConsent" type="checkbox" required>
-                <span>特許、実用新案、意匠、商標の出願を予定しているアイデア、未公開発明、営業秘密、第三者秘密情報は投稿しません。</span>
+                <span>特許出願予定のアイデア、未公開発明、営業秘密、第三者秘密情報は含まれていません。</span>
               </label>
               <label class="consent-card">
                 <input id="noGuaranteeConsent" type="checkbox" required>
-                <span>「対応しています」と表示された場合でも、完成、公開、審査通過、継続提供を保証するものではありません。</span>
+                <span>アイデアの採用やアプリへの実装、およびその時期をお約束するものではないことを理解しています。</span>
               </label>
             </div>
             <div class="button-row">
@@ -2649,14 +2712,14 @@
             </button>
           </div>
           <h1 class="page-title" id="boardTitle">公開ボード</h1>
-          <p class="lead">公開前審査を通過した要望だけを、個人情報や秘密情報を除いた要約で表示します。</p>
+          <p class="lead">公開前の確認を終えた要望だけを、個人情報や秘密情報を除いた要約で表示します。</p>
         </div>
 
         <div class="board-intro">
           <div>
             <span class="section-eyebrow">公開中</span>
             <h2>状態と結果だけを、読みやすく。</h2>
-            <p>非公開投稿、内部審査ログ、投稿者を推測できる審査詳細は表示しません。</p>
+            <p>非公開投稿や投稿者を推測できる情報は表示しません。公開できる内容だけを要約して掲載します。</p>
           </div>
           <button class="button secondary" type="button" data-screen-target="status">ステータスの意味</button>
         </div>
@@ -2670,6 +2733,13 @@
 
         <div class="board-toolbar">
           <div class="toolbar">
+            <label class="search-shell board-search" for="topicSearch">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16.5 16.5 3.5 3.5"></path>
+              </svg>
+              <input id="topicSearch" type="search" placeholder="公開ボードを検索" autocomplete="off">
+            </label>
             <select id="sortSelect" aria-label="並び替え">
               <option value="updated">更新順</option>
               <option value="votes">賛同順</option>
@@ -2693,17 +2763,17 @@
             </button>
           </div>
           <h1 class="page-title" id="statusTitle">ステータス</h1>
-          <p class="lead">対応状況の表示は、完成、公開、審査通過、継続提供を保証するものではありません。</p>
+          <p class="lead">アイデアがどこまで進んでいるかを、公開できる範囲で共有します。</p>
         </div>
 
         <div class="stage-list timeline" aria-label="公開ステータスの流れ">
           <div class="stage-card">
             <span class="stage-index">1</span>
-            <div class="stage-copy"><strong>受け付けました</strong><span>投稿を受領し、公開可能な形式で受付済み。検討・対応を約束しません。</span></div>
+            <div class="stage-copy"><strong>受け付けました</strong><span>アイデアが届きました。まずは公開できる内容か確認します。</span></div>
           </div>
           <div class="stage-card">
             <span class="stage-index">2</span>
-            <div class="stage-copy"><strong>検討しています</strong><span>採否、実現性、優先度を確認中。実装を約束しません。</span></div>
+            <div class="stage-copy"><strong>検討しています</strong><span>実現性、優先度、使い心地への影響を確認しています。</span></div>
           </div>
           <div class="stage-card">
             <span class="stage-index">3</span>
@@ -2711,13 +2781,14 @@
           </div>
           <div class="stage-card">
             <span class="stage-index">4</span>
-            <div class="stage-copy"><strong>対応しています</strong><span>開発、検証、審査準備中。完成や公開は保証しません。</span></div>
+            <div class="stage-copy"><strong>対応しています</strong><span>開発や検証を進めています。結果は決まり次第、更新します。</span></div>
           </div>
           <div class="stage-card">
             <span class="stage-index">5</span>
-            <div class="stage-copy"><strong>出来ました</strong><span>一定の対応を実施。投稿内容どおりの完全実装を保証しません。</span></div>
+            <div class="stage-copy"><strong>出来ました</strong><span>アップデートが完了しました。対応結果を公開しています。</span></div>
           </div>
         </div>
+        <p class="fine-note">ステータスは状況共有のための表示です。採用、実装、公開時期、継続提供をお約束するものではありません。</p>
         <div class="screen-actions">
           <button class="button" type="button" data-screen-target="submit">投稿する</button>
           <button class="button secondary" type="button" data-screen-target="board">公開ボードを見る</button>
@@ -2733,50 +2804,48 @@
             </button>
           </div>
           <h1 class="page-title" id="rulesTitle">投稿前のルール</h1>
-          <p class="lead">法務・プライバシー・Apple連携の条件です。投稿前に必要なところだけ確認できるよう、項目ごとに分けています。</p>
+          <p class="lead">安心して投稿してもらうための約束ごとです。むずかしい条件は投稿直前の確認画面と投稿ガイドラインにまとめています。</p>
         </div>
 
         <div class="rules-digest" aria-label="ルールの要点">
           <div>
             <span class="section-eyebrow">要点 1</span>
             <h2>秘密は送らない</h2>
-            <p>公開前に確認しますが、投稿は秘密情報として取り扱われません。</p>
+            <p>個人情報、秘密情報、出願予定のアイデアは書かないでください。</p>
           </div>
           <div>
             <span class="section-eyebrow">要点 2</span>
-            <h2>権利は無償譲渡</h2>
-            <p>採用・実装されても、対価やロイヤリティは発生しません。</p>
+            <h2>公開前に整える</h2>
+            <p>公開希望の投稿も、運営が確認して読みやすく要約します。</p>
           </div>
           <div>
             <span class="section-eyebrow">要点 3</span>
-            <h2>結果は約束しない</h2>
-            <p>対応中でも、完成・公開・継続提供を保証しません。</p>
+            <h2>結果はこれから決まる</h2>
+            <p>採用や時期は開発状況を見ながら判断し、状況を更新します。</p>
           </div>
         </div>
 
         <div class="desktop-wide">
           <section class="section" aria-labelledby="reviewTitle">
             <div class="section-title-row">
-              <h2 class="section-title" id="reviewTitle">公開前審査の公開方針</h2>
+              <h2 class="section-title" id="reviewTitle">公開前の確認</h2>
             </div>
             <div class="grouped-list">
-              <details class="legal-detail" open><summary>内部審査ログは非公開</summary><small>投稿ごとの内部ID、禁止カテゴリ、詳細な審査理由、投稿本文は公開しません。公開面には方針と件数だけを表示し、投稿者を推測できる審査詳細は公開しません。</small></details>
-              <details class="legal-detail"><summary>公開済み要約</summary><small>運営が確認の上、個人情報、第三者秘密情報、営業秘密、未公開発明、健康情報、権利侵害のおそれがある記述を削除または要約します。AIは補助に限り、公開判断は人間が行います。公開用要約、削除、編集、統合、非公開化は運営担当者が確認して実行し、最終判断は人間の運営担当者が行います。</small></details>
-              <details class="legal-detail"><summary>通報・削除申出</summary><small>権利侵害、プライバシー侵害、名誉・信用毀損、第三者秘密情報の混入が疑われる場合は通報・削除申出を受け付けます。フィルタリング、問題を報告、ブロック、アカウント停止、問い合わせ先を本番で用意し、プロバイダ責任制限法、情報流通プラットフォーム対処法の適用可能性を確認します。</small></details>
-              <details class="legal-detail"><summary>内部監査ログ</summary><small>同意日時、規約バージョン、審査判断、非公開化、削除実行を内部保存します。生のIPアドレスとUser-Agentは原則6か月で削除または匿名化します。同意ログと権利譲渡証跡は10年を上限に保存し、匿名加工情報の作成基準、または仮名加工情報に相当する不可逆ハッシュ化で管理します。</small></details>
+              <details class="legal-detail" open><summary>公開できる形に整えます</summary><small>公開希望の投稿は、運営が確認の上、個人情報や秘密情報を除いた要約で掲載します。AIは補助に限り、公開判断は人間が行います。</small></details>
+              <details class="legal-detail"><summary>公開しない情報</summary><small>非公開投稿、Apple IDの氏名やメールアドレス、個人が推測される情報、第三者の秘密情報、営業秘密、未公開発明、健康情報は公開しません。</small></details>
+              <details class="legal-detail"><summary>困ったときの連絡</summary><small>権利侵害、プライバシー侵害、名誉・信用毀損、第三者秘密情報の混入が疑われる場合は、通報・削除申出を受け付けます。</small></details>
             </div>
           </section>
 
           <section class="section" id="rules" aria-labelledby="legalTitle">
             <div class="section-title-row">
-              <h2 class="section-title" id="legalTitle">利用条件</h2>
+              <h2 class="section-title" id="legalTitle">大切な利用条件</h2>
               <button type="button" id="openTerms">詳細</button>
             </div>
             <div class="grouped-list">
-              <details class="legal-detail" open><summary>権利譲渡</summary><small>投稿内容の著作権（著作権法第27条および第28条に規定する権利を含む）、特許を受ける権利、実用新案登録を受ける権利、意匠登録を受ける権利その他譲渡可能な権利は当社へ無償譲渡されます。投稿者は著作者人格権を行使しません。</small></details>
-              <details class="legal-detail"><summary>対価請求不可</summary><small>採用、実装、販売、収益化されても報酬、対価、ロイヤリティ、利益分配は請求できません。任意の判断により謝意表明を行うことがありますが、既に成立した権利譲渡、対価請求不可、著作者人格権不行使は引き続き有効に存続します。</small></details>
-              <details class="legal-detail"><summary>採用時特典</summary><small>採用時特典は、App Store Connectで発行・管理される公式プロモコード、公式のプロモコード、オファーコードその他 Apple が認める公式コードに限定します。独自の利用クレジット、独自コード、残高管理、ポイント台帳、独自管理機能は持ちません。</small></details>
-              <details class="legal-detail"><summary>結果非保証</summary><small>「対応しています」と表示された場合でも、完成、実装、公開、審査通過、提供開始、継続提供、品質、性能、適法性、特定目的への適合性または利用可能性を保証するものではありません。対応状況の表示は開発義務を構成するものではありません。</small></details>
+              <details class="legal-detail" open><summary>アイデアの扱い</summary><small>投稿されたアイデアは、AllNewがアプリ開発や商品化に利用できる形でお預かりします。詳しい権利条件は投稿ガイドラインで確認できます。</small></details>
+              <details class="legal-detail"><summary>採用時特典</summary><small>採用時に特典を提供する場合は、App Store Connectで発行・管理される公式プロモコード、公式のプロモコード、オファーコードその他 Apple が認める公式コードに限定します。独自の残高管理やポイント台帳は持ちません。</small></details>
+              <details class="legal-detail"><summary>結果について</summary><small>ステータスは状況共有のための表示です。採用、実装、公開時期、継続提供をお約束するものではありません。</small></details>
             </div>
           </section>
         </div>
@@ -2793,14 +2862,14 @@
 
         <section class="section" aria-labelledby="privacyTitle">
           <div class="section-title-row">
-            <h2 class="section-title" id="privacyTitle">本番公開前の必須条件</h2>
+            <h2 class="section-title" id="privacyTitle">プライバシーとアカウント</h2>
           </div>
           <div class="grouped-list">
-            <details class="legal-detail" open><summary>プライバシーポリシー</summary><small><a href="./privacy-policy-draft.md">取得情報、利用目的、第三者提供、外国にある第三者への提供、Apple Inc.（米国）、個人情報保護法第28条、外国制度情報、外部送信、Cookie/外部送信、保管期間</a>を常時確認できる場所に掲示します。</small></details>
-            <details class="legal-detail"><summary>Cookieと外部送信</summary><small>必須Cookie、セッションCookie、外部送信先、送信項目、オプトアウト可否、SameSite、Secure、HttpOnly、重要な変更、最終更新日: 2026-05-19 を本番公開時に明示します。</small></details>
-            <details class="legal-detail"><summary>アカウント削除</summary><small>アカウント削除、Apple ID 連携解除、Apple REST API、token revocation、server-to-server notification、server_to_server_notification、第三者提供停止、開示・削除請求の導線を提供します。Apple ID連携のみでは年齢確認にならないため、18歳以上、日本国内在住者、realUserStatus の扱いも明示します。</small></details>
+            <details class="legal-detail" open><summary>プライバシーポリシー</summary><small><a href="./privacy-policy-draft.md">取得情報、利用目的、第三者提供、外部送信、保管期間</a>を確認できる場所に掲載します。</small></details>
+            <details class="legal-detail"><summary>開示・削除請求</summary><small>登録情報の開示、訂正、利用停止、削除、第三者提供停止の相談窓口を用意します。</small></details>
+            <details class="legal-detail"><summary>アカウント削除</summary><small>Apple ID連携の解除やアカウント削除の導線を提供します。Apple ID連携のみでは年齢確認にならないため、投稿時にも18歳以上であることを確認します。</small></details>
             <details class="legal-detail"><summary>事業者情報</summary><small>AllNew合同会社の事業者名、代表者、所在地、連絡先、受付時間を本番公開ページに表示します。強行法規を優先し、日本法を準拠法、東京地方裁判所を専属的合意管轄とする方針を表示します。</small></details>
-            <details class="legal-detail"><summary>ローンチ前ゲート</summary><small>プライバシーポリシー、開示等請求、アカウント削除、事業者情報、Apple通知、監査ログ保存期間、通報・削除申出フォームが未実装の場合は公開しません。</small></details>
+            <details class="legal-detail"><summary>公開前の準備</summary><small>プライバシーポリシー、開示・削除請求、アカウント削除、事業者情報、通報・削除申出フォームがそろった状態で公開します。</small></details>
           </div>
         </section>
       </section>
@@ -2836,7 +2905,7 @@
         <button class="button secondary" type="button" data-close="loginModal">閉じる</button>
       </header>
       <div class="modal-content">
-        <p>登録料・利用料は無料です。登録には Apple ID 連携のみを使用します。公開版は現在閲覧専用で、Apple ID認証とサーバー保存を接続後に投稿受付を有効化します。本番ではApple提供のSign in with Apple JSとHuman Interface Guidelines準拠ボタンを使用し、アカウント削除時にはApple IDトークンの失効処理を行います。</p>
+        <p>登録料・利用料は無料です。登録には Apple ID 連携のみを使用します。公開版は現在閲覧専用です。Apple ID認証とサーバー保存を接続後に投稿受付を有効化します。</p>
         <h3 class="modal-subtitle">投稿の初期公開設定</h3>
         <div class="visibility-options" role="radiogroup" aria-label="登録時の投稿公開初期設定">
           <label class="choice-card">
@@ -2850,7 +2919,7 @@
             <input type="radio" name="defaultVisibility" value="public">
             <span>
               <strong>公開を初期値にする</strong>
-              <span>公開前審査後、ルーレット名で公開されます。</span>
+              <span>公開前の確認後、ルーレット名で公開されます。</span>
             </span>
           </label>
         </div>
@@ -2870,11 +2939,11 @@
         </label>
         <label class="checkline">
           <input type="checkbox" class="login-check">
-          <span>投稿内容が、著作権法第27条および第28条に規定する権利を含め、当社へ無償で権利譲渡され、当社が自由に利用できることに同意します。</span>
+          <span>投稿されたアイデアの著作権等の権利は、AllNewに帰属し、無償で利用・開発できることに同意します。</span>
         </label>
         <label class="checkline">
           <input type="checkbox" class="login-check">
-          <span>投稿内容が採用または実装されても、報酬、対価、ロイヤリティ、利益分配を請求しません。</span>
+          <span>アイデアの採用やアプリへの実装、およびその時期をお約束するものではないことを理解しています。</span>
         </label>
         <label class="checkline">
           <input type="checkbox" class="login-check">
@@ -2882,7 +2951,7 @@
         </label>
         <label class="checkline">
           <input type="checkbox" class="login-check">
-          <span>対応状況は結果を保証するものではなく、当社が中止、延期、変更、見送りできることに同意します。</span>
+          <span>対応状況は進捗共有であり、開発状況により変更、延期、見送りとなる場合があることに同意します。</span>
         </label>
         <label class="checkline">
           <input type="checkbox" class="login-check">
@@ -2927,6 +2996,6 @@
     </div>
   </div>
 
-  <script src="./app.js?v=20260519-home-renewal-1" defer></script>
+  <script src="./app.js?v=20260521-mobile-refine-1" defer></script>
 </body>
 </html>
