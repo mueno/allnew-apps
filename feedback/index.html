@@ -2,18 +2,17 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <base href="/feedback/">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
-  <meta name="description" content="AllNew App Factory 製アプリの改善要望と新しいアプリ案を投稿し、公開された範囲で状況を確認できるフィードバックポータル。">
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="AllNew App Factory製アプリの改善要望と新しいアプリ案を受け付け、公開可能な範囲で状況と結果を共有するフィードバックポータルです。">
+  <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://apps.allnew.work/feedback/">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="AllNew Apps">
   <meta property="og:title" content="AllNew App Factory Feedback">
-  <meta property="og:description" content="改善要望と新しいアプリ案を、公開可能な範囲で状況共有するAllNewのフィードバックポータル。">
+  <meta property="og:description" content="小さな困りごとが、次のアプリの種になります。">
   <meta property="og:url" content="https://apps.allnew.work/feedback/">
-  <meta property="og:image" content="https://apps.allnew.work/feedback/assets/allnew-logo.png">
+  <meta property="og:site_name" content="AllNew Apps">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>AllNew App Factory Feedback</title>
   <style>
     :root {
@@ -65,8 +64,9 @@
       min-height: 100vh;
       color: var(--ink);
       background:
-        radial-gradient(circle at 50% -8%, rgba(10, 125, 255, 0.1), transparent 36%),
-        linear-gradient(180deg, #ffffff 0%, #f8fcff 42%, #edf7ff 100%);
+        radial-gradient(ellipse at 50% -10%, rgba(10, 125, 255, 0.14), transparent 42%),
+        linear-gradient(115deg, rgba(255, 255, 255, 0.58) 0 16%, transparent 16% 100%),
+        linear-gradient(180deg, #ffffff 0%, #f8fcff 38%, #edf7ff 100%);
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
       font-size: var(--body);
       letter-spacing: 0;
@@ -294,7 +294,7 @@
       overflow: hidden;
       border-radius: 26px;
       background:
-        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.28) 0 18px, transparent 19px),
+        linear-gradient(126deg, rgba(255, 255, 255, 0.16) 0 11%, transparent 11% 28%, rgba(255, 255, 255, 0.1) 28% 39%, transparent 39% 100%),
         radial-gradient(circle at 76% 12%, rgba(89, 211, 255, 0.38) 0 34px, transparent 35px),
         linear-gradient(135deg, var(--brand-blue-deep), var(--brand-blue) 52%, var(--brand-cyan));
       color: white;
@@ -408,6 +408,188 @@
       background: rgba(219, 246, 255, 0.94);
       transform: rotate(10deg);
     }
+
+    .hero-signal {
+      position: absolute;
+      right: 122px;
+      bottom: 24px;
+      display: flex;
+      gap: 5px;
+      align-items: end;
+      pointer-events: none;
+    }
+
+    .hero-signal span {
+      display: block;
+      width: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: 0 6px 14px rgba(0, 20, 56, 0.14);
+    }
+
+    .hero-signal span:nth-child(1) { height: 14px; }
+    .hero-signal span:nth-child(2) { height: 22px; background: rgba(188, 242, 255, 0.82); }
+    .hero-signal span:nth-child(3) { height: 30px; }
+
+    .wonder-track,
+    .journey-map {
+      display: flex;
+      gap: 12px;
+      margin: 0 -18px;
+      padding: 0 18px 2px;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+    }
+
+    .wonder-track::-webkit-scrollbar,
+    .journey-map::-webkit-scrollbar {
+      display: none;
+    }
+
+    .wonder-card {
+      position: relative;
+      display: grid;
+      align-content: space-between;
+      gap: 20px;
+      width: 242px;
+      min-width: 242px;
+      min-height: 164px;
+      padding: 16px;
+      overflow: hidden;
+      border-radius: 25px;
+      background:
+        linear-gradient(140deg, rgba(255, 255, 255, 0.92), rgba(234, 247, 255, 0.82)),
+        linear-gradient(135deg, rgba(0, 82, 163, 0.06), rgba(89, 211, 255, 0.15));
+      color: var(--joy-ink);
+      scroll-snap-align: start;
+      box-shadow:
+        inset 0 0 0 1px rgba(0, 82, 163, 0.09),
+        0 14px 30px rgba(0, 82, 163, 0.08);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .wonder-card::after {
+      content: "";
+      position: absolute;
+      right: -24px;
+      bottom: -28px;
+      width: 118px;
+      height: 118px;
+      border-radius: 34px;
+      background:
+        linear-gradient(135deg, rgba(10, 125, 255, 0.18), rgba(89, 211, 255, 0.28));
+      transform: rotate(18deg);
+    }
+
+    .wonder-card.mint::after {
+      background: linear-gradient(135deg, rgba(48, 209, 88, 0.16), rgba(89, 211, 255, 0.22));
+    }
+
+    .wonder-card.deep {
+      background:
+        linear-gradient(135deg, rgba(5, 50, 103, 0.96), rgba(0, 82, 163, 0.9) 58%, rgba(48, 209, 208, 0.76));
+      color: white;
+    }
+
+    .wonder-card.deep::after {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .wonder-top,
+    .wonder-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wonder-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(0, 82, 163, 0.1);
+      color: var(--brand-blue-deep);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .wonder-card.deep .wonder-tag {
+      background: rgba(255, 255, 255, 0.18);
+      color: white;
+    }
+
+    .wonder-card h3,
+    .journey-step h3 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.18;
+      font-weight: 850;
+    }
+
+    .wonder-card p,
+    .journey-step p {
+      margin: 6px 0 0;
+      color: var(--secondary);
+      font-size: var(--caption);
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .wonder-card.deep p {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .wonder-icon {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-bright), var(--brand-cyan));
+      color: white;
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(0, 82, 163, 0.18);
+    }
+
+    .journey-step {
+      position: relative;
+      display: grid;
+      align-content: start;
+      gap: 9px;
+      width: 172px;
+      min-width: 172px;
+      min-height: 150px;
+      padding: 15px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      scroll-snap-align: start;
+      box-shadow:
+        inset 0 0 0 1px rgba(0, 82, 163, 0.08),
+        0 12px 28px rgba(0, 82, 163, 0.055);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .journey-step::before {
+      content: "";
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      background: var(--stage-color, var(--brand-blue));
+      box-shadow:
+        inset 0 0 0 4px rgba(255, 255, 255, 0.34),
+        0 8px 18px rgba(0, 82, 163, 0.12);
+    }
+
+    .journey-step.accept { --stage-color: #0a8f84; }
+    .journey-step.review { --stage-color: #0a7dff; }
+    .journey-step.pass { --stage-color: #b84a4a; }
+    .journey-step.build { --stage-color: #4169e1; }
+    .journey-step.done { --stage-color: #30b45a; }
 
     .section {
       margin: 0 0 34px;
@@ -1821,6 +2003,26 @@
         min-height: 40px;
       }
 
+      .hero-signal {
+        right: 110px;
+        bottom: 22px;
+      }
+
+      .wonder-card {
+        width: 226px;
+        min-width: 226px;
+        min-height: 154px;
+        padding: 15px;
+        border-radius: 23px;
+      }
+
+      .journey-step {
+        width: 156px;
+        min-width: 156px;
+        min-height: 142px;
+        border-radius: 22px;
+      }
+
       .app-card {
         width: 140px;
         min-width: 140px;
@@ -1962,6 +2164,11 @@
       .play-hero-button:hover {
         transform: translateY(-1px);
       }
+
+      .wonder-card:hover,
+      .journey-step:hover {
+        transform: translateY(-3px);
+      }
     }
 
     @media (prefers-reduced-motion: no-preference) {
@@ -1985,6 +2192,13 @@
       .joy-piece.two {
         animation: float-two 4.2s ease-in-out infinite;
       }
+
+      .hero-signal span {
+        animation: signal-rise 2.8s ease-in-out infinite;
+      }
+
+      .hero-signal span:nth-child(2) { animation-delay: 160ms; }
+      .hero-signal span:nth-child(3) { animation-delay: 320ms; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -2017,6 +2231,11 @@
     @keyframes float-two {
       0%, 100% { transform: translateY(0) rotate(10deg); }
       50% { transform: translateY(-6px) rotate(-8deg); }
+    }
+
+    @keyframes signal-rise {
+      0%, 100% { transform: scaleY(0.78); opacity: 0.68; }
+      50% { transform: scaleY(1); opacity: 1; }
     }
 
     @keyframes press-pop {
@@ -2079,17 +2298,56 @@
 
         <div class="play-hero" data-searchable="今日のひらめき 新しいアプリ 改善要望 投稿">
           <div class="play-hero-copy">
-            <span class="play-hero-kicker">今日のひらめき</span>
-            <strong>小さな困りごとが、次のアプリの種になります。</strong>
-            <span>思いついたら、忘れる前にメモ感覚で送れます。</span>
+            <span class="play-hero-kicker">ひらめきファクトリー</span>
+            <strong>小さな願いが、次のアプリのはじまりになります。</strong>
+            <span>メモ感覚で送信。公開アイデアは旅のように進みます。</span>
           </div>
           <div class="play-hero-actions">
             <button class="play-hero-button" type="button" data-screen-target="submit">送る</button>
             <button class="play-hero-button secondary" type="button" data-screen-target="board">見る</button>
           </div>
+          <span class="hero-signal" aria-hidden="true"><span></span><span></span><span></span></span>
           <span class="joy-piece one" aria-hidden="true">+</span>
           <span class="joy-piece two" aria-hidden="true">✓</span>
         </div>
+
+        <section class="section" aria-labelledby="wonderTitle">
+          <div class="section-title-row">
+            <h2 class="section-title" id="wonderTitle">今週のひらめき</h2>
+          </div>
+          <div class="wonder-track" aria-label="今週のひらめき一覧">
+            <article class="wonder-card deep" data-searchable="ひらめきファクトリー 新しい提案 投稿">
+              <div class="wonder-top">
+                <span class="wonder-tag">New</span>
+              </div>
+              <div class="wonder-body">
+                <h3>忘れる前に、さっと送る。</h3>
+                <p>困った瞬間のメモが、次のアップデートや新アプリの入口になります。</p>
+              </div>
+              <span class="wonder-icon" aria-hidden="true">+</span>
+            </article>
+            <article class="wonder-card mint" data-searchable="アイデアの旅 ステータス 受付 検討 対応 出来ました">
+              <div class="wonder-top">
+                <span class="wonder-tag">Journey</span>
+              </div>
+              <div class="wonder-body">
+                <h3>アイデアの旅を見守る。</h3>
+                <p>受付から結果報告まで、公開できる範囲で進み具合を確認できます。</p>
+              </div>
+              <span class="wonder-icon" aria-hidden="true">→</span>
+            </article>
+            <article class="wonder-card" data-searchable="出来ました 結果報告 採用 新規アプリ案">
+              <div class="wonder-top">
+                <span class="wonder-tag">Done</span>
+              </div>
+              <div class="wonder-body">
+                <h3>できたことが、ちゃんと残る。</h3>
+                <p>採用された要望や新アプリ案は、結果として公開ボードに残ります。</p>
+              </div>
+              <span class="wonder-icon" aria-hidden="true">✓</span>
+            </article>
+          </div>
+        </section>
 
         <section class="section" aria-labelledby="appsTitle">
           <div class="section-title-row">
@@ -2147,6 +2405,35 @@
               <span class="row-text"><strong>投稿前のルール</strong><span>受付不可カテゴリ、権利譲渡、非保証</span></span>
               <span class="chevron" aria-hidden="true"></span>
             </button>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="journeyTitle">
+          <div class="section-title-row">
+            <h2 class="section-title" id="journeyTitle">アイデアの旅</h2>
+            <button type="button" data-screen-target="status">詳しく</button>
+          </div>
+          <div class="journey-map" aria-label="公開ステータスの流れ">
+            <article class="journey-step accept" data-searchable="受け付けました">
+              <h3>受け付けました</h3>
+              <p>投稿を受領。公開前に安全確認します。</p>
+            </article>
+            <article class="journey-step review" data-searchable="検討しています">
+              <h3>検討しています</h3>
+              <p>実現性、優先度、体験への影響を確認中。</p>
+            </article>
+            <article class="journey-step pass" data-searchable="ごめんなさい">
+              <h3>ごめんなさい</h3>
+              <p>今回は見送り。理由は公開できる範囲で表示します。</p>
+            </article>
+            <article class="journey-step build" data-searchable="対応しています">
+              <h3>対応しています</h3>
+              <p>設計、開発、検証へ進行中。完成は保証しません。</p>
+            </article>
+            <article class="journey-step done" data-searchable="出来ました">
+              <h3>出来ました</h3>
+              <p>一定の対応を実施し、結果を公開します。</p>
+            </article>
           </div>
         </section>
 

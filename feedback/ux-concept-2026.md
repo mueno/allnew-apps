@@ -10,7 +10,7 @@ AllNew App Factory Feedback Portal は、通常の問い合わせ窓口ではな
 2. **見える**: 受け付けられた要望の状態と結果が、公開可能な範囲で見える。
 3. **安心できる**: 公開/非公開、権利譲渡、対価請求不可、結果非保証、受付不可カテゴリが、投稿前に理解できる。
 
-目指す印象は、Apple Support アプリに近い「迷わない・軽い・信頼できる」体験に、AllNew らしい「少し楽しい・また触りたい」感覚を足したものです。
+目指す印象は、Apple Support アプリに近い「迷わない・軽い・信頼できる」体験に、Google One AI Plans のような「新しい可能性を発見していく」高揚感を重ねたものです。AllNew ではこれを **ひらめきファクトリー** と呼び、投稿フォームではなく「アイデアが生まれ、旅をして、アプリに近づく場所」として体験設計します。
 
 ## 2. Primary Users
 
@@ -57,10 +57,13 @@ AllNew App Factory Feedback Portal は、通常の問い合わせ窓口ではな
 5. **Joy without dark patterns**  
    ワクワク感は、ルーレット名、押下反応、軽い浮遊感、明るい青の階調で作る。投稿を急かす演出、報酬を期待させる表現、他アプリ購入を前提にする導線は避ける。
 
-6. **Accessible by default**  
+6. **Discovery playground**
+   トップ画面は単なる操作一覧にせず、「今週のひらめき」「アイデアの旅」「AllNewのアプリ」を短いカードで配置する。スクロールするほど、投稿が次の改善や新アプリにつながる期待を感じられる構成にする。
+
+7. **Accessible by default**
    主要操作は44px以上、フォームはラベル必須、テキストは高コントラスト、状態は色だけで伝えない。キーボード操作、フォーカス、スクリーンリーダーで破綻しない構造にする。
 
-7. **Trust-safe identity**  
+8. **Trust-safe identity**
    Apple ID の氏名、メール、識別子は公開名に使わない。公開名は生成ニックネームのみ。非公開投稿は公開ボード、公開統計、公開ステータスの対象外にする。
 
 ## 5. Ideal User Flow
@@ -126,16 +129,24 @@ Home は説明ページではなく、操作ハブにする。
 2. Page title
 3. Search
 4. Hero with `送る` and `見る`
-5. Target apps carousel
-6. Support tools
-7. Optional discovery: AllNew apps
-8. Common items
+5. 今週のひらめき
+6. Target apps carousel
+7. Support tools
+8. アイデアの旅
+9. Optional discovery: AllNew apps
+10. Common items
 
 Hero copy:
 
-- Main: 小さな困りごとが、次のアプリの種になります。
-- Support: 思いついたら、忘れる前にメモ感覚で送れます。
+- Main: 小さな願いが、次のアプリのはじまりになります。
+- Support: メモ感覚で送信。公開アイデアは旅のように進みます。
 - CTA: 送る / 見る
+
+Discovery copy:
+
+- 今週のひらめき: 忘れる前に、さっと送る。
+- アイデアの旅: 受付から結果報告まで、公開できる範囲で進み具合を確認できます。
+- 出来ました: できたことが、ちゃんと残る。
 
 ## 8. Submit Screen Design
 
