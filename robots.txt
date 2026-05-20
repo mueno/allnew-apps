@@ -1,38 +1,130 @@
 # robots.txt — apps.allnew.work
-# Allow all crawlers including AI bots
+#
+# LLM/AI bot strategy:
+#
+# - SEARCH/CITATION bots (drive traffic via AI answer engines): ALLOW.
+#   These crawl on-demand and link back to our site from AI responses.
+# - TRAINING bots (collect content to train models): BLOCK.
+#   Content gets ingested into model weights with no attribution or
+#   referral traffic.
+# - SEO scrapers (Ahrefs/Semrush/MJ12 etc.): BLOCK. High request volume,
+#   no business benefit.
+#
+# Background: Cloudflare Zone Analytics showed GPTBot was hammering
+# this site at ~164,000 req/24h (99.5% of total traffic) chasing
+# /landing-automation/ recursive SPA paths.
+#
+# References:
+#   https://platform.openai.com/docs/bots
+#   https://docs.anthropic.com/en/docs/agents-and-tools/web-fetch-tool
+#   https://docs.perplexity.ai/guides/bots
 
+# --- Default: allow with rate hint ---
 User-agent: *
 Allow: /
+Disallow: /landing-automation/
+Disallow: /debug/
+Disallow: /test-results/
+Disallow: /.planning/
+Disallow: /assets/raw/
+Crawl-delay: 10
 
-# AI Crawlers — explicitly welcomed
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
+# --- Major search engines: allow ---
 User-agent: Googlebot
 Allow: /
+Disallow: /landing-automation/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /landing-automation/
 
-User-agent: cohere-ai
+User-agent: Applebot
 Allow: /
+Disallow: /landing-automation/
+
+# --- AI search/citation bots: ALLOW (link us in AI answers) ---
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /landing-automation/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /landing-automation/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /landing-automation/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /landing-automation/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /landing-automation/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /landing-automation/
+
+# --- AI training bots: BLOCK ---
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
 
 User-agent: Google-Extended
-Allow: /
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Meta-ExternalFetcher
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+# --- High-volume SEO scrapers: BLOCK ---
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
 
 Sitemap: https://apps.allnew.work/sitemap.xml
+Host: https://apps.allnew.work
