@@ -419,6 +419,131 @@
       opacity: 0.4;
     }
 
+    .idea-flow {
+      margin: -18px 0 44px;
+    }
+
+    .idea-flow-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 28px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(238, 248, 255, 0.88)),
+        rgba(255, 255, 255, 0.82);
+      box-shadow: 0 18px 38px rgba(0, 82, 163, 0.08);
+    }
+
+    .idea-flow-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.66));
+      pointer-events: none;
+    }
+
+    .idea-flow-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.58;
+      transform: scale(1.02);
+    }
+
+    .idea-flow-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 18px;
+      padding: 20px;
+    }
+
+    .idea-flow-header {
+      max-width: 680px;
+    }
+
+    .idea-flow-kicker {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(0, 82, 163, 0.1);
+      color: var(--brand-blue-deep);
+      font-size: var(--footnote);
+      font-weight: 850;
+    }
+
+    .idea-flow-title {
+      margin: 8px 0 0;
+      color: var(--ink);
+      font-size: 24px;
+      line-height: 1.28;
+      font-weight: 850;
+    }
+
+    .idea-flow-lead {
+      margin: 8px 0 0;
+      color: var(--secondary);
+      font-size: var(--caption);
+      line-height: 1.7;
+      font-weight: 650;
+    }
+
+    .flow-steps {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .flow-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      min-height: 76px;
+      padding: 12px;
+      border: 1px solid rgba(0, 82, 163, 0.1);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: 0 10px 24px rgba(0, 82, 163, 0.07);
+      backdrop-filter: blur(10px);
+    }
+
+    .flow-number {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand-blue-bright), var(--brand-cyan));
+      color: white;
+      font-size: 14px;
+      font-weight: 850;
+      box-shadow: 0 8px 18px rgba(0, 122, 255, 0.22);
+    }
+
+    .flow-step h3 {
+      margin: 0;
+      color: var(--brand-blue-deep);
+      font-size: 15px;
+      line-height: 1.32;
+      font-weight: 850;
+    }
+
+    .flow-step p {
+      margin: 4px 0 0;
+      color: var(--secondary);
+      font-size: 12px;
+      line-height: 1.55;
+      font-weight: 650;
+    }
+
     .wonder-track,
     .journey-map {
       display: flex;
@@ -2208,6 +2333,10 @@
         grid-column: 1 / -1;
       }
 
+      .home-flow {
+        grid-column: 1 / -1;
+      }
+
       .home-apps,
       .home-wonder {
         grid-column: 1;
@@ -2233,6 +2362,38 @@
 
       .welcome-button {
         width: 100%;
+      }
+
+      .idea-flow {
+        margin-top: -20px;
+      }
+
+      .idea-flow-content {
+        min-height: 360px;
+        align-content: space-between;
+        padding: 26px;
+      }
+
+      .idea-flow-title {
+        max-width: 620px;
+        font-size: 28px;
+      }
+
+      .flow-steps {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: stretch;
+      }
+
+      .flow-step {
+        grid-template-columns: 1fr;
+        align-content: start;
+        min-height: 132px;
+        padding: 14px;
+      }
+
+      .flow-number {
+        width: 32px;
+        height: 32px;
       }
 
       .wonder-track,
@@ -2326,7 +2487,7 @@
           <div class="welcome-copy">
             <span class="welcome-kicker">AllNew App Factory へようこそ</span>
             <h1 id="welcomeTitle">あなたの「あったらいいな」を、アプリの次の一歩へ。</h1>
-            <p>このサイトは、AllNewのアプリをもっと使いやすく育てるためのアイデア共有スペースです。不具合、改善要望、新しいアプリ案を、メモ感覚で気軽に送れます。</p>
+            <p>このサイトは、AllNewのアプリをもっと使いやすく育てるためのアイデア共有スペースです。不具合、改善要望、新しいアプリ案など、あなたの「あったらいいな」を送ってください。</p>
             <ul class="welcome-chips" aria-label="投稿できる内容">
               <li>改善要望</li>
               <li>不具合メモ</li>
@@ -2352,6 +2513,56 @@
               </svg>
               公開ボードを見る
             </button>
+          </div>
+        </section>
+
+        <section class="section home-flow idea-flow" aria-labelledby="ideaFlowTitle">
+          <div class="idea-flow-card">
+            <img class="idea-flow-image" src="assets/idea-flow-slide.png" alt="" aria-hidden="true">
+            <div class="idea-flow-content">
+              <div class="idea-flow-header">
+                <span class="idea-flow-kicker">Idea Flow</span>
+                <h2 class="idea-flow-title" id="ideaFlowTitle">送ったアイデアは、こんな流れでアプリに近づきます。</h2>
+                <p class="idea-flow-lead">すぐに作れるものも、時間をかけて考えるものもあります。進み具合は、公開できる範囲でボードに残します。</p>
+              </div>
+              <ol class="flow-steps" aria-label="アイデアがアプリに反映される流れ">
+                <li class="flow-step">
+                  <span class="flow-number" aria-hidden="true">1</span>
+                  <div>
+                    <h3>声を送る</h3>
+                    <p>困ったことや「あったらいいな」を投稿します。</p>
+                  </div>
+                </li>
+                <li class="flow-step">
+                  <span class="flow-number" aria-hidden="true">2</span>
+                  <div>
+                    <h3>安全に確認</h3>
+                    <p>個人情報や受付できない内容がないか確認します。</p>
+                  </div>
+                </li>
+                <li class="flow-step">
+                  <span class="flow-number" aria-hidden="true">3</span>
+                  <div>
+                    <h3>ボードで共有</h3>
+                    <p>公開できる要望は、今の状況を見られます。</p>
+                  </div>
+                </li>
+                <li class="flow-step">
+                  <span class="flow-number" aria-hidden="true">4</span>
+                  <div>
+                    <h3>作って試す</h3>
+                    <p>必要なものから設計、開発、検証を進めます。</p>
+                  </div>
+                </li>
+                <li class="flow-step">
+                  <span class="flow-number" aria-hidden="true">5</span>
+                  <div>
+                    <h3>結果をお知らせ</h3>
+                    <p>アップデートや新アプリとして形になったら報告します。</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
           </div>
         </section>
 
