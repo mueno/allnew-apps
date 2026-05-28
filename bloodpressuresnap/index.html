@@ -701,6 +701,7 @@
         <a href="#faq" class="toc-link" data-section="faq">FAQ</a>
         <a href="#privacy" class="toc-link" data-section="privacy">プライバシー</a>
         <a href="#terms" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#oss" class="toc-link" data-section="oss">OSSライセンス</a>
         <a href="#commercial" class="toc-link" data-section="commercial">特定商取引法</a>
         <a href="#contact" class="toc-link" data-section="contact">お問い合わせ</a>
     </nav>
@@ -979,6 +980,23 @@
                 <div class="legal-section">
                     <h3>13. 多言語版について</h3>
                     <p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- OSS Notices -->
+            <section id="oss-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <div>
+                        <div class="section-title">OSSライセンス</div>
+                        <div class="section-subtitle">コードに含まれる第三者OSSの棚卸し</div>
+                    </div>
+                </div>
+                <div class="legal-section">
+                    <h3>第三者OSS依存は検出されていません</h3>
+                    <p>このページの更新時点で、アプリコード内にSwift Package Manager、CocoaPods、Carthage、npm、または明示申告された同梱OSS依存は検出されていません。</p>
+                    <p>Apple純正フレームワークは第三者OSSではなく、Appleの各規約に従います。</p>
+                    <p class="muted">棚卸し日: 2026-05-28</p>
                 </div>
             </section>
 
@@ -1298,6 +1316,23 @@
                 </div>
             </section>
 
+            <!-- OSS Notices -->
+            <section id="oss-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <div>
+                        <div class="section-title">OSS Licenses</div>
+                        <div class="section-subtitle">Third-party OSS inventory in the app code</div>
+                    </div>
+                </div>
+                <div class="legal-section">
+                    <h3>No third-party OSS dependencies detected</h3>
+                    <p>As of this page update, the app code inventory did not detect Swift Package Manager, CocoaPods, Carthage, npm, or declared vendored OSS dependencies.</p>
+                    <p>Apple frameworks are not third-party OSS and are governed by Apple's terms.</p>
+                    <p class="muted">Inventory date: 2026-05-28</p>
+                </div>
+            </section>
+
             <!-- Commercial Law -->
             <section id="commercial-en" class="section">
                 <div class="commercial-accordion">
@@ -1350,8 +1385,8 @@
         if (window.self !== window.top) { document.body.style.display = 'none'; }
         // Language Data
         const langData = {
-            ja: { label: '日本語', hero: 'BPSnap', subtitleLine1: '撮るだけ。タップ不要。', subtitleLine2: 'シンプルな血圧記録。', toc: ['FAQ', 'プライバシー', '利用規約', '特定商取引法', 'お問い合わせ'] },
-            en: { label: 'English', hero: 'BPSnap', subtitleLine1: 'Just a Snap. No more Tap.', subtitleLine2: 'The Simplest Way to Log Your Blood Pressure.', toc: ['FAQ', 'Privacy', 'Terms', 'Seller Info', 'Contact'] }
+            ja: { label: '日本語', hero: 'BPSnap', subtitleLine1: '撮るだけ。タップ不要。', subtitleLine2: 'シンプルな血圧記録。', toc: ['FAQ', 'プライバシー', '利用規約', 'OSSライセンス', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'BPSnap', subtitleLine1: 'Just a Snap. No more Tap.', subtitleLine2: 'The Simplest Way to Log Your Blood Pressure.', toc: ['FAQ', 'Privacy', 'Terms', 'OSS', 'Seller Info', 'Contact'] }
         };
 
         // Get current language from URL hash or default to ja
