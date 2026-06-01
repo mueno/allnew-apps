@@ -1,83 +1,303 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>McNav Support</title>
-  <meta name="description" content="McNav support, setup help, and App Review information.">
+  <meta name="description" content="A safer audited bridge between AI assistants and macOS.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="bingbot" content="noindex, nofollow, noarchive">
+  <meta name="GPTBot" content="noindex, nofollow">
+  <meta name="CCBot" content="noindex, nofollow">
+  <meta name="anthropic-ai" content="noindex, nofollow">
+  <meta name="Google-Extended" content="noindex, nofollow">
   <style>
-    :root { color-scheme: light; --ink:#10233f; --muted:#5e6b7f; --line:#d9e6f7; --soft:#f1f7ff; --brand:#0f5bd7; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; color:var(--ink); background:#f8fbff; line-height:1.7; }
-    header, footer { background:#fff; border-bottom:1px solid var(--line); padding:24px; }
-    footer { border-top:1px solid var(--line); border-bottom:0; color:var(--muted); }
-    main { max-width:980px; margin:0 auto; padding:30px 24px 58px; }
-    h1 { margin:0 0 8px; font-size:36px; letter-spacing:0; }
-    h2 { margin:30px 0 12px; font-size:23px; }
-    h3 { margin:20px 0 6px; font-size:18px; }
-    p, li { color:#26364d; }
-    a { color:var(--brand); font-weight:600; }
-    nav { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
-    nav a { padding:8px 12px; border:1px solid var(--line); border-radius:8px; text-decoration:none; background:#fff; }
-    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:14px 0; }
-    code { background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:2px 5px; }
-    .meta { color:var(--muted); }
+    :root {
+      --bg: #fafafa; --panel: #ffffff; --muted: #6e6e73; --text: #1d1d1f;
+      --accent: #0071e3; --border: rgba(0,0,0,.08); --glass: rgba(255,255,255,.78);
+      --radius: 20px; --shadow: 0 10px 30px rgba(0,0,0,.06);
+      --bg-secondary: #f5f5f7; --bg-tertiary: #fbfbfd; --text-secondary: #6e6e73;
+      --text-tertiary: #8e8e93; --text-primary: #1d1d1f; --accent-hover: #0066cc;
+      --radius-sm: 16px; --radius-lg: 28px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #000; --panel: #1c1c1e; --muted: #a1a1a6; --text: #f5f5f7; --border: rgba(255,255,255,.12); --glass: rgba(28,28,30,.78); --bg-secondary: #1c1c1e; --bg-tertiary: #2c2c2e; --text-secondary: #a1a1a6; --text-tertiary: #8e8e93; --text-primary: #f5f5f7; }
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    .header { position: sticky; top: 0; z-index: 10; background: var(--glass); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); }
+    .header-inner { max-width: 860px; margin: 0 auto; padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo-link { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
+    .logo { font-weight: 800; letter-spacing: -.02em; font-size: 1.45rem; }
+    .logo-divider { width: 1px; height: 28px; background: var(--border); display: inline-block; }
+    .app-name { color: var(--muted); font-size: 1.2rem; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lang-dropdown { position: relative; flex-shrink: 0; }
+    .lang-btn { border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 999px; padding: 10px 18px; font-weight: 700; box-shadow: var(--shadow); cursor: pointer; }
+    .lang-btn::after { content: "⌄"; margin-left: 7px; color: var(--muted); }
+    .lang-menu { display: none; position: absolute; right: 0; top: calc(100% + 8px); background: var(--panel); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; min-width: 150px; }
+    .lang-dropdown.open .lang-menu { display: block; }
+    .lang-option { display: block; width: 100%; border: 0; background: transparent; color: var(--text); padding: 11px 16px; text-align: left; font-weight: 650; cursor: pointer; }
+    .lang-option.active, .lang-option:hover { background: var(--bg-secondary); color: var(--accent); }
+    main, .main { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+    .hero { max-width: 860px; margin: 0 auto; padding: 66px 20px 46px; text-align: center; }
+    .hero-icon { width: 92px; height: 92px; border-radius: 24px; margin: 0 auto 24px; display: grid; place-items: center; background: linear-gradient(145deg, #f7e8c8, #f6c842); color: #1d1d1f; font-size: 42px; box-shadow: var(--shadow); }
+    h1 { margin: 0 0 14px; font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.05; letter-spacing: -.03em; }
+    .lead { color: var(--muted); max-width: 560px; margin: 0 auto; font-size: 1.15rem; line-height: 1.75; }
+    .toc { max-width: 760px; margin: 0 auto 52px; padding: 0 20px; display: flex; justify-content: center; align-items: center; gap: 22px; flex-wrap: wrap; }
+    .toc-link { color: var(--muted); text-decoration: none; font-size: 1.05rem; font-weight: 700; transition: color .2s ease; }
+    .toc-link:hover { color: var(--accent); }
+    section { margin: 26px 0; padding: 24px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); scroll-margin-top: 80px; }
+    section h2 { margin: 0 0 14px; font-size: 1.45rem; letter-spacing: -.015em; }
+    section h3 { margin: 22px 0 8px; font-size: 1.1rem; }
+    p { margin: 10px 0; }
+    ul { padding-left: 1.25rem; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; overflow-wrap: anywhere; }
+    th, td { border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; padding: 9px 6px; }
+    .muted { color: var(--muted); }
+    .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .section-icon { width: 44px; height: 44px; border-radius: 14px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-title { font-size: 1.45rem; line-height: 1.2; font-weight: 750; letter-spacing: -.015em; }
+    .section-subtitle { color: var(--muted); font-size: .9rem; margin-top: 2px; }
+    .legal-section h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+    .legal-section p { color: var(--text-secondary); font-size: .93rem; }
+    .legal-section ul { color: var(--text-secondary); font-size: .93rem; }
+    .license-text { white-space: pre-wrap; overflow-wrap: anywhere; padding: 14px; border-radius: var(--radius-sm); background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-secondary); font-size: .78rem; line-height: 1.5; }
+    .commercial-accordion { background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border); overflow: hidden; }
+    .commercial-header { width: 100%; appearance: none; border: 0; background: transparent; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; text-align: left; transition: background .2s ease; }
+    .commercial-header:hover { background: var(--bg-tertiary); }
+    .commercial-header .section-header { margin-bottom: 0; }
+    .commercial-toggle { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 20px; font-weight: 300; transition: all .25s ease; flex-shrink: 0; }
+    .commercial-accordion.open .commercial-toggle { background: var(--accent); color: white; transform: rotate(45deg); }
+    .commercial-content { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+    .commercial-accordion.open .commercial-content { max-height: 1400px; padding: 0 24px 24px; }
+    .contact-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); border-radius: var(--radius-lg); padding: 40px; text-align: center; border: 1px solid var(--border); }
+    .contact-card h2 { font-size: 1.4rem; font-weight: 700; margin: 0 0 22px; }
+    .contact-email { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: white; padding: 14px 28px; border-radius: 980px; text-decoration: none; font-weight: 650; font-size: .95rem; transition: all .2s ease; }
+    .contact-email:hover { background: var(--accent-hover); transform: scale(1.02); text-decoration: none; }
+    .contact-details { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); text-align: left; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .contact-details-top { margin-top: 24px; margin-bottom: 24px; padding-top: 0; padding-bottom: 16px; border-top: none; border-bottom: 1px solid var(--border); }
+    .contact-item { font-size: .88rem; }
+    .contact-item dt { color: var(--text-tertiary); font-weight: 650; margin-bottom: 4px; }
+    .contact-item dd { color: var(--text-primary); margin: 0; overflow-wrap: anywhere; }
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="ja"] { display: none; }
+    body.lang-en [data-lang="en"] { display: block; }
+    @media (max-width: 640px) {
+      .header-inner { padding: 18px 16px; }
+      .logo { font-size: 1.2rem; }
+      .app-name { font-size: 1rem; max-width: 150px; }
+      main, .main { padding: 0 16px 70px; }
+      .hero { padding: 48px 16px 34px; }
+      .toc { gap: 18px; margin-bottom: 36px; }
+      section { padding: 18px; }
+      .section-header { flex-direction: column; text-align: center; }
+      .commercial-header { padding: 18px; }
+      .commercial-header .section-header { flex-direction: row; text-align: left; }
+      .contact-card { padding: 28px; }
+      .contact-details { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <strong>McNav</strong>
-    <nav aria-label="Legal navigation">
-      <a href="/maclaw/">Overview</a>
-      <a href="/maclaw/privacy/">Privacy</a>
-      <a href="/maclaw/terms/">Terms</a>
-      <a href="/maclaw/support/">Support</a>
-    </nav>
+  <header class="header">
+    <div class="header-inner">
+      <a href="https://apps.allnew.work/maclaw/" class="logo-link" aria-label="AllNew McNav">
+        <span class="logo">AllNew</span>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <span class="app-name">McNav</span>
+      </a>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-btn" type="button" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false"><span id="currentLang">日本語</span></button>
+        <div class="lang-menu" role="menu">
+          <button class="lang-option" type="button" data-lang-option="ja" onclick="setLang('ja')" role="menuitem">日本語</button>
+          <button class="lang-option" type="button" data-lang-option="en" onclick="setLang('en')" role="menuitem">English</button>
+        </div>
+      </div>
+    </div>
   </header>
-  <main>
-    <h1>McNav Support</h1>
-    <p class="meta">Last updated: June 1, 2026</p>
-
-    <section class="card">
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:allnew.work2018@gmail.com?subject=McNav%20Support">allnew.work2018@gmail.com</a></p>
-      <p>Supported languages: Japanese and English. Typical response time depends on issue complexity.</p>
-    </section>
-
-    <h2>FAQ</h2>
-    <section class="card">
-      <h3>What is McNav?</h3>
-      <p>McNav is a macOS app and bundled MCP helper that lets AI assistants use public macOS APIs through a controlled, audited surface. It is designed for Claude Desktop, Codex Desktop, and other MCP-compatible clients.</p>
-    </section>
-    <section class="card">
-      <h3>Does McNav require an account?</h3>
-      <p>No AllNew account is required. Paid access, subscriptions, trials, restores, and offer-code redemption are handled by Apple StoreKit.</p>
-    </section>
-    <section class="card">
-      <h3>How do I set it up?</h3>
-      <p>Open McNav, review the dashboard, grant only the macOS permissions you need, and copy the Claude Desktop or Codex Desktop MCP setup snippet from the app. For workspace access, grant only folders you want AI-assisted workflows to use.</p>
-    </section>
-    <section class="card">
-      <h3>How does McNav protect secrets?</h3>
-      <p>Secret Broker stores secret values in macOS Keychain and returns only metadata and local verification codes to MCP clients. Pasting a secret requires confirmation and uses the system clipboard briefly, so users should still be careful around other local apps.</p>
-    </section>
-    <section class="card">
-      <h3>What about malicious web pages or URLs?</h3>
-      <p>McNav treats crawled URL content, browser snapshots, clipboard text, and files as untrusted external content. It adds data-boundary notices, blocks high-confidence indirect prompt-injection and exfiltration patterns, and asks for confirmation on suspicious URL forms.</p>
-    </section>
-    <section class="card">
-      <h3>How can I cancel or restore purchases?</h3>
-      <p>Use the Subscription tab in McNav to restore purchases or open Apple's subscription management. Cancellation, refunds, final pricing, taxes, and renewal terms are controlled by Apple and shown in the App Store purchase sheet.</p>
-    </section>
-
-    <h2>App Review Notes</h2>
-    <p>McNav does not download executable code, does not include a privileged helper, does not use custom external payment unlocks, and does not require Full Disk Access. The bundled <code>mcnav-mcpd</code> helper is fixed at ship time inside the app bundle and is spawned over stdio by MCP-compatible clients.</p>
-
-    <h2>Legal Documents</h2>
-    <ul>
-      <li><a href="/maclaw/privacy/">Privacy Policy</a></li>
-      <li><a href="/maclaw/terms/">Terms of Use</a></li>
-    </ul>
+  <div class="hero" data-lang="ja">
+      <div class="hero-icon" aria-hidden="true">🛡️</div>
+      <h1>McNav</h1>
+      <p class="lead">AIにMacを安全に任せる橋渡し</p>
+  </div>
+  <div class="hero" data-lang="en">
+      <div class="hero-icon" aria-hidden="true">🛡️</div>
+      <h1>McNav</h1>
+      <p class="lead">A safer audited bridge between AI assistants and macOS.</p>
+  </div>
+  <nav class="toc" data-lang="ja">
+<a class="toc-link" href="#faq-ja">FAQ</a>
+<a class="toc-link" href="#privacy-ja">プライバシー</a>
+<a class="toc-link" href="#terms-ja">利用規約</a>
+<a class="toc-link" href="#oss-ja">3rd Party Licensing Notice</a>
+<a class="toc-link" href="#commercial-ja">特定商取引法</a>
+<a class="toc-link" href="#contact-ja">お問い合わせ</a>
+</nav>
+  <nav class="toc" data-lang="en">
+<a class="toc-link" href="#faq-en">FAQ</a>
+<a class="toc-link" href="#privacy-en">Privacy</a>
+<a class="toc-link" href="#terms-en">Terms</a>
+<a class="toc-link" href="#oss-en">3rd Party Licensing Notice</a>
+<a class="toc-link" href="#commercial-en">Commercial</a>
+<a class="toc-link" href="#contact-en">Contact</a>
+</nav>
+  <main class="main">
+    <section id="faq-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">FAQ</div><div class="section-subtitle">設定・安全性・購入について</div></div></div><div class="legal-section"><h3>McNavとは何ですか？</h3><p>McNavは、Claude Desktop、Codex Desktop、その他のMCP互換クライアントが、macOSの公開APIをユーザー管理の監査済み経路で利用できるようにするmacOSアプリと同梱mcnav-mcpd MCPヘルパーです。</p><h3>アカウントは必要ですか？</h3><p>AllNewアカウントは不要です。有料アクセス、サブスクリプション、無料体験、購入復元、offer code redemptionはApple StoreKitで管理されます。</p><h3>どう設定しますか？</h3><p>McNavを開き、必要なmacOS権限だけを許可し、アプリ内のClaude DesktopまたはCodex Desktop用MCP設定スニペットをコピーしてください。ワークスペースアクセスは、AI支援ワークフローで使いたいフォルダだけを許可してください。</p><h3>秘密情報はどのように保護されますか？</h3><p>Secret Brokerは秘密値をmacOS Keychainに保存し、MCPクライアントにはメタデータとローカル確認コードだけを返します。貼り付けには確認が必要で、システムクリップボードを短時間だけ使用します。</p><h3>悪意あるWebページやURLへの対策は？</h3><p>McNavはクロールされたURL内容、ブラウザスナップショット、クリップボード、ファイルを信頼できない外部コンテンツとして扱い、境界表示、間接プロンプトインジェクション検出、疑わしいURL形式での確認を行います。</p><h3>購入をキャンセルまたは復元するには？</h3><p>McNavのSubscriptionタブから購入復元やAppleのサブスクリプション管理を開けます。解約、返金、最終価格、税、更新条件はAppleが管理し、App Store購入画面に表示されます。</p></div></section>
+    <section id="faq-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">FAQ</div><div class="section-subtitle">Setup, safety, and purchases</div></div></div><div class="legal-section"><h3>What is McNav?</h3><p>McNav is a macOS app and bundled mcnav-mcpd MCP helper that lets Claude Desktop, Codex Desktop, and other MCP-compatible clients use public macOS APIs through a controlled, audited surface.</p><h3>Does McNav require an account?</h3><p>No AllNew account is required. Paid access, subscriptions, trials, restores, and offer-code redemption are handled by Apple StoreKit.</p><h3>How do I set it up?</h3><p>Open McNav, grant only the macOS permissions you need, and copy the Claude Desktop or Codex Desktop MCP setup snippet from the app. For workspace access, grant only folders you want AI-assisted workflows to use.</p><h3>How does McNav protect secrets?</h3><p>Secret Broker stores secret values in macOS Keychain and returns only metadata and local verification codes to MCP clients. Pasting a secret requires confirmation and uses the system clipboard briefly.</p><h3>What about malicious web pages or URLs?</h3><p>McNav treats crawled URL content, browser snapshots, clipboard text, and files as untrusted external content. It adds data-boundary notices, blocks high-confidence indirect prompt-injection and exfiltration patterns, and asks for confirmation on suspicious URL forms.</p><h3>How can I cancel or restore purchases?</h3><p>Use the Subscription tab in McNav to restore purchases or open Apple&#x27;s subscription management. Cancellation, refunds, final pricing, taxes, and renewal terms are controlled by Apple and shown in the App Store purchase sheet.</p></div></section>
+    <section id="privacy-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">プライバシーポリシー</div><div class="section-subtitle">データの取り扱い</div></div></div><div class="legal-section"><p>最終更新: 2026年6月1日</p>
+<p>McNavは、主にユーザーのMac上で動作するよう設計されています。当社が運用するアプリデータ用バックエンドはなく、広告SDKを含まず、トラッキング目的でユーザーデータを販売または共有しません。</p>
+<h3>1. トラッキングに使用するデータ</h3>
+<p>ありません。McNavは、他社のアプリやWebサイトを横断してユーザーを追跡しません。</p>
+<h3>2. ユーザーに関連付けられるデータ</h3>
+<p>AllNewがアプリ利用のために収集するものはありません。StoreKitの購入処理はAppleが行います。McNavはApple署名付きの資格情報を受け取りますが、AllNewが管理する顧客プロフィールは受け取りません。</p>
+<h3>3. ユーザーに関連付けられないデータ</h3>
+<table><tbody><tr><td>種類</td><td>目的</td><td>保存・送信</td></tr><tr><td>診断・パフォーマンス情報</td><td>アプリ機能、デバッグ、ローカル監査状態</td><td>ローカルログとApp Groupコンテナに保存され、AllNewへ自動送信されません</td></tr><tr><td>利用状況・操作情報</td><td>Safety Stop、確認判断、監査サマリー</td><td>App Groupコンテナにローカル保存され、AllNewへ自動送信されません</td></tr><tr><td>ユーザーコンテンツ・プロンプト</td><td>ask_llm、route_task、cross_review、compare_responses等の任意のマルチLLM機能</td><td>Apple Foundation Modelsが利用可能な場合は原則オンデバイス。ユーザーが外部プロバイダを設定し、外部LLMフローを実行した場合のみ、そのプロバイダへプロンプト本文が送信されます</td></tr></tbody></table>
+<h3>4. 任意の外部LLM送信先</h3>
+<p>McNavは、ユーザーが外部LLMフローを使用する場合、またはMCPクライアントが設定済みプロバイダで当該フローを呼び出す場合に限り、プロンプト本文を送信することがあります。送信先はユーザー設定に依存します。</p>
+<table><tbody><tr><td>送信先</td><td>運営者</td><td>送信されるデータ</td><td>トリガー</td></tr><tr><td>api.anthropic.com</td><td>Anthropic, PBC</td><td>プロンプト本文</td><td>ユーザー設定済みAnthropic外部LLMフロー</td></tr><tr><td>api.openai.com</td><td>OpenAI, LLC</td><td>プロンプト本文</td><td>ユーザー設定済みOpenAI外部LLMフロー</td></tr><tr><td>api.x.ai</td><td>xAI Corp.</td><td>プロンプト本文</td><td>ユーザー設定済みxAI外部LLMフロー</td></tr><tr><td>generativelanguage.googleapis.com</td><td>Google LLC</td><td>プロンプト本文</td><td>ユーザー設定済みGemini外部LLMフロー</td></tr><tr><td>Apple servers</td><td>Apple Inc.</td><td>StoreKit資格情報・レシート関連データ</td><td>購入、復元、資格情報更新</td></tr></tbody></table>
+<p>これらの外部LLM送信先は米国等の国外事業者です。送信はユーザーの設定、操作、およびユーザー自身が設定したAPIキーに基づいて行われ、各プロバイダのプライバシーポリシーが適用されます。AllNewのサーバーを経由してプロンプトを中継するものではありません。</p>
+<h3>5. Secret Broker</h3>
+<p>Secret Brokerは、APIキー、銀行情報、パスワード、その他の秘密文字列をmacOS Keychainにローカル保存します。MCPツールは秘密値そのものを返さず、ID、種類、表示名、タグ、バイト数、タイムスタンプ、ローカルKeychainキーから派生した確認コードなど、非秘密のメタデータのみを返します。</p>
+<p>表示名やタグはAIクライアントに見える場合があるため、秘密値そのものを入力しないでください。ユーザーが貼り付け操作を承認した場合、McNavは短時間だけ値をシステムクリップボードに置き、その後クリアを試みます。その短い間、他のローカルアプリがクリップボードを読み取れる可能性があります。</p>
+<h3>6. 安全化・最小化</h3>
+<p>Privacy Filterは既定で有効になり、送信前に個人情報や秘密値の可能性がある内容を検出・マスキングするよう試みます。監査ログは、ツール引数やPIIを含む可能性があるフィールドについて、生データではなくSHA-256ハッシュや要約情報を記録する設計です。ユーザーは監査ログをローカルで確認、削除、または手動エクスポートできます。</p>
+<p>ただし、Privacy Filter、URL content guards、Secret Brokerはリスクを低減するベストエフォート機能であり、完全な検出、完全な匿名化、またはすべての開示防止を保証するものではありません。機密性の高い操作を承認する前に内容を確認してください。</p>
+<h3>7. URLおよびWebコンテンツのリスク</h3>
+<p>Webページ、ブラウザスナップショット、クリップボード文字列、ファイルには、AIエージェントを狙った悪意ある指示が含まれる場合があります。McNavは外部コンテンツを信頼できないものとして扱い、境界表示を付け、高信頼度の間接プロンプトインジェクションや外部送信パターンをブロックし、埋め込み認証情報、IPリテラル、短縮URL、Punycode類似ドメイン、ネストしたリダイレクトパラメータなどの疑わしいURL形式では確認を求めます。</p>
+<h3>8. ローカルデータの保持</h3>
+<table><tbody><tr><td>データ</td><td>場所</td><td>保持期間・ユーザー操作</td></tr><tr><td>監査ログ</td><td>App Groupコンテナ</td><td>ローカルでローテーションされ、ユーザーがいつでも削除できます</td></tr><tr><td>LLM設定</td><td>App Groupコンテナ</td><td>変更、リセット、削除されるまで保持されます</td></tr><tr><td>LLM APIキー</td><td>macOS Keychain</td><td>McNav設定またはKeychain Accessで削除されるまで保持されます</td></tr><tr><td>Secret Broker値</td><td>macOS Keychain</td><td>McNavまたはKeychain Accessで削除されるまで保持されます</td></tr><tr><td>Secret Brokerメタデータ</td><td>App Groupコンテナ</td><td>ユーザーが秘密参照を削除するまで保持されます</td></tr><tr><td>Security-scoped bookmarks</td><td>App Groupコンテナ</td><td>ユーザーが取り消すまで保持されます</td></tr></tbody></table>
+<h3>9. 権限</h3>
+<p>McNavは、Calendar、Reminders、Contacts、Screen Recording、Accessibility、Notifications、ユーザー選択フォルダへのアクセスについて、関連ツールまたは機能を使う場合のみmacOSの権限プロンプトを利用します。ユーザーはSystem Settingsからいつでも権限を取り消せます。</p>
+<h3>10. お問い合わせ</h3>
+<p>プライバシー、サポート連絡の削除、その他の問い合わせは、このページの「お問い合わせ」セクションからご連絡ください。</p></div></section>
+    <section id="privacy-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">McNav Privacy Policy</div><div class="section-subtitle">Data handling</div></div></div><div class="legal-section"><p>Last updated: June 1, 2026</p>
+<p>McNav is designed to run primarily on your Mac. It does not operate an AllNew-hosted backend for app data, does not include advertising SDKs, and does not sell or share user data for tracking.</p>
+<h3>1. Data Used to Track You</h3>
+<p>None. McNav does not track you across apps or websites.</p>
+<h3>2. Data Linked to You</h3>
+<p>None collected by AllNew for app use. StoreKit purchases are processed by Apple. McNav receives Apple-signed entitlement information, not a customer profile controlled by AllNew.</p>
+<h3>3. Data Not Linked to You</h3>
+<table><tbody><tr><td>Category</td><td>Purpose</td><td>Storage or transmission</td></tr><tr><td>Diagnostics and performance data</td><td>App functionality, debugging, local audit status</td><td>Stored locally in logs and the App Group container. Not automatically sent to AllNew.</td></tr><tr><td>Usage data / product interaction</td><td>Safety Stop events, confirmation decisions, audit summaries</td><td>Stored locally in the App Group container. Not automatically sent to AllNew.</td></tr><tr><td>User content / prompts</td><td>Optional multi-LLM tools such as ask_llm, route_task, cross_review, and compare_responses</td><td>On-device by default when Apple Foundation Models is available. If the user configures a remote provider and invokes a remote flow, prompt text is sent to that provider.</td></tr></tbody></table>
+<h3>4. Optional Remote LLM Destinations</h3>
+<p>McNav may send prompt text only when the user uses a remote LLM flow or when an MCP-driving assistant invokes that flow with a configured provider. The destination depends on the user configuration.</p>
+<table><tbody><tr><td>Destination</td><td>Operator</td><td>Data sent</td><td>Trigger</td></tr><tr><td>api.anthropic.com</td><td>Anthropic, PBC</td><td>Prompt text</td><td>User-configured Anthropic remote LLM flow</td></tr><tr><td>api.openai.com</td><td>OpenAI, LLC</td><td>Prompt text</td><td>User-configured OpenAI remote LLM flow</td></tr><tr><td>api.x.ai</td><td>xAI Corp.</td><td>Prompt text</td><td>User-configured xAI remote LLM flow</td></tr><tr><td>generativelanguage.googleapis.com</td><td>Google LLC</td><td>Prompt text</td><td>User-configured Gemini remote LLM flow</td></tr><tr><td>Apple servers</td><td>Apple Inc.</td><td>StoreKit entitlement and receipt data handled by Apple</td><td>Purchase, restore, or entitlement refresh</td></tr></tbody></table>
+<p>These remote LLM destinations may be operated by providers outside Japan, including in the United States. Transmission happens based on user configuration, user action, and the user&#x27;s own API key. Each provider&#x27;s privacy policy applies. Prompt text is not relayed through an AllNew-hosted backend.</p>
+<h3>5. Secret Broker</h3>
+<p>Secret Broker lets users store API keys, bank details, passwords, or other secret strings locally in macOS Keychain. MCP tools never return the raw secret value. They return only non-secret metadata such as an ID, kind, display name, tags, byte count, timestamps, and a local verification code derived with a local Keychain key.</p>
+<p>Display names and tags may be visible to the AI client, so users should not put the secret value itself into those fields. When the user approves a paste operation, McNav may place the value on the system clipboard briefly and then attempt to clear it. During that short window, other local apps may be able to read the clipboard.</p>
+<h3>6. Safety and Minimization</h3>
+<p>Privacy Filter is enabled by default and attempts to detect and mask likely personal information or secret values before transmission. Audit logs are designed to store SHA-256 hashes or summary information instead of raw tool arguments or fields that may contain PII. Users can review, delete, or manually export audit logs locally.</p>
+<p>Privacy Filter, URL content guards, and Secret Broker are best-effort controls that reduce risk, but they do not guarantee complete detection, complete anonymization, or prevention of every disclosure. Review sensitive actions before approving them.</p>
+<h3>7. URL and Web Content Risk</h3>
+<p>Web pages, browser snapshots, clipboard text, and files can contain malicious instructions aimed at AI agents. McNav marks external content as untrusted, wraps it with a content-boundary notice, blocks high-confidence indirect prompt-injection and exfiltration patterns, and requires confirmation for suspicious URL forms such as embedded credentials, IP literals, URL shorteners, Punycode lookalikes, and nested redirect parameters.</p>
+<h3>8. Local Data Retention</h3>
+<table><tbody><tr><td>Data</td><td>Where</td><td>Retention and user control</td></tr><tr><td>Audit log</td><td>App Group container</td><td>Rotated locally. Users can delete the files at any time.</td></tr><tr><td>LLM configuration</td><td>App Group container</td><td>Retained until changed, reset, or deleted.</td></tr><tr><td>LLM API keys</td><td>macOS Keychain</td><td>Retained until removed in McNav settings or Keychain Access.</td></tr><tr><td>Secret Broker values</td><td>macOS Keychain</td><td>Retained until deleted in McNav or removed from Keychain Access.</td></tr><tr><td>Secret Broker metadata</td><td>App Group container</td><td>Retained until the user deletes the secret reference.</td></tr><tr><td>Security-scoped bookmarks</td><td>App Group container</td><td>Retained until revoked by the user.</td></tr></tbody></table>
+<h3>9. Permissions</h3>
+<p>McNav uses macOS permission prompts for Calendar, Reminders, Contacts, Screen Recording, Accessibility, Notifications, and user-selected folders only when the related tool or feature is used. Users can revoke permissions at any time in System Settings.</p>
+<h3>10. Contact</h3>
+<p>For privacy questions, deletion requests about support communications, or other inquiries, use the Contact section on this page.</p></div></section>
+    <section id="terms-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">利用規約</div><div class="section-subtitle">サービスのご利用条件</div></div></div><div class="legal-section"><p>最終更新: 2026年6月1日</p>
+<p>本利用規約は、合同会社AllNewが提供するmacOSアプリケーション「McNav」の利用条件を定めるものです。McNavを利用することで、本規約および該当するAppleのApp Store標準規約に同意したものとみなされます。</p>
+<h3>1. McNavが提供するもの</h3>
+<p>McNavは、MCP互換AIアシスタントとmacOSの公開APIの間に、監査可能な橋渡しを提供します。権限、ポリシー、確認、Privacy Filter、Secret Broker、URL content guards、ローカル監査ログを通じて、ユーザーが操作を制御しやすくすることを目的とします。</p>
+<h3>2. セキュリティと自動化の限界</h3>
+<p>McNavはベストエフォートのセキュリティおよび生産性ツールです。完全なブロック、完全な匿名化、法令遵守、またはすべての開示防止を保証するものではありません。ユーザーは、権限、機密性の高い操作、AIクライアントの許可、出力内容を確認したうえで利用する責任を負います。</p>
+<p>McNavは、法律、金融、医療、税務、またはセキュリティコンサルティングの専門助言を提供するものではありません。専門的判断を要する場合は、適切な専門家に相談してください。</p>
+<h3>3. 禁止事項</h3>
+<ul><li>法令、第三者の権利、プラットフォーム規約、守秘義務、プライバシー権を侵害する目的で使用しないでください。</li><li>App Sandbox、macOS TCC権限、App Store決済、McNavの安全処理を回避しようとしないでください。</li><li>秘密監視、認証情報窃取、マルウェア、不正スクレイピング、または外部送信ワークフローに使用しないでください。</li><li>適用法で認められる場合を除き、McNavをリバースエンジニアリング、改変、再配布、再販売しないでください。</li></ul>
+<h3>4. 有料機能とApp Store購入</h3>
+<p>McNav ProはApple管理のアプリ内課金として提供される場合があります。</p>
+<ul><li>月額サブスクリプション: 月額USD 4.99、利用可能な場合は14日間の無料体験。</li><li>年額サブスクリプション: 年額USD 39.99、利用可能な場合は14日間の無料体験。</li><li>Lifetime Access: 買い切りの非消耗型購入、利用可能な場合はUSD 99.99。</li></ul>
+<p>最終価格、税、通貨、更新条件、無料体験の有無、解約期限、返金、ファミリー共有の可否はApp Storeの購入画面に表示され、Appleが管理します。サブスクリプションの管理または解約はApple IDのサブスクリプション設定で行ってください。McNavはAppleのStoreKit offer-code redemption flowのみを使用し、独自ライセンスキー、外部決済、暗号資産決済、App Store外の解除手段を使用しません。</p>
+<h3>5. プライバシー</h3>
+<p>McNavの利用には、McNavプライバシーポリシーも適用されます。同ポリシーでは、ローカルデータ保存、任意の外部LLM送信先、Secret Broker、URLコンテンツリスク制御、ユーザー管理について説明しています。</p>
+<h3>6. 提供の変更</h3>
+<p>McNavは、macOS、App Store規約、AIクライアント連携、セキュリティリスクの変化に応じて変更される場合があります。当社は機能、価格、開示内容、ドキュメントを更新することがあります。重要な変更がある場合、App Store表示、アプリ内文言、または本ページを必要に応じて更新します。</p>
+<h3>7. 免責および責任制限</h3>
+<p>法令で認められる最大限の範囲で、McNavは「現状有姿」および「提供可能な状態」で提供され、中断のない動作、エラーのない検出、特定目的への適合性を保証しません。本規約は、適用される消費者保護法その他の強行法規により制限できない権利を制限するものではありません。</p>
+<h3>8. 準拠法・管轄</h3>
+<p>本規約は日本法に準拠します。本規約またはMcNavに関して紛争が生じた場合、東京地方裁判所を第一審の専属的合意管轄裁判所とします。ただし、ユーザーの居住国または地域の消費者保護法その他の強行法規に基づく権利を制限するものではありません。</p>
+<h3>9. お問い合わせ</h3>
+<p>本規約に関する問い合わせは、このページの「お問い合わせ」セクションからご連絡ください。</p></div></section>
+    <section id="terms-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">McNav Terms of Use</div><div class="section-subtitle">Conditions for using the app</div></div></div><div class="legal-section"><p>Last updated: June 1, 2026</p>
+<p>These Terms of Use govern your use of McNav, a macOS app provided by AllNew LLC. By using McNav, you agree to these terms and to Apple&#x27;s standard App Store terms where applicable.</p>
+<h3>1. What McNav Provides</h3>
+<p>McNav provides an audited bridge between MCP-compatible AI assistants and public macOS APIs. It helps users route actions through permissions, policies, confirmations, Privacy Filter, Secret Broker, URL content guards, and local audit logs.</p>
+<h3>2. Security and Automation Limits</h3>
+<p>McNav is a best-effort security and productivity tool. It does not guarantee complete blocking, complete anonymization, legal compliance, or prevention of every disclosure. Users remain responsible for reviewing permissions, sensitive actions, AI-client grants, and outputs before relying on them.</p>
+<p>McNav does not provide legal, financial, medical, tax, or security-consulting advice. Consult an appropriate professional for decisions requiring expert judgment.</p>
+<h3>3. Prohibited Use</h3>
+<ul><li>Do not use McNav to violate laws, third-party rights, platform rules, confidentiality obligations, or privacy rights.</li><li>Do not attempt to bypass App Sandbox, macOS TCC permissions, App Store payments, or McNav&#x27;s safety pipeline.</li><li>Do not use McNav to run hidden surveillance, credential theft, malware, unauthorized scraping, or exfiltration workflows.</li><li>Do not reverse engineer, modify, redistribute, or resell McNav except where permitted by applicable law.</li></ul>
+<h3>4. Paid Features and App Store Purchases</h3>
+<p>McNav Pro may be offered through Apple-managed in-app purchases:</p>
+<ul><li>Monthly subscription: USD 4.99 per month, with a 14-day free introductory offer where available.</li><li>Yearly subscription: USD 39.99 per year, with a 14-day free introductory offer where available.</li><li>Lifetime Access: one-time non-consumable purchase, USD 99.99 where available.</li></ul>
+<p>The final price, taxes, currency, renewal terms, trial availability, cancellation deadline, refunds, and family-sharing availability are shown by the App Store purchase sheet and are controlled by Apple. Manage or cancel subscriptions in your Apple ID subscription settings. McNav uses Apple&#x27;s StoreKit offer-code redemption flow only; it does not use custom license keys, external payments, cryptocurrency payments, or off-App-Store unlocks.</p>
+<h3>5. Privacy</h3>
+<p>Your use of McNav is also governed by the McNav Privacy Policy. The Privacy Policy explains local data storage, optional remote LLM destinations, Secret Broker, URL content risk controls, and user controls.</p>
+<h3>6. Availability and Changes</h3>
+<p>McNav may change as macOS, App Store rules, AI-client integrations, and security risks evolve. We may update features, pricing, disclosures, and documentation. If a change is material, we will update the App Store listing, in-app text, or this page as appropriate.</p>
+<h3>7. Disclaimer and Limitation of Liability</h3>
+<p>To the maximum extent permitted by law, McNav is provided &quot;as is&quot; and &quot;as available&quot; without warranties of uninterrupted operation, error-free detection, or fitness for a particular purpose. Nothing in these terms limits rights that cannot be limited under applicable consumer protection law.</p>
+<h3>8. Governing Law and Jurisdiction</h3>
+<p>These Terms are governed by the laws of Japan. Disputes shall be subject to the exclusive jurisdiction of the Tokyo District Court as the court of first instance, except for mandatory consumer-protection rights of the user&#x27;s country or region of residence.</p>
+<h3>9. Contact</h3>
+<p>For questions about these Terms, use the Contact section on this page.</p></div></section>
+    <section id="oss-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">📦</div><div><div class="section-title">3rd Party Licensing Notice</div><div class="section-subtitle">Open Source Software notices</div></div></div><div class="legal-section"><h3>3rd Party Licensing Notice</h3><h4>オープンソースソフトウェアに関するお知らせ</h4><p>本製品には、オープンソースライセンスに基づき提供されるソフトウェア（「Open Source Software」）が含まれる場合があります。本製品に適用される利用規約と、当該Open Source Softwareに適用されるオープンソースライセンスの内容が矛盾する場合、当該Open Source Softwareについてはオープンソースライセンスが優先します。</p><p>一部のオープンソースライセンスでは、ソースコードの写しを入手する権利が認められています。適用ライセンス上必要な場合、AllNewはこのページまたはこのページに記載されたサポート窓口を通じて、対応するソースコードの入手方法を提供します。</p><h4>ソースコード提供に関するお知らせ</h4><p>本製品の特定バージョンに、GNU General Public License（GPL）、GNU Library/Lesser General Public License（LGPL）、MPL、またはソースコード提供を求めるその他のライセンスに基づくソフトウェアが含まれる場合、該当する製品名と、可能であればバージョン番号を明記して、このページに記載されたサポート窓口までご連絡ください。</p><table><tbody><tr><td>Package</td><td>Version</td><td>License</td><td>Source</td></tr><tr><td>Model Context Protocol Swift SDK</td><td>0.12.1</td><td>Apache-2.0 / MIT transition notice</td><td>https://github.com/modelcontextprotocol/swift-sdk</td></tr><tr><td>EventSource</td><td>1.4.1</td><td>MIT</td><td>https://github.com/mattt/eventsource</td></tr><tr><td>Swift Atomics</td><td>1.3.0</td><td>Apache-2.0</td><td>https://github.com/apple/swift-atomics</td></tr><tr><td>Swift Collections</td><td>1.5.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-collections</td></tr><tr><td>Swift Log</td><td>1.12.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-log</td></tr><tr><td>Swift NIO</td><td>2.100.0</td><td>Apache-2.0; CNIOLLHTTP MIT component</td><td>https://github.com/apple/swift-nio</td></tr><tr><td>Swift System</td><td>1.6.4</td><td>Apache-2.0</td><td>https://github.com/apple/swift-system</td></tr><tr><td>OpenAI Privacy Filter adapter</td><td>-</td><td>Apache-2.0</td><td>https://github.com/openai/privacy-filter</td></tr><tr><td>AppleScript Bridge OSS Pack</td><td>-</td><td>MIT</td><td>https://github.com/mueno/McNav/tree/main/shortcuts</td></tr></tbody></table><h3>Model Context Protocol Swift SDK</h3><h3>EventSource</h3><h3>Swift Atomics</h3><h3>Swift Collections</h3><h3>Swift Log</h3><h3>Swift NIO</h3><h3>Swift System</h3><h3>OpenAI Privacy Filter adapter</h3><h3>AppleScript Bridge OSS Pack</h3><p class="muted">確認日: 2026-06-01</p></div></section>
+    <section id="oss-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">📦</div><div><div class="section-title">3rd Party Licensing Notice</div><div class="section-subtitle">Open Source Software notices</div></div></div><div class="legal-section"><h3>3rd Party Licensing Notice</h3><h4>NOTICE RELATING TO OPEN SOURCE SOFTWARE</h4><p>This product may contain software ("Open Source Software") that is provided under open source licenses. If there is a conflict between the terms applicable to this product and the open source license applicable to such Open Source Software, the open source license will prevail with respect to that Open Source Software.</p><p>Some open source licenses give you the right to obtain a copy of source code. Where required by the applicable license, AllNew will provide a way to obtain the corresponding source code through this page or through the support contact listed on this page.</p><h4>OFFER TO PROVIDE SOURCE CODE</h4><p>If a version of this product contains software licensed under the GNU General Public License (GPL), GNU Library/Lesser General Public License (LGPL), MPL, or another license that requires source-code availability, you may request the corresponding source code for the relevant product and version by contacting the support address listed on this page.</p><table><tbody><tr><td>Package</td><td>Version</td><td>License</td><td>Source</td></tr><tr><td>Model Context Protocol Swift SDK</td><td>0.12.1</td><td>Apache-2.0 / MIT transition notice</td><td>https://github.com/modelcontextprotocol/swift-sdk</td></tr><tr><td>EventSource</td><td>1.4.1</td><td>MIT</td><td>https://github.com/mattt/eventsource</td></tr><tr><td>Swift Atomics</td><td>1.3.0</td><td>Apache-2.0</td><td>https://github.com/apple/swift-atomics</td></tr><tr><td>Swift Collections</td><td>1.5.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-collections</td></tr><tr><td>Swift Log</td><td>1.12.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-log</td></tr><tr><td>Swift NIO</td><td>2.100.0</td><td>Apache-2.0; CNIOLLHTTP MIT component</td><td>https://github.com/apple/swift-nio</td></tr><tr><td>Swift System</td><td>1.6.4</td><td>Apache-2.0</td><td>https://github.com/apple/swift-system</td></tr><tr><td>OpenAI Privacy Filter adapter</td><td>-</td><td>Apache-2.0</td><td>https://github.com/openai/privacy-filter</td></tr><tr><td>AppleScript Bridge OSS Pack</td><td>-</td><td>MIT</td><td>https://github.com/mueno/McNav/tree/main/shortcuts</td></tr></tbody></table><h3>Model Context Protocol Swift SDK</h3><h3>EventSource</h3><h3>Swift Atomics</h3><h3>Swift Collections</h3><h3>Swift Log</h3><h3>Swift NIO</h3><h3>Swift System</h3><h3>OpenAI Privacy Filter adapter</h3><h3>AppleScript Bridge OSS Pack</h3><p class="muted">Confirmation date: 2026-06-01</p></div></section>
+    <section id="commercial-ja" class="section" data-lang="ja"><div class="commercial-accordion"><button class="commercial-header" type="button" aria-expanded="false"><div class="section-header"><div class="section-icon">🏢</div><div><div class="section-title">特定商取引法に基づく表記</div><div class="section-subtitle">販売事業者情報</div></div></div><span class="commercial-toggle" aria-hidden="true">+</span></button><div class="commercial-content"><dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div><div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div><div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F（詳細所在地は請求があれば、購入申込み前に十分な時間的余裕をもって遅滞なく開示します。）</dd></div><div class="contact-item"><dt>お問い合わせ先</dt><dd><!--email_off-->app-support@allnew.work<!--/email_off--><br><small>※電話番号は請求があれば、購入申込み前に十分な時間的余裕をもって遅滞なく開示します</small></dd></div><div class="contact-item"><dt>販売価格</dt><dd>App Storeの購入画面に表示される価格、無料体験の有無・期間、更新条件が適用されます</dd></div><div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div><div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div><div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセルはお受けできません。返金の可否・手続はAppleの返金ポリシーに従います。</dd></div><div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div></dl></div></div></section>
+    <section id="commercial-en" class="section" data-lang="en"><div class="commercial-accordion"><button class="commercial-header" type="button" aria-expanded="false"><div class="section-header"><div class="section-icon">🏢</div><div><div class="section-title">Seller Information</div><div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div></div></div><span class="commercial-toggle" aria-hidden="true">+</span></button><div class="commercial-content"><dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div><div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div><div class="contact-item"><dt>Contact</dt><dd><!--email_off-->app-support@allnew.work<!--/email_off-->; phone number disclosed upon request where required</dd></div><div class="contact-item"><dt>Price</dt><dd>The price displayed on the App Store, including applicable tax, free trial availability, and renewal terms</dd></div><div class="contact-item"><dt>Payment Method &amp; Timing</dt><dd>Payment is charged by Apple at purchase confirmation using the payment method provided by the App Store</dd></div><div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div><div class="contact-item"><dt>Returns/Cancellations</dt><dd>Digital content is not returnable after purchase. Refunds follow Apple&#x27;s policy.</dd></div><div class="contact-item"><dt>Special Conditions</dt><dd>Minors must purchase or use the App with consent from a parent or legal guardian.</dd></div></dl></div></div></section>
+    <section id="contact-ja" class="section" data-lang="ja"><div class="contact-card"><h2>お問い合わせ</h2><!--email_off--><a href="mailto:app-support@allnew.work?subject=McNav%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off--><dl class="contact-details contact-details-top" style="border-bottom: none;"><div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div><div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div></dl></div></section>
+    <section id="contact-en" class="section" data-lang="en"><div class="contact-card"><h2>Contact Us</h2><!--email_off--><a href="mailto:app-support@allnew.work?subject=McNav%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off--><dl class="contact-details contact-details-top" style="border-bottom: none;"><div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div></section>
+    <p class="muted">Hosted legal page: https://apps.allnew.work/maclaw/</p>
   </main>
-  <footer>AllNew LLC / McNav</footer>
+  <script>
+    function toggleLangMenu() {
+      const dropdown = document.getElementById('langDropdown');
+      dropdown.classList.toggle('open');
+      const button = dropdown.querySelector('.lang-btn');
+      button.setAttribute('aria-expanded', dropdown.classList.contains('open') ? 'true' : 'false');
+    }
+    function setLang(lang) {
+      document.body.classList.toggle('lang-en', lang === 'en');
+      document.documentElement.lang = lang;
+      document.getElementById('currentLang').textContent = lang === 'ja' ? '日本語' : 'English';
+      document.querySelectorAll('.lang-option').forEach(function(option) {
+        option.classList.toggle('active', option.dataset.langOption === lang);
+      });
+      const dropdown = document.getElementById('langDropdown');
+      dropdown.classList.remove('open');
+      dropdown.querySelector('.lang-btn').setAttribute('aria-expanded', 'false');
+      try { localStorage.setItem('allnewLegalLang', lang); } catch (_) {}
+    }
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('langDropdown');
+      if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('open');
+        dropdown.querySelector('.lang-btn').setAttribute('aria-expanded', 'false');
+      }
+      const header = event.target.closest('.commercial-header');
+      if (!header) return;
+      const accordion = header.closest('.commercial-accordion');
+      const isOpen = accordion.classList.toggle('open');
+      header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    function checkCommercialAnchor() {
+      if (!location.hash || !location.hash.includes('commercial')) return;
+      document.querySelectorAll('.commercial-accordion').forEach(function(accordion) {
+        accordion.classList.add('open');
+        const header = accordion.querySelector('.commercial-header');
+        if (header) header.setAttribute('aria-expanded', 'true');
+      });
+    }
+    const params = new URLSearchParams(location.search);
+    const requested = params.get('lang') || (navigator.language || '').slice(0, 2);
+    setLang(requested === 'ja' ? 'ja' : 'en');
+    checkCommercialAnchor();
+    window.addEventListener('hashchange', checkCommercialAnchor);
+  </script>
 </body>
 </html>
