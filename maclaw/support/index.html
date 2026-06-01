@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>McNav Support</title>
+  <meta name="description" content="McNav support, setup help, and App Review information.">
+  <style>
+    :root { color-scheme: light; --ink:#10233f; --muted:#5e6b7f; --line:#d9e6f7; --soft:#f1f7ff; --brand:#0f5bd7; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; color:var(--ink); background:#f8fbff; line-height:1.7; }
+    header, footer { background:#fff; border-bottom:1px solid var(--line); padding:24px; }
+    footer { border-top:1px solid var(--line); border-bottom:0; color:var(--muted); }
+    main { max-width:980px; margin:0 auto; padding:30px 24px 58px; }
+    h1 { margin:0 0 8px; font-size:36px; letter-spacing:0; }
+    h2 { margin:30px 0 12px; font-size:23px; }
+    h3 { margin:20px 0 6px; font-size:18px; }
+    p, li { color:#26364d; }
+    a { color:var(--brand); font-weight:600; }
+    nav { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    nav a { padding:8px 12px; border:1px solid var(--line); border-radius:8px; text-decoration:none; background:#fff; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin:14px 0; }
+    code { background:var(--soft); border:1px solid var(--line); border-radius:6px; padding:2px 5px; }
+    .meta { color:var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>McNav</strong>
+    <nav aria-label="Legal navigation">
+      <a href="/maclaw/">Overview</a>
+      <a href="/maclaw/privacy/">Privacy</a>
+      <a href="/maclaw/terms/">Terms</a>
+      <a href="/maclaw/support/">Support</a>
+    </nav>
+  </header>
+  <main>
+    <h1>McNav Support</h1>
+    <p class="meta">Last updated: June 1, 2026</p>
+
+    <section class="card">
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:allnew.work2018@gmail.com?subject=McNav%20Support">allnew.work2018@gmail.com</a></p>
+      <p>Supported languages: Japanese and English. Typical response time depends on issue complexity.</p>
+    </section>
+
+    <h2>FAQ</h2>
+    <section class="card">
+      <h3>What is McNav?</h3>
+      <p>McNav is a macOS app and bundled MCP helper that lets AI assistants use public macOS APIs through a controlled, audited surface. It is designed for Claude Desktop, Codex Desktop, and other MCP-compatible clients.</p>
+    </section>
+    <section class="card">
+      <h3>Does McNav require an account?</h3>
+      <p>No AllNew account is required. Paid access, subscriptions, trials, restores, and offer-code redemption are handled by Apple StoreKit.</p>
+    </section>
+    <section class="card">
+      <h3>How do I set it up?</h3>
+      <p>Open McNav, review the dashboard, grant only the macOS permissions you need, and copy the Claude Desktop or Codex Desktop MCP setup snippet from the app. For workspace access, grant only folders you want AI-assisted workflows to use.</p>
+    </section>
+    <section class="card">
+      <h3>How does McNav protect secrets?</h3>
+      <p>Secret Broker stores secret values in macOS Keychain and returns only metadata and local verification codes to MCP clients. Pasting a secret requires confirmation and uses the system clipboard briefly, so users should still be careful around other local apps.</p>
+    </section>
+    <section class="card">
+      <h3>What about malicious web pages or URLs?</h3>
+      <p>McNav treats crawled URL content, browser snapshots, clipboard text, and files as untrusted external content. It adds data-boundary notices, blocks high-confidence indirect prompt-injection and exfiltration patterns, and asks for confirmation on suspicious URL forms.</p>
+    </section>
+    <section class="card">
+      <h3>How can I cancel or restore purchases?</h3>
+      <p>Use the Subscription tab in McNav to restore purchases or open Apple's subscription management. Cancellation, refunds, final pricing, taxes, and renewal terms are controlled by Apple and shown in the App Store purchase sheet.</p>
+    </section>
+
+    <h2>App Review Notes</h2>
+    <p>McNav does not download executable code, does not include a privileged helper, does not use custom external payment unlocks, and does not require Full Disk Access. The bundled <code>mcnav-mcpd</code> helper is fixed at ship time inside the app bundle and is spawned over stdio by MCP-compatible clients.</p>
+
+    <h2>Legal Documents</h2>
+    <ul>
+      <li><a href="/maclaw/privacy/">Privacy Policy</a></li>
+      <li><a href="/maclaw/terms/">Terms of Use</a></li>
+    </ul>
+  </main>
+  <footer>AllNew LLC / McNav</footer>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>McNav Privacy Policy</title>
+  <meta name="description" content="McNav Privacy Policy for App Store review and users.">
+  <style>
+    :root { color-scheme: light; --ink:#10233f; --muted:#5e6b7f; --line:#d9e6f7; --soft:#f1f7ff; --brand:#0f5bd7; --warn:#7a4a00; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; color:var(--ink); background:#f8fbff; line-height:1.7; }
+    header, footer { background:#fff; border-bottom:1px solid var(--line); padding:24px; }
+    footer { border-top:1px solid var(--line); border-bottom:0; color:var(--muted); }
+    main { max-width:980px; margin:0 auto; padding:30px 24px 58px; }
+    h1 { margin:0 0 8px; font-size:36px; letter-spacing:0; }
+    h2 { margin:32px 0 12px; font-size:24px; }
+    h3 { margin:22px 0 8px; font-size:18px; }
+    p, li, td, th { color:#26364d; }
+    a { color:var(--brand); font-weight:600; }
+    nav { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+    nav a { padding:8px 12px; border:1px solid var(--line); border-radius:8px; text-decoration:none; background:#fff; }
+    table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; display:block; overflow-x:auto; }
+    th, td { padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { background:var(--soft); color:var(--ink); }
+    .notice { background:#fff8e6; border:1px solid #f1cf7a; color:var(--warn); border-radius:10px; padding:14px 16px; }
+    .meta { color:var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>McNav</strong>
+    <nav aria-label="Legal navigation">
+      <a href="/maclaw/">Overview</a>
+      <a href="/maclaw/privacy/">Privacy</a>
+      <a href="/maclaw/terms/">Terms</a>
+      <a href="/maclaw/support/">Support</a>
+    </nav>
+  </header>
+  <main>
+    <h1>McNav Privacy Policy</h1>
+    <p class="meta">Last updated: June 1, 2026</p>
+    <p>McNav is designed to run primarily on your Mac. It does not operate an AllNew-hosted backend for app data, does not include advertising SDKs, and does not sell or share user data for tracking.</p>
+
+    <section class="notice">
+      <strong>Best-effort security notice:</strong> Privacy Filter, URL content guards, and Secret Broker reduce risk, but they do not guarantee complete detection, complete anonymization, or prevention of every disclosure. Review sensitive actions before approving them.
+    </section>
+
+    <h2>Data Used to Track You</h2>
+    <p>None. McNav does not track you across apps or websites.</p>
+
+    <h2>Data Linked to You</h2>
+    <p>None collected by AllNew. StoreKit purchases are processed by Apple. McNav receives Apple-signed entitlement information, not a customer profile controlled by AllNew.</p>
+
+    <h2>Data Not Linked to You</h2>
+    <table>
+      <tr><th>Category</th><th>Purpose</th><th>Storage or Transmission</th></tr>
+      <tr><td>Diagnostics and performance data</td><td>App functionality, debugging, local audit status</td><td>Stored locally in logs and the App Group container. Not automatically sent to AllNew.</td></tr>
+      <tr><td>Usage data / product interaction</td><td>Safety Stop events, confirmation decisions, audit summaries</td><td>Stored locally in the App Group container. Not automatically sent to AllNew.</td></tr>
+      <tr><td>User content / prompts</td><td>Optional multi-LLM tools such as ask_llm, route_task, cross_review, and compare_responses</td><td>On-device by default when Apple Foundation Models is available. If the user configures a remote provider and invokes a remote flow, prompt text is sent to that provider.</td></tr>
+    </table>
+
+    <h2>Optional Remote LLM Destinations</h2>
+    <p>McNav may send prompt text only when the user uses a remote LLM flow or when an MCP-driving assistant invokes that flow with a configured provider. The destination depends on the user configuration.</p>
+    <table>
+      <tr><th>Destination</th><th>Operator</th><th>Data sent</th><th>Trigger</th></tr>
+      <tr><td>api.anthropic.com</td><td>Anthropic, PBC</td><td>Prompt text</td><td>User-configured Anthropic remote LLM flow</td></tr>
+      <tr><td>api.openai.com</td><td>OpenAI, LLC</td><td>Prompt text</td><td>User-configured OpenAI remote LLM flow</td></tr>
+      <tr><td>api.x.ai</td><td>xAI Corp.</td><td>Prompt text</td><td>User-configured xAI remote LLM flow</td></tr>
+      <tr><td>generativelanguage.googleapis.com</td><td>Google LLC</td><td>Prompt text</td><td>User-configured Gemini remote LLM flow</td></tr>
+      <tr><td>Apple servers</td><td>Apple Inc.</td><td>StoreKit entitlement and receipt data handled by Apple</td><td>Purchase, restore, or entitlement refresh</td></tr>
+    </table>
+
+    <h2>Secret Broker</h2>
+    <p>Secret Broker lets users store API keys, bank details, passwords, or other secret strings locally in macOS Keychain. MCP tools never return the raw secret value. They return only non-secret metadata such as an ID, kind, display name, tags, byte count, timestamps, and a local verification code derived with a local Keychain key.</p>
+    <p>Display names and tags may be visible to the AI client, so users should not put the secret value itself into those fields. When the user approves a paste operation, McNav may place the value on the system clipboard briefly and then attempt to clear it. During that short window, other local apps may be able to read the clipboard.</p>
+
+    <h2>URL and Web Content Risk</h2>
+    <p>Web pages, browser snapshots, clipboard text, and files can contain malicious instructions aimed at AI agents. McNav marks external content as untrusted, wraps it with a content-boundary notice, blocks high-confidence indirect prompt-injection and exfiltration patterns, and requires confirmation for suspicious URL forms such as embedded credentials, IP literals, URL shorteners, Punycode lookalikes, and nested redirect parameters.</p>
+
+    <h2>Local Data Retention</h2>
+    <table>
+      <tr><th>Data</th><th>Where</th><th>Retention and user control</th></tr>
+      <tr><td>Audit log</td><td>App Group container</td><td>Rotated locally. Users can delete the files at any time.</td></tr>
+      <tr><td>LLM configuration</td><td>App Group container</td><td>Retained until changed, reset, or deleted.</td></tr>
+      <tr><td>LLM API keys</td><td>macOS Keychain</td><td>Retained until removed in McNav settings or Keychain Access.</td></tr>
+      <tr><td>Secret Broker values</td><td>macOS Keychain</td><td>Retained until deleted in McNav or removed from Keychain Access.</td></tr>
+      <tr><td>Secret Broker metadata</td><td>App Group container</td><td>Retained until the user deletes the secret reference.</td></tr>
+      <tr><td>Security-scoped bookmarks</td><td>App Group container</td><td>Retained until revoked by the user.</td></tr>
+    </table>
+
+    <h2>Permissions</h2>
+    <p>McNav uses macOS permission prompts for Calendar, Reminders, Contacts, Screen Recording, Accessibility, Notifications, and user-selected folders only when the related tool or feature is used. Users can revoke permissions at any time in System Settings.</p>
+
+    <h2>Contact</h2>
+    <p>For privacy questions or deletion requests about support communications, contact <a href="mailto:allnew.work2018@gmail.com?subject=McNav%20Privacy">allnew.work2018@gmail.com</a>.</p>
+  </main>
+  <footer>AllNew LLC / McNav</footer>
+</body>
+</html>
