@@ -1,156 +1,818 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>McNav Support</title>
-  <meta name="description" content="A safer audited bridge between AI assistants and macOS.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
-  <meta name="referrer" content="no-referrer">
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
-  <meta name="bingbot" content="noindex, nofollow, noarchive">
-  <meta name="GPTBot" content="noindex, nofollow">
-  <meta name="CCBot" content="noindex, nofollow">
-  <meta name="anthropic-ai" content="noindex, nofollow">
-  <meta name="Google-Extended" content="noindex, nofollow">
-  <style>
-    :root {
-      --bg: #fafafa; --panel: #ffffff; --muted: #6e6e73; --text: #1d1d1f;
-      --accent: #0071e3; --border: rgba(0,0,0,.08); --glass: rgba(255,255,255,.78);
-      --radius: 20px; --shadow: 0 10px 30px rgba(0,0,0,.06);
-      --bg-secondary: #f5f5f7; --bg-tertiary: #fbfbfd; --text-secondary: #6e6e73;
-      --text-tertiary: #8e8e93; --text-primary: #1d1d1f; --accent-hover: #0066cc;
-      --radius-sm: 16px; --radius-lg: 28px;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root { --bg: #000; --panel: #1c1c1e; --muted: #a1a1a6; --text: #f5f5f7; --border: rgba(255,255,255,.12); --glass: rgba(28,28,30,.78); --bg-secondary: #1c1c1e; --bg-tertiary: #2c2c2e; --text-secondary: #a1a1a6; --text-tertiary: #8e8e93; --text-primary: #f5f5f7; }
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; -webkit-font-smoothing: antialiased; }
-    .header { position: sticky; top: 0; z-index: 10; background: var(--glass); backdrop-filter: blur(20px) saturate(180%); border-bottom: 1px solid var(--border); }
-    .header-inner { max-width: 860px; margin: 0 auto; padding: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .logo-link { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
-    .logo { font-weight: 800; letter-spacing: -.02em; font-size: 1.45rem; }
-    .logo-divider { width: 1px; height: 28px; background: var(--border); display: inline-block; }
-    .app-name { color: var(--muted); font-size: 1.2rem; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .lang-dropdown { position: relative; flex-shrink: 0; }
-    .lang-btn { border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 999px; padding: 10px 18px; font-weight: 700; box-shadow: var(--shadow); cursor: pointer; }
-    .lang-btn::after { content: "⌄"; margin-left: 7px; color: var(--muted); }
-    .lang-menu { display: none; position: absolute; right: 0; top: calc(100% + 8px); background: var(--panel); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; min-width: 150px; }
-    .lang-dropdown.open .lang-menu { display: block; }
-    .lang-option { display: block; width: 100%; border: 0; background: transparent; color: var(--text); padding: 11px 16px; text-align: left; font-weight: 650; cursor: pointer; }
-    .lang-option.active, .lang-option:hover { background: var(--bg-secondary); color: var(--accent); }
-    main, .main { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
-    .hero { max-width: 860px; margin: 0 auto; padding: 66px 20px 46px; text-align: center; }
-    .hero-icon { width: 92px; height: 92px; border-radius: 24px; margin: 0 auto 24px; display: grid; place-items: center; background: linear-gradient(145deg, #f7e8c8, #f6c842); color: #1d1d1f; font-size: 42px; box-shadow: var(--shadow); }
-    h1 { margin: 0 0 14px; font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.05; letter-spacing: -.03em; }
-    .lead { color: var(--muted); max-width: 560px; margin: 0 auto; font-size: 1.15rem; line-height: 1.75; }
-    .toc { max-width: 760px; margin: 0 auto 52px; padding: 0 20px; display: flex; justify-content: center; align-items: center; gap: 22px; flex-wrap: wrap; }
-    .toc-link { color: var(--muted); text-decoration: none; font-size: 1.05rem; font-weight: 700; transition: color .2s ease; }
-    .toc-link:hover { color: var(--accent); }
-    section { margin: 26px 0; padding: 24px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); scroll-margin-top: 80px; }
-    section h2 { margin: 0 0 14px; font-size: 1.45rem; letter-spacing: -.015em; }
-    section h3 { margin: 22px 0 8px; font-size: 1.1rem; }
-    p { margin: 10px 0; }
-    ul { padding-left: 1.25rem; }
-    table { width: 100%; border-collapse: collapse; margin: 14px 0; overflow-wrap: anywhere; }
-    th, td { border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; padding: 9px 6px; }
-    .muted { color: var(--muted); }
-    .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-    .section-icon { width: 44px; height: 44px; border-radius: 14px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .section-title { font-size: 1.45rem; line-height: 1.2; font-weight: 750; letter-spacing: -.015em; }
-    .section-subtitle { color: var(--muted); font-size: .9rem; margin-top: 2px; }
-    .legal-section h3 { margin: 22px 0 8px; font-size: 1.05rem; }
-    .legal-section p { color: var(--text-secondary); font-size: .93rem; }
-    .legal-section ul { color: var(--text-secondary); font-size: .93rem; }
-    .license-text { white-space: pre-wrap; overflow-wrap: anywhere; padding: 14px; border-radius: var(--radius-sm); background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-secondary); font-size: .78rem; line-height: 1.5; }
-    .commercial-accordion { background: var(--bg-secondary); border-radius: var(--radius-sm); border: 1px solid var(--border); overflow: hidden; }
-    .commercial-header { width: 100%; appearance: none; border: 0; background: transparent; color: inherit; display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; cursor: pointer; text-align: left; transition: background .2s ease; }
-    .commercial-header:hover { background: var(--bg-tertiary); }
-    .commercial-header .section-header { margin-bottom: 0; }
-    .commercial-toggle { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 20px; font-weight: 300; transition: all .25s ease; flex-shrink: 0; }
-    .commercial-accordion.open .commercial-toggle { background: var(--accent); color: white; transform: rotate(45deg); }
-    .commercial-content { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
-    .commercial-accordion.open .commercial-content { max-height: 1400px; padding: 0 24px 24px; }
-    .contact-card { background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%); border-radius: var(--radius-lg); padding: 40px; text-align: center; border: 1px solid var(--border); }
-    .contact-card h2 { font-size: 1.4rem; font-weight: 700; margin: 0 0 22px; }
-    .contact-email { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: white; padding: 14px 28px; border-radius: 980px; text-decoration: none; font-weight: 650; font-size: .95rem; transition: all .2s ease; }
-    .contact-email:hover { background: var(--accent-hover); transform: scale(1.02); text-decoration: none; }
-    .contact-details { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); text-align: left; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
-    .contact-details-top { margin-top: 24px; margin-bottom: 24px; padding-top: 0; padding-bottom: 16px; border-top: none; border-bottom: 1px solid var(--border); }
-    .contact-item { font-size: .88rem; }
-    .contact-item dt { color: var(--text-tertiary); font-weight: 650; margin-bottom: 4px; }
-    .contact-item dd { color: var(--text-primary); margin: 0; overflow-wrap: anywhere; }
-    [data-lang="en"] { display: none; }
-    body.lang-en [data-lang="ja"] { display: none; }
-    body.lang-en [data-lang="en"] { display: block; }
-    @media (max-width: 640px) {
-      .header-inner { padding: 18px 16px; }
-      .logo { font-size: 1.2rem; }
-      .app-name { font-size: 1rem; max-width: 150px; }
-      main, .main { padding: 0 16px 70px; }
-      .hero { padding: 48px 16px 34px; }
-      .toc { gap: 18px; margin-bottom: 36px; }
-      section { padding: 18px; }
-      .section-header { flex-direction: column; text-align: center; }
-      .commercial-header { padding: 18px; }
-      .commercial-header .section-header { flex-direction: row; text-align: left; }
-      .contact-card { padding: 28px; }
-      .contact-details { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McNav Support</title>
+    <meta name="description" content="McNav - AIにMacを安全に任せる橋渡し。FAQ、プライバシーポリシー、利用規約、ライセンス、特定商取引法、お問い合わせ。">
+    <!-- Security Headers (static hosting fallback for Vercel) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+    <meta name="referrer" content="no-referrer">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="bingbot" content="noindex, nofollow, noarchive">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
+    <style>
+:root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.72);
+            --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #2997ff;
+                --accent-hover: #4da8ff;
+                --border: rgba(255,255,255,0.1);
+                --glass: rgba(28,28,30,0.72);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            /* Copy Protection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Sticky Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--border);
+        }
+
+        .app-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Language Dropdown */
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 980px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .lang-btn::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-dropdown.open .lang-btn::after {
+            transform: rotate(180deg);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 160px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-soft);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+            z-index: 200;
+        }
+
+        .lang-dropdown.open .lang-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .lang-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .lang-option.active {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .lang-option:first-child { border-radius: 11px 11px 0 0; }
+        .lang-option:last-child { border-radius: 0 0 11px 11px; }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation TOC */
+        .toc {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .toc-link {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 980px;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        /* Language Content Containers */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        /* Section */
+        .section {
+            padding: 48px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Updated Badge */
+        .updated-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-tertiary);
+            padding: 6px 12px;
+            border-radius: 980px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .updated-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #34c759;
+            border-radius: 50%;
+        }
+
+        /* Important Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0,113,227,0.08) 0%, rgba(102,126,234,0.08) 100%);
+            border: 1px solid rgba(0,113,227,0.2);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .highlight-box p {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(0,113,227,0.3);
+        }
+
+        .faq-question {
+            padding: 18px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 800px;
+            padding: 0 24px 24px;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .faq-answer p:last-child { margin-bottom: 0; }
+
+        .faq-answer ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* Legal Sections */
+        .legal-section {
+            margin-bottom: 28px;
+        }
+
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legal-section h3::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .legal-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .legal-section li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .legal-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .legal-section a:hover {
+            text-decoration: underline;
+        }
+
+
+        .legal-section h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 18px 0 8px;
+        }
+
+        .legal-section table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0 18px;
+            overflow-wrap: anywhere;
+            font-size: 0.86rem;
+            color: var(--text-secondary);
+        }
+
+        .legal-section th,
+        .legal-section td {
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            vertical-align: top;
+            padding: 9px 6px;
+            line-height: 1.6;
+        }
+
+        .legal-section th {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .muted {
+            color: var(--text-tertiary);
+            font-size: 0.85rem;
+        }
+
+        /* Commercial Accordion */
+        .commercial-accordion {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .commercial-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .commercial-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .commercial-toggle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .commercial-accordion.open .commercial-toggle {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .commercial-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .commercial-accordion.open .commercial-content {
+            max-height: 600px;
+            padding: 0 24px 24px;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .contact-card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .contact-card > p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .contact-email:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .contact-details {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .contact-details-top {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            padding-top: 0;
+            padding-bottom: 16px;
+            border-top: none;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contact-item {
+            font-size: 0.85rem;
+        }
+
+        .contact-item dt {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .contact-item dd {
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        /* Translation Notice */
+        .translation-notice {
+            background: #fff3cd;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .translation-notice {
+                background: rgba(255, 193, 7, 0.15);
+                color: #ffc107;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-inner {
+                gap: 12px;
+            }
+
+            .hero { padding: 40px 20px 30px; }
+            .hero h1 { font-size: 1.6rem; }
+
+            .toc { gap: 4px; }
+            .toc-link { padding: 6px 12px; font-size: 0.8rem; }
+
+            .section { padding: 32px 0; }
+            .section-header { flex-direction: column; text-align: center; }
+
+            .contact-card { padding: 28px; }
+            .contact-details { grid-template-columns: 1fr; }
+        }
+
+        /* Scroll offset for anchors */
+        :target {
+            scroll-margin-top: 80px;
+        }
+
+        /* Fun Easter Egg */
+        .hero-icon:hover {
+            animation: wiggle 0.5s ease;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+        }
+    </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <a href="https://apps.allnew.work/maclaw/" class="logo-link" aria-label="AllNew McNav">
-        <span class="logo">AllNew</span>
-        <span class="logo-divider" aria-hidden="true"></span>
-        <span class="app-name">McNav</span>
-      </a>
-      <div class="lang-dropdown" id="langDropdown">
-        <button class="lang-btn" type="button" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false"><span id="currentLang">日本語</span></button>
-        <div class="lang-menu" role="menu">
-          <button class="lang-option" type="button" data-lang-option="ja" onclick="setLang('ja')" role="menuitem">日本語</button>
-          <button class="lang-option" type="button" data-lang-option="en" onclick="setLang('en')" role="menuitem">English</button>
+    <header class="header">
+        <div class="header-inner">
+            <a href="../" class="logo-link">
+                <span class="logo">AllNew</span>
+                <span class="logo-divider"></span>
+                <span class="app-name">McNav</span>
+            </a>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-btn" id="langBtn">
+                    <span id="currentLangLabel">日本語</span>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <button class="lang-option active" data-lang="ja">日本語</button>
+                    <button class="lang-option" data-lang="en">English</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
-  <div class="hero" data-lang="ja">
-      <div class="hero-icon" aria-hidden="true">🛡️</div>
-      <h1>McNav</h1>
-      <p class="lead">AIにMacを安全に任せる橋渡し</p>
-  </div>
-  <div class="hero" data-lang="en">
-      <div class="hero-icon" aria-hidden="true">🛡️</div>
-      <h1>McNav</h1>
-      <p class="lead">A safer audited bridge between AI assistants and macOS.</p>
-  </div>
-  <nav class="toc" data-lang="ja">
-<a class="toc-link" href="#faq-ja">FAQ</a>
-<a class="toc-link" href="#privacy-ja">プライバシー</a>
-<a class="toc-link" href="#terms-ja">利用規約</a>
-<a class="toc-link" href="#oss-ja">3rd Party Licensing Notice</a>
-<a class="toc-link" href="#commercial-ja">特定商取引法</a>
-<a class="toc-link" href="#contact-ja">お問い合わせ</a>
-</nav>
-  <nav class="toc" data-lang="en">
-<a class="toc-link" href="#faq-en">FAQ</a>
-<a class="toc-link" href="#privacy-en">Privacy</a>
-<a class="toc-link" href="#terms-en">Terms</a>
-<a class="toc-link" href="#oss-en">3rd Party Licensing Notice</a>
-<a class="toc-link" href="#commercial-en">Commercial</a>
-<a class="toc-link" href="#contact-en">Contact</a>
-</nav>
-  <main class="main">
-    <section id="faq-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">FAQ</div><div class="section-subtitle">設定・安全性・購入について</div></div></div><div class="legal-section"><h3>McNavとは何ですか？</h3><p>McNavは、Claude Desktop、Codex Desktop、その他のMCP互換クライアントが、macOSの公開APIをユーザー管理の監査済み経路で利用できるようにするmacOSアプリと同梱mcnav-mcpd MCPヘルパーです。</p><h3>アカウントは必要ですか？</h3><p>AllNewアカウントは不要です。有料アクセス、サブスクリプション、無料体験、購入復元、offer code redemptionはApple StoreKitで管理されます。</p><h3>どう設定しますか？</h3><p>McNavを開き、必要なmacOS権限だけを許可し、アプリ内のClaude DesktopまたはCodex Desktop用MCP設定スニペットをコピーしてください。ワークスペースアクセスは、AI支援ワークフローで使いたいフォルダだけを許可してください。</p><h3>秘密情報はどのように保護されますか？</h3><p>Secret Brokerは秘密値をmacOS Keychainに保存し、MCPクライアントにはメタデータとローカル確認コードだけを返します。貼り付けには確認が必要で、システムクリップボードを短時間だけ使用します。</p><h3>悪意あるWebページやURLへの対策は？</h3><p>McNavはクロールされたURL内容、ブラウザスナップショット、クリップボード、ファイルを信頼できない外部コンテンツとして扱い、境界表示、間接プロンプトインジェクション検出、疑わしいURL形式での確認を行います。</p><h3>購入をキャンセルまたは復元するには？</h3><p>McNavのSubscriptionタブから購入復元やAppleのサブスクリプション管理を開けます。解約、返金、最終価格、税、更新条件はAppleが管理し、App Store購入画面に表示されます。</p></div></section>
-    <section id="faq-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">FAQ</div><div class="section-subtitle">Setup, safety, and purchases</div></div></div><div class="legal-section"><h3>What is McNav?</h3><p>McNav is a macOS app and bundled mcnav-mcpd MCP helper that lets Claude Desktop, Codex Desktop, and other MCP-compatible clients use public macOS APIs through a controlled, audited surface.</p><h3>Does McNav require an account?</h3><p>No AllNew account is required. Paid access, subscriptions, trials, restores, and offer-code redemption are handled by Apple StoreKit.</p><h3>How do I set it up?</h3><p>Open McNav, grant only the macOS permissions you need, and copy the Claude Desktop or Codex Desktop MCP setup snippet from the app. For workspace access, grant only folders you want AI-assisted workflows to use.</p><h3>How does McNav protect secrets?</h3><p>Secret Broker stores secret values in macOS Keychain and returns only metadata and local verification codes to MCP clients. Pasting a secret requires confirmation and uses the system clipboard briefly.</p><h3>What about malicious web pages or URLs?</h3><p>McNav treats crawled URL content, browser snapshots, clipboard text, and files as untrusted external content. It adds data-boundary notices, blocks high-confidence indirect prompt-injection and exfiltration patterns, and asks for confirmation on suspicious URL forms.</p><h3>How can I cancel or restore purchases?</h3><p>Use the Subscription tab in McNav to restore purchases or open Apple&#x27;s subscription management. Cancellation, refunds, final pricing, taxes, and renewal terms are controlled by Apple and shown in the App Store purchase sheet.</p></div></section>
-    <section id="privacy-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">プライバシーポリシー</div><div class="section-subtitle">データの取り扱い</div></div></div><div class="legal-section"><p>最終更新: 2026年6月1日</p>
-<p>McNavは、主にユーザーのMac上で動作するよう設計されています。当社が運用するアプリデータ用バックエンドはなく、広告SDKを含まず、トラッキング目的でユーザーデータを販売または共有しません。</p>
-<h3>1. トラッキングに使用するデータ</h3>
+    </header>
+
+    <section class="hero">
+        <img src="../mcnav-icon.png?v=1" alt="McNav" class="hero-icon">
+        <h1 id="heroTitle">McNav</h1>
+        <p class="hero-subtitle" id="heroSubtitle">AIにMacを安全に任せる橋渡し</p>
+    </section>
+
+    <nav class="toc" id="toc">
+        <a href="#faq-ja" class="toc-link" data-section="faq">FAQ</a>
+        <a href="#privacy-ja" class="toc-link" data-section="privacy">プライバシー</a>
+        <a href="#terms-ja" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#oss-ja" class="toc-link" data-section="oss">3rd Party Licensing Notice</a>
+        <a href="#commercial-ja" class="toc-link" data-section="commercial">特定商取引法</a>
+        <a href="#contact-ja" class="toc-link" data-section="contact">お問い合わせ</a>
+    </nav>
+
+    <main class="main">
+        <!-- ==================== JAPANESE ==================== -->
+        <div class="lang-content active" data-lang="ja">
+            <section id="faq-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">よくある質問</div>
+                        <div class="section-subtitle">設定・安全性・購入についてお答えします</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">McNavとは何ですか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>McNavは、Claude Desktop、Codex Desktop、その他のMCP互換クライアントが、macOSの公開APIをユーザー管理の監査済み経路で利用できるようにするmacOSアプリと同梱mcnav-mcpd MCPヘルパーです。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">アカウントは必要ですか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>AllNewアカウントは不要です。有料アクセス、サブスクリプション、無料体験、購入復元、offer code redemptionはApple StoreKitで管理されます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">どう設定しますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>McNavを開き、必要なmacOS権限だけを許可し、アプリ内のClaude DesktopまたはCodex Desktop用MCP設定スニペットをコピーしてください。ワークスペースアクセスは、AI支援ワークフローで使いたいフォルダだけを許可してください。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">秘密情報はどのように保護されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Secret Brokerは秘密値をmacOS Keychainに保存し、MCPクライアントにはメタデータとローカル確認コードだけを返します。貼り付けには確認が必要で、システムクリップボードを短時間だけ使用します。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">悪意あるWebページやURLへの対策は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>McNavはクロールされたURL内容、ブラウザスナップショット、クリップボード、ファイルを信頼できない外部コンテンツとして扱い、境界表示、間接プロンプトインジェクション検出、疑わしいURL形式での確認を行います。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">購入をキャンセルまたは復元するには？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>McNavのSubscriptionタブから購入復元やAppleのサブスクリプション管理を開けます。解約、返金、最終価格、税、更新条件はAppleが管理し、App Store購入画面に表示されます。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="privacy-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">プライバシーポリシー</div>
+                        <div class="section-subtitle">データの取り扱い</div>
+                    </div>
+                </div>
+                <span class="updated-badge">最終更新: 2026年6月1日</span>
+
+                <div class="highlight-box">
+                    <p><strong>重要:</strong> McNavは、主にユーザーのMac上で動作するよう設計されています。当社が運用するアプリデータ用バックエンドはなく、広告SDKを含まず、トラッキング目的でユーザーデータを販売または共有しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. トラッキングに使用するデータ</h3>
 <p>ありません。McNavは、他社のアプリやWebサイトを横断してユーザーを追跡しません。</p>
 <h3>2. ユーザーに関連付けられるデータ</h3>
 <p>AllNewがアプリ利用のために収集するものはありません。StoreKitの購入処理はAppleが行います。McNavはApple署名付きの資格情報を受け取りますが、AllNewが管理する顧客プロフィールは受け取りません。</p>
@@ -173,10 +835,159 @@
 <h3>9. 権限</h3>
 <p>McNavは、Calendar、Reminders、Contacts、Screen Recording、Accessibility、Notifications、ユーザー選択フォルダへのアクセスについて、関連ツールまたは機能を使う場合のみmacOSの権限プロンプトを利用します。ユーザーはSystem Settingsからいつでも権限を取り消せます。</p>
 <h3>10. お問い合わせ</h3>
-<p>プライバシー、サポート連絡の削除、その他の問い合わせは、このページの「お問い合わせ」セクションからご連絡ください。</p></div></section>
-    <section id="privacy-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">McNav Privacy Policy</div><div class="section-subtitle">Data handling</div></div></div><div class="legal-section"><p>Last updated: June 1, 2026</p>
-<p>McNav is designed to run primarily on your Mac. It does not operate an AllNew-hosted backend for app data, does not include advertising SDKs, and does not sell or share user data for tracking.</p>
-<h3>1. Data Used to Track You</h3>
+<p>プライバシー、サポート連絡の削除、その他の問い合わせは、このページの「お問い合わせ」セクションからご連絡ください。</p>
+                </div>
+            </section>
+
+            <section id="terms-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">利用規約</div>
+                        <div class="section-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+                <span class="updated-badge">最終更新: 2026年6月1日</span>
+
+                <div class="legal-section">
+                    <p>本利用規約は、合同会社AllNewが提供するmacOSアプリケーション「McNav」の利用条件を定めるものです。McNavを利用することで、本規約および該当するAppleのApp Store標準規約に同意したものとみなされます。</p>
+<h3>1. McNavが提供するもの</h3>
+<p>McNavは、MCP互換AIアシスタントとmacOSの公開APIの間に、監査可能な橋渡しを提供します。権限、ポリシー、確認、Privacy Filter、Secret Broker、URL content guards、ローカル監査ログを通じて、ユーザーが操作を制御しやすくすることを目的とします。</p>
+<h3>2. セキュリティと自動化の限界</h3>
+<p>McNavはベストエフォートのセキュリティおよび生産性ツールです。完全なブロック、完全な匿名化、法令遵守、またはすべての開示防止を保証するものではありません。ユーザーは、権限、機密性の高い操作、AIクライアントの許可、出力内容を確認したうえで利用する責任を負います。</p>
+<p>McNavは、法律、金融、医療、税務、またはセキュリティコンサルティングの専門助言を提供するものではありません。専門的判断を要する場合は、適切な専門家に相談してください。</p>
+<h3>3. 禁止事項</h3>
+<ul><li>法令、第三者の権利、プラットフォーム規約、守秘義務、プライバシー権を侵害する目的で使用しないでください。</li><li>App Sandbox、macOS TCC権限、App Store決済、McNavの安全処理を回避しようとしないでください。</li><li>秘密監視、認証情報窃取、マルウェア、不正スクレイピング、または外部送信ワークフローに使用しないでください。</li><li>適用法で認められる場合を除き、McNavをリバースエンジニアリング、改変、再配布、再販売しないでください。</li></ul>
+<h3>4. 有料機能とApp Store購入</h3>
+<p>McNav ProはApple管理のアプリ内課金として提供される場合があります。</p>
+<ul><li>月額サブスクリプション: 月額USD 4.99、利用可能な場合は14日間の無料体験。</li><li>年額サブスクリプション: 年額USD 39.99、利用可能な場合は14日間の無料体験。</li><li>Lifetime Access: 買い切りの非消耗型購入、利用可能な場合はUSD 99.99。</li></ul>
+<p>最終価格、税、通貨、更新条件、無料体験の有無、解約期限、返金、ファミリー共有の可否はApp Storeの購入画面に表示され、Appleが管理します。サブスクリプションの管理または解約はApple IDのサブスクリプション設定で行ってください。McNavはAppleのStoreKit offer-code redemption flowのみを使用し、独自ライセンスキー、外部決済、暗号資産決済、App Store外の解除手段を使用しません。</p>
+<h3>5. プライバシー</h3>
+<p>McNavの利用には、McNavプライバシーポリシーも適用されます。同ポリシーでは、ローカルデータ保存、任意の外部LLM送信先、Secret Broker、URLコンテンツリスク制御、ユーザー管理について説明しています。</p>
+<h3>6. 提供の変更</h3>
+<p>McNavは、macOS、App Store規約、AIクライアント連携、セキュリティリスクの変化に応じて変更される場合があります。当社は機能、価格、開示内容、ドキュメントを更新することがあります。重要な変更がある場合、App Store表示、アプリ内文言、または本ページを必要に応じて更新します。</p>
+<h3>7. 免責および責任制限</h3>
+<p>法令で認められる最大限の範囲で、McNavは「現状有姿」および「提供可能な状態」で提供され、中断のない動作、エラーのない検出、特定目的への適合性を保証しません。本規約は、適用される消費者保護法その他の強行法規により制限できない権利を制限するものではありません。</p>
+<h3>8. 準拠法・管轄</h3>
+<p>本規約は日本法に準拠します。本規約またはMcNavに関して紛争が生じた場合、東京地方裁判所を第一審の専属的合意管轄裁判所とします。ただし、ユーザーの居住国または地域の消費者保護法その他の強行法規に基づく権利を制限するものではありません。</p>
+<h3>9. お問い合わせ</h3>
+<p>本規約に関する問い合わせは、このページの「お問い合わせ」セクションからご連絡ください。</p>
+                </div>
+            </section>
+
+            <section id="oss-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <div>
+                        <div class="section-title">3rd Party Licensing Notice</div>
+                        <div class="section-subtitle">Open Source Software notices</div>
+                    </div>
+                </div>
+                <div class="legal-section">
+                    <h3>3rd Party Licensing Notice</h3><h4>オープンソースソフトウェアに関するお知らせ</h4><p>本製品には、オープンソースライセンスに基づき提供されるソフトウェア（「Open Source Software」）が含まれる場合があります。本製品に適用される利用規約と、当該Open Source Softwareに適用されるオープンソースライセンスの内容が矛盾する場合、当該Open Source Softwareについてはオープンソースライセンスが優先します。</p><p>一部のオープンソースライセンスでは、ソースコードの写しを入手する権利が認められています。適用ライセンス上必要な場合、AllNewはこのページまたはこのページに記載されたサポート窓口を通じて、対応するソースコードの入手方法を提供します。</p><h4>ソースコード提供に関するお知らせ</h4><p>本製品の特定バージョンに、GNU General Public License（GPL）、GNU Library/Lesser General Public License（LGPL）、MPL、またはソースコード提供を求めるその他のライセンスに基づくソフトウェアが含まれる場合、該当する製品名と、可能であればバージョン番号を明記して、このページに記載されたサポート窓口までご連絡ください。</p><table><tbody><tr><td>Package</td><td>Version</td><td>License</td><td>Source</td></tr><tr><td>Model Context Protocol Swift SDK</td><td>0.12.1</td><td>Apache-2.0 / MIT transition notice</td><td>https://github.com/modelcontextprotocol/swift-sdk</td></tr><tr><td>EventSource</td><td>1.4.1</td><td>MIT</td><td>https://github.com/mattt/eventsource</td></tr><tr><td>Swift Atomics</td><td>1.3.0</td><td>Apache-2.0</td><td>https://github.com/apple/swift-atomics</td></tr><tr><td>Swift Collections</td><td>1.5.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-collections</td></tr><tr><td>Swift Log</td><td>1.12.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-log</td></tr><tr><td>Swift NIO</td><td>2.100.0</td><td>Apache-2.0; CNIOLLHTTP MIT component</td><td>https://github.com/apple/swift-nio</td></tr><tr><td>Swift System</td><td>1.6.4</td><td>Apache-2.0</td><td>https://github.com/apple/swift-system</td></tr><tr><td>OpenAI Privacy Filter adapter</td><td>-</td><td>Apache-2.0</td><td>https://github.com/openai/privacy-filter</td></tr><tr><td>AppleScript Bridge OSS Pack</td><td>-</td><td>MIT</td><td>https://github.com/mueno/McNav/tree/main/shortcuts</td></tr></tbody></table><h3>Model Context Protocol Swift SDK</h3><h3>EventSource</h3><h3>Swift Atomics</h3><h3>Swift Collections</h3><h3>Swift Log</h3><h3>Swift NIO</h3><h3>Swift System</h3><h3>OpenAI Privacy Filter adapter</h3><h3>AppleScript Bridge OSS Pack</h3><p class="muted">確認日: 2026-06-01</p>
+                </div>
+            </section>
+
+            <section id="commercial-ja" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">特定商取引法に基づく表記</div>
+                                <div class="section-subtitle">販売事業者情報</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div><div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div><div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F（詳細所在地は請求があれば、購入申込み前に十分な時間的余裕をもって遅滞なく開示します。）</dd></div><div class="contact-item"><dt>お問い合わせ先</dt><dd><!--email_off-->app-support@allnew.work<!--/email_off--><br><small>※電話番号は請求があれば、購入申込み前に十分な時間的余裕をもって遅滞なく開示します</small></dd></div><div class="contact-item"><dt>販売価格</dt><dd>App Storeの購入画面に表示される価格、無料体験の有無・期間、更新条件が適用されます</dd></div><div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div><div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div><div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセルはお受けできません。返金の可否・手続はAppleの返金ポリシーに従います。</dd></div><div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div></dl>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact-ja" class="section">
+                <div class="contact-card">
+                    <h2>お問い合わせ</h2>
+                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=McNav%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off-->
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
+                        <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== ENGLISH ==================== -->
+        <div class="lang-content" data-lang="en">
+            <section id="faq-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">Frequently Asked Questions</div>
+                        <div class="section-subtitle">Answers about setup, safety, and purchases</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">What is McNav?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>McNav is a macOS app and bundled mcnav-mcpd MCP helper that lets Claude Desktop, Codex Desktop, and other MCP-compatible clients use public macOS APIs through a controlled, audited surface.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Does McNav require an account?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>No AllNew account is required. Paid access, subscriptions, trials, restores, and offer-code redemption are handled by Apple StoreKit.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I set it up?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Open McNav, grant only the macOS permissions you need, and copy the Claude Desktop or Codex Desktop MCP setup snippet from the app. For workspace access, grant only folders you want AI-assisted workflows to use.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How does McNav protect secrets?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Secret Broker stores secret values in macOS Keychain and returns only metadata and local verification codes to MCP clients. Pasting a secret requires confirmation and uses the system clipboard briefly.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What about malicious web pages or URLs?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>McNav treats crawled URL content, browser snapshots, clipboard text, and files as untrusted external content. It adds data-boundary notices, blocks high-confidence indirect prompt-injection and exfiltration patterns, and asks for confirmation on suspicious URL forms.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How can I cancel or restore purchases?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Use the Subscription tab in McNav to restore purchases or open Apple&#x27;s subscription management. Cancellation, refunds, final pricing, taxes, and renewal terms are controlled by Apple and shown in the App Store purchase sheet.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="privacy-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">Privacy Policy</div>
+                        <div class="section-subtitle">How we handle your data</div>
+                    </div>
+                </div>
+                <span class="updated-badge">Last updated: June 1, 2026</span>
+
+                <div class="highlight-box">
+                    <p><strong>Important:</strong> McNav is designed to run primarily on your Mac. It does not operate an AllNew-hosted backend for app data, does not include advertising SDKs, and does not sell or share user data for tracking.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. Data Used to Track You</h3>
 <p>None. McNav does not track you across apps or websites.</p>
 <h3>2. Data Linked to You</h3>
 <p>None collected by AllNew for app use. StoreKit purchases are processed by Apple. McNav receives Apple-signed entitlement information, not a customer profile controlled by AllNew.</p>
@@ -199,32 +1010,22 @@
 <h3>9. Permissions</h3>
 <p>McNav uses macOS permission prompts for Calendar, Reminders, Contacts, Screen Recording, Accessibility, Notifications, and user-selected folders only when the related tool or feature is used. Users can revoke permissions at any time in System Settings.</p>
 <h3>10. Contact</h3>
-<p>For privacy questions, deletion requests about support communications, or other inquiries, use the Contact section on this page.</p></div></section>
-    <section id="terms-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">利用規約</div><div class="section-subtitle">サービスのご利用条件</div></div></div><div class="legal-section"><p>最終更新: 2026年6月1日</p>
-<p>本利用規約は、合同会社AllNewが提供するmacOSアプリケーション「McNav」の利用条件を定めるものです。McNavを利用することで、本規約および該当するAppleのApp Store標準規約に同意したものとみなされます。</p>
-<h3>1. McNavが提供するもの</h3>
-<p>McNavは、MCP互換AIアシスタントとmacOSの公開APIの間に、監査可能な橋渡しを提供します。権限、ポリシー、確認、Privacy Filter、Secret Broker、URL content guards、ローカル監査ログを通じて、ユーザーが操作を制御しやすくすることを目的とします。</p>
-<h3>2. セキュリティと自動化の限界</h3>
-<p>McNavはベストエフォートのセキュリティおよび生産性ツールです。完全なブロック、完全な匿名化、法令遵守、またはすべての開示防止を保証するものではありません。ユーザーは、権限、機密性の高い操作、AIクライアントの許可、出力内容を確認したうえで利用する責任を負います。</p>
-<p>McNavは、法律、金融、医療、税務、またはセキュリティコンサルティングの専門助言を提供するものではありません。専門的判断を要する場合は、適切な専門家に相談してください。</p>
-<h3>3. 禁止事項</h3>
-<ul><li>法令、第三者の権利、プラットフォーム規約、守秘義務、プライバシー権を侵害する目的で使用しないでください。</li><li>App Sandbox、macOS TCC権限、App Store決済、McNavの安全処理を回避しようとしないでください。</li><li>秘密監視、認証情報窃取、マルウェア、不正スクレイピング、または外部送信ワークフローに使用しないでください。</li><li>適用法で認められる場合を除き、McNavをリバースエンジニアリング、改変、再配布、再販売しないでください。</li></ul>
-<h3>4. 有料機能とApp Store購入</h3>
-<p>McNav ProはApple管理のアプリ内課金として提供される場合があります。</p>
-<ul><li>月額サブスクリプション: 月額USD 4.99、利用可能な場合は14日間の無料体験。</li><li>年額サブスクリプション: 年額USD 39.99、利用可能な場合は14日間の無料体験。</li><li>Lifetime Access: 買い切りの非消耗型購入、利用可能な場合はUSD 99.99。</li></ul>
-<p>最終価格、税、通貨、更新条件、無料体験の有無、解約期限、返金、ファミリー共有の可否はApp Storeの購入画面に表示され、Appleが管理します。サブスクリプションの管理または解約はApple IDのサブスクリプション設定で行ってください。McNavはAppleのStoreKit offer-code redemption flowのみを使用し、独自ライセンスキー、外部決済、暗号資産決済、App Store外の解除手段を使用しません。</p>
-<h3>5. プライバシー</h3>
-<p>McNavの利用には、McNavプライバシーポリシーも適用されます。同ポリシーでは、ローカルデータ保存、任意の外部LLM送信先、Secret Broker、URLコンテンツリスク制御、ユーザー管理について説明しています。</p>
-<h3>6. 提供の変更</h3>
-<p>McNavは、macOS、App Store規約、AIクライアント連携、セキュリティリスクの変化に応じて変更される場合があります。当社は機能、価格、開示内容、ドキュメントを更新することがあります。重要な変更がある場合、App Store表示、アプリ内文言、または本ページを必要に応じて更新します。</p>
-<h3>7. 免責および責任制限</h3>
-<p>法令で認められる最大限の範囲で、McNavは「現状有姿」および「提供可能な状態」で提供され、中断のない動作、エラーのない検出、特定目的への適合性を保証しません。本規約は、適用される消費者保護法その他の強行法規により制限できない権利を制限するものではありません。</p>
-<h3>8. 準拠法・管轄</h3>
-<p>本規約は日本法に準拠します。本規約またはMcNavに関して紛争が生じた場合、東京地方裁判所を第一審の専属的合意管轄裁判所とします。ただし、ユーザーの居住国または地域の消費者保護法その他の強行法規に基づく権利を制限するものではありません。</p>
-<h3>9. お問い合わせ</h3>
-<p>本規約に関する問い合わせは、このページの「お問い合わせ」セクションからご連絡ください。</p></div></section>
-    <section id="terms-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">McNav Terms of Use</div><div class="section-subtitle">Conditions for using the app</div></div></div><div class="legal-section"><p>Last updated: June 1, 2026</p>
-<p>These Terms of Use govern your use of McNav, a macOS app provided by AllNew LLC. By using McNav, you agree to these terms and to Apple&#x27;s standard App Store terms where applicable.</p>
+<p>For privacy questions, deletion requests about support communications, or other inquiries, use the Contact section on this page.</p>
+                </div>
+            </section>
+
+            <section id="terms-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">McNav Terms of Use</div>
+                        <div class="section-subtitle">Conditions for using the App</div>
+                    </div>
+                </div>
+                <span class="updated-badge">Last updated: June 1, 2026</span>
+
+                <div class="legal-section">
+                    <p>These Terms of Use govern your use of McNav, a macOS app provided by AllNew LLC. By using McNav, you agree to these terms and to Apple&#x27;s standard App Store terms where applicable.</p>
 <h3>1. What McNav Provides</h3>
 <p>McNav provides an audited bridge between MCP-compatible AI assistants and public macOS APIs. It helps users route actions through permissions, policies, confirmations, Privacy Filter, Secret Broker, URL content guards, and local audit logs.</p>
 <h3>2. Security and Automation Limits</h3>
@@ -245,59 +1046,262 @@
 <h3>8. Governing Law and Jurisdiction</h3>
 <p>These Terms are governed by the laws of Japan. Disputes shall be subject to the exclusive jurisdiction of the Tokyo District Court as the court of first instance, except for mandatory consumer-protection rights of the user&#x27;s country or region of residence.</p>
 <h3>9. Contact</h3>
-<p>For questions about these Terms, use the Contact section on this page.</p></div></section>
-    <section id="oss-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">📦</div><div><div class="section-title">3rd Party Licensing Notice</div><div class="section-subtitle">Open Source Software notices</div></div></div><div class="legal-section"><h3>3rd Party Licensing Notice</h3><h4>オープンソースソフトウェアに関するお知らせ</h4><p>本製品には、オープンソースライセンスに基づき提供されるソフトウェア（「Open Source Software」）が含まれる場合があります。本製品に適用される利用規約と、当該Open Source Softwareに適用されるオープンソースライセンスの内容が矛盾する場合、当該Open Source Softwareについてはオープンソースライセンスが優先します。</p><p>一部のオープンソースライセンスでは、ソースコードの写しを入手する権利が認められています。適用ライセンス上必要な場合、AllNewはこのページまたはこのページに記載されたサポート窓口を通じて、対応するソースコードの入手方法を提供します。</p><h4>ソースコード提供に関するお知らせ</h4><p>本製品の特定バージョンに、GNU General Public License（GPL）、GNU Library/Lesser General Public License（LGPL）、MPL、またはソースコード提供を求めるその他のライセンスに基づくソフトウェアが含まれる場合、該当する製品名と、可能であればバージョン番号を明記して、このページに記載されたサポート窓口までご連絡ください。</p><table><tbody><tr><td>Package</td><td>Version</td><td>License</td><td>Source</td></tr><tr><td>Model Context Protocol Swift SDK</td><td>0.12.1</td><td>Apache-2.0 / MIT transition notice</td><td>https://github.com/modelcontextprotocol/swift-sdk</td></tr><tr><td>EventSource</td><td>1.4.1</td><td>MIT</td><td>https://github.com/mattt/eventsource</td></tr><tr><td>Swift Atomics</td><td>1.3.0</td><td>Apache-2.0</td><td>https://github.com/apple/swift-atomics</td></tr><tr><td>Swift Collections</td><td>1.5.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-collections</td></tr><tr><td>Swift Log</td><td>1.12.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-log</td></tr><tr><td>Swift NIO</td><td>2.100.0</td><td>Apache-2.0; CNIOLLHTTP MIT component</td><td>https://github.com/apple/swift-nio</td></tr><tr><td>Swift System</td><td>1.6.4</td><td>Apache-2.0</td><td>https://github.com/apple/swift-system</td></tr><tr><td>OpenAI Privacy Filter adapter</td><td>-</td><td>Apache-2.0</td><td>https://github.com/openai/privacy-filter</td></tr><tr><td>AppleScript Bridge OSS Pack</td><td>-</td><td>MIT</td><td>https://github.com/mueno/McNav/tree/main/shortcuts</td></tr></tbody></table><h3>Model Context Protocol Swift SDK</h3><h3>EventSource</h3><h3>Swift Atomics</h3><h3>Swift Collections</h3><h3>Swift Log</h3><h3>Swift NIO</h3><h3>Swift System</h3><h3>OpenAI Privacy Filter adapter</h3><h3>AppleScript Bridge OSS Pack</h3><p class="muted">確認日: 2026-06-01</p></div></section>
-    <section id="oss-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">📦</div><div><div class="section-title">3rd Party Licensing Notice</div><div class="section-subtitle">Open Source Software notices</div></div></div><div class="legal-section"><h3>3rd Party Licensing Notice</h3><h4>NOTICE RELATING TO OPEN SOURCE SOFTWARE</h4><p>This product may contain software ("Open Source Software") that is provided under open source licenses. If there is a conflict between the terms applicable to this product and the open source license applicable to such Open Source Software, the open source license will prevail with respect to that Open Source Software.</p><p>Some open source licenses give you the right to obtain a copy of source code. Where required by the applicable license, AllNew will provide a way to obtain the corresponding source code through this page or through the support contact listed on this page.</p><h4>OFFER TO PROVIDE SOURCE CODE</h4><p>If a version of this product contains software licensed under the GNU General Public License (GPL), GNU Library/Lesser General Public License (LGPL), MPL, or another license that requires source-code availability, you may request the corresponding source code for the relevant product and version by contacting the support address listed on this page.</p><table><tbody><tr><td>Package</td><td>Version</td><td>License</td><td>Source</td></tr><tr><td>Model Context Protocol Swift SDK</td><td>0.12.1</td><td>Apache-2.0 / MIT transition notice</td><td>https://github.com/modelcontextprotocol/swift-sdk</td></tr><tr><td>EventSource</td><td>1.4.1</td><td>MIT</td><td>https://github.com/mattt/eventsource</td></tr><tr><td>Swift Atomics</td><td>1.3.0</td><td>Apache-2.0</td><td>https://github.com/apple/swift-atomics</td></tr><tr><td>Swift Collections</td><td>1.5.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-collections</td></tr><tr><td>Swift Log</td><td>1.12.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-log</td></tr><tr><td>Swift NIO</td><td>2.100.0</td><td>Apache-2.0; CNIOLLHTTP MIT component</td><td>https://github.com/apple/swift-nio</td></tr><tr><td>Swift System</td><td>1.6.4</td><td>Apache-2.0</td><td>https://github.com/apple/swift-system</td></tr><tr><td>OpenAI Privacy Filter adapter</td><td>-</td><td>Apache-2.0</td><td>https://github.com/openai/privacy-filter</td></tr><tr><td>AppleScript Bridge OSS Pack</td><td>-</td><td>MIT</td><td>https://github.com/mueno/McNav/tree/main/shortcuts</td></tr></tbody></table><h3>Model Context Protocol Swift SDK</h3><h3>EventSource</h3><h3>Swift Atomics</h3><h3>Swift Collections</h3><h3>Swift Log</h3><h3>Swift NIO</h3><h3>Swift System</h3><h3>OpenAI Privacy Filter adapter</h3><h3>AppleScript Bridge OSS Pack</h3><p class="muted">Confirmation date: 2026-06-01</p></div></section>
-    <section id="commercial-ja" class="section" data-lang="ja"><div class="commercial-accordion"><button class="commercial-header" type="button" aria-expanded="false"><div class="section-header"><div class="section-icon">🏢</div><div><div class="section-title">特定商取引法に基づく表記</div><div class="section-subtitle">販売事業者情報</div></div></div><span class="commercial-toggle" aria-hidden="true">+</span></button><div class="commercial-content"><dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div><div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div><div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F（詳細所在地は請求があれば、購入申込み前に十分な時間的余裕をもって遅滞なく開示します。）</dd></div><div class="contact-item"><dt>お問い合わせ先</dt><dd><!--email_off-->app-support@allnew.work<!--/email_off--><br><small>※電話番号は請求があれば、購入申込み前に十分な時間的余裕をもって遅滞なく開示します</small></dd></div><div class="contact-item"><dt>販売価格</dt><dd>App Storeの購入画面に表示される価格、無料体験の有無・期間、更新条件が適用されます</dd></div><div class="contact-item"><dt>代金の支払方法・時期</dt><dd>App Storeが提供する決済手段によります。購入確定時にAppleから課金されます</dd></div><div class="contact-item"><dt>商品の引き渡し時期</dt><dd>購入手続き完了後、すぐにご利用いただけます</dd></div><div class="contact-item"><dt>返品・キャンセルについて</dt><dd>アプリの特性上、購入確定後の返品・キャンセルはお受けできません。返金の可否・手続はAppleの返金ポリシーに従います。</dd></div><div class="contact-item"><dt>特別条件</dt><dd>未成年者が購入する場合、親権者の同意を得た上でご利用ください</dd></div></dl></div></div></section>
-    <section id="commercial-en" class="section" data-lang="en"><div class="commercial-accordion"><button class="commercial-header" type="button" aria-expanded="false"><div class="section-header"><div class="section-icon">🏢</div><div><div class="section-title">Seller Information</div><div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div></div></div><span class="commercial-toggle" aria-hidden="true">+</span></button><div class="commercial-content"><dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div><div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div><div class="contact-item"><dt>Contact</dt><dd><!--email_off-->app-support@allnew.work<!--/email_off-->; phone number disclosed upon request where required</dd></div><div class="contact-item"><dt>Price</dt><dd>The price displayed on the App Store, including applicable tax, free trial availability, and renewal terms</dd></div><div class="contact-item"><dt>Payment Method &amp; Timing</dt><dd>Payment is charged by Apple at purchase confirmation using the payment method provided by the App Store</dd></div><div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div><div class="contact-item"><dt>Returns/Cancellations</dt><dd>Digital content is not returnable after purchase. Refunds follow Apple&#x27;s policy.</dd></div><div class="contact-item"><dt>Special Conditions</dt><dd>Minors must purchase or use the App with consent from a parent or legal guardian.</dd></div></dl></div></div></section>
-    <section id="contact-ja" class="section" data-lang="ja"><div class="contact-card"><h2>お問い合わせ</h2><!--email_off--><a href="mailto:app-support@allnew.work?subject=McNav%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off--><dl class="contact-details contact-details-top" style="border-bottom: none;"><div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div><div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div></dl></div></section>
-    <section id="contact-en" class="section" data-lang="en"><div class="contact-card"><h2>Contact Us</h2><!--email_off--><a href="mailto:app-support@allnew.work?subject=McNav%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off--><dl class="contact-details contact-details-top" style="border-bottom: none;"><div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div></section>
-    <p class="muted">Hosted legal page: https://apps.allnew.work/maclaw/</p>
-  </main>
-  <script>
-    function toggleLangMenu() {
-      const dropdown = document.getElementById('langDropdown');
-      dropdown.classList.toggle('open');
-      const button = dropdown.querySelector('.lang-btn');
-      button.setAttribute('aria-expanded', dropdown.classList.contains('open') ? 'true' : 'false');
-    }
-    function setLang(lang) {
-      document.body.classList.toggle('lang-en', lang === 'en');
-      document.documentElement.lang = lang;
-      document.getElementById('currentLang').textContent = lang === 'ja' ? '日本語' : 'English';
-      document.querySelectorAll('.lang-option').forEach(function(option) {
-        option.classList.toggle('active', option.dataset.langOption === lang);
-      });
-      const dropdown = document.getElementById('langDropdown');
-      dropdown.classList.remove('open');
-      dropdown.querySelector('.lang-btn').setAttribute('aria-expanded', 'false');
-      try { localStorage.setItem('allnewLegalLang', lang); } catch (_) {}
-    }
-    document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('langDropdown');
-      if (dropdown && !dropdown.contains(event.target)) {
-        dropdown.classList.remove('open');
-        dropdown.querySelector('.lang-btn').setAttribute('aria-expanded', 'false');
-      }
-      const header = event.target.closest('.commercial-header');
-      if (!header) return;
-      const accordion = header.closest('.commercial-accordion');
-      const isOpen = accordion.classList.toggle('open');
-      header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
-    function checkCommercialAnchor() {
-      if (!location.hash || !location.hash.includes('commercial')) return;
-      document.querySelectorAll('.commercial-accordion').forEach(function(accordion) {
-        accordion.classList.add('open');
-        const header = accordion.querySelector('.commercial-header');
-        if (header) header.setAttribute('aria-expanded', 'true');
-      });
-    }
-    const params = new URLSearchParams(location.search);
-    const requested = params.get('lang') || (navigator.language || '').slice(0, 2);
-    setLang(requested === 'ja' ? 'ja' : 'en');
-    checkCommercialAnchor();
-    window.addEventListener('hashchange', checkCommercialAnchor);
-  </script>
+<p>For questions about these Terms, use the Contact section on this page.</p>
+                </div>
+            </section>
+
+            <section id="oss-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <div>
+                        <div class="section-title">3rd Party Licensing Notice</div>
+                        <div class="section-subtitle">Open Source Software notices</div>
+                    </div>
+                </div>
+                <div class="legal-section">
+                    <h3>3rd Party Licensing Notice</h3><h4>NOTICE RELATING TO OPEN SOURCE SOFTWARE</h4><p>This product may contain software ("Open Source Software") that is provided under open source licenses. If there is a conflict between the terms applicable to this product and the open source license applicable to such Open Source Software, the open source license will prevail with respect to that Open Source Software.</p><p>Some open source licenses give you the right to obtain a copy of source code. Where required by the applicable license, AllNew will provide a way to obtain the corresponding source code through this page or through the support contact listed on this page.</p><h4>OFFER TO PROVIDE SOURCE CODE</h4><p>If a version of this product contains software licensed under the GNU General Public License (GPL), GNU Library/Lesser General Public License (LGPL), MPL, or another license that requires source-code availability, you may request the corresponding source code for the relevant product and version by contacting the support address listed on this page.</p><table><tbody><tr><td>Package</td><td>Version</td><td>License</td><td>Source</td></tr><tr><td>Model Context Protocol Swift SDK</td><td>0.12.1</td><td>Apache-2.0 / MIT transition notice</td><td>https://github.com/modelcontextprotocol/swift-sdk</td></tr><tr><td>EventSource</td><td>1.4.1</td><td>MIT</td><td>https://github.com/mattt/eventsource</td></tr><tr><td>Swift Atomics</td><td>1.3.0</td><td>Apache-2.0</td><td>https://github.com/apple/swift-atomics</td></tr><tr><td>Swift Collections</td><td>1.5.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-collections</td></tr><tr><td>Swift Log</td><td>1.12.1</td><td>Apache-2.0</td><td>https://github.com/apple/swift-log</td></tr><tr><td>Swift NIO</td><td>2.100.0</td><td>Apache-2.0; CNIOLLHTTP MIT component</td><td>https://github.com/apple/swift-nio</td></tr><tr><td>Swift System</td><td>1.6.4</td><td>Apache-2.0</td><td>https://github.com/apple/swift-system</td></tr><tr><td>OpenAI Privacy Filter adapter</td><td>-</td><td>Apache-2.0</td><td>https://github.com/openai/privacy-filter</td></tr><tr><td>AppleScript Bridge OSS Pack</td><td>-</td><td>MIT</td><td>https://github.com/mueno/McNav/tree/main/shortcuts</td></tr></tbody></table><h3>Model Context Protocol Swift SDK</h3><h3>EventSource</h3><h3>Swift Atomics</h3><h3>Swift Collections</h3><h3>Swift Log</h3><h3>Swift NIO</h3><h3>Swift System</h3><h3>OpenAI Privacy Filter adapter</h3><h3>AppleScript Bridge OSS Pack</h3><p class="muted">Confirmation date: 2026-06-01</p>
+                </div>
+            </section>
+
+            <section id="commercial-en" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">Seller Information</div>
+                                <div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div><div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div><div class="contact-item"><dt>Contact</dt><dd><!--email_off-->app-support@allnew.work<!--/email_off-->; phone number disclosed upon request where required</dd></div><div class="contact-item"><dt>Price</dt><dd>The price displayed on the App Store, including applicable tax, free trial availability, and renewal terms</dd></div><div class="contact-item"><dt>Payment Method &amp; Timing</dt><dd>Payment is charged by Apple at purchase confirmation using the payment method provided by the App Store</dd></div><div class="contact-item"><dt>Delivery</dt><dd>Available immediately after purchase completion</dd></div><div class="contact-item"><dt>Returns/Cancellations</dt><dd>Digital content is not returnable after purchase. Refunds follow Apple&#x27;s policy.</dd></div><div class="contact-item"><dt>Special Conditions</dt><dd>Minors must purchase or use the App with consent from a parent or legal guardian.</dd></div></dl>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact-en" class="section">
+                <div class="contact-card">
+                    <h2>Contact Us</h2>
+                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=McNav%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off-->
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
+                        <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 合同会社AllNew / AllNew LLC</p>
+    </footer>
+
+    <script>
+        // Clickjacking defense (frame-busting fallback for static hosting)
+        if (window.self !== window.top) { document.body.style.display = 'none'; }
+        // Language Data
+        const langData = {
+            ja: {
+                label: '日本語', hero: 'McNav',
+                subtitleLine1: 'AIにMacを安全に任せる橋渡し', subtitleLine2: '',
+                toc: ['FAQ', 'プライバシー', '利用規約', '3rd Party Licensing Notice', '特定商取引法', 'お問い合わせ']
+            },
+            en: {
+                label: 'English', hero: 'McNav',
+                subtitleLine1: 'A safer audited bridge between AI assistants and macOS.', subtitleLine2: '',
+                toc: ['FAQ', 'Privacy', 'Terms', '3rd Party Licensing Notice', 'Seller Info', 'Contact']
+            }
+        };
+
+        // Get current language from URL hash or default to ja
+        function getLangFromHash() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang]) return possibleLang;
+                }
+            }
+            // Check URL params
+            const params = new URLSearchParams(window.location.search);
+            const langParam = params.get('lang');
+            if (langParam && langData[langParam]) return langParam;
+            // Default based on browser language
+            const browserLang = navigator.language.split('-')[0];
+            if (langData[browserLang]) return browserLang;
+            return 'ja';
+        }
+
+        let currentLang = getLangFromHash();
+
+        // Switch Language
+        function switchLanguage(lang) {
+            currentLang = lang;
+
+            // Update content visibility
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+
+            // Update dropdown
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+            document.getElementById('currentLangLabel').textContent = langData[lang].label;
+
+            // Update hero
+            document.getElementById('heroTitle').textContent = langData[lang].hero;
+            var subtitleEl = document.getElementById('heroSubtitle');
+            subtitleEl.textContent = '';
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine1));
+            if (langData[lang].subtitleLine2) {
+                subtitleEl.appendChild(document.createElement('br'));
+                subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine2));
+            }
+
+            // Update TOC
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const tocLabels = langData[lang].toc;
+            tocLinks.forEach((link, i) => {
+                link.textContent = tocLabels[i];
+                const section = link.dataset.section;
+                link.href = `#${section}-${lang}`;
+            });
+
+            // Update URL
+            const currentParams = new URLSearchParams(window.location.search);
+            currentParams.set('lang', lang);
+            const queryString = currentParams.toString();
+            history.replaceState(null, null, `?${queryString}`);
+
+            // Close dropdown
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+
+        // Language Dropdown Toggle
+        const langBtn = document.getElementById('langBtn');
+        const langDropdown = document.getElementById('langDropdown');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            langDropdown.classList.remove('open');
+        });
+
+        // Language Options
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => switchLanguage(opt.dataset.lang));
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all in same lang-content
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // Commercial Accordion
+        // Commercial accordion (event delegation — no inline onclick)
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.commercial-header');
+            if (!header) return;
+            var accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        });
+
+        // Auto-expand commercial section if accessed via anchor
+        function checkCommercialAnchor() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(acc => {
+                    acc.classList.add('open');
+                });
+            }
+        }
+
+        // Initialize
+        switchLanguage(currentLang);
+        checkCommercialAnchor();
+
+        // Handle hash changes for section navigation
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang]) {
+                        if (currentLang !== possibleLang) {
+                            switchLanguage(possibleLang);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Copy Protection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', e => e.preventDefault());
+    </script>
+
+    <!-- Trademark Attribution Footer -->
+    <footer class="trademark-footer">
+        <div class="trademark-content">
+            <p class="trademark-text">
+                Apple、Appleのロゴ、macOS、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                <br>
+                Apple, the Apple logo, macOS, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+            </p>
+            <p class="trademark-disclaimer">
+                その他の会社名、製品名、サービス名は各社の商標または登録商標です。本アプリケーションはApple Inc.、Anthropic, PBC、OpenAI, L.L.C.が開発または認定したものではありません。<br>
+                Other company, product, and service names may be trademarks of their respective owners. This application is not developed or endorsed by Apple Inc., Anthropic, PBC, or OpenAI, L.L.C.
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .trademark-footer {
+            margin-top: 60px;
+            padding: 24px 20px 40px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+        .trademark-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .trademark-text {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .trademark-disclaimer {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+    </style>
 </body>
 </html>
