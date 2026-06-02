@@ -16,6 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const feedbackAdminListApiUrl =
     window.POIPOI_FEEDBACK_ADMIN_LIST_API_URL ||
     feedbackChatApiUrl.replace(/\/api\/feedback\/chat$/, "/api/feedback/admin/list");
+  const appleAuthConfigApiUrl =
+    window.POIPOI_APPLE_AUTH_CONFIG_API_URL ||
+    feedbackChatApiUrl.replace(/\/api\/feedback\/chat$/, "/api/auth/apple/config");
+  const appleAuthSessionApiUrl =
+    window.POIPOI_APPLE_AUTH_SESSION_API_URL ||
+    feedbackChatApiUrl.replace(/\/api\/feedback\/chat$/, "/api/auth/apple/session");
   const adminSharedSecret = window.POIPOI_ADMIN_SHARED_SECRET || "";
   const appStoreIdByName = Object.freeze({
     WeightSnap: "6758825019",
@@ -230,6 +236,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const cookieConsentAccept = document.getElementById("cookieConsentAccept");
   let termsModalRequiresRegistrationConsent = false;
   let termsModalReturnFocusTarget = null;
+  let appleSignInRuntimeConfig = null;
+  let appleSignInConfigPromise = null;
+  let appleSignInInitialized = false;
 
   function randomItem(items) {
     return items[Math.floor(Math.random() * items.length)];
@@ -1946,6 +1955,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function appleSignInConfigReady() {
+    if (
+      appleSignInInitialized &&
+      appleSignInRuntimeConfig?.clientId &&
+      appleSignInRuntimeConfig?.redirectURI &&
+      appleSignInRuntimeConfig?.state &&
+      appleSignInRuntimeConfig?.nonce
+    ) {
+      return true;
+    }
+
     const requiredMetaNames = [
       "appleid-signin-client-id",
       "appleid-signin-redirect-uri",
@@ -1959,21 +1978,115 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function getFallbackAppleSignInMeta(name) {
+    const content = document.querySelector(`meta[name="${name}"]`)?.content?.trim() ?? "";
+    if (!content || content.startsWith("__") || content.endsWith("__")) return "";
+    return content;
+  }
+
+  function fallbackAppleSignInConfig() {
+    if (!appleSignInConfigReady()) return null;
+    return {
+      clientId: getFallbackAppleSignInMeta("appleid-signin-client-id"),
+      redirectURI: getFallbackAppleSignInMeta("appleid-signin-redirect-uri"),
+      scope: getFallbackAppleSignInMeta("appleid-signin-scope") || "name email",
+      state: getFallbackAppleSignInMeta("appleid-signin-state"),
+      nonce: getFallbackAppleSignInMeta("appleid-signin-nonce"),
+      usePopup: true
+    };
+  }
+
+  async function ensureAppleSignInConfigured() {
+    if (appleSignInInitialized && appleSignInRuntimeConfig) {
+      return appleSignInRuntimeConfig;
+    }
+
+    if (appleSignInConfigPromise) {
+      return appleSignInConfigPromise;
+    }
+
+    appleSignInConfigPromise = (async () => {
+      const response = await fetch(appleAuthConfigApiUrl, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        credentials: "omit"
+      });
+
+      if (!response.ok) {
+        throw new Error("apple_signin_config_unavailable");
+      }
+
+      const config = await response.json();
+      if (!config.clientId || !config.redirectURI || !config.state || !config.nonce) {
+        throw new Error("apple_signin_config_invalid");
+      }
+
+      if (!window.AppleID?.auth?.init) {
+        throw new Error("apple_signin_script_unavailable");
+      }
+
+      window.AppleID.auth.init({
+        clientId: config.clientId,
+        scope: config.scope || "name email",
+        redirectURI: config.redirectURI,
+        state: config.state,
+        nonce: config.nonce,
+        usePopup: config.usePopup !== false
+      });
+
+      appleSignInRuntimeConfig = config;
+      appleSignInInitialized = true;
+      return config;
+    })();
+
+    try {
+      return await appleSignInConfigPromise;
+    } catch (error) {
+      const fallbackConfig = fallbackAppleSignInConfig();
+      if (!fallbackConfig || !window.AppleID?.auth?.init) {
+        throw error;
+      }
+
+      window.AppleID.auth.init(fallbackConfig);
+      appleSignInRuntimeConfig = fallbackConfig;
+      appleSignInInitialized = true;
+      return fallbackConfig;
+    } finally {
+      appleSignInConfigPromise = null;
+    }
+  }
+
   function resetAppleOfficialAuthZone() {
     appleOfficialAuthZone.hidden = true;
     appleIdSigninButton.hidden = true;
     appleSigninConfigNotice.hidden = true;
     appleSigninReadyText.hidden = false;
+    appleSigninReadyText.textContent = "同意が完了しました。下のAppleボタンからサインインしてください。";
     localApplePreviewBtn.hidden = true;
   }
 
   function revealAppleOfficialAuthZone() {
-    const isConfigured = appleSignInConfigReady();
     appleOfficialAuthZone.hidden = false;
-    appleIdSigninButton.hidden = !isConfigured;
-    appleSigninConfigNotice.hidden = isConfigured;
-    appleSigninReadyText.hidden = !isConfigured;
-    localApplePreviewBtn.hidden = isConfigured;
+    appleIdSigninButton.hidden = true;
+    appleSigninConfigNotice.hidden = true;
+    appleSigninReadyText.hidden = false;
+    appleSigninReadyText.textContent = "Appleサインインを準備しています。";
+    localApplePreviewBtn.hidden = true;
+
+    ensureAppleSignInConfigured()
+      .then(() => {
+        appleIdSigninButton.hidden = !appleSignInConfigReady();
+        appleSigninConfigNotice.hidden = true;
+        appleSigninReadyText.hidden = false;
+        appleSigninReadyText.textContent = "同意が完了しました。下のAppleボタンからサインインしてください。";
+        localApplePreviewBtn.hidden = true;
+      })
+      .catch(() => {
+        appleIdSigninButton.hidden = true;
+        appleSigninConfigNotice.hidden = false;
+        appleSigninReadyText.hidden = true;
+        localApplePreviewBtn.hidden = false;
+      });
   }
 
   function updateTermsActionState() {
@@ -2040,11 +2153,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function exchangeAppleAuthorization(authorization) {
-    const response = await fetch("/api/auth/apple/session", {
+    const response = await fetch(appleAuthSessionApiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ authorization })
+      credentials: "omit",
+      body: JSON.stringify({
+        authorization,
+        expectedState: appleSignInRuntimeConfig?.state || "",
+        expectedNonce: appleSignInRuntimeConfig?.nonce || ""
+      })
     });
 
     if (!response.ok) {
@@ -2184,14 +2301,61 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
-  function applySendHashIntent(options = {}) {
-    if (window.location.hash !== "#send") return false;
+  function scrollToSigninEntry(options = {}) {
+    const stage = document.querySelector("[data-scrolly-stage]");
+    if (!stage) return false;
 
-    if (!isAuthenticated) {
-      openTermsModal(true);
+    setGuestStatusBoardVisible(false, { scroll: false });
+
+    const panels = Array.from(stage.querySelectorAll("[data-scrolly-panel]"));
+    const signinIndex = panels.findIndex((panel) => panel.id === "join" || panel.classList.contains("signin-scene"));
+    const stepIndex = signinIndex >= 0 ? signinIndex : Math.max(panels.length - 1, 0);
+    const behavior = options.behavior || "smooth";
+
+    if (stage.classList.contains("is-static-list")) {
+      const signinScene = mockAppleLoginBtn.closest(".signin-scene") || stage;
+      signinScene.scrollIntoView({ behavior, block: "center" });
       return true;
     }
 
+    const rect = stage.getBoundingClientRect();
+    const viewportHeight = Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 1);
+    const scrollableDistance = Math.max(stage.offsetHeight - viewportHeight, 1);
+    const stageTop = window.scrollY + rect.top;
+    const sticky = stage.querySelector(".welcome-scrolly-sticky");
+    const stickyTop = sticky ? Number.parseFloat(window.getComputedStyle(sticky).top) || 0 : 0;
+    const safeMaxScrollY = sticky
+      ? stageTop + stage.offsetHeight - sticky.offsetHeight - stickyTop
+      : stageTop + scrollableDistance;
+    const stepSpan = scrollableDistance / Math.max(panels.length, 1);
+    const centeredTarget = stepIndex <= 0
+      ? stageTop
+      : stageTop + stepSpan * (stepIndex + 0.5);
+    const target = stepIndex >= panels.length - 1
+      ? Math.min(centeredTarget, safeMaxScrollY)
+      : centeredTarget;
+
+    setScrollyStep(stage, stepIndex);
+    window.scrollTo({
+      top: Math.max(stageTop, Math.min(target, safeMaxScrollY)),
+      behavior
+    });
+
+    window.setTimeout(() => setScrollyStep(stage, stepIndex), behavior === "smooth" ? 520 : 0);
+    return true;
+  }
+
+  function applyJoinHashIntent(options = {}) {
+    if (window.location.hash !== "#join") return false;
+    if (isAuthenticated) {
+      showSubmissionEntry(options);
+      return true;
+    }
+    scrollToSigninEntry(options);
+    return true;
+  }
+
+  function showSubmissionEntry(options = {}) {
     activeAppFilter = "all";
     appSearchQuery = "";
     if (appSearchInput) appSearchInput.value = "";
@@ -2201,11 +2365,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (options.scroll !== false) {
       document.getElementById("wizardStep1Section")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  }
+
+  function applySendHashIntent(options = {}) {
+    if (window.location.hash !== "#send") return false;
+
+    if (!isAuthenticated) {
+      scrollToSigninEntry(options);
+      return true;
+    }
+
+    showSubmissionEntry(options);
     return true;
   }
 
   function applySubmissionHashIntent(options = {}) {
-    return applySendHashIntent(options) || applyIdeaHashIntent(options);
+    return applyJoinHashIntent(options) || applySendHashIntent(options) || applyIdeaHashIntent(options);
   }
 
   async function hydrateAppStoreAppSelectors() {
