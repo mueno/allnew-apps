@@ -154,6 +154,10 @@ App Store Review Guideline 1.2 の UGC 基準に合わせ、本番では以下�
 
 - 本番では Apple 提供の Sign in with Apple JS を使用する
 - ボタンは Apple Human Interface Guidelines に準拠し、独自色・独自ロゴ・紛らわしい表現にしない
+- Apple Developer Program の有効なチームで、Web用の Services ID、連携する App ID、Primary App ID、Web Domain、Return URL を Apple Developer の Certificates, Identifiers & Profiles で設定する
+- Sign in with Apple 用の Key を作成し、Key ID、Team ID、Services ID、秘密鍵（.p8）をサーバー側のシークレットとして管理する。秘密鍵はブラウザ、静的HTML、Gitリポジトリ、ログに置かない
+- Webフロントエンドは AppleID JS の初期化に `clientId`、`scope`、`redirectURI`、`state`、必要に応じて `nonce` を渡し、認可コードとIDトークンはサーバーへ送信して検証する
+- サーバー側は Apple の公開鍵を用いた ID token 検証、`iss`、`aud`、`exp`、`nonce`、`state` の検証、authorization code の交換、client secret の生成、リプレイ防止、CSRF対策を行う
 - Sign in with Apple はユーザーが任意にアカウント作成・サインインする目的に限定する
 - Apple ID 連携以外のログインを追加する場合、App Store Review Guideline 4.8 の同等ログイン要件を再確認する
 - アカウント作成があるため、Webおよび該当アプリ内からアカウント削除を開始できる導線を提供する
@@ -194,7 +198,23 @@ App Store Review Guideline 1.2 の UGC 基準に合わせ、本番では以下�
 14. 強行法規優先、準拠法、管轄の表示
 15. 採用時特典を提供する場合の非対価性、App Store Connect 公式コード限定、独自管理機能なし、現金化・譲渡・払戻し不可、提供しない場合がある旨の表示
 
-## 13. MVP Boundary
+## 13. POIPOI to ios-app-factory-v4.7 Loop
+
+POIPOI-STUDIO で受け付けた声は、次の順序で ios-app-factory-v4.7 へ渡す。
+
+1. ポイナが会話で一次受付し、不適切カテゴリ、個人情報、医療助言、権利侵害リスクを確認する
+2. 受付可能な内容と拒否した内容の両方を、ポイナのコメント付きで運営確認キューへ保存する
+3. 人間の管理者が `Go / No Go / 保留` を判断する
+4. `Go` の案件だけを `factoryキュー` へ投入する
+5. `ios-app-factory-v4.7 feedback-intake` が定期的にキューを取得し、`factory-brief.md`、`objective.txt`、`runbook.sh` を生成する
+6. 既存アプリの改善は対象アプリの `app_manifest.yaml` に紐づけ、最小差分で `run` と `ship` を行う
+7. 新規アプリ案は `goal / discover / ai-plan / asc-ux / generate / validate / prepare / run / ship` の順に進める
+8. App Store Connect へ提出する場合は `手動リリース` 前提にし、承認後の公開判断は人間が保持する
+9. 実装結果、TestFlight/ASC申請状態、失敗理由、成果物リンクを factory job に戻し、公開可能な範囲でステータスを更新する
+
+このループにより、企画、開発、テスト、申請、広告、ユーザーフィードバック、改善活動を継続的に回す。ただし、AIだけで実装開始しない。factory へ送る判断は必ず人間の管理者Goを必要とする。
+
+## 14. MVP Boundary
 
 MVP は静的画面とルールの合意形成を目的にする。本番化では以下を追加する。
 

@@ -2,7 +2,7 @@
 
 最終更新日: 2026-05-19
 
-この文書はプライバシーポリシーへ組み込むためのドラフトです。公開前に日本法の個人情報保護法、Apple Developer Program、App Store Review Guidelines、Sign in with Apple の要件に照らした弁護士レビューを行ってください。
+この文書は、コーポレートサイト掲載のプライバシーポリシーへ組み込む、または AllNew App Factory Feedback 固有の補足文書として公開するためのドラフトです。公開画面では、プライバシーポリシーの正本を `https://www.allnew.work/ja/privacy` に置き、本サービス固有の Cookie、外部送信、Apple ID 連携、投稿公開、権利行使の説明は `cookie-policy.html` と登録前同意で補足します。公開前に日本法の個人情報保護法、Apple Developer Program、App Store Review Guidelines、Sign in with Apple の要件に照らした弁護士レビューを行ってください。
 
 本番公開時点で、プライバシーポリシー、問い合わせ窓口、開示・訂正・利用停止・削除請求、アカウント削除、Apple ID 連携解除の導線を、登録前、投稿前、アカウント設定、公開ページのフッターから常時到達できる状態にします。
 

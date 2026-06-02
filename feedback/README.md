@@ -57,4 +57,17 @@ Apple Support アプリを参考に、一般ユーザーがスマホで迷わず
 
 この静的公開版は閲覧専用として公開します。ローカルプレビューではUI検証のため疑似ログインを有効にしますが、`apps.allnew.work` などの公開ホストでは疑似ログインと疑似投稿を無効化し、Apple ID認証、サーバー側検証、投稿保存、公開前審査キューが接続されるまで投稿受付を開始しません。
 
+### Sign in with Apple setup
+
+本番ではApple公式のSign in with Apple JSボタンを使用します。現在の静的プレビューは、同意チェック後にApple公式ボタン領域を表示し、Apple Developer設定が未投入の場合のみローカル確認用ボタンを表示します。
+
+Apple Developer側で必要な準備は以下です。
+
+1. 既存のPrimary App IDでSign in with Appleを有効化する。
+2. Web用のServices IDを作成し、Primary App IDへ関連付ける。
+3. Web DomainとReturn URLを登録する。
+4. Sign in with Apple Keyを作成し、Key ID、Team ID、Services ID、秘密鍵（.p8）をサーバー側シークレットとして保存する。
+5. HTMLの `appleid-signin-client-id`、`appleid-signin-redirect-uri`、`appleid-signin-state`、`appleid-signin-nonce` を本番サーバーで実値へ差し替える。`state` と `nonce` はリクエストごとに生成し、サーバー側セッションと照合する。
+6. Apple JSから返る authorization code / identity token を `/api/auth/apple/session` などのサーバーAPIへ送り、Apple公開鍵、issuer、audience、nonce、期限、client secret、token exchangeを検証してからセッションを発行する。
+
 本番化では、Apple Sign in、ユーザー ID、投稿 ID、規約バージョン、同意日時、公開設定、公開ニックネーム、ニックネーム言語、ニックネーム生成ルールバージョン、使用済みニックネーム予約日時、外国第三者提供同意バージョン、Cookie/外部送信表示バージョン、監査ログ保存期間ポリシー、採用時特典の文言バージョンをサーバー側で保存してください。生のIPアドレスとUser-Agentは原則6か月で削除、匿名加工情報の作成基準を満たす匿名化、または仮名加工情報に相当する不可逆ハッシュ化を行い、同意ログと権利譲渡証跡は10年を上限に保存する設計です。投稿本文に含まれる個人情報・健康情報・第三者秘密情報・営業秘密・未公開発明の検出、管理者審査、公開前の非公開キュー、通報、ブロック、削除請求導線も必須です。Apple token revocation、server-to-server notification、外国第三者提供同意、Cookie/外部送信表示、アカウント削除、開示等請求窓口、事業者情報表示、採用時特典をApp Store Connect公式コードに限定する運用、本番セキュリティヘッダーを実装し、公開前には弁護士レビューを行ってください。

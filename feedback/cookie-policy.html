@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Cookie/外部送信ポリシー | AllNew App Factory Feedback</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #050505;
+      --secondary: #5f6673;
+      --paper: #f7fbff;
+      --surface: #ffffff;
+      --surface-soft: #eef7ff;
+      --line: rgba(60, 60, 67, 0.12);
+      --blue: #0a7dff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(89, 211, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 96% 20%, rgba(10, 125, 255, 0.08), transparent 30%),
+        linear-gradient(180deg, #f7fbff 0%, #ffffff 48%, #f7fbff 100%);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+      line-height: 1.78;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      padding: 32px 20px 72px;
+    }
+
+    .legal-card {
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 24px 60px rgba(0, 82, 163, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(25px, 6.4vw, 44px);
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      margin: 36px 0 10px;
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    p, li, td, th {
+      color: var(--secondary);
+      font-size: 15px;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 0;
+      overflow-wrap: anywhere;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      background: var(--surface-soft);
+    }
+
+    .updated {
+      margin: 0 0 28px;
+      color: var(--secondary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .notice {
+      padding: 16px;
+      border-radius: 20px;
+      background: #eef7ff;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .back-link {
+      display: inline-flex;
+      margin-bottom: 18px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 18px 10px 48px;
+      }
+
+      .legal-card {
+        padding: 22px 14px 28px;
+        border-radius: 22px;
+      }
+
+      h1 {
+        font-size: 24px;
+        line-height: 1.22;
+      }
+
+      h2 {
+        margin-top: 30px;
+        font-size: 17px;
+      }
+
+      p, li, td, th {
+        font-size: 14px;
+      }
+
+      ul {
+        padding-left: 1.25em;
+      }
+
+      table,
+      tbody,
+      tr,
+      td {
+        display: block;
+      }
+
+      thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      tr {
+        margin: 12px 0;
+        padding: 14px;
+        border-radius: 18px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(238, 247, 255, 0.72));
+        box-shadow:
+          0 12px 28px rgba(0, 82, 163, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.86);
+      }
+
+      td {
+        display: grid;
+        grid-template-columns: minmax(6.5em, 38%) 1fr;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+        word-break: normal;
+        overflow-wrap: anywhere;
+      }
+
+      td:last-child {
+        border-bottom: 0;
+      }
+
+      td::before {
+        content: attr(data-label);
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.55;
+      }
+
+      .notice {
+        padding: 14px;
+        border-radius: 18px;
+        font-size: 13.5px;
+      }
+
+      .back-link {
+        margin: 0 0 12px 4px;
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back-link" href="./index.html">← フィードバックサイトへ戻る</a>
+    <article class="legal-card">
+      <h1>Cookie/外部送信ポリシー</h1>
+      <p class="updated">最終更新日: 2026年5月23日</p>
+      <p class="notice">このページは、AllNew App Factory FeedbackにおけるCookie、Sign in with Apple、外部送信、サービス固有の情報取扱いを説明するものです。合同会社AllNewのプライバシーポリシーは、<a href="https://www.allnew.work/ja/privacy">コーポレートサイト掲載版</a>をご確認ください。</p>
+
+      <h2>1. 基本方針</h2>
+      <ul>
+        <li>本サービスは、ログイン維持、不正対策、同意状態の保存、投稿受付、通報・削除申出、開示・削除請求対応に必要なCookieおよび通信のみを使用します。</li>
+        <li>広告目的のCookie、行動ターゲティング、第三者広告SDK、クロスサイトトラッキングSDKは使用しません。</li>
+        <li>将来、解析、広告、外部SDK、追加の委託先を導入する場合は、事前にこのページを更新し、必要に応じて同意取得またはオプトアウト導線を設けます。</li>
+      </ul>
+
+      <h2>2. 本サービスで使用するCookie</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th>目的</th>
+            <th>期間</th>
+            <th>属性</th>
+            <th>オプトアウト可否</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="名称">af_cookie_notice</td>
+            <td data-label="目的">Cookie/外部送信に関する通知を確認済みであることを保存します。</td>
+            <td data-label="期間">180日</td>
+            <td data-label="属性">SameSite=Lax。本番HTTPS環境ではSecure属性を付与します。画面表示制御のためJavaScriptから読み取れるCookieであり、HttpOnlyではありません。</td>
+            <td data-label="オプトアウト可否">ブラウザ設定で削除できます。削除後は通知が再表示されます。</td>
+          </tr>
+          <tr>
+            <td data-label="名称">セッションCookie</td>
+            <td data-label="目的">Sign in with Apple後のログイン維持、CSRF/リプレイ防止、不正利用防止に使用します。</td>
+            <td data-label="期間">セッションまたは最長30日</td>
+            <td data-label="属性">本番ではSecure、HttpOnly、SameSite=LaxまたはSameSite=Strictを付与します。</td>
+            <td data-label="オプトアウト可否">ログイン機能に必要なため、無効化すると本サービスを利用できない場合があります。</td>
+          </tr>
+          <tr>
+            <td data-label="名称">同意・監査ログ識別子</td>
+            <td data-label="目的">利用規約、プライバシーポリシー、Cookie/外部送信ポリシーへの同意、権利譲渡合意、18歳以上確認の証跡管理に使用します。</td>
+            <td data-label="期間">同意ログは10年を上限に保管します。生のIPアドレスとUser-Agentは原則6か月で削除または匿名化します。</td>
+            <td data-label="属性">本番ではSecure、HttpOnly、SameSite属性を適切に設定します。</td>
+            <td data-label="オプトアウト可否">法令対応、権利譲渡、紛争対応のため必要な範囲では削除できない場合があります。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. 外部送信先</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>送信先</th>
+            <th>所在国</th>
+            <th>送信項目</th>
+            <th>送信目的</th>
+            <th>送信先での利用目的</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="送信先">Apple Inc.</td>
+            <td data-label="所在国">米国</td>
+            <td data-label="送信項目">Apple提供ユーザー識別子、氏名、メールアドレス、非公開メールアドレス、identity token、authorization code、state、nonce、認証に必要なブラウザ情報等</td>
+            <td data-label="送信目的">Sign in with Appleによる本人識別、ログイン、Apple ID連携解除、token revocation、server-to-server notificationへの対応</td>
+            <td data-label="送信先での利用目的">Apple Accountによる認証、セキュリティ、不正防止、Appleが定めるプライバシーポリシーおよびSign in with Appleの提供</td>
+          </tr>
+          <tr>
+            <td data-label="送信先">apps.allnew.work</td>
+            <td data-label="所在国">日本または委託先クラウド提供地域</td>
+            <td data-label="送信項目">アクセス時刻、IPアドレス、User-Agent、参照元、表示言語、アプリカタログ取得に必要なブラウザ情報</td>
+            <td data-label="送信目的">AllNewが公開しているアプリ一覧、アプリ名、説明、カタログ上のアイコン画像を本サービス内に表示するため</td>
+            <td data-label="送信先での利用目的">AllNewアプリカタログサイトの配信、保守、障害対応、セキュリティ確保</td>
+          </tr>
+          <tr>
+            <td data-label="送信先">Apple App Store / iTunes Lookup API / mzstatic.com</td>
+            <td data-label="所在国">米国その他Appleが定める地域</td>
+            <td data-label="送信項目">アクセス時刻、IPアドレス、User-Agent、アプリID、表示に必要なブラウザ情報</td>
+            <td data-label="送信目的">App Storeで公開されているアプリ名、販売ページURL、実際のアプリアイコン画像を取得・表示するため</td>
+            <td data-label="送信先での利用目的">AppleによるApp Store情報、画像配信、セキュリティ、不正防止、サービス改善</td>
+          </tr>
+          <tr>
+            <td data-label="送信先">AllNew BaaS / OpenAI, L.L.C.</td>
+            <td data-label="所在国">日本または委託先クラウド提供地域、米国</td>
+            <td data-label="送信項目">投稿前のチャット内容、対象アプリ、投稿種別の推定に必要な情報、ランダムニックネーム、アクセス時刻、IPアドレス、User-Agent等</td>
+            <td data-label="送信目的">POIPOI受付係による自由記入チャット応対、受付可否の一次確認、運営管理者向け一次審査レポート作成のため</td>
+            <td data-label="送信先での利用目的">当社の委託に基づくAI応答生成、セキュリティ、不正対策、障害対応。送信先が独自目的で利用しないよう契約・設定・アクセス制御を行います。</td>
+          </tr>
+          <tr>
+            <td data-label="送信先">本サービスのホスティング、データベース、ログ管理、監視、メール送信等の委託先</td>
+            <td data-label="所在国">本番構成確定時に明示</td>
+            <td data-label="送信項目">アクセス情報、投稿情報、同意ログ、通報・削除申出、問い合わせ、セキュリティログ等</td>
+            <td data-label="送信目的">本サービスの提供、保守、障害対応、不正対策、法令対応</td>
+            <td data-label="送信先での利用目的">当社の委託に基づく処理。委託先が独自目的で利用しないよう契約・設定・アクセス制御を行います。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>4. 外国にある第三者への提供</h2>
+      <p>Sign in with Appleの利用に伴い、Apple Inc.（米国）へ認証関連情報が送信される場合があります。また、POIPOI受付係のAI応答生成および一次審査レポート作成のため、OpenAI, L.L.C.（米国）へチャット内容等が送信される場合があります。当社は、個人情報保護法第28条に基づき、外国にある第三者への個人データ提供を認める旨の本人同意、提供先の国名、当該外国における個人情報保護制度に関する情報、提供先が講じる個人情報保護措置、本人の求めに応じた情報提供方法を、登録前および投稿前に明示します。</p>
+      <p>提供先の国名または保護措置を同意取得時点で特定できない場合は、特定できない旨、その理由、本人の参考となる情報を表示します。米国以外の外国に所在する委託先、国外再委託、国外からのアクセス、国外リージョン、国外サポートがある場合は、提供先名、所在国、送信項目、利用目的、保護措置を本番公開前に追加します。</p>
+      <p>EU/EEA、英国、中国、米国カリフォルニア州その他日本国外の居住者を対象に本サービスを積極的に提供する場合は、GDPR、UK GDPR、中国個人情報保護法（PIPL）、CCPA/CPRAその他適用される国外法令について、必要な表示、同意、権利行使手続、国外移転条項、代理人・代表者表示、アクセス制限または提供地域制限を実装するまで、当該地域向け提供を開始しません。</p>
+
+      <h2>5. サービス固有の投稿情報</h2>
+      <p>投稿には、氏名、住所、電話番号、メールアドレス、健康情報、要配慮個人情報、第三者秘密情報、営業秘密、未公開発明、出願予定アイデア、第三者の権利を侵害する情報を含めないでください。公開を希望する投稿は、運営担当者が確認した公開用要約、ステータス、状況報告、結果報告として公開される場合があります。AIは補助に限り、公開判断を確定しないものとし、最終判断は人間の運営担当者が行います。</p>
+
+      <h2>6. 権利行使と問い合わせ</h2>
+      <p>開示・削除請求、アカウント削除、Apple ID連携解除、第三者提供停止、通報、削除申出は、AllNewコーポレートサイトの導線または当社所定の窓口から受け付けます。本人確認後、法令および当社所定の手続に従って対応します。</p>
+      <p>会社情報: <a href="https://www.allnew.work/?lang=ja#company">https://www.allnew.work/?lang=ja#company</a></p>
+
+      <h2>7. 重要な変更</h2>
+      <p>Cookie、外部送信先、送信項目、利用目的、同意取得方法に重要な変更がある場合、当社は本ページ、登録画面、投稿画面、メールその他適切な方法で通知します。</p>
+    </article>
+  </main>
+</body>
+</html>
