@@ -5,7 +5,7 @@ AllNew App Factory Feedback を本番公開する場合の最低限のセキュ�
 ## Required HTTP Headers
 
 ```http
-Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://appleid.apple.com; frame-src https://appleid.apple.com; object-src 'none'; base-uri 'none'; form-action 'self' https://appleid.apple.com; frame-ancestors 'none'; upgrade-insecure-requests
+Content-Security-Policy: default-src 'self'; script-src 'self' https://appleid.cdn-apple.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://appleid.cdn-apple.com; connect-src 'self' https://appleid.apple.com; frame-src https://appleid.apple.com; object-src 'none'; base-uri 'none'; form-action 'self' https://appleid.apple.com; frame-ancestors 'none'; upgrade-insecure-requests
 Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 X-Content-Type-Options: nosniff
 Referrer-Policy: strict-origin-when-cross-origin
@@ -18,6 +18,10 @@ Cross-Origin-Opener-Policy: same-origin
 ## Application Controls
 
 - Sign in with Apple JS を使い、認証結果はサーバーで検証する
+- Apple Developer Program で Services ID、Primary App ID、Web Domain、Return URL、Sign in with Apple Key を設定する。Key ID、Team ID、Services ID、秘密鍵（.p8）はサーバー側シークレットで管理し、静的HTML、Git、ログには置かない
+- 本番HTMLの `appleid-signin-client-id`、`appleid-signin-redirect-uri`、`appleid-signin-state`、`appleid-signin-nonce` は、デプロイ時にサーバーで実値へ差し替える。`state` と `nonce` はリクエストごとに生成し、セッションと照合する
+- Apple公式ボタンは `https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/ja_JP/appleid.auth.js` と `#appleid-signin` でレンダリングする。独自のAppleロゴ手打ち、非公式SVG、非公式画像ボタンは使用しない
+- AppleID JS の `clientId`、`redirectURI`、`scope`、`state`、`nonce` とサーバー側の ID token 検証、authorization code 交換、client secret 生成、CSRF/リプレイ防止を本番前に検証する
 - セッション Cookie は `HttpOnly`, `Secure`, `SameSite=Lax` 以上にする。管理者系は `SameSite=Strict` を原則にする
 - 投稿 API は CSRF トークン、Origin チェック、レート制限を必須にする
 - Cookie/外部送信ポリシーとして、必須Cookie、セッションCookie、外部送信先、送信項目、送信目的、送信先利用目的、オプトアウト可否、SameSite/Secure/HttpOnly属性、有効期間を本番公開前に明示する

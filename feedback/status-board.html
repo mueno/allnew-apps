@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>STATUS BOARD | POIPOI-STUDIO</title>
+  <link rel="stylesheet" href="status-board.css">
+</head>
+<body>
+  <div class="board-shell">
+    <header class="board-topbar">
+      <a class="board-logo" href="index.html" aria-label="AllNew App Factory Feedbackへ戻る">
+        <img src="assets/allnew-logo.png" alt="AllNew">
+      </a>
+      <nav class="board-nav" aria-label="公開ボード">
+        <a href="index.html#send">気づきやアイデアを送る</a>
+        <a class="is-active" href="status-board.html" aria-current="page">どうなってる?</a>
+      </nav>
+      <div class="board-profile" aria-label="閲覧モード">
+        <span>見物モード</span>
+        <span class="board-bell" aria-hidden="true">⌁</span>
+        <span class="board-avatar" aria-hidden="true">👀</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="board-hero" aria-labelledby="boardHeroTitle">
+        <div class="board-hero-copy">
+          <p class="board-hero-kicker">POIPOI STATUS BOARD</p>
+          <h1 id="boardHeroTitle">みんなの声と<br>開発のいま</h1>
+          <p>
+            いただいた「気づき」や「あったらいいなぁ」が、
+            いまどこまで進んでいるかを確認できます。
+            開発チームとAIで協力しながら、アプリをもっと良くしていきます。
+          </p>
+          <div class="board-current-strip">
+            <span class="current-dot">✓</span>
+            <strong>現在の状況：通常どおり受付中</strong>
+            <span>最終更新：2026年6月1日 10:30</span>
+          </div>
+        </div>
+        <div class="board-hero-art" aria-label="公開ボードで受付状況と開発の進み具合を確認するイメージ">
+          <img class="board-hero-image" src="assets/status-board-hero-v2.png" alt="AIロボットと開発メンバーが進捗ボードを確認するイラスト">
+          <div class="hero-banner-stack" aria-label="公開ボードからのお知らせ">
+            <article class="hero-info-banner">
+              <span class="hero-info-icon" aria-hidden="true">📣</span>
+              <div>
+                <strong>開発チームからのお知らせ</strong>
+                <span>対応中の内容を順次更新します。</span>
+              </div>
+            </article>
+            <article class="hero-info-banner">
+              <span class="hero-info-icon" aria-hidden="true">?</span>
+              <div>
+                <strong>困った時は</strong>
+                <span>受付番号やアプリ名で探せます。</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="board-panel" aria-labelledby="statusOverviewTitle">
+        <div class="board-section-head">
+          <div>
+            <p class="board-kicker">STATUS BOARD</p>
+            <h2 id="statusOverviewTitle">受付状況</h2>
+          </div>
+          <p id="resultCount" aria-live="polite">5件を表示しています。</p>
+        </div>
+
+        <div class="status-metrics" aria-label="ステータスで絞り込み">
+          <button class="status-metric is-active" type="button" data-status-filter="all" aria-pressed="true">
+            <i class="metric-mark" aria-hidden="true"></i>
+            <span>すべて</span>
+            <strong data-metric-count>5</strong>
+          </button>
+          <button class="status-metric" type="button" data-status-filter="受け付けました" aria-pressed="false">
+            <i class="metric-mark" aria-hidden="true"></i>
+            <span>受け付けました</span>
+            <strong data-metric-count>1</strong>
+          </button>
+          <button class="status-metric" type="button" data-status-filter="検討しています" aria-pressed="false">
+            <i class="metric-mark" aria-hidden="true"></i>
+            <span>検討しています</span>
+            <strong data-metric-count>1</strong>
+          </button>
+          <button class="status-metric" type="button" data-status-filter="対応しています" aria-pressed="false">
+            <i class="metric-mark" aria-hidden="true"></i>
+            <span>対応しています</span>
+            <strong data-metric-count>1</strong>
+          </button>
+          <button class="status-metric" type="button" data-status-filter="出来ました" aria-pressed="false">
+            <i class="metric-mark" aria-hidden="true"></i>
+            <span>出来ました</span>
+            <strong data-metric-count>1</strong>
+          </button>
+          <button class="status-metric" type="button" data-status-filter="見送り・保留" aria-pressed="false">
+            <i class="metric-mark" aria-hidden="true"></i>
+            <span>見送り・保留</span>
+            <strong data-metric-count>1</strong>
+          </button>
+        </div>
+
+        <div class="board-controls" aria-label="公開ボードの検索と並び替え">
+          <input id="boardSearchInput" type="search" autocomplete="off" placeholder="キーワード・受付番号で探す">
+          <select id="boardSortSelect" aria-label="並び替え">
+            <option value="updated-desc">更新日が新しい順</option>
+            <option value="updated-asc">更新日が古い順</option>
+            <option value="accepted-desc">受付日が新しい順</option>
+            <option value="accepted-asc">受付日が古い順</option>
+            <option value="good-desc">Goodが多い順</option>
+          </select>
+        </div>
+
+        <div class="board-chip-row" aria-label="カテゴリで絞り込み">
+          <button class="board-chip is-active" type="button" data-category-filter="all" aria-pressed="true">すべて</button>
+          <button class="board-chip" type="button" data-category-filter="使いやすさ" aria-pressed="false">使いやすさ</button>
+          <button class="board-chip" type="button" data-category-filter="新しい機能" aria-pressed="false">新しい機能</button>
+          <button class="board-chip" type="button" data-category-filter="見た目・表示" aria-pressed="false">見た目・表示</button>
+          <button class="board-chip" type="button" data-category-filter="記録・同期" aria-pressed="false">記録・同期</button>
+          <button class="board-chip" type="button" data-category-filter="その他" aria-pressed="false">その他</button>
+        </div>
+
+        <div class="board-controls" aria-label="アプリで絞り込み">
+          <select id="appFilterSelect" aria-label="アプリで絞り込み">
+            <option value="all">すべてのアプリ</option>
+          </select>
+          <a class="ghost-button" href="index.html" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;">あなたのご要望をお聞かせください。</a>
+        </div>
+
+        <div class="board-grid" id="statusList" aria-label="最近の受付状況"></div>
+        <p class="board-empty" id="statusEmpty" hidden>条件に合う公開項目はまだありません。</p>
+      </section>
+
+      <section class="board-panel" aria-labelledby="developmentNowTitle">
+        <div class="board-section-head">
+          <div>
+            <p class="board-kicker">NOW / NEXT / LATER</p>
+            <h2 id="developmentNowTitle">開発のいま</h2>
+          </div>
+          <p>アプリごとに、いま取り組んでいることを公開できる範囲で表示します。</p>
+        </div>
+        <div class="development-board">
+          <section class="dev-column">
+            <h3><span>Now</span>いま取り組んでいます</h3>
+            <div class="dev-item">
+              <i aria-hidden="true">🛠</i>
+              <em><img src="https://apps.allnew.work/weightsnap-icon.png" alt="">WeightSnap</em>
+              <strong>写真読み取り後の安定性を改善</strong>
+              <span>画像処理後の表示まわりを確認しています。</span>
+              <progress value="60" max="100" aria-label="進捗 60%"></progress>
+            </div>
+            <div class="dev-item">
+              <i aria-hidden="true">📈</i>
+              <em><img src="https://apps.allnew.work/weightsnap-icon.png" alt="">WeightSnap</em>
+              <strong>週ごとのグラフ表示</strong>
+              <span>集計と見え方のテストを進めています。</span>
+              <progress value="45" max="100" aria-label="進捗 45%"></progress>
+            </div>
+          </section>
+          <section class="dev-column">
+            <h3><span>Next</span>次に試します</h3>
+            <div class="dev-item">
+              <i aria-hidden="true">↩</i>
+              <em><img src="https://apps.allnew.work/glucosnap-icon.png" alt="">GlucoSnap</em>
+              <strong>入力履歴から再送できる機能</strong>
+              <span>うっかり消えた記録を戻しやすくします。</span>
+              <progress value="22" max="100" aria-label="進捗 22%"></progress>
+            </div>
+          </section>
+          <section class="dev-column">
+            <h3><span>Later</span>検討リスト</h3>
+            <div class="dev-item">
+              <i aria-hidden="true">🚀</i>
+              <em><span class="dev-new-app-icon">＋</span>新しいアプリ案</em>
+              <strong>集中タイマーのアプリ案</strong>
+              <span>新しいアプリ案として使いどころを整理中です。</span>
+              <progress value="12" max="100" aria-label="進捗 12%"></progress>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="board-panel" aria-labelledby="releaseHistoryTitle">
+        <div class="board-section-head">
+          <div>
+            <p class="board-kicker">RELEASE HISTORY</p>
+            <h2 id="releaseHistoryTitle">リリース履歴</h2>
+          </div>
+          <select id="releaseAppFilterSelect" aria-label="アプリでリリース履歴を絞り込み">
+            <option value="all">すべてのアプリ</option>
+          </select>
+        </div>
+        <div class="release-list">
+          <details class="release-item" data-release-app="WeightSnap">
+            <summary class="release-row">
+              <time>6/1</time>
+              <strong><img src="https://apps.allnew.work/weightsnap-icon.png" alt="">WeightSnap v1.4.2</strong>
+              <span>写真読み取り時の安定性を改善しました。</span>
+              <b>関連する声を見る（3件）</b>
+            </summary>
+            <div class="release-detail">
+              <p>画像を読み取った後に結果が表示されないことがある、という声をもとに安定性を見直しました。</p>
+              <ul>
+                <li>AF-1042 週ごとのグラフを見たい</li>
+                <li>AF-1049 写真読み取り後に結果が出ないことがある</li>
+                <li>AF-1050 入力後の確認表示を分かりやすくしたい</li>
+              </ul>
+            </div>
+          </details>
+          <details class="release-item" data-release-app="GlucoSnap">
+            <summary class="release-row">
+              <time>5/28</time>
+              <strong><img src="https://apps.allnew.work/glucosnap-icon.png" alt="">GlucoSnap v2.1.0</strong>
+              <span>入力履歴から再送できるようにしました。</span>
+              <b>関連する声を見る（1件）</b>
+            </summary>
+            <div class="release-detail">
+              <p>入力途中で戻ってしまったときも、前回の内容から再開しやすくしました。</p>
+              <ul>
+                <li>AF-1037 メモ候補を増やしたい</li>
+              </ul>
+            </div>
+          </details>
+          <details class="release-item" data-release-app="ThermoSnap">
+            <summary class="release-row">
+              <time>5/12</time>
+              <strong><img src="https://apps.allnew.work/thermosnap-icon.png" alt="">ThermoSnap</strong>
+              <span>記録一覧の読みやすさを改善しました。</span>
+              <b>関連する声を見る（1件）</b>
+            </summary>
+            <div class="release-detail">
+              <p>日々の記録を見返すときに、数字と日付が追いやすくなるよう表示を調整しました。</p>
+              <ul>
+                <li>AF-1029 表示を見やすくしてほしい</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="detail-drawer" id="detailDialog" aria-label="受付状況の詳細">
+    <div class="detail-body" id="detailContent"></div>
+  </dialog>
+
+  <script src="status-board.js"></script>
+</body>
+</html>
