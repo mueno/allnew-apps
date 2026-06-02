@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-01T21:43:21+00:00",
+  "generated_at": "2026-06-02T21:23:43+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -158,14 +158,14 @@
       "bundle_id": "jp.allnew.oxisnap",
       "asc_app_id": "6759076145",
       "is_health_app": true,
-      "release_date": "2026-06-01",
+      "release_date": "2026-06-02",
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-06-01T21:43:21+00:00",
-      "app_store_version": "1.0.10",
+      "updated_at": "2026-06-02T21:23:43+00:00",
+      "app_store_version": "1.0.11",
       "app_store_name": "OxiSnap - SpO2を声で記録",
-      "app_store_current_version_release_date": "2026-06-01T13:42:52Z",
+      "app_store_current_version_release_date": "2026-06-02T16:01:16Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -348,14 +348,14 @@
       "bundle_id": "jp.allnew.zenflip",
       "asc_app_id": "6759169189",
       "is_health_app": false,
-      "release_date": "2026-06-01",
+      "release_date": "2026-06-02",
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-06-01T21:43:21+00:00",
-      "app_store_version": "1.0.5",
+      "updated_at": "2026-06-02T21:23:43+00:00",
+      "app_store_version": "1.0.6",
       "app_store_name": "BOTTO - 没頭タイマー",
-      "app_store_current_version_release_date": "2026-06-01T13:43:05Z",
+      "app_store_current_version_release_date": "2026-06-02T16:02:32Z",
       "app_store_lookup_country": "jp"
     }
   ]
