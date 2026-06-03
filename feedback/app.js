@@ -234,11 +234,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const legalDocDisclosures = Array.from(document.querySelectorAll(".legal-doc-disclosure"));
   const cookieConsentBanner = document.getElementById("cookieConsentBanner");
   const cookieConsentAccept = document.getElementById("cookieConsentAccept");
+  const isLocalPreviewHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
   let termsModalRequiresRegistrationConsent = false;
   let termsModalReturnFocusTarget = null;
   let appleSignInRuntimeConfig = null;
   let appleSignInConfigPromise = null;
   let appleSignInInitialized = false;
+  let appleProgrammaticSignInReady = false;
 
   function randomItem(items) {
     return items[Math.floor(Math.random() * items.length)];
@@ -1989,11 +1991,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function resetAppleOfficialAuthZone() {
+    appleProgrammaticSignInReady = false;
     appleOfficialAuthZone.hidden = true;
     appleIdSigninButton.hidden = true;
     appleSigninConfigNotice.hidden = true;
     appleSigninReadyText.hidden = false;
     appleSigninReadyText.textContent = "同意が完了しました。下のAppleボタンからサインインしてください。";
+    localApplePreviewBtn.textContent = "この環境で動きを確認する";
+    localApplePreviewBtn.classList.remove("apple-js-signin-button");
+    localApplePreviewBtn.disabled = false;
     localApplePreviewBtn.hidden = true;
   }
 
@@ -2003,21 +2009,33 @@ document.addEventListener("DOMContentLoaded", () => {
     appleSigninConfigNotice.hidden = true;
     appleSigninReadyText.hidden = false;
     appleSigninReadyText.textContent = "Appleサインインを準備しています。";
+    appleProgrammaticSignInReady = false;
+    localApplePreviewBtn.textContent = "Appleでサインイン";
+    localApplePreviewBtn.classList.add("apple-js-signin-button");
+    localApplePreviewBtn.disabled = true;
     localApplePreviewBtn.hidden = true;
 
     ensureAppleSignInConfigured()
       .then(() => {
-        appleIdSigninButton.hidden = !appleSignInConfigReady();
+        appleProgrammaticSignInReady = appleSignInConfigReady();
+        appleIdSigninButton.hidden = true;
         appleSigninConfigNotice.hidden = true;
         appleSigninReadyText.hidden = false;
-        appleSigninReadyText.textContent = "同意が完了しました。下のAppleボタンからサインインしてください。";
-        localApplePreviewBtn.hidden = true;
+        appleSigninReadyText.textContent = "同意が完了しました。Appleでサインインしてください。";
+        localApplePreviewBtn.textContent = "Appleでサインイン";
+        localApplePreviewBtn.classList.add("apple-js-signin-button");
+        localApplePreviewBtn.disabled = !appleProgrammaticSignInReady;
+        localApplePreviewBtn.hidden = !appleProgrammaticSignInReady;
       })
       .catch(() => {
+        appleProgrammaticSignInReady = false;
         appleIdSigninButton.hidden = true;
         appleSigninConfigNotice.hidden = false;
         appleSigninReadyText.hidden = true;
-        localApplePreviewBtn.hidden = false;
+        localApplePreviewBtn.textContent = "この環境で動きを確認する";
+        localApplePreviewBtn.classList.remove("apple-js-signin-button");
+        localApplePreviewBtn.disabled = false;
+        localApplePreviewBtn.hidden = !isLocalPreviewHost;
       });
   }
 
@@ -2103,9 +2121,19 @@ document.addEventListener("DOMContentLoaded", () => {
     return response.json();
   }
 
-  async function handleAppleSignInSuccess(event) {
+  function extractAppleAuthorizationPayload(source) {
+    const detail = source?.detail ?? source ?? {};
+    return (
+      detail.authorization ||
+      detail.data?.authorization ||
+      detail.data ||
+      detail
+    );
+  }
+
+  async function completeAppleAuthorization(authorization) {
     try {
-      const session = await exchangeAppleAuthorization(event.detail?.authorization ?? {});
+      const session = await exchangeAppleAuthorization(authorization ?? {});
       closeTermsModal();
       signIn(session.nickname || generateNickname());
     } catch {
@@ -2114,9 +2142,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function handleAppleSignInSuccess(event) {
+    await completeAppleAuthorization(extractAppleAuthorizationPayload(event));
+  }
+
   function handleAppleSignInFailure() {
     termsErrorText.textContent = "Appleでサインインを完了できませんでした。もう一度お試しください。";
     termsErrorText.hidden = false;
+  }
+
+  async function startAppleProgrammaticSignIn() {
+    if (!appleProgrammaticSignInReady || !window.AppleID?.auth?.signIn) {
+      termsErrorText.textContent = "Appleサインインを準備できませんでした。ページを再読み込みしてもう一度お試しください。";
+      termsErrorText.hidden = false;
+      return;
+    }
+
+    termsErrorText.hidden = true;
+    localApplePreviewBtn.disabled = true;
+    localApplePreviewBtn.textContent = "Appleへ接続しています...";
+    try {
+      const result = await window.AppleID.auth.signIn();
+      await completeAppleAuthorization(extractAppleAuthorizationPayload(result));
+    } catch {
+      handleAppleSignInFailure();
+    } finally {
+      localApplePreviewBtn.disabled = false;
+      localApplePreviewBtn.textContent = "Appleでサインイン";
+    }
+  }
+
+  function handleAppleAuthAction() {
+    if (appleProgrammaticSignInReady) {
+      startAppleProgrammaticSignIn();
+      return;
+    }
+
+    if (isLocalPreviewHost) {
+      startLocalApplePreview();
+    }
   }
 
   function startLocalApplePreview() {
@@ -2520,7 +2584,7 @@ document.addEventListener("DOMContentLoaded", () => {
   closeTermsBtn.addEventListener("click", closeTermsModal);
   cancelTermsBtn.addEventListener("click", closeTermsModal);
   acceptTermsBtn.addEventListener("click", acceptTermsModal);
-  localApplePreviewBtn.addEventListener("click", startLocalApplePreview);
+  localApplePreviewBtn.addEventListener("click", handleAppleAuthAction);
   registrationConsentChecks.forEach((check) => check.addEventListener("change", updateTermsActionState));
   legalDocDisclosures.forEach((disclosure) => disclosure.addEventListener("toggle", handleLegalDocDisclosureToggle));
   document.addEventListener("AppleIDSignInOnSuccess", handleAppleSignInSuccess);
