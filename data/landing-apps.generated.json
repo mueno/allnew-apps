@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-02T21:23:43+00:00",
+  "generated_at": "2026-06-03T21:29:37+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -222,14 +222,14 @@
       "bundle_id": "jp.allnew.pawpass",
       "asc_app_id": "6768502509",
       "is_health_app": false,
-      "release_date": "2026-05-19",
+      "release_date": "2026-06-03",
       "featured_priority": 65,
       "sort_order": 65,
       "published_to_landing": true,
-      "updated_at": "2026-05-19T20:03:16+00:00",
-      "app_store_version": "1.4",
+      "updated_at": "2026-06-03T21:29:37+00:00",
+      "app_store_version": "1.5",
       "app_store_name": "PawPass",
-      "app_store_current_version_release_date": "2026-05-19T14:42:48Z",
+      "app_store_current_version_release_date": "2026-06-03T00:22:31Z",
       "app_store_lookup_country": "jp"
     },
     {
