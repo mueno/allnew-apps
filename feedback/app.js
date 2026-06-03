@@ -1136,6 +1136,11 @@ document.addEventListener("DOMContentLoaded", () => {
     aiReviewMessage.textContent = latestReview.message;
     submitFeedbackBtn.hidden = latestReview.decision !== "accept";
 
+    if (latestReview.decision === "accept") {
+      stopPoipoiChat();
+      return;
+    }
+
     if (latestReview.decision === "block") {
       stopPoipoiChat();
       const nextCount = getModerationWarningCount() + 1;
