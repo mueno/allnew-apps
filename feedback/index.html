@@ -348,7 +348,7 @@
     .welcome-scrolly-shell {
       position: relative;
       width: 100%;
-      min-height: min(calc(var(--scrolly-sticky-height) - 112px), 640px);
+      min-height: min(calc(var(--scrolly-sticky-height) - 36px), 720px);
     }
 
     .welcome-scene {
@@ -571,19 +571,23 @@
     }
 
     .scrolly-progress-dots {
-      position: relative;
-      z-index: 10;
+      position: absolute;
+      top: 50%;
+      right: -36px;
+      z-index: 12;
       display: inline-flex;
-      gap: 8px;
+      flex-direction: column;
+      gap: 9px;
       align-items: center;
       justify-content: center;
       min-height: 18px;
-      margin-top: 4px;
-      padding: 5px 8px;
+      margin: 0;
+      padding: 8px 6px;
       border-radius: 999px;
       background: color-mix(in srgb, var(--surface-soft) 72%, transparent);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
       pointer-events: auto;
+      transform: translateY(-50%);
     }
 
     .scrolly-dot {
@@ -601,25 +605,13 @@
     }
 
     .scrolly-dot.is-active {
-      width: 22px;
-      background: linear-gradient(90deg, #0877ff, #59d3ff);
+      height: 24px;
+      background: linear-gradient(180deg, #0877ff, #59d3ff);
       transform: scale(1.06);
     }
 
-    .welcome-scrolly.is-magnetizing .scrolly-dot.is-active {
-      width: 30px;
-      transform: scale(1.12);
-      box-shadow: 0 0 0 4px rgba(10, 125, 255, 0.08), 0 10px 22px rgba(10, 125, 255, 0.22);
-    }
-
     .scrolly-scroll-hint {
-      margin: 0;
-      color: color-mix(in srgb, var(--secondary) 84%, transparent);
-      font-size: 11.5px;
-      font-weight: 650;
-      line-height: 1.5;
-      text-align: center;
-      letter-spacing: 0.02em;
+      display: none;
     }
 
     .scrolly-sentinels {
@@ -633,6 +625,12 @@
 
     .scrolly-sentinel {
       min-height: 82svh;
+    }
+
+    @media (max-width: 860px) {
+      .scrolly-progress-dots {
+        display: none;
+      }
     }
 
     .capability-number {
@@ -3471,7 +3469,7 @@
       }
 
       .welcome-scrolly-shell {
-        min-height: min(calc(var(--scrolly-sticky-height) - 112px), 620px);
+        min-height: min(calc(var(--scrolly-sticky-height) - 36px), 700px);
       }
 
       .welcome-scene {

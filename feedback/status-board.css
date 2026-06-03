@@ -431,15 +431,11 @@ select {
 
 .board-chip-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 9px;
   margin-top: 14px;
   padding-bottom: 2px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.board-chip-row::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
 }
 
 .board-chip {
@@ -1005,6 +1001,22 @@ select {
   cursor: pointer;
 }
 
+@media (max-width: 1100px) {
+  .board-hero {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .board-hero-art {
+    order: -1;
+    min-height: clamp(220px, 34vw, 300px);
+  }
+
+  .status-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 860px) {
   .board-shell {
     width: min(100% - 20px, 640px);
@@ -1040,7 +1052,6 @@ select {
     order: -1;
   }
 
-  .status-metrics,
   .board-grid,
   .development-board {
     grid-template-columns: 1fr;
@@ -1066,23 +1077,13 @@ select {
   }
 
   .status-metrics {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    margin-inline: -4px;
-    padding: 4px 4px 8px;
-    scrollbar-width: none;
-  }
-
-  .status-metrics::-webkit-scrollbar {
-    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
   .status-metric {
-    flex: 0 0 min(156px, 42vw);
     min-height: 104px;
     padding: 16px 14px;
-    scroll-snap-align: start;
   }
 
   .board-controls {
@@ -1163,31 +1164,28 @@ select {
 
   .hero-banner-stack {
     top: auto;
+    left: 10px;
     right: 10px;
     bottom: 10px;
-    width: min(64%, 208px);
-    gap: 7px;
+    width: auto;
+    gap: 6px;
   }
 
   .hero-info-banner {
-    grid-template-columns: 28px minmax(0, 1fr);
-    min-height: 50px;
-    padding: 8px;
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    padding: 8px 10px;
     border-radius: 14px;
   }
 
   .hero-info-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 10px;
-    font-size: 14px;
+    display: none;
   }
 
   .hero-info-banner strong {
-    overflow: hidden;
-    font-size: 10.5px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 11px;
+    line-height: 1.35;
+    white-space: normal;
   }
 
   .hero-info-banner span {
@@ -1228,7 +1226,6 @@ select {
   }
 
   .status-metric {
-    flex-basis: 134px;
     min-height: 96px;
   }
 

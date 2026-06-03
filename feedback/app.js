@@ -484,7 +484,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!panels.length) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
+    const prefersSimpleScroll = window.matchMedia("(max-width: 640px), (pointer: coarse)").matches;
+    if (reducedMotion || prefersSimpleScroll) {
       showScrollyPanelsAsStaticList(stage);
       return;
     }
@@ -495,10 +496,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function syncScrollyViewportSize() {
       const viewportHeight = getScrollyViewportHeight();
-      const isCompact = window.matchMedia("(max-width: 640px)").matches;
-      const stickyRatio = isCompact ? 0.68 : 0.58;
-      const minStickyHeight = isCompact ? 390 : 360;
-      const maxStickyHeight = isCompact ? 560 : 520;
+      const stickyRatio = 0.82;
+      const minStickyHeight = 640;
+      const maxStickyHeight = 780;
       const stickyHeight = Math.min(
         Math.max(Math.round(viewportHeight * stickyRatio), minStickyHeight),
         maxStickyHeight
@@ -517,12 +517,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let ticking = false;
-    let magneticSnapTimer = 0;
-    let isScrollyPointerDown = false;
-    let isMagneticSnapping = false;
-    let lastScrollyScrollY = window.scrollY;
-    let lastScrollyDirection = 0;
-
     function getScrollyMetrics() {
       syncScrollyViewportSize();
 
@@ -572,37 +566,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (Math.abs(window.scrollY - target) < 2) return;
 
-      isMagneticSnapping = true;
-      stage.classList.add("is-magnetizing");
       window.scrollTo({ top: target, behavior });
-
-      window.setTimeout(() => {
-        isMagneticSnapping = false;
-        stage.classList.remove("is-magnetizing");
-        requestScrollyStepUpdate();
-      }, behavior === "smooth" ? 460 : 0);
-    }
-
-    function scheduleMagneticSnap(delay = 180) {
-      if (isAuthenticated || isMagneticSnapping || stage.classList.contains("is-static-list")) return;
-      if (lastScrollyDirection < 0) {
-        window.clearTimeout(magneticSnapTimer);
-        return;
-      }
-      window.clearTimeout(magneticSnapTimer);
-
-      magneticSnapTimer = window.setTimeout(() => {
-        if (isScrollyPointerDown) {
-          scheduleMagneticSnap(90);
-          return;
-        }
-
-        const metrics = getScrollyMetrics();
-        const stageIsVisible = metrics.rect.top < metrics.viewportHeight && metrics.rect.bottom > 0;
-        if (!stageIsVisible) return;
-
-        snapScrollyToIndex(getScrollyStepFromProgress(metrics.progress));
-      }, delay);
     }
 
     setScrollyStep(stage, 0);
@@ -611,20 +575,6 @@ document.addEventListener("DOMContentLoaded", () => {
       ticking = false;
       const metrics = getScrollyMetrics();
       const nextIndex = getScrollyStepFromProgress(metrics.progress);
-
-      if (!isAuthenticated && nextIndex === panels.length - 1) {
-        const sticky = stage.querySelector(".welcome-scrolly-sticky");
-        if (sticky) {
-          if (window.scrollY > metrics.safeMaxScrollY + 1) {
-            setScrollyStep(stage, nextIndex);
-            window.scrollTo({
-              top: Math.max(metrics.stageTop, metrics.safeMaxScrollY),
-              behavior: "auto"
-            });
-            return;
-          }
-        }
-      }
 
       setScrollyStep(stage, nextIndex);
     }
@@ -636,38 +586,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function handleScrollyScroll() {
-      const currentScrollY = window.scrollY;
-      const deltaY = currentScrollY - lastScrollyScrollY;
-      if (Math.abs(deltaY) > 1) {
-        lastScrollyDirection = deltaY > 0 ? 1 : -1;
-      }
-      lastScrollyScrollY = currentScrollY;
       requestScrollyStepUpdate();
-      scheduleMagneticSnap(180);
     }
 
     window.addEventListener("scroll", handleScrollyScroll, { passive: true });
-    window.addEventListener("scrollend", () => scheduleMagneticSnap(0), { passive: true });
     window.addEventListener("resize", () => {
       requestScrollyStepUpdate();
-      scheduleMagneticSnap(120);
     });
-    window.addEventListener("touchstart", () => {
-      isScrollyPointerDown = true;
-      window.clearTimeout(magneticSnapTimer);
-    }, { passive: true });
-    window.addEventListener("touchend", () => {
-      isScrollyPointerDown = false;
-      scheduleMagneticSnap(80);
-    }, { passive: true });
-    window.addEventListener("touchcancel", () => {
-      isScrollyPointerDown = false;
-      scheduleMagneticSnap(80);
-    }, { passive: true });
-    window.addEventListener("wheel", () => scheduleMagneticSnap(120), { passive: true });
     window.visualViewport?.addEventListener("resize", () => {
       requestScrollyStepUpdate();
-      scheduleMagneticSnap(120);
     }, { passive: true });
     window.visualViewport?.addEventListener("scroll", requestScrollyStepUpdate, { passive: true });
     updateScrollyStepFromScroll();
