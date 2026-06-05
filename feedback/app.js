@@ -1120,7 +1120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     idea: {
       type: "新しいアプリ案",
       filter: "idea",
-      note: "新しいアプリ案ですね。「New App Idea」を選ぶと、ポイナが困りごとをお預かりします。"
+      note: "新しいアプリ案ですね。このままポイナが困りごとをお預かりします。"
     }
   });
 
@@ -1149,9 +1149,40 @@ document.addEventListener("DOMContentLoaded", () => {
     if (appSearchInput) appSearchInput.value = "";
     if (poinaSelectedIntentNote) poinaSelectedIntentNote.textContent = intent.note;
     updatePoinaIntentButtonState();
+    setAppPickerSkippedForIdea(false);
+
+    if (intentKey === "idea") {
+      startNewAppIdeaReception();
+      return;
+    }
+
     renderAppSelectors();
     resetAppScrollPosition();
     scrollToAppPicker(options);
+  }
+
+  function setAppPickerSkippedForIdea(shouldSkip) {
+    if (appPickerSection) appPickerSection.hidden = Boolean(shouldSkip);
+    if (confirmAppPanel) {
+      confirmAppPanel.hidden = Boolean(shouldSkip);
+      if (shouldSkip) confirmAppPanel.classList.remove("is-open");
+    }
+  }
+
+  function getNewAppIdeaApp() {
+    return appsData.find((app) => app.isVirtual) || newAppIdea;
+  }
+
+  function startNewAppIdeaReception() {
+    selectedApp = getNewAppIdeaApp();
+    selectedType = "新しいアプリ案";
+    pendingReceptionType = "新しいアプリ案";
+    appsScroller.classList.add("has-selection");
+    confirmAppPanel.classList.remove("is-open");
+    renderAppSelectors();
+    resetAppScrollPosition();
+    setAppPickerSkippedForIdea(true);
+    confirmAppSelection();
   }
 
   function getConfirmAppSelectionLabel(app) {
@@ -3077,6 +3108,14 @@ document.addEventListener("DOMContentLoaded", () => {
         node.classList.add("is-selected");
 
         selectedApp = app;
+        if (app.isVirtual) {
+          confirmAppPanel.classList.remove("is-open");
+          setAppPickerSkippedForIdea(true);
+          confirmAppSelection();
+          return;
+        }
+
+        setAppPickerSkippedForIdea(false);
         confirmAppLabel.textContent = getConfirmAppSelectionLabel(app);
         confirmAppPanel.classList.add("is-open");
       });
@@ -3111,6 +3150,11 @@ document.addEventListener("DOMContentLoaded", () => {
       poinaSelectedIntentNote.textContent = poinaReceptionIntents.idea.note;
     }
     updatePoinaIntentButtonState();
+    setAppPickerSkippedForIdea(false);
+    if (isAuthenticated) {
+      startNewAppIdeaReception();
+      return true;
+    }
     renderAppSelectors();
     resetAppScrollPosition();
     if (options.scroll !== false && isAuthenticated) {
@@ -3177,6 +3221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activeAppFilter = "all";
     appSearchQuery = "";
     if (appSearchInput) appSearchInput.value = "";
+    setAppPickerSkippedForIdea(false);
     renderAppSelectors();
     resetAppScrollPosition();
     setGuestStatusBoardVisible(false, { scroll: false });
@@ -3219,6 +3264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedType = null;
     selectedReceptionIntent = "";
     pendingReceptionType = "";
+    setAppPickerSkippedForIdea(false);
     updatePoinaIntentButtonState();
     if (poinaSelectedIntentNote) {
       poinaSelectedIntentNote.textContent = "まず近いご用件を選ぶか、そのまま下のアプリ選択へ進んでください。";
@@ -3250,6 +3296,7 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedType = null;
     selectedReceptionIntent = "";
     pendingReceptionType = "";
+    setAppPickerSkippedForIdea(false);
     poipoiChatHistory = [];
     latestChatDraft = null;
     latestReview = null;

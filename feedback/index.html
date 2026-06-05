@@ -1938,11 +1938,18 @@
       border-radius: 16px;
       display: grid;
       place-items: center;
-      color: #ffffff;
-      font-size: 22px;
-      font-weight: 900;
+      overflow: hidden;
+      padding: 2px;
       background: linear-gradient(135deg, var(--brand-blue-bright), var(--brand-cyan));
       box-shadow: 0 12px 24px rgba(10, 125, 255, 0.18);
+    }
+
+    .poina-reception-avatar img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      object-fit: cover;
     }
 
     .poina-reception-kicker {
@@ -2630,12 +2637,19 @@
       width: 44px;
       height: 44px;
       border-radius: 16px;
+      overflow: hidden;
+      padding: 2px;
       background:
-        linear-gradient(135deg, #0a7dff, #59d3ff 56%, #34c759);
-      color: #ffffff;
-      font-size: 20px;
-      font-weight: 900;
+        linear-gradient(135deg, rgba(10, 125, 255, 0.9), rgba(89, 211, 255, 0.86) 56%, rgba(52, 199, 89, 0.72));
       box-shadow: 0 12px 26px rgba(10, 125, 255, 0.2);
+    }
+
+    .poipoi-agent-avatar img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 14px;
+      object-fit: cover;
     }
 
     .poipoi-agent-kicker {
@@ -3736,15 +3750,7 @@
     body.is-authenticated .account-strip #userNicknameDisplay,
     body.is-authenticated .account-board-link,
     body.is-authenticated .logout-text-link {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+      display: none !important;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3994,7 +4000,11 @@
         width: 44px;
         height: 44px;
         border-radius: 14px;
-        font-size: 20px;
+        padding: 2px;
+      }
+
+      .poina-reception-avatar img {
+        border-radius: 12px;
       }
 
       .poina-reception-title {
@@ -4077,7 +4087,11 @@
         width: 40px;
         height: 40px;
         border-radius: 14px;
-        font-size: 18px;
+        padding: 2px;
+      }
+
+      .poipoi-agent-avatar img {
+        border-radius: 12px;
       }
 
       .poipoi-agent-name {
@@ -4826,7 +4840,9 @@
 
         <div class="poina-reception-panel" id="poinaReceptionSection" aria-live="polite">
           <div class="poina-reception-header">
-            <div class="poina-reception-avatar" aria-hidden="true">P</div>
+            <div class="poina-reception-avatar" aria-hidden="true">
+              <img src="assets/poina-robot-avatar.png" alt="">
+            </div>
             <div>
               <p class="poina-reception-kicker">ポイナ受付</p>
               <h3 class="poina-reception-title" id="poinaReceptionTitle">ポイナ受付へようこそ。お困りごとをお預かりします。</h3>
@@ -4904,7 +4920,9 @@
           <div id="step2ContextBadgeSlot"></div>
 
           <div class="poipoi-chat-header">
-            <div class="poipoi-agent-avatar" aria-hidden="true">P</div>
+            <div class="poipoi-agent-avatar" aria-hidden="true">
+              <img src="assets/poina-robot-avatar.png" alt="">
+            </div>
             <div>
               <p class="poipoi-agent-kicker">ポイナ受付</p>
               <h3 class="poipoi-agent-name">ポイナがお困りごとをお預かりします。</h3>
@@ -5241,6 +5259,6 @@
   </template>
 
   <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/ja_JP/appleid.auth.js" defer></script>
-  <script src="./app.js?v=20260605-app-list-idea-reception" defer></script>
+  <script src="./app.js?v=20260605-idea-skip-poina-avatar" defer></script>
 </body>
 </html>
