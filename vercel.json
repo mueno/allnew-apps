@@ -12,7 +12,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://appleid.cdn-apple.com https://cdn.vercel-insights.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://appleid.cdn-apple.com https://apps.allnew.work https://is1-ssl.mzstatic.com https://*.mzstatic.com; connect-src 'self' https://appleid.apple.com https://apps.allnew.work https://allnew-mobile-baas.vercel.app https://itunes.apple.com https://va.vercel-scripts.com; frame-src https://appleid.apple.com; object-src 'none'; base-uri 'self'; form-action 'self' https://appleid.apple.com; frame-ancestors 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://appleid.cdn-apple.com https://cdn.vercel-insights.com https://itunes.apple.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://appleid.cdn-apple.com https://apps.allnew.work https://is1-ssl.mzstatic.com https://*.mzstatic.com; connect-src 'self' https://appleid.apple.com https://apps.allnew.work https://allnew-mobile-baas.vercel.app https://itunes.apple.com https://va.vercel-scripts.com; frame-src https://appleid.apple.com; object-src 'none'; base-uri 'self'; form-action 'self' https://appleid.apple.com; frame-ancestors 'none'; upgrade-insecure-requests"
         },
         {
           "key": "Strict-Transport-Security",
