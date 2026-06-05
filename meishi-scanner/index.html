@@ -43,8 +43,8 @@
     .lang-option { display: block; width: 100%; border: 0; background: transparent; color: var(--text); padding: 11px 16px; text-align: left; font-weight: 650; cursor: pointer; }
     .lang-option.active, .lang-option:hover { background: var(--bg-secondary); color: var(--accent); }
     main, .main { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
-    .hero { max-width: 860px; margin: 0 auto; padding: 66px 20px 46px; text-align: center; }
-    .hero-icon { width: 92px; height: 92px; border-radius: 24px; margin: 0 auto 24px; display: grid; place-items: center; background: linear-gradient(145deg, #f7e8c8, #f6c842); color: #1d1d1f; font-size: 42px; box-shadow: var(--shadow); }
+    .hero { max-width: 860px; margin: 0 auto; padding: 60px 20px 40px; text-align: center; }
+    .hero-icon { width: 92px; height: 92px; border-radius: 24px; margin: 0 auto 24px; display: block; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,.14); }
     h1 { margin: 0 0 14px; font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.05; letter-spacing: -.03em; }
     .lead { color: var(--muted); max-width: 560px; margin: 0 auto; font-size: 1.15rem; line-height: 1.75; }
     .toc { max-width: 760px; margin: 0 auto 52px; padding: 0 20px; display: flex; justify-content: center; align-items: center; gap: 22px; flex-wrap: wrap; }
@@ -104,7 +104,7 @@
 <body>
   <header class="header">
     <div class="header-inner">
-      <a href="https://apps.allnew.work/meishi-scanner/" class="logo-link" aria-label="AllNew MeishiBridge">
+      <a href="https://apps.allnew.work/" class="logo-link" aria-label="AllNew Apps">
         <span class="logo">AllNew</span>
         <span class="logo-divider" aria-hidden="true"></span>
         <span class="app-name">MeishiBridge</span>
@@ -119,14 +119,14 @@
     </div>
   </header>
   <div class="hero" data-lang="ja">
-      <div class="hero-icon" aria-hidden="true">📷</div>
+      <img src="../meishi-scanner-icon.png?v=2" alt="MeishiBridge" class="hero-icon">
       <h1>MeishiBridge</h1>
-      <p class="lead">MeishiBridgeは、名刺をカメラまたは写真から読み取り、確認した情報をApple純正の連絡先へ登録する補助ツールです。氏名、会社名、役職、メール、電話番号、住所、ソーシャルプロフィールの候補を端末内OCRで抽出し、保存前に必ず確認・修正できます。 複数名刺が写った写真にも対応し、名刺ごとに画像補正と確認を行えます。登録時には名刺画像を連絡先画像として設定し、登録後の編集、重複統合、共有、書き出しはApple標準の連絡先アプリで行います。アカウント作成、クラウド送信、アプリ内の名刺履歴保存、アプリ内課金はありません。</p>
+      <p class="lead">名刺を読み取り、Apple連絡先へ登録。<br>保存前に確認・修正できます。</p>
   </div>
   <div class="hero" data-lang="en">
-      <div class="hero-icon" aria-hidden="true">📷</div>
+      <img src="../meishi-scanner-icon.png?v=2" alt="MeishiBridge" class="hero-icon">
       <h1>MeishiBridge</h1>
-      <p class="lead">MeishiBridge helps users scan business cards from the camera or photo library, review extracted fields, and save the result to Apple Contacts. On-device OCR suggests name, company, role, email, phone, address, and social profiles before the user confirms each record. The app can process photos containing multiple cards and lets users review each detected card. Card images are attached as contact images. After saving, editing, duplicate merging, sharing, and exporting are handled in Apple&#x27;s Contacts app. There is no account creation, cloud upload, in-app card history, subscription, or IAP.</p>
+      <p class="lead">Scan business cards into Apple Contacts.<br>Review and edit before saving.</p>
   </div>
   <nav class="toc" data-lang="ja">
 <a class="toc-link" href="#faq-ja">FAQ</a>
