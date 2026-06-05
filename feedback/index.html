@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="feedback-loop-version" content="20260527-feedback-loop-1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://appleid.cdn-apple.com https://itunes.apple.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://appleid.cdn-apple.com https://apps.allnew.work https://is1-ssl.mzstatic.com https://is2-ssl.mzstatic.com https://is3-ssl.mzstatic.com https://is4-ssl.mzstatic.com https://is5-ssl.mzstatic.com; connect-src 'self' https://appleid.apple.com https://apps.allnew.work https://allnew-mobile-baas.vercel.app; frame-src https://appleid.apple.com; object-src 'none'; base-uri 'none'; form-action 'self' https://appleid.apple.com">
   <meta name="appleid-signin-client-id" content="__APPLE_SERVICES_ID__">
   <meta name="appleid-signin-scope" content="name email">
@@ -120,6 +121,12 @@
 
     .is-authenticated main.app-container {
       padding-bottom: var(--chat-bottom-reserve);
+    }
+
+    body.is-authenticated .hero-stage,
+    body.is-authenticated .welcome-meta-box,
+    body.is-authenticated .guest-status-board {
+      display: none !important;
     }
 
     .hero-ux-wrapper {
@@ -1905,6 +1912,156 @@
       font-weight: 700;
     }
 
+    .poina-reception-panel {
+      margin: 20px 0 24px;
+      padding: 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(10, 125, 255, 0.14);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(234, 249, 255, 0.72));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 18px 34px rgba(10, 125, 255, 0.08);
+    }
+
+    .poina-reception-header {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .poina-reception-avatar {
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--brand-blue-bright), var(--brand-cyan));
+      box-shadow: 0 12px 24px rgba(10, 125, 255, 0.18);
+    }
+
+    .poina-reception-kicker {
+      margin: 0 0 2px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .poina-reception-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.48;
+    }
+
+    .poina-reception-lead,
+    .poina-reception-guide,
+    .poina-selected-intent-note {
+      margin: 0;
+      color: color-mix(in srgb, var(--ink) 78%, transparent);
+      font-size: 14px;
+      font-weight: 650;
+      line-height: 1.82;
+    }
+
+    .poina-reception-guide {
+      margin-top: 8px;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .poina-intent-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0 10px;
+    }
+
+    .poina-intent-button {
+      appearance: none;
+      min-width: 0;
+      min-height: 92px;
+      border: 1px solid rgba(10, 125, 255, 0.12);
+      border-radius: 18px;
+      padding: 13px 12px;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(0, 82, 163, 0.05);
+      transition:
+        border-color 0.22s ease,
+        box-shadow 0.22s ease,
+        transform 0.22s ease,
+        background 0.22s ease;
+    }
+
+    .poina-intent-button:hover,
+    .poina-intent-button:focus-visible,
+    .poina-intent-button.is-active {
+      border-color: rgba(10, 125, 255, 0.42);
+      background: #ffffff;
+      box-shadow: 0 16px 28px rgba(10, 125, 255, 0.13);
+      transform: translateY(-1px);
+    }
+
+    .poina-intent-button:focus-visible {
+      outline: 3px solid rgba(10, 125, 255, 0.24);
+      outline-offset: 2px;
+    }
+
+    .poina-intent-button.is-active {
+      background: linear-gradient(180deg, #ffffff, rgba(238, 247, 255, 0.92));
+    }
+
+    .poina-intent-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      color: var(--blue);
+      background: rgba(10, 125, 255, 0.1);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .poina-intent-button strong,
+    .poina-intent-button small {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .poina-intent-button strong {
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.42;
+    }
+
+    .poina-intent-button small {
+      margin-top: 5px;
+      color: color-mix(in srgb, var(--ink) 62%, transparent);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .poina-selected-intent-note {
+      padding-top: 4px;
+      color: color-mix(in srgb, var(--blue) 72%, var(--ink) 28%);
+      font-size: 13px;
+    }
+
     .app-picker-tools {
       display: grid;
       grid-template-columns: minmax(220px, 1fr) auto;
@@ -1992,13 +2149,13 @@
 
     .apps-carousel-shell {
       position: relative;
-      margin: 14px -8px 0;
-      overflow: hidden;
+      margin: 14px 0 0;
+      overflow: visible;
     }
 
     .apps-carousel-shell::before,
     .apps-carousel-shell::after {
-      content: "";
+      content: none;
       position: absolute;
       top: 0;
       bottom: 0;
@@ -2019,12 +2176,13 @@
     }
 
     .apps-horizontal-scroller {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
       gap: 16px;
-      overflow-x: auto;
-      scroll-snap-type: x proximity;
-      scroll-padding-inline: 52px;
-      padding: 8px 52px 18px;
+      overflow: visible;
+      scroll-snap-type: none;
+      scroll-padding-inline: 0;
+      padding: 8px 0 18px;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
@@ -2038,7 +2196,8 @@
       color: inherit;
       font: inherit;
       padding: 0;
-      flex: 0 0 105px;
+      width: 100%;
+      flex: 0 0 auto;
       scroll-snap-align: center;
       text-align: center;
       cursor: pointer;
@@ -2116,6 +2275,7 @@
 
     .apps-scroll-button {
       appearance: none;
+      display: none;
       border: 0;
       position: absolute;
       top: 36px;
@@ -2186,6 +2346,92 @@
       overflow: visible;
       scroll-margin-block: 24px var(--chat-bottom-reserve);
       margin-bottom: clamp(24px, 4svh, 48px);
+    }
+
+    .app-confirm-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .app-confirm-label {
+      min-width: 0;
+      font-weight: 750;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .app-confirm-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(112px, auto));
+      gap: 10px;
+      align-items: center;
+    }
+
+    .app-confirm-actions .action-button {
+      min-height: 48px;
+      padding-inline: 16px;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 560px) {
+      .apps-carousel-shell {
+        padding-inline: 0;
+      }
+
+      .apps-horizontal-scroller {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        overflow: visible;
+        scroll-snap-type: none;
+        padding: 8px 0 4px;
+      }
+
+      .app-selector-node {
+        width: 100%;
+        flex-basis: auto;
+        padding: 12px 8px;
+        border: 1px solid rgba(0, 82, 163, 0.08);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.74);
+        box-shadow: 0 10px 24px rgba(0, 82, 163, 0.06);
+      }
+
+      .app-icon-frame {
+        width: 64px;
+        height: 64px;
+      }
+
+      .app-icon-img,
+      .app-icon-fallback {
+        width: 54px;
+        height: 54px;
+      }
+
+      .apps-scroll-button {
+        display: none;
+      }
+
+      .apps-horizontal-scroller.has-selection .app-selector-node:not(.is-selected) {
+        opacity: 1;
+        transform: none;
+      }
+
+      .app-confirm-row {
+        grid-template-columns: 1fr;
+      }
+
+      .app-confirm-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .app-confirm-actions .action-button {
+        width: 100%;
+        min-width: 0;
+        font-size: 15px;
+      }
     }
 
     .question-speech-bubble {
@@ -2360,12 +2606,12 @@
 
     .poipoi-conversation-panel {
       display: grid;
-      grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+      grid-template-rows: auto auto auto auto auto auto;
       gap: 18px;
       width: 100%;
-      min-height: var(--chat-panel-min-height);
-      max-height: var(--chat-panel-max-height);
-      overflow: hidden;
+      min-height: 0;
+      max-height: none;
+      overflow: visible;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(243, 250, 255, 0.94)),
         radial-gradient(circle at 14% 0%, rgba(89, 211, 255, 0.16), transparent 36%);
@@ -2467,9 +2713,10 @@
       resize: none;
       border: 0;
       outline: 0;
-      background: transparent;
+      background: rgba(255, 255, 255, 0.72);
       color: var(--ink);
       padding: 12px 14px;
+      border-radius: 18px;
       font: inherit;
       font-size: 15px;
       font-weight: 650;
@@ -2513,7 +2760,15 @@
 
     .poipoi-final-actions {
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
       justify-content: flex-end;
+    }
+
+    .poipoi-final-actions .action-button.secondary {
+      background: var(--brand-ice);
+      color: var(--ink);
+      box-shadow: none;
     }
 
     @keyframes chatBubbleIn {
@@ -2622,6 +2877,67 @@
       letter-spacing: 0.08em;
     }
 
+    .poipoi-submit-summary {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(10, 125, 255, 0.16);
+      box-shadow:
+        0 14px 30px rgba(0, 82, 163, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .poipoi-submit-summary[hidden] {
+      display: none;
+    }
+
+    .poipoi-submit-summary-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1.5;
+    }
+
+    .poipoi-submit-summary-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .poipoi-submit-summary-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 10px;
+      align-items: start;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .poipoi-submit-summary-row dt {
+      color: var(--secondary);
+      font-weight: 800;
+    }
+
+    .poipoi-submit-summary-row dd {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .poipoi-submit-summary-note {
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(238, 247, 255, 0.86);
+      color: color-mix(in srgb, var(--ink) 78%, transparent);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
     .admin-review-panel[hidden] {
       display: none;
     }
@@ -2694,6 +3010,7 @@
       max-height: min(90vh, 780px);
       display: flex;
       flex-direction: column;
+      overflow: hidden;
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
     }
 
@@ -2732,6 +3049,8 @@
     .modal-content {
       padding: 16px 22px 18px;
       overflow-y: auto;
+      min-height: 0;
+      flex: 1 1 auto;
       font-size: 14px;
       color: var(--secondary);
       display: flex;
@@ -3091,15 +3410,55 @@
     }
 
     .modal-footer {
+      flex: 0 0 auto;
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
+      justify-content: space-between;
       gap: 10px;
       padding: 16px 22px 20px;
+      border-top: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface) 94%, var(--surface-soft));
+    }
+
+    .modal-footer-note {
+      flex: 1 1 260px;
+      margin: 0;
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .modal-footer-note.is-error {
+      color: #d70015;
+    }
+
+    .modal-footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .modal-footer-actions [hidden] {
+      display: none !important;
     }
 
     .modal-primary-button:disabled {
       opacity: 0.42;
       cursor: not-allowed;
+    }
+
+    .modal-primary-button.is-apple-signin-action {
+      min-width: 220px;
+      background: #000000;
+      color: #ffffff;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.14);
+    }
+
+    .modal-primary-button.is-loading {
+      cursor: progress;
     }
 
     .portal-legal-footer {
@@ -3179,6 +3538,11 @@
       pointer-events: auto;
     }
 
+    .cookie-consent-banner[hidden],
+    .modal-overlay[hidden] {
+      display: none !important;
+    }
+
     .cookie-consent-title {
       margin: 0;
       font-size: 13px;
@@ -3242,6 +3606,19 @@
       height: 54px;
     }
 
+    .apple-footer-auth-slot {
+      width: min(100%, 240px);
+      min-height: 54px;
+    }
+
+    .apple-footer-auth-slot[hidden] {
+      display: none;
+    }
+
+    .apple-footer-auth-slot .apple-signin-official-button {
+      width: 100%;
+    }
+
     .apple-signin-config-notice {
       max-width: 360px;
       color: var(--secondary);
@@ -3276,6 +3653,28 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 0;
+    }
+
+    .account-strip::before {
+      content: "受付中";
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      color: color-mix(in srgb, var(--blue) 88%, var(--ink) 12%);
+      background: color-mix(in srgb, var(--brand-ice) 74%, #ffffff 26%);
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .account-strip #userNicknameDisplay {
+      max-width: 12ch;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .account-board-link {
@@ -3301,6 +3700,20 @@
       color: var(--blue);
       cursor: pointer;
       text-decoration: underline;
+    }
+
+    body.is-authenticated .account-strip #userNicknameDisplay,
+    body.is-authenticated .account-board-link,
+    body.is-authenticated .logout-text-link {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3537,6 +3950,42 @@
         font-size: 15px;
       }
 
+      .poina-reception-panel {
+        padding: 17px;
+        border-radius: 20px;
+      }
+
+      .poina-reception-header {
+        align-items: flex-start;
+      }
+
+      .poina-reception-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        font-size: 20px;
+      }
+
+      .poina-reception-title {
+        font-size: 16px;
+      }
+
+      .poina-reception-lead,
+      .poina-reception-guide {
+        font-size: 13.5px;
+        line-height: 1.72;
+      }
+
+      .poina-intent-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+      }
+
+      .poina-intent-button {
+        min-height: 104px;
+        padding: 12px 11px;
+      }
+
       .app-picker-tools {
         grid-template-columns: 1fr;
         gap: 10px;
@@ -3554,17 +4003,20 @@
       }
 
       .apps-carousel-shell {
-        margin-inline: -14px;
+        margin-inline: 0;
       }
 
       .apps-horizontal-scroller {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
-        scroll-padding-inline: 46px;
-        padding: 8px 46px 18px;
+        overflow: visible;
+        scroll-padding-inline: 0;
+        padding: 8px 0 4px;
       }
 
       .app-selector-node {
-        flex-basis: 96px;
+        flex-basis: auto;
       }
 
       .apps-scroll-button {
@@ -3605,20 +4057,32 @@
         gap: 14px;
         border-radius: 22px;
         padding: 20px 16px;
+        min-height: 0;
+        max-height: none;
+        overflow: visible;
+        padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
       }
 
       .poipoi-chat-messages {
         min-height: 0;
-        max-height: none;
+        max-height: min(42svh, 360px);
       }
 
       .poipoi-chat-form {
         grid-template-columns: 1fr;
         border-radius: 22px;
+        gap: 9px;
+        padding: 12px;
+      }
+
+      .poipoi-chat-input {
+        min-height: 86px;
+        padding: 13px 14px;
       }
 
       .poipoi-chat-send {
         width: 100%;
+        min-height: 52px;
       }
 
       .chat-choice-button {
@@ -3752,7 +4216,12 @@
       }
 
       .modal-footer {
-        flex-direction: column-reverse;
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .modal-footer-note {
+        flex: 0 0 auto;
       }
 
       .modal-window {
@@ -3873,6 +4342,23 @@
         padding: 12px 16px 16px;
       }
 
+      .modal-footer-note {
+        flex: 0 0 auto;
+      }
+
+      .modal-footer-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .modal-footer-actions .action-button {
+        width: 100%;
+      }
+
+      .apple-footer-auth-slot {
+        width: 100%;
+      }
+
       .cookie-consent-banner {
         left: max(14px, env(safe-area-inset-left));
         right: max(14px, env(safe-area-inset-right));
@@ -3900,15 +4386,15 @@
     </button>
     <div id="accountStrip" class="account-strip u-hidden">
       <span id="userNicknameDisplay">匿名ユーザー</span>
-      <button class="account-board-link" id="accountBoardLink" type="button">公開ボード</button>
-      <span class="logout-text-link" id="logoutTrigger">サインアウト</span>
+      <button class="account-board-link" id="accountBoardLink" type="button">受付状況</button>
+      <span class="logout-text-link" id="logoutTrigger">ログアウト</span>
     </div>
   </header>
 
   <main class="app-container">
     <div class="hero-stage" id="heroStage" aria-hidden="true">
       <div class="hero-ux-wrapper is-opening-floating" id="heroWrapper">
-        <video id="openingVideo" class="opening-video-layer" playsinline autoplay muted preload="auto" poster="assets/idea-flow-slide.png">
+        <video id="openingVideo" class="opening-video-layer" playsinline muted preload="auto" poster="assets/idea-flow-slide.png">
           <source src="assets/opening-hero.mp4" type="video/mp4">
         </video>
         <img id="welcomeHeroImg" class="welcome-hero-image" src="assets/idea-flow-slide.png" alt="Idea Flow">
@@ -4304,35 +4790,80 @@
         <span id="send" class="sr-only" aria-hidden="true">気づきやアイデアを送る</span>
         <div class="section-title-pack">
           <span class="section-sub-badge">Step 1</span>
-          <h2 class="section-main-title">今日はどのアプリについて、お話ししていただけますか？</h2>
+          <h2 class="section-main-title">ポイナが受付します。今日はどういうご用件ですか？</h2>
         </div>
 
-        <div class="app-picker-tools" aria-label="アプリの検索と絞り込み">
-          <label class="app-search-field" for="appSearchInput">
-            <span class="app-search-icon" aria-hidden="true">⌕</span>
-            <input class="app-search-input" id="appSearchInput" type="search" autocomplete="off" placeholder="アプリ名・用途で探す">
-          </label>
-          <div class="app-filter-chips" aria-label="カテゴリで絞り込み">
-            <button class="app-filter-chip" type="button" data-app-filter="all" aria-pressed="true">すべて</button>
-            <button class="app-filter-chip" type="button" data-app-filter="health" aria-pressed="false">健康</button>
-            <button class="app-filter-chip" type="button" data-app-filter="pet" aria-pressed="false">ペット</button>
-            <button class="app-filter-chip" type="button" data-app-filter="focus" aria-pressed="false">集中</button>
-            <button class="app-filter-chip" id="idea" type="button" data-app-filter="idea" aria-pressed="false">新アプリ案</button>
+        <div class="poina-reception-panel" id="poinaReceptionSection" aria-live="polite">
+          <div class="poina-reception-header">
+            <div class="poina-reception-avatar" aria-hidden="true">P</div>
+            <div>
+              <p class="poina-reception-kicker">ポイナ受付</p>
+              <h3 class="poina-reception-title" id="poinaReceptionTitle">ポイナ受付へようこそ。お困りごとをお預かりします。</h3>
+            </div>
           </div>
+          <p class="poina-reception-lead" id="poinaReceptionLead">ここでは、AllNewのアプリの不具合、改善アイデア、新しいアプリ案を短く安心して送れます。</p>
+          <p class="poina-reception-guide" id="poinaReceptionGuide">お名前や連絡先は書かず、今日はどういうご用件かを選んでください。</p>
+
+          <div class="poina-intent-grid" aria-label="今日のご用件">
+            <button class="poina-intent-button" type="button" data-poina-intent="bug" aria-pressed="false">
+              <span class="poina-intent-mark" aria-hidden="true">01</span>
+              <strong>不具合を伝える</strong>
+              <small>動かない、表示がおかしい、送れない</small>
+            </button>
+            <button class="poina-intent-button" type="button" data-poina-intent="improvement" aria-pressed="false">
+              <span class="poina-intent-mark" aria-hidden="true">02</span>
+              <strong>改善アイデア</strong>
+              <small>もっと使いやすく、分かりやすくしたい</small>
+            </button>
+            <button class="poina-intent-button" type="button" data-poina-intent="idea" aria-pressed="false">
+              <span class="poina-intent-mark" aria-hidden="true">03</span>
+              <strong>新しいアプリ案</strong>
+              <small>まだ名前がなくても大丈夫です</small>
+            </button>
+            <button class="poina-intent-button" type="button" data-poina-intent="status" aria-pressed="false">
+              <span class="poina-intent-mark" aria-hidden="true">04</span>
+              <strong>受付状況を見る</strong>
+              <small>公開中の受付状況を確認します</small>
+            </button>
+          </div>
+          <p class="poina-selected-intent-note" id="poinaSelectedIntentNote">まず近いご用件を選ぶか、そのまま下のアプリ選択へ進んでください。</p>
         </div>
 
-        <div class="apps-carousel-shell">
-          <button class="apps-scroll-button apps-scroll-left" id="appsScrollLeft" type="button" aria-label="前のアプリを見る">‹</button>
-          <div class="apps-horizontal-scroller" id="appsScroller" tabindex="0" aria-label="対象アプリ一覧"></div>
-          <button class="apps-scroll-button apps-scroll-right" id="appsScrollRight" type="button" aria-label="次のアプリを見る">›</button>
+        <div id="appPickerSection">
+          <div class="section-title-pack">
+            <span class="section-sub-badge">対象アプリ</span>
+            <h3 class="section-main-title">どのアプリについてお聞かせください。</h3>
+          </div>
+
+          <div class="app-picker-tools" aria-label="アプリの検索と絞り込み">
+            <label class="app-search-field" for="appSearchInput">
+              <span class="app-search-icon" aria-hidden="true">⌕</span>
+              <input class="app-search-input" id="appSearchInput" type="search" autocomplete="off" placeholder="アプリ名・用途で探す">
+            </label>
+            <div class="app-filter-chips" aria-label="カテゴリで絞り込み">
+              <button class="app-filter-chip" type="button" data-app-filter="all" aria-pressed="true">すべて</button>
+              <button class="app-filter-chip" type="button" data-app-filter="health" aria-pressed="false">健康</button>
+              <button class="app-filter-chip" type="button" data-app-filter="pet" aria-pressed="false">ペット</button>
+              <button class="app-filter-chip" type="button" data-app-filter="focus" aria-pressed="false">集中</button>
+              <button class="app-filter-chip" id="idea" type="button" data-app-filter="idea" aria-pressed="false">新アプリ案</button>
+            </div>
+          </div>
+
+          <div class="apps-carousel-shell">
+            <button class="apps-scroll-button apps-scroll-left" id="appsScrollLeft" type="button" aria-label="前のアプリを見る">‹</button>
+            <div class="apps-horizontal-scroller" id="appsScroller" tabindex="0" aria-label="対象アプリ一覧"></div>
+            <button class="apps-scroll-button apps-scroll-right" id="appsScrollRight" type="button" aria-label="次のアプリを見る">›</button>
+          </div>
+          <p class="app-empty-state" id="appEmptyState" hidden>条件に合うアプリが見つかりません。検索語を短くするか、絞り込みを「すべて」に戻してください。</p>
         </div>
-        <p class="app-empty-state" id="appEmptyState" hidden>条件に合うアプリが見つかりません。検索語を短くするか、絞り込みを「すべて」に戻してください。</p>
 
         <div class="guide-panel-next" id="confirmAppPanel">
-          <div class="yes-no-flex-bar">
-            <span id="confirmAppLabel" style="font-weight: 700; margin-right: auto;">このアプリで間違いないですか？</span>
-            <button class="action-button secondary" id="btnAppNo" type="button">NO</button>
-            <button class="action-button primary" id="btnAppYes" type="button">YES</button>
+          <div class="app-confirm-row">
+            <span class="app-confirm-label" id="confirmAppLabel">このアプリについてですね。この内容で進めますか？</span>
+            <div class="app-confirm-actions">
+              <button class="action-button secondary" id="btnAppNo" type="button">ちがいます</button>
+              <button class="action-button primary" id="btnAppYes" type="button">はい、進める</button>
+            </div>
           </div>
         </div>
       </section>
@@ -4344,14 +4875,14 @@
           <div class="poipoi-chat-header">
             <div class="poipoi-agent-avatar" aria-hidden="true">P</div>
             <div>
-              <p class="poipoi-agent-kicker">POIPOI受付係</p>
-              <h3 class="poipoi-agent-name">ポイナがお話をうかがいます。</h3>
+              <p class="poipoi-agent-kicker">ポイナ受付</p>
+              <h3 class="poipoi-agent-name">ポイナがお困りごとをお預かりします。</h3>
             </div>
           </div>
 
           <div class="poipoi-privacy-notice" role="note" aria-label="個人情報入力についての注意">
-            <strong>個人情報は入力しないでください。</strong>
-            <p>電話番号、メールアドレス、住所、本名、パスワードなどが入力されると、このチャットはそこで止まります。記録はされませんので、最初からやり直してください。</p>
+            <strong>個人情報は書かないでください。</strong>
+            <p>電話番号、メールアドレス、住所、本名、パスワード、体重などの数値は入力しないでください。見つかった場合は、送信前に書き直しをお願いすることがあります。</p>
           </div>
 
           <div class="poipoi-chat-messages" id="feedbackChatLog" role="log" aria-live="polite" aria-label="POIPOI受付チャット"></div>
@@ -4369,13 +4900,35 @@
           </form>
 
           <div class="ai-review-card poipoi-review-card" id="aiReviewPreview" role="status" aria-live="polite" hidden>
-            <span class="ai-review-pill">AI一次チェック</span>
+            <span class="ai-review-pill">送信前チェック</span>
             <p id="aiReviewMessage">会話の内容をもとに、受付できる状態か確認します。</p>
           </div>
 
+          <div class="poipoi-submit-summary" id="poipoiSubmitSummary" aria-live="polite" hidden>
+            <p class="poipoi-submit-summary-title">送信前に内容を確認してください。</p>
+            <dl class="poipoi-submit-summary-list">
+              <div class="poipoi-submit-summary-row">
+                <dt>アプリ</dt>
+                <dd id="poipoiSummaryApp">-</dd>
+              </div>
+              <div class="poipoi-submit-summary-row">
+                <dt>種類</dt>
+                <dd id="poipoiSummaryType">-</dd>
+              </div>
+              <div class="poipoi-submit-summary-row">
+                <dt>内容</dt>
+                <dd id="poipoiSummaryBody">-</dd>
+              </div>
+            </dl>
+            <p class="poipoi-submit-summary-note" id="poipoiSummaryNote">氏名、連絡先、体重などの数値は書かないでください。状況だけで送信できます。送信後に受付番号が表示され、あとで受付状況を確認できます。</p>
+          </div>
+
           <div class="poipoi-final-actions">
+            <button class="action-button secondary" id="editFeedbackDraftBtn" type="button" hidden>
+              内容を直す
+            </button>
             <button class="action-button primary" id="submitFeedbackBtn" type="button" hidden>
-              この内容で受付へ進む →
+              確認して送る →
             </button>
           </div>
         </div>
@@ -4387,7 +4940,7 @@
             <span class="section-sub-badge">Admin Preview</span>
             <h2 class="section-main-title">運営管理レビュー</h2>
           </div>
-          <p class="capability-detail">本番では管理者認証の内側で、AI一次審査、受付ステータス、運営向け要約を確認する画面です。</p>
+          <p class="capability-detail">本番では管理者認証の内側で、受付内容、公開ステータス、運営向け要約を確認する画面です。</p>
           <div class="admin-report-list" id="adminReportList"></div>
         </div>
       </section>
@@ -4404,12 +4957,12 @@
     </footer>
   </main>
 
-  <div class="cookie-consent-banner" id="cookieConsentBanner" role="region" aria-labelledby="cookieConsentTitle" aria-hidden="true">
+  <div class="cookie-consent-banner" id="cookieConsentBanner" role="region" aria-labelledby="cookieConsentTitle" aria-hidden="true" hidden inert>
     <div>
       <h2 class="cookie-consent-title" id="cookieConsentTitle">Cookieと外部送信について</h2>
       <p class="cookie-consent-text">
         本サイトは、ログイン維持、不正対策、同意状態の保存に必要なCookieのみを使用します。
-        広告目的のトラッキングCookieは使用しません。AppleでサインインやPOIPOI受付係を利用する場合、認証・AI応答のため外部サービスへ情報が送信されます。
+        広告目的のトラッキングCookieは使用しません。Appleでサインインやポイナ受付を利用する場合、認証・AI応答のため外部サービスへ情報が送信されます。
       </p>
     </div>
     <div class="cookie-consent-actions">
@@ -4418,7 +4971,7 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsTitle" aria-hidden="true">
+  <div class="modal-overlay" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsTitle" aria-hidden="true" hidden inert>
     <div class="modal-window">
       <header class="modal-header">
         <div class="modal-title">
@@ -4521,25 +5074,29 @@
         </div>
         <p class="terms-error-text" id="termsErrorText" hidden>登録に進むには、3つの確認にチェックしてください。</p>
         <div class="apple-official-auth-zone" id="appleOfficialAuthZone" hidden>
-          <p class="apple-signin-config-notice" id="appleSigninReadyText">同意が完了しました。下のAppleボタンからサインインしてください。</p>
-          <div
-            id="appleid-signin"
-            class="apple-signin-official-button"
-            data-color="black"
-            data-border="false"
-            data-type="sign-in"
-            data-border-radius="30"
-            data-width="100%"
-            data-height="54"
-            hidden
-          ></div>
-          <p class="apple-signin-config-notice" id="appleSigninConfigNotice" hidden>Appleサインインを準備できませんでした。ローカル確認では下のボタンで動きを確認できます。</p>
-          <button class="action-button secondary local-apple-preview-button" id="localApplePreviewBtn" type="button" hidden>この環境で動きを確認する</button>
+          <p class="apple-signin-config-notice" id="appleSigninReadyText">Appleサインインを準備しています。</p>
+          <p class="apple-signin-config-notice" id="appleSigninConfigNotice" hidden>Appleサインインを準備できませんでした。ページを再読み込みしてもう一度お試しください。</p>
         </div>
       </div>
       <footer class="modal-footer">
-        <button class="action-button secondary" id="cancelTermsBtn" type="button">戻る</button>
-        <button class="action-button primary modal-primary-button" id="acceptTermsBtn" type="button" disabled>同意して次へ</button>
+        <p class="modal-footer-note" id="termsFooterNote">3つの確認にチェックすると、Appleでサインインできます。</p>
+        <div class="modal-footer-actions">
+          <button class="action-button secondary" id="cancelTermsBtn" type="button">戻る</button>
+          <div class="apple-footer-auth-slot" id="appleFooterAuthSlot" hidden>
+            <div
+              id="appleid-signin"
+              class="apple-signin-official-button"
+              data-color="black"
+              data-border="false"
+              data-type="sign-in"
+              data-border-radius="30"
+              data-width="100%"
+              data-height="54"
+            ></div>
+          </div>
+          <button class="action-button secondary local-apple-preview-button" id="localApplePreviewBtn" type="button" hidden>この環境で動きを確認する</button>
+          <button class="action-button primary modal-primary-button" id="acceptTermsBtn" type="button" disabled aria-describedby="termsFooterNote">Appleでサインイン</button>
+        </div>
       </footer>
     </div>
   </div>
@@ -4548,9 +5105,9 @@
     <article class="legal-doc-inline">
       <h4>利用規約</h4>
       <p class="legal-doc-updated">最終更新日: 2026年5月22日</p>
-      <p>AllNew App Factory Feedbackで改善要望・不具合メモ・新しいアプリ案を投稿する場合に適用されます。</p>
+      <p>AllNew App Factory Feedbackで改善要望・不具合の報告・新しいアプリ案を投稿する場合に適用されます。</p>
       <h5>1. サービスの目的</h5>
-      <p>合同会社AllNewが提供または開発するアプリについて、改善要望、不具合メモ、新しいアプリ案を受け付け、公開可能な範囲で受付状況、検討状況、対応状況、結果を共有するための窓口です。</p>
+      <p>合同会社AllNewが提供または開発するアプリについて、改善要望、不具合の報告、新しいアプリ案を受け付け、公開可能な範囲で受付状況、検討状況、対応状況、結果を共有するための窓口です。</p>
       <h5>2. 利用資格とアカウント</h5>
       <ul>
         <li>日本国内在住の18歳以上の方を対象とします。</li>
@@ -4609,7 +5166,7 @@
       <h5>3. 投稿内容の公開</h5>
       <p>投稿内容は、公開用に要約、編集、統合、匿名化したうえで公開される場合があります。氏名、住所、電話番号、メールアドレス、健康情報、要配慮個人情報、第三者秘密情報、営業秘密、未公開発明、出願予定アイデア、第三者の権利を侵害する情報は投稿しないでください。</p>
       <h5>4. 第三者提供および外部送信</h5>
-      <p>Sign in with Appleの利用に伴い、Apple Inc.へ認証関連情報が送信される場合があります。また、POIPOI受付係のAI応答生成および一次審査レポート作成のため、チャット内容等が委託先へ送信される場合があります。外国にある第三者へ個人データを提供する場合は、提供先の国名、当該国の個人情報保護制度、提供先の保護措置、本人の求めに応じた情報提供方法を登録前および投稿前に明示します。広告目的の第三者提供またはトラッキングは行わない設計を原則とします。</p>
+      <p>Sign in with Appleの利用に伴い、Apple Inc.へ認証関連情報が送信される場合があります。また、ポイナ受付のAI応答生成および一次審査レポート作成のため、チャット内容等が委託先へ送信される場合があります。外国にある第三者へ個人データを提供する場合は、提供先の国名、当該国の個人情報保護制度、提供先の保護措置、本人の求めに応じた情報提供方法を登録前および投稿前に明示します。広告目的の第三者提供またはトラッキングは行わない設計を原則とします。</p>
       <h5>5. 権利行使</h5>
       <p>アカウント削除、Apple ID連携解除、同意撤回、保有個人データの開示、訂正、追加、削除、利用停止、消去、第三者提供停止を請求できます。削除前に投稿済みの内容について成立した権利譲渡、対価請求不可、著作者人格権不行使等の合意は、法令上許される範囲で維持されます。</p>
       <h5>6. 国外利用・多法域対応</h5>
@@ -4640,11 +5197,11 @@
       <ul>
         <li>Apple Inc.: Sign in with Appleによる本人識別、ログイン、Apple ID連携解除、token revocation等に必要な情報を送信します。</li>
         <li>apps.allnew.work、Apple App Store / iTunes Lookup API / mzstatic.com: アプリ一覧、アプリ名、説明、アプリアイコン画像の取得・表示に必要な情報を送信します。</li>
-        <li>AllNew BaaS / OpenAI, L.L.C.: POIPOI受付係による自由記入チャット応対、受付可否の一次確認、運営管理者向け一次審査レポート作成のために必要な情報を送信する場合があります。</li>
+        <li>AllNew BaaS / OpenAI, L.L.C.: ポイナ受付による自由記入チャット応対、受付可否の一次確認、運営管理者向け一次審査レポート作成のために必要な情報を送信する場合があります。</li>
         <li>ホスティング、データベース、ログ管理、監視、メール送信等の委託先: 本サービスの提供、保守、障害対応、不正対策、法令対応のために必要な情報を送信します。</li>
       </ul>
       <h5>4. 外国にある第三者への提供</h5>
-      <p>Sign in with Apple、POIPOI受付係のAI応答生成および一次審査レポート作成に伴い、米国所在の事業者へ情報が送信される場合があります。提供先の国名、送信項目、利用目的、当該国の個人情報保護制度、提供先の保護措置、本人の求めに応じた情報提供方法を登録前および投稿前に明示します。提供先の国名または保護措置を同意取得時点で特定できない場合は、特定できない旨、その理由、本人の参考となる情報を表示します。</p>
+      <p>Sign in with Apple、ポイナ受付のAI応答生成および一次審査レポート作成に伴い、米国所在の事業者へ情報が送信される場合があります。提供先の国名、送信項目、利用目的、当該国の個人情報保護制度、提供先の保護措置、本人の求めに応じた情報提供方法を登録前および投稿前に明示します。提供先の国名または保護措置を同意取得時点で特定できない場合は、特定できない旨、その理由、本人の参考となる情報を表示します。</p>
       <h5>5. 国外利用・多法域対応</h5>
       <p>EU/EEA、英国、中国、米国カリフォルニア州その他日本国外の居住者を対象に本サービスを積極的に提供する場合は、GDPR、UK GDPR、中国個人情報保護法（PIPL）、CCPA/CPRAその他適用される国外法令について、必要な表示、同意、権利行使手続、国外移転条項、代理人・代表者表示、アクセス制限または提供地域制限を実装するまで、当該地域向け提供を開始しません。</p>
       <h5>6. 投稿情報と問い合わせ</h5>
@@ -4653,6 +5210,6 @@
   </template>
 
   <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/ja_JP/appleid.auth.js" defer></script>
-  <script src="./app.js?v=20260603-apple-signin2" defer></script>
+  <script src="./app.js?v=20260605-chat-refine" defer></script>
 </body>
 </html>
