@@ -132,14 +132,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const prefixes = ["爆速の", "癒やしの", "無敵の", "陽気な", "秘密の", "孤高の", "奇跡の", "前向きな", "お茶目な", "ふんわりな"];
   const roles = ["開発者", "応援団", "研究員", "旅人", "キャプテン", "サポーター", "ひらめき王"];
   const suffixes = ["ぷに助", "もっちー", "トントン", "まるこ", "ピポパ"];
+  const authSessionCookieName = "poipoi_feedback_session";
+  const appleRedirectStateCookieName = "poipoi_apple_redirect_state";
+  const goodVoteCookieName = "poipoi_good_votes";
+  const poinaReceptionVisitCookieName = "poipoi_reception_visit_count";
+  const authSessionMaxAgeSeconds = 60 * 60 * 24 * 90;
+  const preferenceCookieMaxAgeSeconds = 60 * 60 * 24 * 180;
 
   let isAuthenticated = false;
   let selectedApp = null;
   let selectedType = null;
+  let selectedReceptionIntent = "";
+  let pendingReceptionType = "";
   let currentNickname = "";
   let heroCompleted = false;
   let activeAppFilter = window.location.hash === "#idea" ? "idea" : "all";
   let appSearchQuery = "";
+  let poinaReceptionVisitCounted = false;
   const adminPreviewEnabled = new URLSearchParams(window.location.search).get("admin") === "preview";
   let moderationWarningCount = 0;
   let previewUserSuspended = false;
@@ -148,7 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let poipoiChatStopped = false;
   let latestChatDraft = null;
   let latestReview = null;
-  const goodVoteStorageKey = "poipoiGoodVotes:v1";
   let guestGoodVotes = loadGuestGoodVotes();
   let guestGoodRemoteCounts = {};
   const guestBoardFilters = {
@@ -201,6 +209,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const accountBoardLink = document.getElementById("accountBoardLink");
   const logoutTrigger = document.getElementById("logoutTrigger");
 
+  const poinaReceptionSection = document.getElementById("poinaReceptionSection");
+  const poinaReceptionTitle = document.getElementById("poinaReceptionTitle");
+  const poinaReceptionLead = document.getElementById("poinaReceptionLead");
+  const poinaReceptionGuide = document.getElementById("poinaReceptionGuide");
+  const poinaSelectedIntentNote = document.getElementById("poinaSelectedIntentNote");
+  const poinaIntentButtons = Array.from(document.querySelectorAll("[data-poina-intent]"));
+  const appPickerSection = document.getElementById("appPickerSection");
   const appsScroller = document.getElementById("appsScroller");
   const appSearchInput = document.getElementById("appSearchInput");
   const appFilterButtons = Array.from(document.querySelectorAll("[data-app-filter]"));
@@ -217,6 +232,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const poipoiChatSend = document.getElementById("poipoiChatSend");
   const aiReviewPreview = document.getElementById("aiReviewPreview");
   const aiReviewMessage = document.getElementById("aiReviewMessage");
+  const poipoiSubmitSummary = document.getElementById("poipoiSubmitSummary");
+  const poipoiSummaryApp = document.getElementById("poipoiSummaryApp");
+  const poipoiSummaryType = document.getElementById("poipoiSummaryType");
+  const poipoiSummaryBody = document.getElementById("poipoiSummaryBody");
+  const poipoiSummaryNote = document.getElementById("poipoiSummaryNote");
+  const editFeedbackDraftBtn = document.getElementById("editFeedbackDraftBtn");
   const submitFeedbackBtn = document.getElementById("submitFeedbackBtn");
   const adminReviewPanel = document.getElementById("adminReviewPanel");
   const adminReportList = document.getElementById("adminReportList");
@@ -226,10 +247,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const acceptTermsBtn = document.getElementById("acceptTermsBtn");
   const termsErrorText = document.getElementById("termsErrorText");
   const appleOfficialAuthZone = document.getElementById("appleOfficialAuthZone");
+  const appleFooterAuthSlot = document.getElementById("appleFooterAuthSlot");
   const appleIdSigninButton = document.getElementById("appleid-signin");
   const appleSigninConfigNotice = document.getElementById("appleSigninConfigNotice");
   const appleSigninReadyText = document.getElementById("appleSigninReadyText");
   const localApplePreviewBtn = document.getElementById("localApplePreviewBtn");
+  const termsFooterNote = document.getElementById("termsFooterNote");
   const registrationConsentChecks = Array.from(document.querySelectorAll(".registration-consent-check"));
   const legalDocDisclosures = Array.from(document.querySelectorAll(".legal-doc-disclosure"));
   const cookieConsentBanner = document.getElementById("cookieConsentBanner");
@@ -241,6 +264,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let appleSignInConfigPromise = null;
   let appleSignInInitialized = false;
   let appleProgrammaticSignInReady = false;
+  let appleSignInPreparing = false;
+  let appleSignInSetupFailed = false;
 
   function randomItem(items) {
     return items[Math.floor(Math.random() * items.length)];
@@ -388,16 +413,111 @@ document.addEventListener("DOMContentLoaded", () => {
     return [...apps.filter((app) => app.id !== newAppIdea.id), { ...newAppIdea }];
   }
 
+  function cookieSecureAttribute() {
+    return window.location.protocol === "https:" ? "; Secure" : "";
+  }
+
+  function getCookieValue(name) {
+    const prefix = `${name}=`;
+    const entry = document.cookie
+      .split("; ")
+      .find((cookie) => cookie.startsWith(prefix));
+    if (!entry) return "";
+    return decodeURIComponent(entry.slice(prefix.length));
+  }
+
+  function setCookieValue(name, value, maxAgeSeconds) {
+    document.cookie = `${name}=${encodeURIComponent(value)}; Max-Age=${maxAgeSeconds}; Path=/; SameSite=Lax${cookieSecureAttribute()}`;
+  }
+
+  function clearCookieValue(name) {
+    document.cookie = `${name}=; Max-Age=0; Path=/; SameSite=Lax${cookieSecureAttribute()}`;
+  }
+
+  function getJsonCookie(name) {
+    const value = getCookieValue(name);
+    if (!value) return null;
+    try {
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function setJsonCookie(name, value, maxAgeSeconds) {
+    setCookieValue(name, JSON.stringify(value), maxAgeSeconds);
+  }
+
+  function getStoredPoinaReceptionVisitCount() {
+    const count = Number.parseInt(getCookieValue(poinaReceptionVisitCookieName) || "0", 10);
+    return Number.isFinite(count) && count > 0 ? Math.min(count, 99) : 0;
+  }
+
+  function markPoinaReceptionVisit() {
+    if (poinaReceptionVisitCounted) return getStoredPoinaReceptionVisitCount();
+
+    const nextCount = Math.min(getStoredPoinaReceptionVisitCount() + 1, 99);
+    setCookieValue(poinaReceptionVisitCookieName, String(nextCount), preferenceCookieMaxAgeSeconds);
+    poinaReceptionVisitCounted = true;
+    return nextCount;
+  }
+
+  function getPoinaReceptionScript(visitCount = getStoredPoinaReceptionVisitCount()) {
+    if (visitCount <= 1) {
+      return {
+        title: "ポイナ受付へようこそ。お困りごとをお預かりします。",
+        lead: "ここでは、AllNewのアプリの不具合、改善アイデア、新しいアプリ案を短く安心して送れます。",
+        guide: "お名前や連絡先は書かず、今日はどういうご用件かを選んでください。"
+      };
+    }
+
+    if (visitCount === 2) {
+      return {
+        title: "おかえりなさい。今日のご用件をお聞かせください。",
+        lead: "前回の続きでも、新しい内容でも大丈夫です。用件と対象アプリを選ぶと、ポイナが必要な点だけ確認します。",
+        guide: "不具合、改善アイデア、新しいアプリ案のどれに近いですか？"
+      };
+    }
+
+    return {
+      title: "いつもありがとうございます。要点から受付します。",
+      lead: "説明は短くて大丈夫です。ポイナが確認しやすい形でお預かりします。",
+      guide: "まず近いご用件を選んでください。迷ったら「改善アイデア」を選んでください。"
+    };
+  }
+
+  function updatePoinaReceptionScript(visitCount = getStoredPoinaReceptionVisitCount()) {
+    const script = getPoinaReceptionScript(visitCount);
+    if (poinaReceptionTitle) poinaReceptionTitle.textContent = script.title;
+    if (poinaReceptionLead) poinaReceptionLead.textContent = script.lead;
+    if (poinaReceptionGuide) poinaReceptionGuide.textContent = script.guide;
+  }
+
+  function scrollToPoinaReception(options = {}) {
+    const target = poinaReceptionSection || document.getElementById("wizardStep1Section");
+    if (!target || options.scroll === false) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function scrollToAppPicker(options = {}) {
+    if (options.scroll === false) return;
+    const target = appPickerSection || appsScroller || document.getElementById("wizardStep1Section");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   function hasCookieConsentNotice() {
-    return document.cookie.split("; ").some((cookie) => cookie.startsWith("af_cookie_notice=accepted"));
+    return getCookieValue("af_cookie_notice") === "accepted";
   }
 
   function setCookieConsentNotice() {
-    document.cookie = "af_cookie_notice=accepted; Max-Age=15552000; Path=/; SameSite=Lax";
+    setCookieValue("af_cookie_notice", "accepted", preferenceCookieMaxAgeSeconds);
   }
 
   function setCookieBannerVisible(isVisible) {
     if (!cookieConsentBanner) return;
+    cookieConsentBanner.hidden = !isVisible;
+    cookieConsentBanner.inert = !isVisible;
     cookieConsentBanner.classList.toggle("is-visible", isVisible);
     cookieConsentBanner.setAttribute("aria-hidden", isVisible ? "false" : "true");
   }
@@ -486,8 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!panels.length) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const prefersSimpleScroll = window.matchMedia("(max-width: 640px), (pointer: coarse)").matches;
-    if (reducedMotion || prefersSimpleScroll) {
+    if (reducedMotion) {
       showScrollyPanelsAsStaticList(stage);
       return;
     }
@@ -498,9 +617,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function syncScrollyViewportSize() {
       const viewportHeight = getScrollyViewportHeight();
-      const stickyRatio = 0.82;
-      const minStickyHeight = 640;
-      const maxStickyHeight = 780;
+      const isCompact = window.matchMedia("(max-width: 640px)").matches;
+      const stickyRatio = isCompact ? 0.68 : 0.58;
+      const minStickyHeight = isCompact ? 390 : 360;
+      const maxStickyHeight = isCompact ? 560 : 520;
       const stickyHeight = Math.min(
         Math.max(Math.round(viewportHeight * stickyRatio), minStickyHeight),
         maxStickyHeight
@@ -519,6 +639,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let ticking = false;
+    let magneticSnapTimer = 0;
+    let isScrollyPointerDown = false;
+    let isMagneticSnapping = false;
+    let lastScrollyScrollY = window.scrollY;
+    let lastScrollyDirection = 0;
+
     function getScrollyMetrics() {
       syncScrollyViewportSize();
 
@@ -568,7 +694,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (Math.abs(window.scrollY - target) < 2) return;
 
+      isMagneticSnapping = true;
+      stage.classList.add("is-magnetizing");
       window.scrollTo({ top: target, behavior });
+
+      window.setTimeout(() => {
+        isMagneticSnapping = false;
+        stage.classList.remove("is-magnetizing");
+        requestScrollyStepUpdate();
+      }, behavior === "smooth" ? 460 : 0);
+    }
+
+    function scheduleMagneticSnap(delay = 180) {
+      if (isAuthenticated || isMagneticSnapping || stage.classList.contains("is-static-list")) return;
+      if (lastScrollyDirection < 0) {
+        window.clearTimeout(magneticSnapTimer);
+        return;
+      }
+      window.clearTimeout(magneticSnapTimer);
+
+      magneticSnapTimer = window.setTimeout(() => {
+        if (isScrollyPointerDown) {
+          scheduleMagneticSnap(90);
+          return;
+        }
+
+        const metrics = getScrollyMetrics();
+        const stageIsVisible = metrics.rect.top < metrics.viewportHeight && metrics.rect.bottom > 0;
+        if (!stageIsVisible) return;
+
+        snapScrollyToIndex(getScrollyStepFromProgress(metrics.progress));
+      }, delay);
     }
 
     setScrollyStep(stage, 0);
@@ -577,6 +733,20 @@ document.addEventListener("DOMContentLoaded", () => {
       ticking = false;
       const metrics = getScrollyMetrics();
       const nextIndex = getScrollyStepFromProgress(metrics.progress);
+
+      if (!isAuthenticated && nextIndex === panels.length - 1) {
+        const sticky = stage.querySelector(".welcome-scrolly-sticky");
+        if (sticky) {
+          if (window.scrollY > metrics.safeMaxScrollY + 1) {
+            setScrollyStep(stage, nextIndex);
+            window.scrollTo({
+              top: Math.max(metrics.stageTop, metrics.safeMaxScrollY),
+              behavior: "auto"
+            });
+            return;
+          }
+        }
+      }
 
       setScrollyStep(stage, nextIndex);
     }
@@ -588,15 +758,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function handleScrollyScroll() {
+      const currentScrollY = window.scrollY;
+      const deltaY = currentScrollY - lastScrollyScrollY;
+      if (Math.abs(deltaY) > 1) {
+        lastScrollyDirection = deltaY > 0 ? 1 : -1;
+      }
+      lastScrollyScrollY = currentScrollY;
       requestScrollyStepUpdate();
+      scheduleMagneticSnap(180);
     }
 
     window.addEventListener("scroll", handleScrollyScroll, { passive: true });
+    window.addEventListener("scrollend", () => scheduleMagneticSnap(0), { passive: true });
     window.addEventListener("resize", () => {
       requestScrollyStepUpdate();
+      scheduleMagneticSnap(120);
     });
+    window.addEventListener("touchstart", () => {
+      isScrollyPointerDown = true;
+      window.clearTimeout(magneticSnapTimer);
+    }, { passive: true });
+    window.addEventListener("touchend", () => {
+      isScrollyPointerDown = false;
+      scheduleMagneticSnap(80);
+    }, { passive: true });
+    window.addEventListener("touchcancel", () => {
+      isScrollyPointerDown = false;
+      scheduleMagneticSnap(80);
+    }, { passive: true });
+    window.addEventListener("wheel", () => scheduleMagneticSnap(120), { passive: true });
     window.visualViewport?.addEventListener("resize", () => {
       requestScrollyStepUpdate();
+      scheduleMagneticSnap(120);
     }, { passive: true });
     window.visualViewport?.addEventListener("scroll", requestScrollyStepUpdate, { passive: true });
     updateScrollyStepFromScroll();
@@ -721,6 +914,127 @@ document.addEventListener("DOMContentLoaded", () => {
     window.setTimeout(updateAppScrollButtons, 280);
   }
 
+  function getDisplayFeedbackType(type) {
+    if (type === "不具合メモ") return "不具合";
+    if (type === "改善の要望") return "改善アイデア";
+    if (type === "新しいアプリ案") return "新しいアプリ案";
+    return type || "ご意見";
+  }
+
+  function getSelectedAppDisplayName() {
+    return selectedApp?.isVirtual ? "新しいアプリ案" : selectedApp?.name || "未選択";
+  }
+
+  function getChatPlaceholder() {
+    const appName = selectedApp?.name || "アプリ";
+    const type = selectedType || pendingReceptionType;
+    if (selectedApp?.isVirtual || type === "新しいアプリ案") {
+      return "誰が、どんな場面で、何に困るかを書いてください。";
+    }
+    if (type === "不具合メモ") {
+      return `${appName}で、どの画面で、何をした時に、どうなったかを書いてください。`;
+    }
+    if (type === "改善の要望") {
+      return `${appName}で、使いにくい点やこうなると助かることを書いてください。`;
+    }
+    return "気になったことをそのまま書いてください。";
+  }
+
+  function updateChatPlaceholder() {
+    if (poipoiChatInput) {
+      poipoiChatInput.placeholder = getChatPlaceholder();
+    }
+  }
+
+  function hideSubmitSummary() {
+    if (poipoiSubmitSummary) {
+      poipoiSubmitSummary.hidden = true;
+    }
+    if (editFeedbackDraftBtn) {
+      editFeedbackDraftBtn.hidden = true;
+    }
+  }
+
+  function updateSubmitSummary(payload = getDraftPayload()) {
+    if (!poipoiSubmitSummary) return;
+    const body = String(payload.body || payload.title || "").trim();
+    if (!body) {
+      hideSubmitSummary();
+      return;
+    }
+
+    if (poipoiSummaryApp) poipoiSummaryApp.textContent = payload.appName || getSelectedAppDisplayName();
+    if (poipoiSummaryType) poipoiSummaryType.textContent = getDisplayFeedbackType(payload.type);
+    if (poipoiSummaryBody) poipoiSummaryBody.textContent = body.length > 180 ? `${body.slice(0, 180)}...` : body;
+    if (poipoiSummaryNote) {
+      poipoiSummaryNote.textContent = payload.appName === "WeightSnap"
+        ? "体重などの数値は書かないでください。状況だけで送信できます。送信後に受付番号が表示され、あとで受付状況を確認できます。"
+        : "氏名、連絡先、住所、パスワードなどの個人情報は書かないでください。状況だけで送信できます。送信後に受付番号が表示されます。";
+    }
+    poipoiSubmitSummary.hidden = false;
+    if (editFeedbackDraftBtn) {
+      editFeedbackDraftBtn.hidden = false;
+    }
+  }
+
+  const poinaReceptionIntents = Object.freeze({
+    bug: {
+      type: "不具合メモ",
+      filter: "all",
+      note: "不具合についてですね。対象アプリを選ぶと、起きたことをすぐ書けます。"
+    },
+    improvement: {
+      type: "改善の要望",
+      filter: "all",
+      note: "改善アイデアですね。対象のアプリを選んでください。迷った点や、こうなったら良いことを聞かせてください。"
+    },
+    idea: {
+      type: "新しいアプリ案",
+      filter: "idea",
+      note: "新しいアプリ案ですね。「New App Idea」を選ぶと、ポイナが利用シーンから一緒に整理します。"
+    }
+  });
+
+  function updatePoinaIntentButtonState() {
+    poinaIntentButtons.forEach((button) => {
+      const isActive = button.dataset.poinaIntent === selectedReceptionIntent;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function selectPoinaReceptionIntent(intentKey, options = {}) {
+    if (intentKey === "status") {
+      window.location.href = "status-board.html";
+      return;
+    }
+
+    const intent = poinaReceptionIntents[intentKey];
+    if (!intent) return;
+
+    selectedReceptionIntent = intentKey;
+    pendingReceptionType = intent.type;
+    selectedType = intent.type;
+    activeAppFilter = intent.filter || "all";
+    appSearchQuery = "";
+    if (appSearchInput) appSearchInput.value = "";
+    if (poinaSelectedIntentNote) poinaSelectedIntentNote.textContent = intent.note;
+    updatePoinaIntentButtonState();
+    renderAppSelectors();
+    resetAppScrollPosition();
+    scrollToAppPicker(options);
+  }
+
+  function getConfirmAppSelectionLabel(app) {
+    if (app?.isVirtual) {
+      return "新しいアプリ案として進めますか？";
+    }
+    if (pendingReceptionType) {
+      return `${app.name}の${getDisplayFeedbackType(pendingReceptionType)}についてですね。この内容で進めますか？`;
+    }
+    return `${app.name}についてですね。この内容で進めますか？`;
+  }
+
   function selectedAppIsVisible(visibleApps) {
     return Boolean(selectedApp && visibleApps.some((app) => app.id === selectedApp.id));
   }
@@ -756,9 +1070,20 @@ document.addEventListener("DOMContentLoaded", () => {
   function getPoinaOpeningMessage() {
     const appName = selectedApp?.name || "このアプリ";
     if (selectedApp?.isVirtual) {
-      return "いらっしゃいませ、ポイナです。新しいアプリの案ですね。まだ名前がなくても大丈夫です。ポイナがいっしょに整理しますので、どんな人が、どんな時に使うものか、思いついたまま書いてください。";
+      return "新しいアプリ案ですね。まだ名前がなくても大丈夫です。誰が、どんな場面で、何に困るかを思いつくまま書いてください。";
     }
-    return `いらっしゃいませ、ポイナです。${appName} のことでお話をうかがいます。不具合でも、改善アイデアでも大丈夫です。ポイナがお預かりしますので、まずは気になったことをそのまま書いてください。`;
+
+    const receptionType = selectedType || pendingReceptionType;
+    if (receptionType === "不具合メモ") {
+      const privacyNote = appName === "WeightSnap"
+        ? "体重などの数値や氏名は不要です。"
+        : "氏名や連絡先は不要です。";
+      return `${appName}で何が起きましたか？${privacyNote}どの画面で、何をした時に、どうなったかを分かる範囲で書いてください。`;
+    }
+    if (receptionType === "改善の要望") {
+      return `${appName}をもっと使いやすくするアイデアですね。ありがとうございます。迷ったところ、使いづらかったところ、こうなると助かることを1つ書いてください。`;
+    }
+    return `${appName}についてお聞かせください。気になったことをそのまま書いてください。ポイナが内容を整理します。`;
   }
 
   function renderFeedbackChat() {
@@ -766,16 +1091,18 @@ document.addEventListener("DOMContentLoaded", () => {
     poipoiChatStopped = false;
     latestChatDraft = null;
     latestReview = null;
-    selectedType = selectedApp?.isVirtual ? "新しいアプリ案" : "";
+    selectedType = selectedApp?.isVirtual ? "新しいアプリ案" : pendingReceptionType;
     feedbackChatLog.replaceChildren();
     aiReviewPreview.hidden = true;
     submitFeedbackBtn.hidden = true;
+    hideSubmitSummary();
     poipoiChatForm.hidden = false;
     poipoiChatInput.disabled = false;
     poipoiChatSend.disabled = false;
     poipoiChatSend.textContent = "送る";
     appendChatMessage("assistant", getPoinaOpeningMessage());
     poipoiChatInput.value = "";
+    updateChatPlaceholder();
     poipoiChatInput.focus({ preventScroll: true });
   }
 
@@ -847,9 +1174,9 @@ document.addEventListener("DOMContentLoaded", () => {
       decision: "accept",
       publicStatus: "受け付けました",
       flags: [],
-      message: "受付できそうです。送信すると、AI一次審査レポートを作成して運営管理画面へ送ります。",
+      message: "このまま送信できます。",
       adminSummary: `${payload.appName} / ${payload.type} として検討に値する内容。公開前に人間の運営管理者が要約とマスキングを確認する。`,
-      nextAction: payload.type === "新しいアプリ案" ? "新規アプリ案として検討キューへ。" : "対象アプリの改善・不具合キューへ。"
+      nextAction: payload.type === "新しいアプリ案" ? "新しいアプリ案として運営が確認します。" : "対象アプリの改善・不具合として運営が確認します。"
     };
   }
 
@@ -860,12 +1187,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!payload.title && !payload.body) {
       aiReviewPreview.hidden = true;
       aiReviewMessage.textContent = "入力された内容は、送信前にAIが受付できる内容か確認します。";
+      hideSubmitSummary();
       return review;
     }
 
     aiReviewPreview.hidden = false;
     aiReviewPreview.classList.add(review.decision === "accept" ? "is-ok" : review.decision === "block" ? "is-block" : "is-warn");
     aiReviewMessage.textContent = review.message;
+    if (review.decision === "accept") {
+      updateSubmitSummary(payload);
+    } else {
+      hideSubmitSummary();
+    }
     return review;
   }
 
@@ -891,19 +1224,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const riskLabels = review.flags.map((flag) => flag.label);
     const needsMore = review.decision === "warn";
     const accepted = review.decision === "accept";
-    const reply = riskLabels.includes("個人情報・秘密情報の混入")
-      ? "個人情報が入力されたため、このチャットは停止されました。記録はされません。お手数ですが最初からやり直してください。"
-      : riskLabels.includes("医療助言・診断に近い内容")
-        ? "ご提案ありがとうございます。大変申し訳ありませんが、医療判断となるアドバイスはできません。法律に抵触する可能性があるためです。ご期待に添えず申し訳ありません。何か他にご要望はございませんか？"
-        : review.decision === "block"
-          ? `すみません。ポイナ受付では、この内容はそのままだとお預かりできません。アプリの不具合や「あったらいいな」にしぼって、言い方を変えて送ってください。`
-          : needsMore
-            ? "ありがとうございます。もう少しだけ教えてください。いつ、どの画面で、どうなったか。もしくは、だれが、どんな時に使うアプリなのかを書いてもらえると、ぐっと受付しやすくなります。"
-            : inferredType === "不具合メモ"
-              ? "ご不便をおかけして申し訳ございません。不具合としてお預かりいたします。発生した時間帯など、もう少し詳しく教えていただけると助かります。"
-              : inferredType === "新しいアプリ案"
-                ? "なるほどぉ〜、いいですね。もう少し詳しいイメージを教えていただけますか？"
-                : "ありがとうございます。だいじなひとこと、受け取れそうです。内容を受付に進める準備ができました。";
+    let reply = "";
+    if (riskLabels.includes("個人情報・秘密情報の混入")) {
+      reply = "個人情報や秘密情報に見える内容が含まれているようです。安全のため、その部分を伏せて、起きたことやご要望だけを書き直してください。";
+    } else if (riskLabels.includes("医療助言・診断に近い内容")) {
+      reply = "ありがとうございます。診断や治療の判断にあたる内容は、この受付では扱えません。アプリの表示、操作、記録のしやすさについて気になった点を書いてください。";
+    } else if (review.decision === "block") {
+      reply = "すみません。この内容はそのままでは受け付けできません。アプリの不具合、使いにくさ、あったらいい機能のどれかにしぼって書き直してください。";
+    } else if (needsMore) {
+      reply = "ありがとうございます。もう少しだけ教えてください。どの画面で、何をした時に、どうなったかを書いてもらえると内容を整理しやすくなります。";
+    } else if (inferredType === "不具合メモ") {
+      reply = "不具合としてお預かりします。下の確認内容を見て、問題なければ送信してください。";
+    } else if (inferredType === "新しいアプリ案") {
+      reply = "新しいアプリ案としてお預かりします。下の確認内容を見て、問題なければ送信してください。";
+    } else {
+      reply = "ありがとうございます。内容をお預かりできます。下の確認内容を見て、問題なければ送信してください。";
+    }
 
     return {
       reply,
@@ -925,6 +1261,50 @@ document.addEventListener("DOMContentLoaded", () => {
         nextAction: review.nextAction
       }
     };
+  }
+
+  function isAllowedInlineLatinToken(value) {
+    return /^(YouTube|Instagram|POIPOI|STUDIO|App|AI|URL|SNS|iPhone|Android)/i.test(value);
+  }
+
+  function hasSuspiciousLatinJapaneseBlend(text) {
+    const matches = String(text || "").match(/[A-Za-z]{3,}[ぁ-んァ-ヶ一-龯]/g) || [];
+    return matches.some((match) => !isAllowedInlineLatinToken(match));
+  }
+
+  function replyAsksForMoreAfterReady(text) {
+    return /もう少し|教えて|いただけますか|ください|どんな使い方|どの画面|いつ、どこ/i.test(String(text || ""));
+  }
+
+  function buildStablePoinaReply(result) {
+    const appName = selectedApp?.name || "このアプリ";
+    const type = result?.extracted?.type || selectedType || inferFeedbackType(result?.extracted?.summary || "");
+    if (result?.status === "ready") {
+      if (selectedApp?.isVirtual || type === "新しいアプリ案") {
+        return "ありがとうございます。新しいアプリ案として整理しました。下の確認内容を見て、問題なければ送信してください。";
+      }
+      if (type === "不具合メモ") {
+        return `${appName}の不具合として整理しました。下の確認内容を見て、問題なければ送信してください。`;
+      }
+      return `ありがとうございます。${appName}の改善アイデアとしてお預かりします。下の確認内容を見て、問題なければ送信してください。`;
+    }
+
+    if (result?.status === "blocked") {
+      return "すみません。この内容はそのままでは受付できません。個人情報や秘密情報を入れず、アプリの不具合や改善案にしぼって書き直してください。";
+    }
+
+    return selectedApp?.isVirtual
+      ? "ありがとうございます。どんな場面で、どんなふうに助かるアプリかを1つだけ追記してください。"
+      : "ありがとうございます。いつ、どの画面で、どうなるとよいかを1つだけ追記してください。";
+  }
+
+  function polishPoinaResultForDisplay(result) {
+    const reply = String(result?.reply || "");
+    if (!result || typeof result !== "object") return buildLocalChatResult("");
+    if (hasSuspiciousLatinJapaneseBlend(reply) || (result.status === "ready" && replyAsksForMoreAfterReady(reply))) {
+      return { ...result, reply: buildStablePoinaReply(result) };
+    }
+    return result;
   }
 
   async function callFeedbackChatApi(message) {
@@ -1026,6 +1406,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return result.item;
   }
 
+  function getUserFacingSubmitError(error) {
+    const message = error instanceof Error ? error.message : String(error || "");
+    if (message.includes("feedback_store_not_configured")) {
+      return "受付内容の保存先がまだ有効になっていません。内容は失われないよう、この画面に残しています。運営側で保存先を有効化してから、もう一度送信してください。";
+    }
+    if (message.includes("rate_limited")) {
+      return "短時間に送信が集中しています。少し時間をおいてから、もう一度送信してください。";
+    }
+    if (message.includes("unauthorized")) {
+      return "受付内容の保存に必要な認証に失敗しました。ページを再読み込みして、もう一度お試しください。";
+    }
+    return "受付内容の送信に失敗しました。通信状況を確認して、もう一度お試しください。";
+  }
+
   function reviewFromChatResult(result) {
     const riskFlags = Array.isArray(result.extracted?.riskFlags) ? result.extracted.riskFlags : [];
     const decision = result.status === "ready" ? "accept" : result.status === "blocked" ? "block" : "warn";
@@ -1034,12 +1428,12 @@ document.addEventListener("DOMContentLoaded", () => {
       publicStatus: result.publicStatus || (decision === "accept" ? "受け付けました" : decision === "block" ? "ごめんなさい" : "下書き確認"),
       flags: riskFlags.map((label) => ({ label, severity: decision === "block" ? "block" : "warn" })),
       message: decision === "accept"
-        ? "受付できそうです。ボタンを押すと、AI一次審査レポートを作成して運営管理画面へ送ります。"
+        ? "このまま送信できます。"
         : decision === "block"
           ? "この内容は受付できません。表現を変えてください。"
           : "もう少し会話で情報を足すと、受付しやすくなります。",
       adminSummary: result.adminReport?.summary || "",
-      nextAction: result.adminReport?.nextAction || "人間の運営管理者が内容を確認する。"
+      nextAction: result.adminReport?.nextAction || "運営が内容を確認する。"
     };
   }
 
@@ -1066,9 +1460,12 @@ document.addEventListener("DOMContentLoaded", () => {
     submitFeedbackBtn.hidden = latestReview.decision !== "accept";
 
     if (latestReview.decision === "accept") {
+      updateSubmitSummary();
       stopPoipoiChat();
       return;
     }
+
+    hideSubmitSummary();
 
     if (latestReview.decision === "block") {
       stopPoipoiChat();
@@ -1092,6 +1489,26 @@ document.addEventListener("DOMContentLoaded", () => {
     poipoiChatInput.disabled = true;
     poipoiChatSend.disabled = true;
     poipoiChatForm.hidden = true;
+  }
+
+  function resumePoipoiDraftEditing() {
+    const draftBody = latestChatDraft?.body || latestChatDraft?.title || "";
+    poipoiChatStopped = false;
+    poipoiChatForm.hidden = false;
+    poipoiChatInput.disabled = false;
+    poipoiChatSend.disabled = false;
+    poipoiChatSend.textContent = "送り直す";
+    poipoiChatInput.value = draftBody;
+    updateChatPlaceholder();
+    resizePoipoiChatInput();
+    latestChatDraft = null;
+    latestReview = null;
+    submitFeedbackBtn.hidden = true;
+    aiReviewPreview.hidden = true;
+    aiReviewMessage.textContent = "修正した内容を送ると、もう一度確認します。";
+    hideSubmitSummary();
+    appendChatMessage("assistant", "内容を直せます。修正できたら、もう一度送ってください。");
+    poipoiChatInput.focus({ preventScroll: true });
   }
 
   function resizePoipoiChatInput() {
@@ -1134,6 +1551,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     typingMessage.remove();
+    result = polishPoinaResultForDisplay(result);
     appendChatMessage("assistant", result.reply);
     poipoiChatHistory.push({ role: "assistant", content: result.reply });
     applyChatResult(result);
@@ -1203,7 +1621,7 @@ document.addEventListener("DOMContentLoaded", () => {
         publicStatus: decision === "go" ? "対応しています" : decision === "no_go" ? "ごめんなさい" : "検討しています",
         factoryJobId,
         nextAction: decision === "go"
-          ? "管理者Go。factoryキューへ投入されます。"
+          ? "管理者Go。開発対応の確認へ進みます。"
           : decision === "no_go"
             ? "管理者No Go。公開可能な範囲でごめんなさいへ。"
             : "管理者保留。追加確認または後日判断。"
@@ -1250,7 +1668,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!reports.length) {
       const empty = document.createElement("div");
       empty.className = "admin-report-card";
-      empty.textContent = "まだレポートはありません。投稿が受付されると、ここにAI一次審査レポートが表示されます。";
+      empty.textContent = "まだレポートはありません。投稿が届くと、ここに確認レポートが表示されます。";
       adminReportList.append(empty);
       return;
     }
@@ -1317,6 +1735,54 @@ document.addEventListener("DOMContentLoaded", () => {
     document.dispatchEvent(new CustomEvent("heroAnimationCompleted"));
   }
 
+  function hasStoredAuthSession() {
+    return Boolean(getJsonCookie(authSessionCookieName)?.signedIn);
+  }
+
+  function hasAppleRedirectAuthorizationFragment() {
+    const params = new URLSearchParams((window.location.hash || "").replace(/^#/, ""));
+    return params.has("code") || params.has("id_token") || params.has("error");
+  }
+
+  function shouldEnterReceptionDirectly() {
+    return isAuthenticated || hasStoredAuthSession() || hasAppleRedirectAuthorizationFragment();
+  }
+
+  function skipOpeningAnimationForReception() {
+    heroCompleted = true;
+    try {
+      video?.pause();
+    } catch {
+      // Removal below is enough if the browser rejects pause before metadata is ready.
+    }
+    video?.removeAttribute("autoplay");
+    video?.remove();
+    welcomeHeroImg?.classList.add("active");
+    if (skipVideoBtn) skipVideoBtn.style.display = "none";
+    heroWrapper?.classList.remove("is-opening-floating", "is-docking");
+    revealHeroCopy();
+  }
+
+  function showCompactReceptionHeader() {
+    accountStrip?.setAttribute("aria-label", "受付中");
+    if (userNicknameDisplay) {
+      userNicknameDisplay.textContent = "";
+      userNicknameDisplay.hidden = true;
+    }
+    if (accountBoardLink) accountBoardLink.hidden = true;
+    if (logoutTrigger) logoutTrigger.hidden = true;
+  }
+
+  function restoreAccountHeaderControls() {
+    accountStrip?.removeAttribute("aria-label");
+    if (userNicknameDisplay) {
+      userNicknameDisplay.hidden = false;
+      userNicknameDisplay.textContent = "匿名ユーザー";
+    }
+    if (accountBoardLink) accountBoardLink.hidden = false;
+    if (logoutTrigger) logoutTrigger.hidden = false;
+  }
+
   function dockHeroToPage() {
     if (!heroStage || !heroWrapper || !heroWrapper.classList.contains("is-opening-floating")) {
       revealHeroCopy();
@@ -1352,6 +1818,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initOpeningInteraction() {
     document.body.classList.add("motion-ready");
+
+    if (shouldEnterReceptionDirectly()) {
+      skipOpeningAnimationForReception();
+      return;
+    }
 
     if (!video || !welcomeHeroImg) {
       completeHeroAnimation();
@@ -1389,14 +1860,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 7000);
   }
 
-  function unlockGatedContent() {
+  function unlockGatedContent(options = {}) {
     gatedContentArea.classList.add("is-unlocked");
     gatedContentArea.setAttribute("aria-hidden", "false");
     accountStrip.classList.remove("u-hidden");
-    userNicknameDisplay.textContent = currentNickname;
+    showCompactReceptionHeader();
 
     applySubmissionHashIntent({ scroll: false });
-    document.getElementById("wizardStep1Section").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (options.scroll !== false) {
+      scrollToPoinaReception(options);
+    }
   }
 
   function setGuestStatusBoardVisible(isVisible, options = {}) {
@@ -1615,17 +2088,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadGuestGoodVotes() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(goodVoteStorageKey) || "{}");
-      return parsed && typeof parsed === "object" ? parsed : {};
-    } catch {
-      return {};
-    }
+    return getJsonCookie(goodVoteCookieName) || {};
   }
 
   function saveGuestGoodVotes() {
     try {
-      localStorage.setItem(goodVoteStorageKey, JSON.stringify(guestGoodVotes));
+      setJsonCookie(goodVoteCookieName, guestGoodVotes, preferenceCookieMaxAgeSeconds);
     } catch {
       // Goodは補助的な応援機能なので、保存に失敗しても画面操作は止めない。
     }
@@ -1732,17 +2200,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function signIn(nickname = generateNickname()) {
+  function normalizeAuthNickname(value) {
+    const nickname = String(value || "").trim().slice(0, 80);
+    return nickname || generateNickname();
+  }
+
+  function saveAuthSession(nickname) {
+    setJsonCookie(authSessionCookieName, {
+      signedIn: true,
+      nickname: normalizeAuthNickname(nickname),
+      createdAt: new Date().toISOString()
+    }, authSessionMaxAgeSeconds);
+  }
+
+  function restoreAuthSession() {
+    const session = getJsonCookie(authSessionCookieName);
+    if (!session?.signedIn) return false;
+    signIn(session.nickname, { delayMs: 0, persist: false, scroll: true });
+    return true;
+  }
+
+  function signIn(nickname = generateNickname(), options = {}) {
     isAuthenticated = true;
-    currentNickname = nickname;
+    currentNickname = normalizeAuthNickname(nickname);
+    if (options.persist !== false) {
+      saveAuthSession(currentNickname);
+    }
     document.body.classList.add("is-authenticated");
+    updatePoinaReceptionScript(markPoinaReceptionVisit());
     setGuestStatusBoardVisible(false, { scroll: false });
     renderGuestGoodVotes();
     applyGuestBoardFiltersAndSort();
     setSignedInButtonLabel();
     mockAppleLoginBtn.style.pointerEvents = "none";
 
-    setTimeout(unlockGatedContent, 600);
+    setTimeout(
+      () => unlockGatedContent({ scroll: options.scroll !== false }),
+      Number.isFinite(options.delayMs) ? options.delayMs : 600
+    );
   }
 
   function getTermsModalFocusableElements() {
@@ -1773,13 +2268,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    container.innerHTML = '<p class="legal-doc-loading">この環境では文書を表示できませんでした。</p>';
+    const message = document.createElement("p");
+    message.className = "legal-doc-loading";
+    message.textContent = "この環境では文書を表示できませんでした。";
+    container.replaceChildren(message);
     container.dataset.loaded = "error";
   }
 
-  function normalizeLegalDocMarkup(doc) {
+  function buildLegalDocInlineArticle(doc) {
     const source = doc.querySelector(".legal-card") || doc.querySelector("article") || doc.querySelector("main") || doc.body;
-    if (!source) return "";
+    if (!source) return null;
 
     const clone = source.cloneNode(true);
     clone.querySelectorAll("script, style, link, .back-link").forEach((node) => node.remove());
@@ -1789,16 +2287,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     clone.querySelectorAll("h1").forEach((heading) => {
       const replacement = document.createElement("h4");
-      replacement.innerHTML = heading.innerHTML;
+      replacement.replaceChildren(...Array.from(heading.childNodes));
       heading.replaceWith(replacement);
     });
     clone.querySelectorAll("h2").forEach((heading) => {
       const replacement = document.createElement("h5");
-      replacement.innerHTML = heading.innerHTML;
+      replacement.replaceChildren(...Array.from(heading.childNodes));
       heading.replaceWith(replacement);
     });
 
-    return clone.innerHTML;
+    const article = document.createElement("article");
+    article.className = "legal-doc-inline";
+    article.replaceChildren(...Array.from(clone.childNodes));
+    return article;
   }
 
   async function loadLegalDocContent(disclosure) {
@@ -1820,10 +2321,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const text = await response.text();
       const parsedDoc = new DOMParser().parseFromString(text, "text/html");
-      const bodyMarkup = normalizeLegalDocMarkup(parsedDoc);
-      if (!bodyMarkup) throw new Error("Empty legal document");
+      const legalArticle = buildLegalDocInlineArticle(parsedDoc);
+      if (!legalArticle) throw new Error("Empty legal document");
 
-      container.innerHTML = `<article class="legal-doc-inline">${bodyMarkup}</article>`;
+      container.replaceChildren(legalArticle);
       container.dataset.loaded = "true";
     } catch (error) {
       renderLegalDocFallback(container);
@@ -1846,6 +2347,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setTermsModalVisible(isVisible) {
+    termsModal.hidden = !isVisible;
+    termsModal.inert = !isVisible;
     termsModal.classList.toggle("show", isVisible);
     termsModal.setAttribute("aria-hidden", isVisible ? "false" : "true");
     if (isVisible) {
@@ -1990,52 +2493,92 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function loadAppleRedirectConfig() {
+    const response = await fetch(appleAuthConfigApiUrl, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+      credentials: "omit"
+    });
+
+    if (!response.ok) {
+      throw new Error("apple_signin_config_unavailable");
+    }
+
+    const config = await response.json();
+    if (!config.clientId || !config.redirectURI || !config.state || !config.nonce) {
+      throw new Error("apple_signin_config_invalid");
+    }
+
+    appleSignInRuntimeConfig = config;
+    return config;
+  }
+
   function resetAppleOfficialAuthZone() {
     appleProgrammaticSignInReady = false;
+    appleSignInPreparing = false;
+    appleSignInSetupFailed = false;
     appleOfficialAuthZone.hidden = true;
+    appleFooterAuthSlot.hidden = true;
     appleIdSigninButton.hidden = true;
     appleSigninConfigNotice.hidden = true;
     appleSigninReadyText.hidden = false;
-    appleSigninReadyText.textContent = "同意が完了しました。下のAppleボタンからサインインしてください。";
+    appleSigninReadyText.textContent = "Appleサインインを準備しています。";
     localApplePreviewBtn.textContent = "この環境で動きを確認する";
     localApplePreviewBtn.classList.remove("apple-js-signin-button");
     localApplePreviewBtn.disabled = false;
     localApplePreviewBtn.hidden = true;
+    acceptTermsBtn.classList.remove("is-apple-signin-action", "is-loading");
+    acceptTermsBtn.removeAttribute("aria-busy");
   }
 
-  function revealAppleOfficialAuthZone() {
-    appleOfficialAuthZone.hidden = false;
+  function updateTermsFooterNote(message, isError = false) {
+    if (!termsFooterNote) return;
+    termsFooterNote.textContent = message;
+    termsFooterNote.classList.toggle("is-error", Boolean(isError));
+  }
+
+  function prepareAppleSignInForTermsModal() {
+    appleOfficialAuthZone.hidden = true;
     appleIdSigninButton.hidden = true;
     appleSigninConfigNotice.hidden = true;
     appleSigninReadyText.hidden = false;
     appleSigninReadyText.textContent = "Appleサインインを準備しています。";
     appleProgrammaticSignInReady = false;
+    appleSignInPreparing = true;
+    appleSignInSetupFailed = false;
     localApplePreviewBtn.textContent = "Appleでサインイン";
     localApplePreviewBtn.classList.add("apple-js-signin-button");
     localApplePreviewBtn.disabled = true;
     localApplePreviewBtn.hidden = true;
+    updateTermsActionState();
 
-    ensureAppleSignInConfigured()
+    loadAppleRedirectConfig()
       .then(() => {
-        appleProgrammaticSignInReady = appleSignInConfigReady();
-        appleIdSigninButton.hidden = true;
-        appleSigninConfigNotice.hidden = true;
-        appleSigninReadyText.hidden = false;
-        appleSigninReadyText.textContent = "同意が完了しました。Appleでサインインしてください。";
+        appleProgrammaticSignInReady = Boolean(
+          appleSignInRuntimeConfig?.clientId
+          && appleSignInRuntimeConfig?.redirectURI
+          && appleSignInRuntimeConfig?.state
+          && appleSignInRuntimeConfig?.nonce
+        );
+        appleSignInSetupFailed = !appleProgrammaticSignInReady;
+        appleOfficialAuthZone.hidden = true;
         localApplePreviewBtn.textContent = "Appleでサインイン";
         localApplePreviewBtn.classList.add("apple-js-signin-button");
         localApplePreviewBtn.disabled = !appleProgrammaticSignInReady;
-        localApplePreviewBtn.hidden = !appleProgrammaticSignInReady;
+        localApplePreviewBtn.hidden = true;
       })
       .catch(() => {
         appleProgrammaticSignInReady = false;
-        appleIdSigninButton.hidden = true;
-        appleSigninConfigNotice.hidden = false;
-        appleSigninReadyText.hidden = true;
-        localApplePreviewBtn.textContent = "この環境で動きを確認する";
-        localApplePreviewBtn.classList.remove("apple-js-signin-button");
-        localApplePreviewBtn.disabled = false;
-        localApplePreviewBtn.hidden = !isLocalPreviewHost;
+        appleSignInSetupFailed = true;
+        appleOfficialAuthZone.hidden = true;
+        if (allRegistrationConsentsChecked() && !isLocalPreviewHost) {
+          termsErrorText.textContent = "Appleサインインを準備できませんでした。ページを再読み込みしてもう一度お試しください。";
+          termsErrorText.hidden = false;
+        }
+      })
+      .finally(() => {
+        appleSignInPreparing = false;
+        updateTermsActionState();
       });
   }
 
@@ -2043,11 +2586,50 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!termsModalRequiresRegistrationConsent) {
       acceptTermsBtn.disabled = false;
       acceptTermsBtn.textContent = "閉じる";
+      acceptTermsBtn.classList.remove("is-apple-signin-action", "is-loading");
+      acceptTermsBtn.removeAttribute("aria-busy");
+      acceptTermsBtn.hidden = false;
+      appleFooterAuthSlot.hidden = true;
+      appleIdSigninButton.hidden = true;
+      localApplePreviewBtn.hidden = true;
+      updateTermsFooterNote("内容を確認したら閉じてください。");
       return;
     }
 
-    acceptTermsBtn.textContent = "同意して次へ";
-    acceptTermsBtn.disabled = !allRegistrationConsentsChecked();
+    const checked = allRegistrationConsentsChecked();
+    const localFallbackReady = isLocalPreviewHost && appleSignInSetupFailed;
+    const waitingForApple = checked && appleSignInPreparing && !appleProgrammaticSignInReady && !localFallbackReady;
+    const unavailable = checked && appleSignInSetupFailed && !localFallbackReady;
+    const redirectReady = checked && appleProgrammaticSignInReady && !waitingForApple && !unavailable && !localFallbackReady;
+
+    acceptTermsBtn.classList.add("is-apple-signin-action");
+    acceptTermsBtn.classList.toggle("is-loading", waitingForApple);
+    acceptTermsBtn.setAttribute("aria-busy", waitingForApple ? "true" : "false");
+    acceptTermsBtn.textContent = localFallbackReady
+      ? "この環境で動きを確認する"
+      : waitingForApple
+        ? "Appleサインインを準備中..."
+        : "Appleでサインイン";
+    acceptTermsBtn.hidden = localFallbackReady;
+    acceptTermsBtn.disabled = !checked || waitingForApple || unavailable;
+    appleFooterAuthSlot.hidden = true;
+    appleIdSigninButton.hidden = true;
+    localApplePreviewBtn.hidden = !localFallbackReady;
+    localApplePreviewBtn.disabled = !localFallbackReady;
+
+    if (!checked) {
+      updateTermsFooterNote("3つの確認にチェックすると、Appleでサインインできます。");
+    } else if (waitingForApple) {
+      updateTermsFooterNote("Appleサインインを準備しています。");
+    } else if (unavailable) {
+      updateTermsFooterNote("Appleサインインを準備できませんでした。ページを再読み込みしてもう一度お試しください。", true);
+    } else if (localFallbackReady) {
+      updateTermsFooterNote("ローカル確認環境のため、仮のサインインで動きを確認します。");
+    } else {
+      updateTermsFooterNote(redirectReady
+        ? "同意内容を確認したうえで、Appleの認証画面へ進みます。"
+        : "Appleサインインを準備しています。");
+    }
   }
 
   function openTermsModal(requiresRegistrationConsent = false) {
@@ -2070,6 +2652,9 @@ document.addEventListener("DOMContentLoaded", () => {
     resetAppleOfficialAuthZone();
     updateTermsActionState();
     setTermsModalVisible(true);
+    if (requiresRegistrationConsent) {
+      prepareAppleSignInForTermsModal();
+    }
   }
 
   function closeTermsModal() {
@@ -2088,29 +2673,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    termsErrorText.hidden = true;
-    revealAppleOfficialAuthZone();
-    acceptTermsBtn.hidden = true;
+    if (isLocalPreviewHost && appleSignInSetupFailed) {
+      startLocalApplePreview();
+      return;
+    }
 
-    setTimeout(() => {
-      const modalContent = document.querySelector(".modal-content");
-      modalContent?.scrollTo({
-        top: modalContent.scrollHeight,
-        behavior: "smooth"
-      });
-      appleOfficialAuthZone.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 80);
+    if (!appleProgrammaticSignInReady) {
+      termsErrorText.textContent = appleSignInPreparing
+        ? "Appleサインインを準備しています。少し待ってからもう一度お試しください。"
+        : "Appleサインインを準備できませんでした。ページを再読み込みしてもう一度お試しください。";
+      termsErrorText.hidden = false;
+      updateTermsActionState();
+      return;
+    }
+
+    termsErrorText.hidden = true;
+    startAppleRedirectSignIn();
   }
 
-  async function exchangeAppleAuthorization(authorization) {
+  async function exchangeAppleAuthorization(authorization, expected = {}) {
     const response = await fetch(appleAuthSessionApiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "omit",
       body: JSON.stringify({
         authorization,
-        expectedState: appleSignInRuntimeConfig?.state || "",
-        expectedNonce: appleSignInRuntimeConfig?.nonce || ""
+        expectedState: expected.state || appleSignInRuntimeConfig?.state || "",
+        expectedNonce: expected.nonce || appleSignInRuntimeConfig?.nonce || ""
       })
     });
 
@@ -2131,9 +2720,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  async function completeAppleAuthorization(authorization) {
+  async function completeAppleAuthorization(authorization, expected = {}) {
     try {
-      const session = await exchangeAppleAuthorization(authorization ?? {});
+      const session = await exchangeAppleAuthorization(authorization ?? {}, expected);
       closeTermsModal();
       signIn(session.nickname || generateNickname());
     } catch {
@@ -2146,9 +2735,82 @@ document.addEventListener("DOMContentLoaded", () => {
     await completeAppleAuthorization(extractAppleAuthorizationPayload(event));
   }
 
+  function buildAppleAuthorizeUrl(config) {
+    const url = new URL("https://appleid.apple.com/auth/authorize");
+    url.searchParams.set("client_id", config.clientId);
+    url.searchParams.set("redirect_uri", config.redirectURI);
+    url.searchParams.set("response_type", "code id_token");
+    url.searchParams.set("response_mode", "fragment");
+    url.searchParams.set("state", config.state);
+    url.searchParams.set("nonce", config.nonce);
+    return url;
+  }
+
+  function startAppleRedirectSignIn() {
+    if (!appleSignInRuntimeConfig?.clientId || !appleSignInRuntimeConfig?.state || !appleSignInRuntimeConfig?.nonce) {
+      termsErrorText.textContent = "Appleサインインを準備できませんでした。ページを再読み込みしてもう一度お試しください。";
+      termsErrorText.hidden = false;
+      return;
+    }
+
+    setJsonCookie(appleRedirectStateCookieName, {
+      state: appleSignInRuntimeConfig.state,
+      nonce: appleSignInRuntimeConfig.nonce,
+      createdAt: Date.now()
+    }, 60 * 10);
+
+    window.location.assign(buildAppleAuthorizeUrl(appleSignInRuntimeConfig).toString());
+  }
+
+  function parseAppleRedirectFragment() {
+    const rawHash = window.location.hash || "";
+    if (!rawHash.startsWith("#")) return null;
+    const params = new URLSearchParams(rawHash.slice(1));
+    if (!params.has("code") && !params.has("id_token") && !params.has("error")) return null;
+    return {
+      code: params.get("code") || "",
+      id_token: params.get("id_token") || "",
+      state: params.get("state") || "",
+      error: params.get("error") || "",
+      user: params.get("user") || ""
+    };
+  }
+
+  function clearAppleRedirectFragment() {
+    if (!window.history?.replaceState) return;
+    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+  }
+
+  async function handleAppleRedirectCallback() {
+    const authorization = parseAppleRedirectFragment();
+    if (!authorization) return false;
+
+    clearAppleRedirectFragment();
+    const expected = getJsonCookie(appleRedirectStateCookieName) || {};
+    clearCookieValue(appleRedirectStateCookieName);
+
+    if (authorization.error) {
+      openTermsModal(true);
+      termsErrorText.textContent = "Appleでサインインを完了できませんでした。もう一度お試しください。";
+      termsErrorText.hidden = false;
+      return true;
+    }
+
+    if (!expected.state || authorization.state !== expected.state || !expected.nonce) {
+      openTermsModal(true);
+      termsErrorText.textContent = "Appleサインインの確認情報が一致しませんでした。ページを再読み込みしてもう一度お試しください。";
+      termsErrorText.hidden = false;
+      return true;
+    }
+
+    await completeAppleAuthorization(authorization, expected);
+    return true;
+  }
+
   function handleAppleSignInFailure() {
     termsErrorText.textContent = "Appleでサインインを完了できませんでした。もう一度お試しください。";
     termsErrorText.hidden = false;
+    updateTermsActionState();
   }
 
   async function startAppleProgrammaticSignIn() {
@@ -2159,16 +2821,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     termsErrorText.hidden = true;
-    localApplePreviewBtn.disabled = true;
-    localApplePreviewBtn.textContent = "Appleへ接続しています...";
+    acceptTermsBtn.disabled = true;
+    acceptTermsBtn.classList.add("is-loading");
+    acceptTermsBtn.setAttribute("aria-busy", "true");
+    acceptTermsBtn.textContent = "Appleへ接続しています...";
+    updateTermsFooterNote("Appleの認証画面を開いています。");
     try {
       const result = await window.AppleID.auth.signIn();
       await completeAppleAuthorization(extractAppleAuthorizationPayload(result));
     } catch {
       handleAppleSignInFailure();
     } finally {
-      localApplePreviewBtn.disabled = false;
-      localApplePreviewBtn.textContent = "Appleでサインイン";
+      acceptTermsBtn.classList.remove("is-loading");
+      acceptTermsBtn.removeAttribute("aria-busy");
+      updateTermsActionState();
     }
   }
 
@@ -2189,15 +2855,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     closeTermsModal();
-    signIn();
+    signIn(generateNickname(), { persist: false });
   }
 
   function signOut() {
     isAuthenticated = false;
     currentNickname = "";
+    clearCookieValue(authSessionCookieName);
     document.body.classList.remove("is-authenticated");
     gatedContentArea.classList.remove("is-unlocked");
     gatedContentArea.setAttribute("aria-hidden", "true");
+    restoreAccountHeaderControls();
     accountStrip.classList.add("u-hidden");
     resetLoginButtonLabel();
     mockAppleLoginBtn.style.pointerEvents = "auto";
@@ -2221,6 +2889,7 @@ document.addEventListener("DOMContentLoaded", () => {
       latestReview = null;
       aiReviewPreview.hidden = true;
       submitFeedbackBtn.hidden = true;
+      hideSubmitSummary();
       appsScroller.classList.remove("has-selection");
     }
 
@@ -2262,7 +2931,7 @@ document.addEventListener("DOMContentLoaded", () => {
         node.classList.add("is-selected");
 
         selectedApp = app;
-        confirmAppLabel.textContent = `「${app.name}」で間違いないですか？`;
+        confirmAppLabel.textContent = getConfirmAppSelectionLabel(app);
         confirmAppPanel.classList.add("is-open");
       });
 
@@ -2287,12 +2956,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function applyIdeaHashIntent(options = {}) {
     if (window.location.hash !== "#idea") return false;
     activeAppFilter = "idea";
+    selectedReceptionIntent = "idea";
+    pendingReceptionType = "新しいアプリ案";
+    selectedType = "新しいアプリ案";
     appSearchQuery = "";
     if (appSearchInput) appSearchInput.value = "";
+    if (poinaSelectedIntentNote) {
+      poinaSelectedIntentNote.textContent = poinaReceptionIntents.idea.note;
+    }
+    updatePoinaIntentButtonState();
     renderAppSelectors();
     resetAppScrollPosition();
     if (options.scroll !== false && isAuthenticated) {
-      document.getElementById("wizardStep1Section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToPoinaReception(options);
     }
     return true;
   }
@@ -2358,9 +3034,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAppSelectors();
     resetAppScrollPosition();
     setGuestStatusBoardVisible(false, { scroll: false });
-    if (options.scroll !== false) {
-      document.getElementById("wizardStep1Section")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    scrollToPoinaReception(options);
   }
 
   function applySendHashIntent(options = {}) {
@@ -2398,6 +3072,12 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmAppPanel.classList.remove("is-open");
     selectedApp = null;
     selectedType = null;
+    selectedReceptionIntent = "";
+    pendingReceptionType = "";
+    updatePoinaIntentButtonState();
+    if (poinaSelectedIntentNote) {
+      poinaSelectedIntentNote.textContent = "まず近いご用件を選ぶか、そのまま下のアプリ選択へ進んでください。";
+    }
     wizardStep2Section.classList.remove("is-open");
     poipoiChatHistory = [];
     latestChatDraft = null;
@@ -2405,6 +3085,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.remove("is-chat-active");
     aiReviewPreview.hidden = true;
     submitFeedbackBtn.hidden = true;
+    hideSubmitSummary();
   }
 
   function confirmAppSelection() {
@@ -2422,6 +3103,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function resetWizard() {
     selectedApp = null;
     selectedType = null;
+    selectedReceptionIntent = "";
+    pendingReceptionType = "";
     poipoiChatHistory = [];
     latestChatDraft = null;
     latestReview = null;
@@ -2430,10 +3113,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".app-selector-node").forEach((node) => node.classList.remove("is-selected"));
     confirmAppPanel.classList.remove("is-open");
     wizardStep2Section.classList.remove("is-open");
+    updatePoinaIntentButtonState();
+    if (poinaSelectedIntentNote) {
+      poinaSelectedIntentNote.textContent = "まず近いご用件を選ぶか、そのまま下のアプリ選択へ進んでください。";
+    }
     feedbackChatLog.replaceChildren();
     aiReviewPreview.hidden = true;
     submitFeedbackBtn.hidden = true;
     submitFeedbackBtn.disabled = false;
+    submitFeedbackBtn.textContent = "確認して送る →";
+    hideSubmitSummary();
   }
 
   async function submitFeedback(event) {
@@ -2460,12 +3149,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (review.decision === "warn") {
-      alert("送信前に、もう少し内容を見直してください。AI一次チェックの表示を確認してください。");
+      alert("送信前に、もう少し内容を見直してください。送信前チェックの表示を確認してください。");
       return;
     }
 
     submitFeedbackBtn.disabled = true;
-    submitFeedbackBtn.textContent = "受付へ送信中...";
+    submitFeedbackBtn.textContent = "内容を送信中...";
 
     let persistedItem = null;
     try {
@@ -2473,8 +3162,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       if (!shouldUseLocalPersistenceFallback()) {
         submitFeedbackBtn.disabled = false;
-        submitFeedbackBtn.textContent = "この内容で受付へ進む →";
-        alert(`受付キューへ送信できませんでした。\n\n${error instanceof Error ? error.message : "unknown error"}`);
+        submitFeedbackBtn.textContent = "確認して送る →";
+        alert(`受付内容を送信できませんでした。\n\n${getUserFacingSubmitError(error)}`);
         return;
       }
       console.warn("POIPOI feedback submit API fallback.", error);
@@ -2483,10 +3172,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const report = createAdminReport(payload, review, persistedItem);
     saveAdminReport(report);
 
-    alert(`🎉 届きました！\n\n【受付ID】${report.id}\n【お届け先】${payload.appName}\n【種別】${payload.type}\n【公開ステータス】${report.publicStatus}\n\nAI一次審査レポートを作成し、運営管理者の確認キューへ送りました。`);
+    alert(`受付が完了しました。\n\n【受付ID】${report.id}\n【対象】${payload.appName}\n【内容】${getDisplayFeedbackType(payload.type)}\n【公開ステータス】${report.publicStatus}\n\nいただいた内容をお預かりしました。運営が確認します。`);
 
     submitFeedbackBtn.disabled = false;
-    submitFeedbackBtn.textContent = "この内容で受付へ進む →";
+    submitFeedbackBtn.textContent = "確認して送る →";
     resetWizard();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -2501,6 +3190,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   guestStatusViewBtn?.addEventListener("click", () => {
     window.location.href = "status-board.html";
+  });
+  poinaIntentButtons.forEach((button) => {
+    button.addEventListener("click", () => selectPoinaReceptionIntent(button.dataset.poinaIntent));
   });
   guestStatusFilterButtons.forEach((button) => {
     button.addEventListener("click", () => applyGuestStatusFilter(button.dataset.guestStatusFilter));
@@ -2598,6 +3290,7 @@ document.addEventListener("DOMContentLoaded", () => {
       poipoiChatForm.requestSubmit();
     }
   });
+  editFeedbackDraftBtn?.addEventListener("click", resumePoipoiDraftEditing);
   submitFeedbackBtn.addEventListener("click", submitFeedback);
 
   if (adminPreviewEnabled) {
@@ -2612,8 +3305,17 @@ document.addEventListener("DOMContentLoaded", () => {
   initCookieConsentNotice();
   initScrollyCapabilities();
   bindGuestStatusIconFallbacks();
+  updatePoinaReceptionScript();
+  updatePoinaIntentButtonState();
   renderGuestGoodVotes();
   renderAppSelectors();
+  handleAppleRedirectCallback().then((handled) => {
+    if (!handled) restoreAuthSession();
+  }).catch(() => {
+    openTermsModal(true);
+    termsErrorText.textContent = "Apple認証の確認中にエラーが発生しました。もう一度お試しください。";
+    termsErrorText.hidden = false;
+  });
   applySubmissionHashIntent({ scroll: false });
   hydrateAppStoreAppSelectors();
 });
