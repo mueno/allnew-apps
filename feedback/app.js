@@ -25,23 +25,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const adminSharedSecret = window.POIPOI_ADMIN_SHARED_SECRET || "";
   const appStoreIdByName = Object.freeze({
     WeightSnap: "6758825019",
+    OxiSnap: "6759076145",
     ThermoSnap: "6759076372",
     BPSnap: "6759076255",
     GlucoSnap: "6759076419",
     WaistVox: "6759076494",
     CoughWav: "6759076606",
     PupWeight: "6759076505",
-    BOTTO: "6759169189"
+    BabyVox: "6759076543",
+    BOTTO: "6759169189",
+    PawPass: "6768502509",
+    MedReminder: "6767980716"
   });
   const appSearchAliasesByName = Object.freeze({
     WeightSnap: "体重 体重管理 weight scale",
+    OxiSnap: "血中酸素 SpO2 酸素 oxygen",
     ThermoSnap: "体温 熱 fever temperature",
     BPSnap: "血圧 blood pressure",
     GlucoSnap: "血糖値 血糖 メモ glucose",
     WaistVox: "腹囲 ウエスト waist",
     CoughWav: "咳 せき cough",
     PupWeight: "ペット 犬 猫 体重 pet dog cat",
+    BabyVox: "赤ちゃん 育児 成長記録 baby child",
     BOTTO: "集中 没頭 タイマー focus timer",
+    PawPass: "ペット 診察券 保険証 薬 犬 猫 pet",
+    MedReminder: "服薬 通知 処方箋 薬 リマインダー medicine pill reminder",
     "New App Idea": "新しい提案 新アプリ案 アイデア idea"
   });
   const newAppIdea = Object.freeze({
@@ -61,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       appStoreId: "6758825019",
       catalogUrl: "https://apps.allnew.work/weightsnap/",
       appStoreUrl: "https://apps.apple.com/app/weightsnap/id6758825019",
-      iconUrl: "https://apps.allnew.work/weightsnap-icon.png"
+      iconUrl: "https://apps.allnew.work/weightsnap-icon.png?v=20260605-appstore-icon"
     },
     {
       id: "thermosnap",
@@ -70,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filterGroup: "health",
       appStoreId: "6759076372",
       catalogUrl: "https://apps.allnew.work/thermosnap/",
-      iconUrl: "https://apps.allnew.work/thermosnap-icon.png"
+      iconUrl: "https://apps.allnew.work/thermosnap-icon.png?v=20260605-appstore-icon"
     },
     {
       id: "bpsnap",
@@ -79,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filterGroup: "health",
       appStoreId: "6759076255",
       catalogUrl: "https://apps.allnew.work/bloodpressuresnap/",
-      iconUrl: "https://apps.allnew.work/bpsnap-icon.png"
+      iconUrl: "https://apps.allnew.work/bpsnap-icon.png?v=20260605-appstore-icon"
     },
     {
       id: "glucosnap",
@@ -88,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filterGroup: "health",
       appStoreId: "6759076419",
       catalogUrl: "https://apps.allnew.work/glucosnap/",
-      iconUrl: "https://apps.allnew.work/glucosnap-icon.png"
+      iconUrl: "https://apps.allnew.work/glucosnap-icon.png?v=20260605-appstore-icon"
     },
     {
       id: "waistvox",
@@ -97,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filterGroup: "health",
       appStoreId: "6759076494",
       catalogUrl: "https://apps.allnew.work/waistvox/",
-      iconUrl: "https://apps.allnew.work/waistvox-icon.png"
+      iconUrl: "https://apps.allnew.work/waistvox-icon.png?v=20260605-appstore-icon"
     },
     {
       id: "coughwav",
@@ -106,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filterGroup: "health",
       appStoreId: "6759076606",
       catalogUrl: "https://apps.allnew.work/coughwav/",
-      iconUrl: "https://apps.allnew.work/coughwav-icon.png"
+      iconUrl: "https://apps.allnew.work/coughwav-icon.png?v=20260605-appstore-icon"
     },
     {
       id: "pupweight",
@@ -115,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filterGroup: "pet",
       appStoreId: "6759076505",
       catalogUrl: "https://apps.allnew.work/pupweight/",
-      iconUrl: "https://apps.allnew.work/pupweight-icon.png"
+      iconUrl: "https://apps.allnew.work/pupweight-icon.png?v=20260605-appstore-icon"
     },
     {
       id: "botto",
@@ -124,10 +132,56 @@ document.addEventListener("DOMContentLoaded", () => {
       filterGroup: "focus",
       appStoreId: "6759169189",
       catalogUrl: "https://apps.allnew.work/botto/",
-      iconUrl: "https://apps.allnew.work/botto-icon.png"
+      iconUrl: "https://apps.allnew.work/botto-icon.png?v=20260605-appstore-icon"
     }
   ]);
-  let appsData = [...fallbackAppsData.map((app) => ({ ...app })), { ...newAppIdea }];
+  const releasedAppStoreSupplements = Object.freeze([
+    {
+      id: "oxisnap",
+      name: "OxiSnap",
+      category: "血中酸素",
+      filterGroup: "health",
+      appStoreId: "6759076145",
+      catalogUrl: "https://apps.allnew.work/oxisnap/",
+      appStoreUrl: "https://apps.apple.com/jp/app/oxisnap-spo2%E3%82%92%E5%A3%B0%E3%81%A7%E8%A8%98%E9%8C%B2/id6759076145?uo=4",
+      iconUrl: "https://apps.allnew.work/oxisnap-icon.png?v=20260605-appstore-icon"
+    },
+    {
+      id: "babyvox",
+      name: "BabyVox",
+      category: "育児記録",
+      filterGroup: "health",
+      appStoreId: "6759076543",
+      catalogUrl: "https://apps.allnew.work/babyvox/",
+      appStoreUrl: "https://apps.apple.com/jp/app/babyvox-%E8%B5%A4%E3%81%A1%E3%82%83%E3%82%93%E3%81%AE%E6%88%90%E9%95%B7%E8%A8%98%E9%8C%B2%E3%83%8E%E3%83%BC%E3%83%88/id6759076543?uo=4",
+      iconUrl: "https://apps.allnew.work/babyvox-icon.png?v=20260605-appstore-icon"
+    },
+    {
+      id: "pawpass",
+      name: "PawPass",
+      category: "ペット管理",
+      filterGroup: "pet",
+      appStoreId: "6768502509",
+      catalogUrl: "https://apps.allnew.work/pawpass/",
+      appStoreUrl: "https://apps.apple.com/jp/app/pawpass/id6768502509?uo=4",
+      iconUrl: "https://apps.allnew.work/pawpass-icon.png?v=20260605-appstore-icon"
+    },
+    {
+      id: "medreminder",
+      name: "MedReminder",
+      category: "服薬リマインダー",
+      filterGroup: "health",
+      appStoreId: "6767980716",
+      catalogUrl: "https://apps.allnew.work/medreminder/",
+      appStoreUrl: "https://apps.apple.com/jp/app/ai%E6%9C%8D%E8%96%AC%E9%80%9A%E7%9F%A5-%E5%87%A6%E6%96%B9%E7%AE%8B%E3%83%AA%E3%83%9E%E3%82%A4%E3%83%B3%E3%83%80%E3%83%BC/id6767980716?uo=4",
+      iconUrl: "https://apps.allnew.work/medreminder-icon.png?v=20260605-appstore-icon"
+    }
+  ]);
+  const canonicalReceptionApps = Object.freeze([
+    ...fallbackAppsData,
+    ...releasedAppStoreSupplements
+  ]);
+  let appsData = withNewAppIdea(canonicalReceptionApps.map((app) => ({ ...app })));
 
   const prefixes = ["爆速の", "癒やしの", "無敵の", "陽気な", "秘密の", "孤高の", "奇跡の", "前向きな", "お茶目な", "ふんわりな"];
   const roles = ["開発者", "応援団", "研究員", "旅人", "キャプテン", "サポーター", "ひらめき王"];
@@ -286,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const normalizedName = String(name || "").toLowerCase();
     const normalizedCategory = String(category || "");
     if (normalizedName === "new app idea") return "idea";
-    if (normalizedName === "pupweight" || normalizedCategory.includes("ペット")) return "pet";
+    if (normalizedName === "pupweight" || normalizedName === "pawpass" || normalizedCategory.includes("ペット")) return "pet";
     if (normalizedName === "botto" || normalizedCategory.includes("集中")) return "focus";
     return "health";
   }
@@ -407,6 +461,45 @@ document.addEventListener("DOMContentLoaded", () => {
         iconUrl: storeApp.artworkUrl512 || storeApp.artworkUrl100 || app.iconUrl
       };
     });
+  }
+
+  function mergeCatalogWithCanonicalApps(catalogApps) {
+    const catalogById = new Map();
+    const catalogByName = new Map();
+    catalogApps.forEach((app) => {
+      if (app.appStoreId) catalogById.set(String(app.appStoreId), app);
+      catalogByName.set(app.name, app);
+    });
+
+    const used = new Set();
+    const merged = canonicalReceptionApps.map((canonical) => {
+      const catalog = catalogById.get(String(canonical.appStoreId)) || catalogByName.get(canonical.name);
+      if (!catalog) return { ...canonical };
+
+      used.add(catalog);
+      return {
+        ...canonical,
+        ...catalog,
+        id: canonical.id || catalog.id,
+        category: canonical.category || catalog.category,
+        filterGroup: canonical.filterGroup || catalog.filterGroup,
+        appStoreId: canonical.appStoreId || catalog.appStoreId,
+        appStoreUrl: catalog.appStoreUrl || canonical.appStoreUrl,
+        catalogUrl: catalog.catalogUrl || canonical.catalogUrl,
+        iconUrl: canonical.iconUrl || catalog.iconUrl
+      };
+    });
+
+    catalogApps.forEach((app) => {
+      const alreadyCanonical = canonicalReceptionApps.some((canonical) =>
+        canonical.name === app.name || String(canonical.appStoreId) === String(app.appStoreId || "")
+      );
+      if (!used.has(app) && !alreadyCanonical) {
+        merged.push(app);
+      }
+    });
+
+    return merged;
   }
 
   function withNewAppIdea(apps) {
@@ -946,13 +1039,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function isNewAppIdeaPayload(payload = getDraftPayload()) {
+    return selectedApp?.isVirtual || payload.type === "新しいアプリ案" || payload.appName === newAppIdea.name;
+  }
+
   function hideSubmitSummary() {
     if (poipoiSubmitSummary) {
       poipoiSubmitSummary.hidden = true;
+      poipoiSubmitSummary.classList.remove("is-idea-reception");
+      const summaryList = poipoiSubmitSummary.querySelector(".poipoi-submit-summary-list");
+      if (summaryList) summaryList.hidden = false;
     }
     if (editFeedbackDraftBtn) {
       editFeedbackDraftBtn.hidden = true;
     }
+  }
+
+  function setSubmitButtonIdleLabel(payload = getDraftPayload()) {
+    if (!submitFeedbackBtn) return;
+    submitFeedbackBtn.textContent = isNewAppIdeaPayload(payload) ? "このまま送る →" : "確認して送る →";
   }
 
   function updateSubmitSummary(payload = getDraftPayload()) {
@@ -963,6 +1068,29 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    const isIdea = isNewAppIdeaPayload(payload);
+    const summaryList = poipoiSubmitSummary.querySelector(".poipoi-submit-summary-list");
+    poipoiSubmitSummary.classList.toggle("is-idea-reception", isIdea);
+    if (summaryList) summaryList.hidden = isIdea;
+
+    if (isIdea) {
+      if (poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title")) {
+        poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title").textContent = "その困りごと、ポイナが持ち帰ります。";
+      }
+      if (poipoiSummaryNote) {
+        poipoiSummaryNote.textContent = "いただいたアイデアは、AllNewの新しいアプリ案として検討します。氏名や連絡先などの個人情報は書かず、このまま送信してください。送信後に受付番号が表示されます。";
+      }
+      poipoiSubmitSummary.hidden = false;
+      if (editFeedbackDraftBtn) {
+        editFeedbackDraftBtn.hidden = false;
+      }
+      setSubmitButtonIdleLabel(payload);
+      return;
+    }
+
+    if (poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title")) {
+      poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title").textContent = "送信前に内容を確認してください。";
+    }
     if (poipoiSummaryApp) poipoiSummaryApp.textContent = payload.appName || getSelectedAppDisplayName();
     if (poipoiSummaryType) poipoiSummaryType.textContent = getDisplayFeedbackType(payload.type);
     if (poipoiSummaryBody) poipoiSummaryBody.textContent = body.length > 180 ? `${body.slice(0, 180)}...` : body;
@@ -975,6 +1103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (editFeedbackDraftBtn) {
       editFeedbackDraftBtn.hidden = false;
     }
+    setSubmitButtonIdleLabel(payload);
   }
 
   const poinaReceptionIntents = Object.freeze({
@@ -991,7 +1120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     idea: {
       type: "新しいアプリ案",
       filter: "idea",
-      note: "新しいアプリ案ですね。「New App Idea」を選ぶと、ポイナが利用シーンから一緒に整理します。"
+      note: "新しいアプリ案ですね。「New App Idea」を選ぶと、ポイナが困りごとをお預かりします。"
     }
   });
 
@@ -1070,7 +1199,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function getPoinaOpeningMessage() {
     const appName = selectedApp?.name || "このアプリ";
     if (selectedApp?.isVirtual) {
-      return "新しいアプリ案ですね。まだ名前がなくても大丈夫です。誰が、どんな場面で、何に困るかを思いつくまま書いてください。";
+      return "新しいアプリ案ですね。まだ名前がなくても大丈夫です。誰が、どんな場面で、何に困っているかを思いつくまま書いてください。ポイナが受け取って、AllNewで検討できるようにお預かりします。";
     }
 
     const receptionType = selectedType || pendingReceptionType;
@@ -1174,7 +1303,7 @@ document.addEventListener("DOMContentLoaded", () => {
       decision: "accept",
       publicStatus: "受け付けました",
       flags: [],
-      message: "このまま送信できます。",
+      message: payload.type === "新しいアプリ案" ? "ポイナがお預かりできる内容です。" : "このまま送信できます。",
       adminSummary: `${payload.appName} / ${payload.type} として検討に値する内容。公開前に人間の運営管理者が要約とマスキングを確認する。`,
       nextAction: payload.type === "新しいアプリ案" ? "新しいアプリ案として運営が確認します。" : "対象アプリの改善・不具合として運営が確認します。"
     };
@@ -1232,11 +1361,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (review.decision === "block") {
       reply = "すみません。この内容はそのままでは受け付けできません。アプリの不具合、使いにくさ、あったらいい機能のどれかにしぼって書き直してください。";
     } else if (needsMore) {
-      reply = "ありがとうございます。もう少しだけ教えてください。どの画面で、何をした時に、どうなったかを書いてもらえると内容を整理しやすくなります。";
+      reply = inferredType === "新しいアプリ案"
+        ? "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。個人情報は不要です。"
+        : "ありがとうございます。もう少しだけ教えてください。どの画面で、何をした時に、どうなったかを書いてもらえると内容を整理しやすくなります。";
     } else if (inferredType === "不具合メモ") {
       reply = "不具合としてお預かりします。下の確認内容を見て、問題なければ送信してください。";
     } else if (inferredType === "新しいアプリ案") {
-      reply = "新しいアプリ案としてお預かりします。下の確認内容を見て、問題なければ送信してください。";
+      reply = "それは時間を取り戻したい、という切実な困りごとですね。新しいアプリ案としてポイナがお預かりします。送信すると受付番号が出ます。";
     } else {
       reply = "ありがとうございます。内容をお預かりできます。下の確認内容を見て、問題なければ送信してください。";
     }
@@ -1281,7 +1412,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const type = result?.extracted?.type || selectedType || inferFeedbackType(result?.extracted?.summary || "");
     if (result?.status === "ready") {
       if (selectedApp?.isVirtual || type === "新しいアプリ案") {
-        return "ありがとうございます。新しいアプリ案として整理しました。下の確認内容を見て、問題なければ送信してください。";
+        return "ありがとうございます。その困りごと、ポイナが新しいアプリ案としてお預かりします。送信すると受付番号が出ます。";
       }
       if (type === "不具合メモ") {
         return `${appName}の不具合として整理しました。下の確認内容を見て、問題なければ送信してください。`;
@@ -1301,7 +1432,22 @@ document.addEventListener("DOMContentLoaded", () => {
   function polishPoinaResultForDisplay(result) {
     const reply = String(result?.reply || "");
     if (!result || typeof result !== "object") return buildLocalChatResult("");
-    if (hasSuspiciousLatinJapaneseBlend(reply) || (result.status === "ready" && replyAsksForMoreAfterReady(reply))) {
+    if (selectedApp?.isVirtual && result.status !== "blocked") {
+      const lastUserMessage = [...poipoiChatHistory].reverse().find((item) => item.role === "user")?.content
+        || result.extracted?.detail
+        || result.extracted?.summary
+        || "";
+      const localIdeaResult = buildLocalChatResult(lastUserMessage);
+      if (localIdeaResult.status === "ready") {
+        return {
+          ...localIdeaResult,
+          reply: buildStablePoinaReply(localIdeaResult)
+        };
+      }
+    }
+    const isIdeaReady = result.status === "ready"
+      && (selectedApp?.isVirtual || result.extracted?.type === "新しいアプリ案");
+    if (isIdeaReady || hasSuspiciousLatinJapaneseBlend(reply) || (result.status === "ready" && replyAsksForMoreAfterReady(reply))) {
       return { ...result, reply: buildStablePoinaReply(result) };
     }
     return result;
@@ -1428,7 +1574,7 @@ document.addEventListener("DOMContentLoaded", () => {
       publicStatus: result.publicStatus || (decision === "accept" ? "受け付けました" : decision === "block" ? "ごめんなさい" : "下書き確認"),
       flags: riskFlags.map((label) => ({ label, severity: decision === "block" ? "block" : "warn" })),
       message: decision === "accept"
-        ? "このまま送信できます。"
+        ? (selectedApp?.isVirtual ? "ポイナがお預かりできる内容です。" : "このまま送信できます。")
         : decision === "block"
           ? "この内容は受付できません。表現を変えてください。"
           : "もう少し会話で情報を足すと、受付しやすくなります。",
@@ -3055,8 +3201,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function hydrateAppStoreAppSelectors() {
     try {
-      const catalogApps = await loadAllNewAppCatalog();
-      if (!catalogApps.length) return;
+      const catalogApps = mergeCatalogWithCanonicalApps(await loadAllNewAppCatalog());
 
       const storeById = await lookupAppStoreApps(catalogApps);
       appsData = withNewAppIdea(mergeAppStoreData(catalogApps, storeById));
@@ -3121,7 +3266,7 @@ document.addEventListener("DOMContentLoaded", () => {
     aiReviewPreview.hidden = true;
     submitFeedbackBtn.hidden = true;
     submitFeedbackBtn.disabled = false;
-    submitFeedbackBtn.textContent = "確認して送る →";
+    setSubmitButtonIdleLabel();
     hideSubmitSummary();
   }
 
@@ -3162,7 +3307,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       if (!shouldUseLocalPersistenceFallback()) {
         submitFeedbackBtn.disabled = false;
-        submitFeedbackBtn.textContent = "確認して送る →";
+        setSubmitButtonIdleLabel(payload);
         alert(`受付内容を送信できませんでした。\n\n${getUserFacingSubmitError(error)}`);
         return;
       }
@@ -3175,7 +3320,7 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(`受付が完了しました。\n\n【受付ID】${report.id}\n【対象】${payload.appName}\n【内容】${getDisplayFeedbackType(payload.type)}\n【公開ステータス】${report.publicStatus}\n\nいただいた内容をお預かりしました。運営が確認します。`);
 
     submitFeedbackBtn.disabled = false;
-    submitFeedbackBtn.textContent = "確認して送る →";
+    setSubmitButtonIdleLabel(payload);
     resetWizard();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
