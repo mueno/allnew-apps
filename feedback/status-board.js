@@ -11,7 +11,7 @@ const appCatalogFallback = [
 
 let appCatalog = [...appCatalogFallback];
 
-const statusItems = [
+const publicStatusItems = [
   {
     id: "AF-1042",
     app: "WeightSnap",
@@ -121,7 +121,10 @@ const filters = {
 };
 
 const goodStorageKey = "poipoiStatusBoardGood:v1";
+const myReceptionStorageKey = "poipoi_my_receptions_v1";
+const authSessionCookieName = "poipoi_feedback_session";
 let goodVotes = loadGoodVotes();
+let boardView = loadMyReceptions().length > 0 ? "mine" : "public";
 
 const listEl = document.getElementById("statusList");
 const emptyEl = document.getElementById("statusEmpty");
@@ -132,6 +135,72 @@ const appEl = document.getElementById("appFilterSelect");
 const releaseAppEl = document.getElementById("releaseAppFilterSelect");
 const detailDialog = document.getElementById("detailDialog");
 const detailBody = document.getElementById("detailContent");
+const boardProfileLabel = document.getElementById("boardProfileLabel");
+const boardViewButtons = Array.from(document.querySelectorAll("[data-board-view]"));
+const myBoardPanel = document.getElementById("myBoardPanel");
+const myBoardNickname = document.getElementById("myBoardNickname");
+
+function getCookieValue(name) {
+  const prefix = `${name}=`;
+  const entry = document.cookie.split("; ").find((cookie) => cookie.startsWith(prefix));
+  if (!entry) return "";
+  return decodeURIComponent(entry.slice(prefix.length));
+}
+
+function getJsonCookie(name) {
+  const value = getCookieValue(name);
+  if (!value) return null;
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function loadMyReceptions() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(myReceptionStorageKey) || "[]");
+    return Array.isArray(parsed) ? parsed.filter((item) => item?.id).slice(0, 30) : [];
+  } catch {
+    return [];
+  }
+}
+
+function getCurrentNickname() {
+  return getJsonCookie(authSessionCookieName)?.nickname || loadMyReceptions()[0]?.nickname || "";
+}
+
+function mapMyReceptionToStatusItem(item) {
+  const accepted = item.acceptedAt ? item.acceptedAt.slice(0, 10) : new Date().toISOString().slice(0, 10);
+  const updated = item.updatedAt ? item.updatedAt.slice(0, 10) : accepted;
+  return {
+    id: item.id,
+    app: item.appName || "New App Idea",
+    appEmoji: item.appName === "New App Idea" ? "🚀" : "•",
+    appDisplayName: item.appName === "New App Idea" ? "新しいアプリ案" : item.appName || "受付内容",
+    appFilterable: item.appName !== "New App Idea",
+    appTheme: "#0a7dff",
+    category: item.type || "自分の受付",
+    status: item.publicStatus || "受け付けました",
+    title: item.title || "受付内容",
+    acceptedDate: accepted,
+    updatedDate: updated,
+    detail: item.body || "受付内容はこの端末に控えています。公開ボードでは要約される場合があります。",
+    good: 0,
+    owned: true,
+    timeline: [
+      [accepted.replaceAll("-", "/"), "ポイナが受付しました"],
+      [updated.replaceAll("-", "/"), item.publicStatus || "受け付けました"]
+    ]
+  };
+}
+
+function getBoardItems() {
+  return boardView === "mine"
+    ? loadMyReceptions().map(mapMyReceptionToStatusItem)
+    : publicStatusItems;
+}
 
 function loadGoodVotes() {
   try {
@@ -159,7 +228,8 @@ function getGoodCount(item) {
 }
 
 function updateMetrics() {
-  const counts = statusItems.reduce((acc, item) => {
+  const baseItems = getBoardItems();
+  const counts = baseItems.reduce((acc, item) => {
     acc.all += 1;
     acc[item.status] = (acc[item.status] || 0) + 1;
     return acc;
@@ -241,7 +311,7 @@ function createTimeline(item, compact = false) {
 
 function createCard(item) {
   const card = document.createElement("article");
-  card.className = "request-card";
+  card.className = `request-card${item.owned ? " is-owned" : ""}`;
   card.dataset.status = item.status;
   card.dataset.requestId = item.id;
 
@@ -252,6 +322,12 @@ function createCard(item) {
   const id = document.createElement("span");
   id.textContent = item.id;
   meta.append(id, createAppBadge(item));
+  if (item.owned) {
+    const owned = document.createElement("span");
+    owned.className = "owned-badge";
+    owned.textContent = "あなたの受付";
+    meta.append(owned);
+  }
   const pill = document.createElement("b");
   pill.className = "status-pill";
   const pillIcon = document.createElement("span");
@@ -276,22 +352,25 @@ function createCard(item) {
   const actions = document.createElement("div");
   actions.className = "request-card-actions";
   const good = document.createElement("button");
-  good.className = `good-button${goodVotes[item.id] ? " is-voted" : ""}`;
-  good.type = "button";
-  good.setAttribute("aria-pressed", goodVotes[item.id] ? "true" : "false");
-  good.innerHTML = `👍 Good <strong>${getGoodCount(item)}</strong>`;
-  good.addEventListener("click", () => {
-    goodVotes[item.id] = !goodVotes[item.id];
-    if (!goodVotes[item.id]) delete goodVotes[item.id];
-    saveGoodVotes();
-    render();
-  });
+  if (!item.owned) {
+    good.className = `good-button${goodVotes[item.id] ? " is-voted" : ""}`;
+    good.type = "button";
+    good.setAttribute("aria-pressed", goodVotes[item.id] ? "true" : "false");
+    good.innerHTML = `👍 Good <strong>${getGoodCount(item)}</strong>`;
+    good.addEventListener("click", () => {
+      goodVotes[item.id] = !goodVotes[item.id];
+      if (!goodVotes[item.id]) delete goodVotes[item.id];
+      saveGoodVotes();
+      render();
+    });
+  }
   const detailButton = document.createElement("button");
   detailButton.className = "ghost-button";
   detailButton.type = "button";
   detailButton.textContent = "詳しく見る";
   detailButton.addEventListener("click", () => openDetail(item));
-  actions.append(good, detailButton);
+  if (!item.owned) actions.append(good);
+  actions.append(detailButton);
 
   card.append(top, title, timing, detail, compactStatus, actions);
   return card;
@@ -327,7 +406,24 @@ function openDetail(item) {
 }
 
 function render() {
+  const baseItems = getBoardItems();
+  document.body.classList.toggle("is-my-board", boardView === "mine");
   updateMetrics();
+  boardViewButtons.forEach((button) => {
+    const isActive = button.dataset.boardView === boardView;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+  if (myBoardPanel) myBoardPanel.hidden = boardView !== "mine";
+  const nickname = getCurrentNickname();
+  if (myBoardNickname) {
+    myBoardNickname.textContent = nickname
+      ? `ポイナはあなたを「${nickname}」と呼びます。`
+      : "Appleでサインインすると、ポイナが呼び名を決めます。";
+  }
+  if (boardProfileLabel) {
+    boardProfileLabel.textContent = nickname && boardView === "mine" ? `${nickname}の受付` : "公開ボード";
+  }
   document.querySelectorAll("[data-status-filter]").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.statusFilter === filters.status);
     button.setAttribute("aria-pressed", button.dataset.statusFilter === filters.status ? "true" : "false");
@@ -337,10 +433,12 @@ function render() {
     button.setAttribute("aria-pressed", button.dataset.categoryFilter === filters.category ? "true" : "false");
   });
 
-  const visible = sortItems(statusItems.filter(itemMatches));
+  const visible = sortItems(baseItems.filter(itemMatches));
   listEl.replaceChildren(...visible.map(createCard));
   emptyEl.hidden = visible.length !== 0;
-  resultEl.textContent = `${visible.length}件を表示しています（全${statusItems.length}件）。`;
+  resultEl.textContent = boardView === "mine"
+    ? `${visible.length}件の自分の受付を表示しています。`
+    : `${visible.length}件を表示しています（全${baseItems.length}件）。`;
 }
 
 function findAppMeta(name) {
@@ -378,7 +476,7 @@ async function loadAppCatalog() {
   }
 
   const catalogByName = new Map(appCatalog.map((app) => [app.name, app]));
-  statusItems.forEach((item) => {
+  publicStatusItems.forEach((item) => {
     const meta = catalogByName.get(item.app);
     if (meta) {
       item.appIcon = item.appIcon || meta.icon;
@@ -409,6 +507,19 @@ function setupAppFilter() {
 document.querySelectorAll("[data-status-filter]").forEach((button) => {
   button.addEventListener("click", () => {
     filters.status = button.dataset.statusFilter || "all";
+    render();
+  });
+});
+
+boardViewButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    boardView = button.dataset.boardView === "public" ? "public" : "mine";
+    filters.status = "all";
+    filters.category = "all";
+    filters.app = "all";
+    filters.query = "";
+    if (searchEl) searchEl.value = "";
+    if (appEl) appEl.value = "all";
     render();
   });
 });

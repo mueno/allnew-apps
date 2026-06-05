@@ -1082,6 +1082,156 @@
       text-align: center;
     }
 
+    .guest-board-view-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 6px;
+      border: 1px solid rgba(10, 125, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(237, 247, 255, 0.72);
+    }
+
+    .guest-board-view-tab {
+      min-height: 42px;
+      border: 0;
+      border-radius: 14px;
+      background: transparent;
+      color: color-mix(in srgb, var(--ink) 68%, transparent);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 880;
+    }
+
+    .guest-board-view-tab.is-active {
+      background: #ffffff;
+      color: var(--blue);
+      box-shadow: 0 12px 26px rgba(10, 125, 255, 0.12);
+    }
+
+    .my-reception-panel {
+      display: grid;
+      gap: 13px;
+      padding: 16px;
+      border: 1px solid rgba(10, 125, 255, 0.14);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(89, 211, 255, 0.16), transparent 34%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 249, 255, 0.88));
+      box-shadow: 0 16px 36px rgba(10, 52, 92, 0.07);
+    }
+
+    .my-reception-panel[hidden] {
+      display: none;
+    }
+
+    .my-reception-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .my-reception-kicker,
+    .my-reception-head h3,
+    .my-reception-nickname {
+      margin: 0;
+    }
+
+    .my-reception-kicker {
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+    }
+
+    .my-reception-head h3 {
+      margin-top: 4px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .my-reception-nickname {
+      max-width: min(44%, 260px);
+      padding: 8px 11px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.78);
+      color: color-mix(in srgb, var(--ink) 72%, transparent);
+      font-size: 12px;
+      font-weight: 780;
+      line-height: 1.45;
+    }
+
+    .my-reception-list {
+      display: grid;
+      gap: 11px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .my-reception-card {
+      display: grid;
+      gap: 9px;
+      padding: 14px;
+      border: 1px solid rgba(10, 125, 255, 0.12);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 10px 24px rgba(10, 52, 92, 0.05);
+    }
+
+    .my-reception-card-head,
+    .my-reception-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .my-reception-id {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .my-reception-status {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(52, 199, 89, 0.12);
+      color: color-mix(in srgb, var(--green) 82%, var(--ink) 18%);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .my-reception-card-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.5;
+      font-weight: 880;
+    }
+
+    .my-reception-card-detail,
+    .my-reception-card-meta {
+      margin: 0;
+      color: color-mix(in srgb, var(--secondary) 88%, transparent);
+      font-size: 12px;
+      line-height: 1.65;
+      font-weight: 720;
+    }
+
+    .my-reception-empty {
+      padding: 16px;
+      border: 1px dashed rgba(10, 125, 255, 0.22);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.68);
+      color: color-mix(in srgb, var(--secondary) 88%, transparent);
+      font-size: 13px;
+      font-weight: 760;
+      line-height: 1.7;
+    }
+
     .guest-status-kicker {
       margin: 0;
       color: var(--blue);
@@ -4017,6 +4167,18 @@
         line-height: 1.72;
       }
 
+      .guest-board-view-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .my-reception-head {
+        display: grid;
+      }
+
+      .my-reception-nickname {
+        max-width: none;
+      }
+
       .poina-intent-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 9px;
@@ -4592,7 +4754,24 @@
         <div class="guest-status-head">
           <h2 class="guest-status-kicker guest-status-section-title" id="guestStatusTitle">STATUS BOARD</h2>
         </div>
-        <div class="guest-status-summary" aria-label="ステータスで絞り込み">
+        <div class="guest-board-view-tabs" role="tablist" aria-label="受付状況の表示切替">
+          <button class="guest-board-view-tab is-active" type="button" role="tab" id="guestMyBoardTab" data-guest-board-view="mine" aria-selected="true" aria-controls="myReceptionPanel">自分の受付</button>
+          <button class="guest-board-view-tab" type="button" role="tab" id="guestPublicBoardTab" data-guest-board-view="public" aria-selected="false" aria-controls="publicReceptionPanel">みんなの受付</button>
+        </div>
+        <section class="my-reception-panel" id="myReceptionPanel" aria-labelledby="myReceptionTitle">
+          <div class="my-reception-head">
+            <div>
+              <p class="my-reception-kicker">MY RECEPTION</p>
+              <h3 id="myReceptionTitle">あなたの受付</h3>
+            </div>
+            <p class="my-reception-nickname" id="myReceptionNickname" aria-live="polite"></p>
+          </div>
+          <ol class="my-reception-list" id="myReceptionList" aria-label="自分の受付一覧"></ol>
+          <div class="my-reception-empty" id="myReceptionEmpty" hidden>
+            まだ自分の受付はありません。送信すると、次回ここで受付番号と進み具合を確認できます。
+          </div>
+        </section>
+        <div class="guest-status-summary" id="publicStatusSummary" aria-label="ステータスで絞り込み">
           <button class="guest-status-stat is-active" type="button" data-guest-status-filter="all" aria-pressed="true">
             <span class="guest-status-stat-label">すべて</span>
             <strong>5</strong>
@@ -4624,7 +4803,7 @@
             <span>ごめんなさい</span>
           </button>
         </div>
-        <div class="guest-status-tools" aria-label="公開ボードの絞り込みと並び替え">
+        <div class="guest-status-tools" id="publicStatusTools" aria-label="公開ボードの絞り込みと並び替え">
           <div class="guest-status-top-tools">
             <label class="guest-board-search-field" for="guestBoardSearchInput">
               検索
@@ -4690,7 +4869,7 @@
             <div class="guest-filter-active-chips" id="guestFilterActiveChips" aria-label="選択中の条件"></div>
           </div>
         </div>
-        <ol class="guest-status-list" aria-label="公開中の受付状況">
+        <ol class="guest-status-list" id="publicStatusList" aria-label="公開中の受付状況">
           <li class="guest-status-item" data-public-status="対応しています" data-request-id="AF-1042" data-good-base-count="142" data-app-name="WeightSnap" data-accepted-date="2026-02-15" data-updated-date="2026-05-03" data-owned-by-current-user="false">
             <b class="guest-status-pill">対応しています</b>
             <div class="guest-status-meta">
@@ -5259,6 +5438,6 @@
   </template>
 
   <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/ja_JP/appleid.auth.js" defer></script>
-  <script src="./app.js?v=20260605-idea-skip-poina-avatar" defer></script>
+  <script src="./app.js?v=20260605-my-reception-nickname" defer></script>
 </body>
 </html>

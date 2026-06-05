@@ -190,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const appleRedirectStateCookieName = "poipoi_apple_redirect_state";
   const goodVoteCookieName = "poipoi_good_votes";
   const poinaReceptionVisitCookieName = "poipoi_reception_visit_count";
+  const myReceptionStorageKey = "poipoi_my_receptions_v1";
   const authSessionMaxAgeSeconds = 60 * 60 * 24 * 90;
   const preferenceCookieMaxAgeSeconds = 60 * 60 * 24 * 180;
 
@@ -211,6 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let poipoiChatStopped = false;
   let latestChatDraft = null;
   let latestReview = null;
+  let guestBoardView = "mine";
   let guestGoodVotes = loadGuestGoodVotes();
   let guestGoodRemoteCounts = {};
   const guestBoardFilters = {
@@ -243,6 +245,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const guestStatusViewBtn = document.getElementById("guestStatusViewBtn");
   const guestStatusBoard = document.getElementById("guestStatusBoard");
   const guestStatusSignInBtn = document.getElementById("guestStatusSignInBtn");
+  const guestBoardViewButtons = Array.from(document.querySelectorAll("[data-guest-board-view]"));
+  const publicStatusSummary = document.getElementById("publicStatusSummary");
+  const publicStatusTools = document.getElementById("publicStatusTools");
+  const myReceptionPanel = document.getElementById("myReceptionPanel");
+  const myReceptionList = document.getElementById("myReceptionList");
+  const myReceptionEmpty = document.getElementById("myReceptionEmpty");
+  const myReceptionNickname = document.getElementById("myReceptionNickname");
   const guestStatusFilterButtons = Array.from(document.querySelectorAll("[data-guest-status-filter]"));
   const guestStatusItems = Array.from(document.querySelectorAll("[data-public-status]"));
   const guestStatusList = document.querySelector(".guest-status-list");
@@ -540,6 +549,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setJsonCookie(name, value, maxAgeSeconds) {
     setCookieValue(name, JSON.stringify(value), maxAgeSeconds);
+  }
+
+  function loadMyReceptions() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(myReceptionStorageKey) || "[]");
+      return Array.isArray(parsed) ? parsed.filter((item) => item?.id).slice(0, 30) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveMyReceptions(items) {
+    try {
+      localStorage.setItem(myReceptionStorageKey, JSON.stringify(items.slice(0, 30)));
+    } catch {
+      // マイ受付は再訪時の補助表示なので、保存できなくても送信自体は止めない。
+    }
+  }
+
+  function rememberMyReception(payload, report) {
+    const now = new Date();
+    const receivedAt = report.createdAt || now.toISOString();
+    const next = {
+      id: report.id,
+      appName: payload.appName || "New App Idea",
+      type: payload.type || "未分類",
+      title: payload.title || payload.body?.slice(0, 48) || "受付内容",
+      body: payload.body || "",
+      publicStatus: report.publicStatus || "受け付けました",
+      acceptedAt: receivedAt,
+      updatedAt: report.updatedAt || receivedAt,
+      nickname: currentNickname || generateNickname()
+    };
+    const existing = loadMyReceptions().filter((item) => item.id !== next.id);
+    saveMyReceptions([next, ...existing]);
+  }
+
+  function formatDateForReception(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    return new Intl.DateTimeFormat("ja-JP", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).format(date);
   }
 
   function getStoredPoinaReceptionVisitCount() {
@@ -2049,6 +2103,72 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function createMyReceptionCard(item) {
+    const card = document.createElement("li");
+    card.className = "my-reception-card";
+
+    const head = document.createElement("div");
+    head.className = "my-reception-card-head";
+    const id = document.createElement("span");
+    id.className = "my-reception-id";
+    id.textContent = item.id;
+    const status = document.createElement("span");
+    status.className = "my-reception-status";
+    status.textContent = item.publicStatus || "受け付けました";
+    head.append(id, status);
+
+    const title = document.createElement("h4");
+    title.className = "my-reception-card-title";
+    title.textContent = item.title || "受付内容";
+
+    const detail = document.createElement("p");
+    detail.className = "my-reception-card-detail";
+    const body = String(item.body || "").replace(/\s+/g, " ").trim();
+    detail.textContent = body
+      ? (body.length > 120 ? `${body.slice(0, 120)}...` : body)
+      : "受付内容は本人確認用にこの端末だけで控えています。公開ボードでは要約される場合があります。";
+
+    const meta = document.createElement("p");
+    meta.className = "my-reception-card-meta";
+    const accepted = formatDateForReception(item.acceptedAt);
+    const updated = formatDateForReception(item.updatedAt || item.acceptedAt);
+    meta.textContent = `${item.appName || "New App Idea"} / ${getDisplayFeedbackType(item.type)}${accepted ? ` / 受付 ${accepted}` : ""}${updated ? ` / 更新 ${updated}` : ""}`;
+
+    card.append(head, title, detail, meta);
+    return card;
+  }
+
+  function renderMyReceptionPanel() {
+    if (!myReceptionPanel || !myReceptionList || !myReceptionEmpty) return;
+    const receptions = loadMyReceptions();
+    if (myReceptionNickname) {
+      const nickname = currentNickname || getJsonCookie(authSessionCookieName)?.nickname || generateNickname();
+      myReceptionNickname.textContent = `ポイナはあなたを「${nickname}」と呼びます。`;
+    }
+    myReceptionList.replaceChildren(...receptions.map(createMyReceptionCard));
+    myReceptionEmpty.hidden = receptions.length !== 0;
+  }
+
+  function syncGuestBoardViewVisibility() {
+    const showMine = isAuthenticated && guestBoardView === "mine";
+    if (myReceptionPanel) myReceptionPanel.hidden = !showMine;
+    if (publicStatusSummary) publicStatusSummary.hidden = showMine;
+    if (publicStatusTools) publicStatusTools.hidden = showMine;
+    if (guestStatusList) guestStatusList.hidden = showMine;
+    if (guestStatusEmptyState && showMine) guestStatusEmptyState.hidden = true;
+    guestBoardViewButtons.forEach((button) => {
+      const isActive = (button.dataset.guestBoardView || "public") === (showMine ? "mine" : "public");
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+  }
+
+  function setGuestBoardView(view) {
+    guestBoardView = view === "public" ? "public" : "mine";
+    renderMyReceptionPanel();
+    applyGuestBoardFiltersAndSort();
+  }
+
   function setGuestStatusBoardVisible(isVisible, options = {}) {
     if (!guestStatusBoard) return;
 
@@ -2056,12 +2176,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.toggle("is-guest-viewing", isVisible);
 
     if (isVisible && options.scroll !== false) {
+      guestBoardView = isAuthenticated ? "mine" : "public";
+      renderMyReceptionPanel();
       renderGuestGoodVotes();
       applyGuestBoardFiltersAndSort();
       setTimeout(() => {
         guestStatusBoard.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 60);
     } else if (isVisible) {
+      guestBoardView = isAuthenticated ? "mine" : "public";
+      renderMyReceptionPanel();
       renderGuestGoodVotes();
       applyGuestBoardFiltersAndSort();
     }
@@ -2246,6 +2370,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (guestStatusEmptyState) {
       guestStatusEmptyState.hidden = visibleCount !== 0;
     }
+    syncGuestBoardViewVisibility();
   }
 
   function resetGuestBoardFilters() {
@@ -2899,9 +3024,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function completeAppleAuthorization(authorization, expected = {}) {
     try {
-      const session = await exchangeAppleAuthorization(authorization ?? {}, expected);
+      await exchangeAppleAuthorization(authorization ?? {}, expected);
       closeTermsModal();
-      signIn(session.nickname || generateNickname());
+      signIn(generateNickname());
     } catch {
       termsErrorText.textContent = "Apple認証のサーバー検証に失敗しました。時間をおいてもう一度お試しください。";
       termsErrorText.hidden = false;
@@ -3363,13 +3488,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const report = createAdminReport(payload, review, persistedItem);
     saveAdminReport(report);
+    rememberMyReception(payload, report);
+    renderMyReceptionPanel();
 
-    alert(`受付が完了しました。\n\n【受付ID】${report.id}\n【対象】${payload.appName}\n【内容】${getDisplayFeedbackType(payload.type)}\n【公開ステータス】${report.publicStatus}\n\nいただいた内容をお預かりしました。運営が確認します。`);
+    alert(`受付が完了しました。\n\n【受付ID】${report.id}\n【呼び名】${currentNickname}\n【対象】${payload.appName}\n【内容】${getDisplayFeedbackType(payload.type)}\n【公開ステータス】${report.publicStatus}\n\nいただいた内容をお預かりしました。次回は「自分の受付」で進み具合を確認できます。`);
 
     submitFeedbackBtn.disabled = false;
     setSubmitButtonIdleLabel(payload);
     resetWizard();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setGuestStatusBoardVisible(true);
   }
 
   function bindGuestStatusIconFallbacks() {
@@ -3382,6 +3509,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   guestStatusViewBtn?.addEventListener("click", () => {
     window.location.href = "status-board.html";
+  });
+  guestBoardViewButtons.forEach((button) => {
+    button.addEventListener("click", () => setGuestBoardView(button.dataset.guestBoardView || "public"));
   });
   poinaIntentButtons.forEach((button) => {
     button.addEventListener("click", () => selectPoinaReceptionIntent(button.dataset.poinaIntent));

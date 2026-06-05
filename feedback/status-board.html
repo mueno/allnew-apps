@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light">
   <title>STATUS BOARD | POIPOI-STUDIO</title>
-  <link rel="stylesheet" href="status-board.css?v=20260603-responsive2">
+  <link rel="stylesheet" href="status-board.css?v=20260605-my-reception">
 </head>
 <body>
   <div class="board-shell">
@@ -17,10 +17,8 @@
         <a href="index.html#join">気づきやアイデアを送る</a>
         <a class="is-active" href="status-board.html" aria-current="page">どうなってる?</a>
       </nav>
-      <div class="board-profile" aria-label="閲覧モード">
-        <span>見物モード</span>
-        <span class="board-bell" aria-hidden="true">⌁</span>
-        <span class="board-avatar" aria-hidden="true">👀</span>
+      <div class="board-profile" aria-label="受付確認モード">
+        <span id="boardProfileLabel">公開ボード</span>
       </div>
     </header>
 
@@ -69,6 +67,22 @@
           </div>
           <p id="resultCount" aria-live="polite">5件を表示しています。</p>
         </div>
+
+        <div class="board-view-tabs" role="tablist" aria-label="受付状況の表示切替">
+          <button class="board-view-tab is-active" type="button" role="tab" data-board-view="mine" aria-selected="true">自分の受付</button>
+          <button class="board-view-tab" type="button" role="tab" data-board-view="public" aria-selected="false">みんなの受付</button>
+        </div>
+
+        <section class="my-board-panel" id="myBoardPanel" aria-labelledby="myBoardTitle">
+          <div class="my-board-head">
+            <div>
+              <p class="board-kicker">MY RECEPTION</p>
+              <h3 id="myBoardTitle">自分の受付</h3>
+            </div>
+            <p id="myBoardNickname" class="my-board-nickname"></p>
+          </div>
+          <p class="my-board-lead">Appleでサインインした端末では、送信した受付番号と進み具合をここで確認できます。</p>
+        </section>
 
         <div class="status-metrics" aria-label="ステータスで絞り込み">
           <button class="status-metric is-active" type="button" data-status-filter="all" aria-pressed="true">
@@ -247,6 +261,6 @@
     <div class="detail-body" id="detailContent"></div>
   </dialog>
 
-  <script src="status-board.js"></script>
+  <script src="status-board.js?v=20260605-my-reception"></script>
 </body>
 </html>
