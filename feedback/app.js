@@ -1089,15 +1089,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const appName = selectedApp?.name || "アプリ";
     const type = selectedType || pendingReceptionType;
     if (selectedApp?.isVirtual || type === "新しいアプリ案") {
-      return "誰が、どんな場面で、何に困るかを書いてください。";
+      return "どなたが、どのような場面で困るかを教えてください。";
     }
     if (type === "不具合メモ") {
-      return `${appName}で、どの画面で、何をした時に、どうなったかを書いてください。`;
+      return `${appName}で起きていることを教えてください。`;
     }
     if (type === "改善の要望") {
-      return `${appName}で、使いにくい点やこうなると助かることを書いてください。`;
+      return `${appName}で、こうなると助かることを教えてください。`;
     }
-    return "気になったことをそのまま書いてください。";
+    return "気になったことをそのまま教えてください。";
   }
 
   function updateChatPlaceholder() {
@@ -1145,7 +1145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title").textContent = "ありがとうございます。AllNewで検討します。";
       }
       if (poipoiSummaryNote) {
-        poipoiSummaryNote.textContent = "いただいたアイデアは、AllNewの新しいアプリ案として検討します。氏名や連絡先などの個人情報は書かず、このまま送信してください。送信後に受付番号が表示されます。";
+        poipoiSummaryNote.textContent = "いただいたアイデアは、AllNewの新しいアプリ案としてお預かりします。氏名や連絡先などの個人情報は書かず、このまま送信してください。送信後に受付番号が表示されます。";
       }
       poipoiSubmitSummary.hidden = false;
       if (editFeedbackDraftBtn) {
@@ -1163,8 +1163,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (poipoiSummaryBody) poipoiSummaryBody.textContent = body.length > 180 ? `${body.slice(0, 180)}...` : body;
     if (poipoiSummaryNote) {
       poipoiSummaryNote.textContent = payload.appName === "WeightSnap"
-        ? "体重などの数値は書かないでください。状況だけで送信できます。送信後に受付番号が表示され、あとで受付状況を確認できます。"
-        : "氏名、連絡先、住所、パスワードなどの個人情報は書かないでください。状況だけで送信できます。送信後に受付番号が表示されます。";
+        ? "体重などの数値は書かないでください。状況だけでお預かりできます。送信後に受付番号が表示され、あとで受付状況を確認できます。"
+        : "氏名、連絡先、住所、パスワードなどの個人情報は書かないでください。状況だけでお預かりできます。送信後に受付番号が表示されます。";
     }
     poipoiSubmitSummary.hidden = false;
     if (editFeedbackDraftBtn) {
@@ -1302,20 +1302,17 @@ document.addEventListener("DOMContentLoaded", () => {
   function getPoinaOpeningMessage() {
     const appName = selectedApp?.name || "このアプリ";
     if (selectedApp?.isVirtual) {
-      return "新しいアプリ案ですね。アイデアについてお聞かせください。誰が、どんな場面で、何に困っているかを思いつくまま書いてください。";
+      return "新しいアプリ案ですね。アイデアについてお聞かせください。どなたが、どのような場面で困るかを、思いつく範囲で教えてください。";
     }
 
     const receptionType = selectedType || pendingReceptionType;
     if (receptionType === "不具合メモ") {
-      const privacyNote = appName === "WeightSnap"
-        ? "体重などの数値や氏名は不要です。"
-        : "氏名や連絡先は不要です。";
-      return `${appName}の不具合ですね。起きていることをそのまま書いてください。${privacyNote}`;
+      return `${appName}の不具合ですね。ご不便をおかけして申し訳ありません。差し支えない範囲で、具体的な内容を教えていただけますか？`;
     }
     if (receptionType === "改善の要望") {
-      return `${appName}の改善アイデアですね。迷ったところ、使いづらかったところ、こうなると助かることを1つ書いてください。`;
+      return `${appName}の改善アイデアですね。より使いやすくするために、こうなると助かることを1つ教えていただけますか？`;
     }
-    return `${appName}についてお聞かせください。気になったことをそのまま書いてください。`;
+    return `${appName}についてお聞かせください。気になったことをそのまま教えてください。`;
   }
 
   function renderFeedbackChat() {
@@ -1362,7 +1359,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function evaluateSubmission(payload) {
-    const fullText = `${payload.title}\n${payload.body}`.trim();
+    const titleText = String(payload.title || "").trim();
+    const bodyText = String(payload.body || "").trim();
+    const fullText = bodyText && titleText && bodyText !== titleText
+      ? `${titleText}\n${bodyText}`.trim()
+      : (bodyText || titleText);
     const flags = prohibitedTopicRules.filter((rule) => rule.pattern.test(fullText));
     const blockingFlags = flags.filter((flag) => flag.severity === "block");
     const warningFlags = flags.filter((flag) => flag.severity === "warn");
@@ -1374,7 +1375,7 @@ document.addEventListener("DOMContentLoaded", () => {
         decision: "block",
         publicStatus: "ごめんなさい",
         flags,
-        message: `この内容はそのままでは送信できません。${blockingFlags.map((flag) => flag.label).join("、") || "いたずらの疑い"}にあたる可能性があります。表現を変えてください。`,
+        message: `恐れ入りますが、この内容はそのままでは送信できません。${blockingFlags.map((flag) => flag.label).join("、") || "いたずらの疑い"}にあたる可能性があります。表現を変えてください。`,
         adminSummary: "受付不可カテゴリに該当する可能性があるため、公開・受付せず警告対象とする。",
         nextAction: "警告。一定回数を超えた場合は利用停止。"
       };
@@ -1406,7 +1407,7 @@ document.addEventListener("DOMContentLoaded", () => {
       decision: "accept",
       publicStatus: "受け付けました",
       flags: [],
-      message: "この内容で受付できます。",
+      message: "この内容でお預かりできます。",
       adminSummary: `${payload.appName} / ${payload.type} として検討に値する内容。公開前に人間の運営管理者が要約とマスキングを確認する。`,
       nextAction: payload.type === "新しいアプリ案" ? "新しいアプリ案として運営が確認します。" : "対象アプリの改善・不具合として運営が確認します。"
     };
@@ -1436,7 +1437,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function inferFeedbackType(message) {
     if (selectedApp?.isVirtual) return "新しいアプリ案";
-    if (/不具合|バグ|落ちる|固まる|保存されない|表示されない|おかしい|エラー|クラッシュ/i.test(message)) {
+    if (selectedType === "不具合メモ" || selectedType === "改善の要望") return selectedType;
+    if (pendingReceptionType === "不具合メモ" || pendingReceptionType === "改善の要望") return pendingReceptionType;
+    if (/不具合|バグ|落ちる|固まる|保存されない|表示されない|おかしい|エラー|クラッシュ|bug|error|crash|broken|breaks?|not working|doesn'?t work|cannot|can't|icon|display/i.test(message)) {
       return "不具合メモ";
     }
     return "改善の要望";
@@ -1458,21 +1461,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const accepted = review.decision === "accept";
     let reply = "";
     if (riskLabels.includes("個人情報・秘密情報の混入")) {
-      reply = "個人情報や秘密情報に見える内容が含まれているようです。安全のため、その部分を伏せて、起きたことやご要望だけを書き直してください。";
+      reply = "個人情報や秘密情報に見える内容が含まれているようです。恐れ入りますが、その部分を伏せて、起きたことやご要望だけを書き直してください。";
     } else if (riskLabels.includes("医療助言・診断に近い内容")) {
-      reply = "ありがとうございます。診断や治療の判断にあたる内容は、この受付では扱えません。アプリの表示、操作、記録のしやすさについて気になった点を書いてください。";
+      reply = "ありがとうございます。診断や治療の判断にあたる内容は、この受付では扱えません。アプリの表示、操作、記録のしやすさについて気になった点を教えてください。";
     } else if (review.decision === "block") {
-      reply = "この内容はそのままでは受付できません。アプリの不具合、使いにくさ、あったらいい機能のどれかにしぼって書き直してください。";
+      reply = "恐れ入りますが、この内容はそのままではお預かりできません。アプリの不具合、使いにくさ、あったらいい機能のどれかに絞って書き直してください。";
     } else if (needsMore) {
       reply = inferredType === "新しいアプリ案"
-        ? "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。個人情報は不要です。"
+        ? "ありがとうございます。どなたが、どのような場面で困るかを、もう少しだけ教えてください。個人情報は不要です。"
         : buildStableCollectingReply({ extracted: { type: inferredType } });
     } else if (inferredType === "不具合メモ") {
-      reply = "ありがとうございます。不具合として受付できます。";
+      reply = "お知らせいただき、ありがとうございました。すぐに担当者と確認いたします。";
     } else if (inferredType === "新しいアプリ案") {
-      reply = "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
+      reply = "ありがとうございます。その困りごとは、AllNewで検討します。送信後に受付番号が表示されます。";
     } else {
-      reply = "ありがとうございます。この内容で受付できます。";
+      reply = `ありがとうございます。${selectedApp?.name || "このアプリ"}の改善アイデアとしてお預かりします。`;
     }
 
     return {
@@ -1555,12 +1558,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const appName = selectedApp?.name || "このアプリ";
     const type = getReceptionTypeFromResult(result);
     if (selectedApp?.isVirtual || type === "新しいアプリ案") {
-      return "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。";
+      return "ありがとうございます。どなたが、どのような場面で困るかを、もう少しだけ教えてください。";
     }
     if (type === "不具合メモ") {
-      return `${appName}の${inferBugTopicFromUserMessages()}ですね。どの操作のあとに起きるかだけ教えてください。`;
+      return `ありがとうございます。${inferBugTopicFromUserMessages()}の不具合ですね。`;
     }
-    return `${appName}の改善アイデアですね。どう変わると使いやすいかを1つだけ教えてください。`;
+    return `ありがとうございます。${appName}をより使いやすくするご提案ですね。どのように変わると助かるか、1つだけ教えていただけますか？`;
   }
 
   function replyAsksForMoreAfterReady(text) {
@@ -1571,7 +1574,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const reply = String(text || "");
     const type = getReceptionTypeFromResult(result);
     if (!reply.trim()) return true;
-    if (/ご不便|申し訳|おさわがせ|確認しました|記録しますので|改善案を一緒|AI一次|下のAI|再現条件|再現手順|環境情報|クリック動作|未特定|現象を詳しく|どのアイコンが|まず「|次に、/.test(reply)) {
+    if (/おさわがせ|確認しました|記録しますので|改善案を一緒|AI一次|下のAI|再現条件|再現手順|環境情報|クリック動作|未特定|現象を詳しく|どのアイコンが|まず「|次に、/.test(reply)) {
       return true;
     }
     if (type === "不具合メモ" && /改善案/.test(reply)) return true;
@@ -1584,16 +1587,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const type = getReceptionTypeFromResult(result);
     if (result?.status === "ready") {
       if (selectedApp?.isVirtual || type === "新しいアプリ案") {
-        return "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
+        return "ありがとうございます。その困りごとは、AllNewで検討します。送信後に受付番号が表示されます。";
       }
       if (type === "不具合メモ") {
-        return `ありがとうございます。${appName}の不具合として受付できます。`;
+        return "お知らせいただき、ありがとうございました。すぐに担当者と確認いたします。";
       }
-      return `ありがとうございます。${appName}の改善アイデアとして受付できます。`;
+      return `ありがとうございます。${appName}の改善アイデアとしてお預かりします。`;
     }
 
     if (result?.status === "blocked") {
-      return "この内容はそのままでは受付できません。個人情報や秘密情報を入れず、アプリの不具合や改善案にしぼって書き直してください。";
+      return "恐れ入りますが、この内容はそのままではお預かりできません。個人情報や秘密情報を入れず、アプリの不具合や改善案に絞って書き直してください。";
     }
 
     return buildStableCollectingReply(result);
@@ -1744,9 +1747,9 @@ document.addEventListener("DOMContentLoaded", () => {
       publicStatus: result.publicStatus || (decision === "accept" ? "受け付けました" : decision === "block" ? "ごめんなさい" : "下書き確認"),
       flags: riskFlags.map((label) => ({ label, severity: decision === "block" ? "block" : "warn" })),
       message: decision === "accept"
-        ? "この内容で受付できます。"
+        ? "この内容でお預かりできます。"
         : decision === "block"
-          ? "この内容はそのままでは送信できません。表現を変えてください。"
+          ? "恐れ入りますが、この内容はそのままでは送信できません。表現を変えてください。"
           : "もう少し情報を足すと、内容が伝わりやすくなります。",
       adminSummary: result.adminReport?.summary || "",
       nextAction: result.adminReport?.nextAction || "運営が内容を確認する。"
@@ -1828,7 +1831,7 @@ document.addEventListener("DOMContentLoaded", () => {
     aiReviewPreview.hidden = true;
     aiReviewMessage.textContent = "修正した内容を送ると、もう一度確認します。";
     hideSubmitSummary();
-    appendChatMessage("assistant", "内容を直せます。修正できたら、もう一度送ってください。");
+    appendChatMessage("assistant", "内容を修正できます。直した内容をもう一度送ってください。");
     poipoiChatInput.focus({ preventScroll: true });
   }
 
@@ -1863,7 +1866,7 @@ document.addEventListener("DOMContentLoaded", () => {
         typingMessage.remove();
         appendChatMessage(
           "assistant",
-          "すみません。いまポイナにつながりませんでした。少し時間をおいて、もう一度送ってください。"
+          "申し訳ありません。いまポイナにつながりませんでした。少し時間をおいて、もう一度送ってください。"
         );
         setPoipoiChatBusy(false);
         poipoiChatInput.focus({ preventScroll: true });
