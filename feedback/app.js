@@ -765,6 +765,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if (window.matchMedia("(max-width: 640px)").matches) {
+      showScrollyPanelsAsStaticList(stage);
+      return;
+    }
+
     function getScrollyViewportHeight() {
       return Math.round(window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 1);
     }
