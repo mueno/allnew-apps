@@ -248,11 +248,14 @@
     .line-unit {
       display: inline-block;
       max-width: 100%;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .jp-copy {
       word-break: keep-all;
-      overflow-wrap: normal;
+      overflow-wrap: anywhere;
       line-break: strict;
       text-wrap: pretty;
     }
@@ -481,6 +484,7 @@
       line-height: 1.78;
       text-align: center;
       letter-spacing: 0.02em;
+      overflow-wrap: anywhere;
     }
 
     .capability-list {
@@ -663,6 +667,7 @@
       display: grid;
       gap: 3px;
       min-width: 0;
+      max-width: 100%;
     }
 
     .capability-title-text {
@@ -672,6 +677,10 @@
       line-height: 1.36;
       letter-spacing: 0.01em;
       text-wrap: pretty;
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .capability-detail {
@@ -681,6 +690,10 @@
       line-height: 1.55;
       letter-spacing: 0.01em;
       text-wrap: pretty;
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .action-guidance-text {
@@ -819,6 +832,7 @@
 
     .guest-tour-button {
       width: 100%;
+      max-width: 100%;
       min-height: 62px;
       border: 0;
       border-radius: 999px;
@@ -832,6 +846,8 @@
       font: inherit;
       font-size: 16px;
       font-weight: 850;
+      white-space: normal;
+      overflow-wrap: anywhere;
       cursor: pointer;
       transition:
         transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
