@@ -759,28 +759,28 @@
                 <div class="faq-item">
                     <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>咳データは<strong>お使いのデバイス内のApple HealthKit（ヘルスケア）</strong>に保存されます。</p>
-                        <p>当社が運用するサーバーへの送信はありません。録音した音声データは咳検出処理後に即時破棄されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。</p>
+                        <p>咳データは<strong>お使いのデバイス内およびApple HealthKit（ヘルスケア）</strong>に保存されます。</p>
+                        <p>当社が運用するサーバーへの送信はありません。咳検出のために解析される音声ストリームは端末内で処理され、分類処理のために保存されません。設定で咳の録音を有効にした場合のみ、検出された咳の前後の短い音声スニペットが端末内に保存されます。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">認識後の記録方法は？<span class="faq-icon">+</span></div>
+                    <div class="faq-question">モニタリング後の記録方法は？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、「記録する」ボタンを押すとヘルスケアに保存されます。</p>
+                        <p><strong>デフォルト動作:</strong> モニタリングを停止すると、咳の回数、1時間あたりの頻度、目安となるレベルをまとめたセッションレポートが表示されます。</p>
                         <ul>
-                            <li><strong>通常:</strong> 確認画面で数値を確認し、「記録する」を選択すると保存されます</li>
-                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にヘルスケアに記録されます</li>
+                            <li><strong>HealthKit:</strong> ヘルスケアへの書き込み権限がある場合、セッションの咳レベルがHealthKitに保存されます</li>
+                            <li><strong>録音:</strong> 設定で咳の録音を有効にした場合のみ、検出された咳の短い音声スニペットが端末内に保存されます</li>
                         </ul>
-                        <p>認識精度が低い場合は、自動記録がオンでも確認画面が表示されます。</p>
+                        <p>本アプリの咳検出とレベル表示は参考情報であり、医療上の診断ではありません。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">認識結果が間違っていた場合は？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>保存前の場合:</strong> 確認画面で数値を確認できます。正しくないと思ったら「記録しない」を選択し、再度モニタリングを行ってください。</p>
-                        <p><strong>保存後の場合:</strong> 誤った数値が保存された場合は、iOSのヘルスケアアプリから削除してください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</p>
+                        <p><strong>セッション中の場合:</strong> 周囲の音や環境によって、咳ではない音を検出したり、咳を検出できない場合があります。必要に応じて静かな環境で再度モニタリングしてください。</p>
+                        <p><strong>保存後の場合:</strong> HealthKitに保存されたデータは、iOSのヘルスケアアプリから削除できます。録音スニペットはアプリ内の録音一覧から個別または一括で削除できます。</p>
                     </div>
                 </div>
 
@@ -812,7 +812,7 @@
                 <div class="legal-section">
                     <h3>1. 収集する情報の種類</h3>
                     <ul>
-                        <li><strong>マイクで取得する音声:</strong> 咳検出処理後に即時破棄。当社が運用するサーバーへの送信はありません。</li>
+                        <li><strong>マイクで取得する音声:</strong> 咳検出のための音声分類は端末内で処理され、分類処理のために保存されません。咳の録音を有効にした場合のみ、検出された咳の前後の短い音声スニペットが端末内に保存されます。当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>健康関連データ（HealthKit）:</strong> 咳データの書き込み・読み取り。お使いの端末およびApple HealthKitに保存されます。HealthKitの保存・同期の挙動（iCloud等）は、ユーザーの端末設定およびAppleの仕様に従います。</li>
                         <li><strong>デバイス情報:</strong> 端末内で処理され、当社が運用するサーバーへの送信はありません。</li>
                         <li><strong>デバイス内保存情報:</strong> 無料使用回数、購入状態、設定情報。当社が運用するサーバーへの送信はありません。</li>
@@ -1086,28 +1086,28 @@
                 <div class="faq-item">
                     <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>Cough data is stored in <strong>Apple HealthKit on your device</strong>.</p>
-                        <p>We do not transmit data to servers operated by us. Audio recordings are discarded immediately after cough detection processing. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</p>
+                        <p>Cough data is stored <strong>on your device and in Apple HealthKit</strong>.</p>
+                        <p>We do not transmit data to servers operated by us. The audio stream used for cough classification is processed on device and is not saved for classification. If you enable cough recording in Settings, short audio snippets around detected cough events are stored locally on your device. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">What happens when recognition confidence is low?<span class="faq-icon">+</span></div>
+                    <div class="faq-question">How are sessions recorded?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p>The app automatically evaluates recognition confidence.</p>
+                        <p>When you stop monitoring, the app shows a session report with cough count, coughs per hour, and an informational level.</p>
                         <ul>
-                            <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
-                            <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value. "Record this value" saves it; "Don't Record" prompts you to try again.</li>
+                            <li><strong>HealthKit:</strong> If Health write permission is available, the session cough level is saved to HealthKit.</li>
+                            <li><strong>Recordings:</strong> If cough recording is enabled in Settings, short audio snippets around detected cough events are stored locally on your device.</li>
                         </ul>
-                        <p>When the app determines confidence is low, data will not be saved unless you explicitly approve it.</p>
+                        <p>Cough detection and level summaries are for personal reference only and are not medical diagnoses.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <div class="faq-question">What if the recognition is wrong?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
-                        <p><strong>Before saving:</strong> If the recognition confidence is low, the app will show a confirmation screen. If the value looks incorrect, choose "Don't Record" and try again.</p>
-                        <p><strong>After saving:</strong> High-confidence readings are automatically saved. If incorrect data was saved, delete it from the iOS Health app. Please refer to the Health app for detailed instructions.</p>
+                        <p><strong>During a session:</strong> Environmental sound can cause false positives or missed detections. If needed, monitor again in a quieter environment.</p>
+                        <p><strong>After saving:</strong> HealthKit data can be deleted from the iOS Health app. Audio snippets can be deleted individually or all at once from the app's recording list.</p>
                     </div>
                 </div>
 
@@ -1133,13 +1133,13 @@
                 <span class="updated-badge">Last Updated: February 5, 2026</span>
 
                 <div class="highlight-box">
-                    <p><strong>Important:</strong> This app does not send or store your cough data or audio recordings on our external servers. Cough data is stored on your device and in Apple HealthKit. Audio is discarded immediately after cough detection processing. Health data storage/sync behavior (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior.</p>
+                    <p><strong>Important:</strong> This app does not send or store your cough data or audio recordings on our external servers. Cough data is stored on your device and in Apple HealthKit. The audio stream used for cough classification is processed on device and is not saved for classification. Optional cough audio snippets are stored locally only when you enable recording in Settings. Health data storage/sync behavior (including iCloud) and Apple-side processing depend on your device settings and Apple's system behavior.</p>
                 </div>
 
                 <div class="legal-section">
                     <h3>1. Information We Collect</h3>
                     <ul>
-                        <li><strong>Audio Recordings:</strong> Discarded immediately after cough detection processing. Not transmitted to servers operated by us.</li>
+                        <li><strong>Audio:</strong> Audio classification for cough detection is processed on device and is not saved for classification. If cough recording is enabled, short audio snippets around detected cough events are stored locally on your device. Audio is not transmitted to servers operated by us.</li>
                         <li><strong>Health Data (HealthKit):</strong> Cough incidence data read/write. Stored on your device and in Apple HealthKit. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior.</li>
                         <li><strong>Device Info:</strong> Processed on your device; not transmitted to servers operated by us.</li>
                         <li><strong>Local Storage:</strong> Free usage count, purchase status, settings. Not transmitted to servers operated by us.</li>
