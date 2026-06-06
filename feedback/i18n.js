@@ -284,14 +284,17 @@
     }
     const original = originalText.get(node);
     if (activeLanguage === "ja") {
-      node.nodeValue = original;
+      if (node.nodeValue !== original) node.nodeValue = original;
       return;
     }
 
     const leading = original.match(/^\s*/)?.[0] || "";
     const trailing = original.match(/\s*$/)?.[0] || "";
     const translated = translateValue(original.trim());
-    if (translated !== original.trim()) node.nodeValue = `${leading}${translated}${trailing}`;
+    if (translated !== original.trim()) {
+      const nextValue = `${leading}${translated}${trailing}`;
+      if (node.nodeValue !== nextValue) node.nodeValue = nextValue;
+    }
   }
 
   function shouldSkipElement(element) {
@@ -312,12 +315,12 @@
       }
       const original = stored[attr] || "";
       if (activeLanguage === "ja") {
-        element.setAttribute(attr, original);
+        if (element.getAttribute(attr) !== original) element.setAttribute(attr, original);
         return;
       }
       const map = attr === "placeholder" ? enPlaceholders : enAttributes;
       const translated = map[original] || translateValue(original);
-      element.setAttribute(attr, translated);
+      if (element.getAttribute(attr) !== translated) element.setAttribute(attr, translated);
     });
   }
 
@@ -365,7 +368,8 @@
     document.querySelectorAll("[data-language-choice]").forEach((button) => {
       const isActive = button.dataset.languageChoice === activeLanguage;
       button.classList.toggle("is-active", isActive);
-      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      const nextPressed = isActive ? "true" : "false";
+      if (button.getAttribute("aria-pressed") !== nextPressed) button.setAttribute("aria-pressed", nextPressed);
     });
   }
 
