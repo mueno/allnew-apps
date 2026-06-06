@@ -281,9 +281,11 @@
 
     .welcome-tagline span {
       display: block;
-      width: 100%;
-      max-width: min(100%, 340px);
+      width: fit-content;
+      max-width: min(100%, 720px);
+      margin-inline: auto;
       white-space: normal;
+      text-align: center;
       transform-origin: center;
     }
 
@@ -300,10 +302,11 @@
     }
 
     .welcome-tagline {
-      display: flex;
-      justify-content: center;
+      display: grid;
+      justify-items: center;
       width: 100%;
       max-width: 960px;
+      margin-inline: auto;
       color: var(--secondary);
       font-weight: 700;
       margin-bottom: 28px;
