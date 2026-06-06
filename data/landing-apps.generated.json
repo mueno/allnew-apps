@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-05T20:12:16+00:00",
+  "generated_at": "2026-06-06T19:46:37+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -318,14 +318,14 @@
       "bundle_id": "jp.allnew.coughwav",
       "asc_app_id": "6759076606",
       "is_health_app": true,
-      "release_date": "2026-06-05",
+      "release_date": "2026-06-06",
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-06-05T20:12:16+00:00",
-      "app_store_version": "1.0.10",
+      "updated_at": "2026-06-06T19:46:37+00:00",
+      "app_store_version": "1.0.11",
       "app_store_name": "CoughWav 咳（せき）ノート",
-      "app_store_current_version_release_date": "2026-06-05T06:01:23Z",
+      "app_store_current_version_release_date": "2026-06-06T16:28:32Z",
       "app_store_lookup_country": "jp"
     },
     {
