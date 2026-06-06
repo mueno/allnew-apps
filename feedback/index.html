@@ -229,8 +229,9 @@
     }
 
     .welcome-meta-box {
+      width: min(100%, 960px);
       text-align: center;
-      margin-top: 0;
+      margin: 0 auto;
       padding: 0 12px;
     }
 
@@ -239,6 +240,7 @@
       justify-items: center;
       gap: 10px;
       width: 100%;
+      max-width: 960px;
       margin: 0 0 14px;
       font-weight: 800;
       letter-spacing: 0;
@@ -269,8 +271,11 @@
     .welcome-title-main,
     .welcome-title-sub {
       display: block;
+      width: fit-content;
       max-width: 100%;
+      margin-inline: auto;
       white-space: nowrap;
+      text-align: center;
       transform-origin: center;
     }
 
@@ -297,6 +302,8 @@
     .welcome-tagline {
       display: flex;
       justify-content: center;
+      width: 100%;
+      max-width: 960px;
       color: var(--secondary);
       font-weight: 700;
       margin-bottom: 28px;
@@ -4771,39 +4778,39 @@
             まだ自分の受付はありません。送信すると、次回ここで受付番号と進み具合を確認できます。
           </div>
         </section>
-        <div class="guest-status-summary" id="publicStatusSummary" aria-label="ステータスで絞り込み">
+        <div class="guest-status-summary" id="publicStatusSummary" aria-label="ステータスで絞り込み" hidden>
           <button class="guest-status-stat is-active" type="button" data-guest-status-filter="all" aria-pressed="true">
             <span class="guest-status-stat-label">すべて</span>
-            <strong>5</strong>
+            <strong>0</strong>
             <span>全公開要望</span>
           </button>
           <button class="guest-status-stat" type="button" data-guest-status-filter="受け付けました" aria-pressed="false">
             <span class="guest-status-stat-label">受け付けました</span>
-            <strong>1</strong>
+            <strong>0</strong>
             <span>受け付けました</span>
           </button>
           <button class="guest-status-stat" type="button" data-guest-status-filter="検討しています" aria-pressed="false">
             <span class="guest-status-stat-label">検討しています</span>
-            <strong>1</strong>
+            <strong>0</strong>
             <span>検討しています</span>
           </button>
           <button class="guest-status-stat" type="button" data-guest-status-filter="対応しています" aria-pressed="false">
             <span class="guest-status-stat-label">対応しています</span>
-            <strong>1</strong>
+            <strong>0</strong>
             <span>対応しています</span>
           </button>
           <button class="guest-status-stat" type="button" data-guest-status-filter="出来ました" aria-pressed="false">
             <span class="guest-status-stat-label">出来ました</span>
-            <strong>1</strong>
+            <strong>0</strong>
             <span>出来ました</span>
           </button>
           <button class="guest-status-stat" type="button" data-guest-status-filter="ごめんなさい" aria-pressed="false">
             <span class="guest-status-stat-label">ごめんなさい</span>
-            <strong>1</strong>
+            <strong>0</strong>
             <span>ごめんなさい</span>
           </button>
         </div>
-        <div class="guest-status-tools" id="publicStatusTools" aria-label="公開ボードの絞り込みと並び替え">
+        <div class="guest-status-tools" id="publicStatusTools" aria-label="公開ボードの絞り込みと並び替え" hidden>
           <div class="guest-status-top-tools">
             <label class="guest-board-search-field" for="guestBoardSearchInput">
               検索
@@ -4864,147 +4871,17 @@
             </div>
           </details>
           <div class="guest-filter-footer">
-            <p class="guest-filter-result-count" id="guestFilterResultCount" aria-live="polite">5件を表示しています。</p>
+            <p class="guest-filter-result-count" id="guestFilterResultCount" aria-live="polite">0件を表示しています。</p>
             <button class="guest-filter-reset" type="button" id="guestFilterResetButton">条件をリセット</button>
             <div class="guest-filter-active-chips" id="guestFilterActiveChips" aria-label="選択中の条件"></div>
           </div>
         </div>
-        <ol class="guest-status-list" id="publicStatusList" aria-label="公開中の受付状況">
-          <li class="guest-status-item" data-public-status="対応しています" data-request-id="AF-1042" data-good-base-count="142" data-app-name="WeightSnap" data-accepted-date="2026-02-15" data-updated-date="2026-05-03" data-owned-by-current-user="false">
-            <b class="guest-status-pill">対応しています</b>
-            <div class="guest-status-meta">
-              <span class="guest-status-id">AF-1042</span>
-              <span class="guest-status-app">
-                <img class="guest-status-app-icon" src="https://apps.allnew.work/weightsnap-icon.png" alt="" loading="lazy" decoding="async">
-                WeightSnap
-              </span>
-            </div>
-            <h3 class="guest-status-item-title">週ごとのグラフを見たい</h3>
-            <p class="guest-status-timing">受付日: 2026/02/15 | 受付から93日経過 | 最新ステータス更新から15日経過</p>
-            <p class="guest-status-detail">日ごとの変化だけでなく、週単位の傾向を見たいというご意見です。</p>
-            <ol class="guest-status-timeline" aria-label="週ごとのグラフを見たい の進捗">
-              <li><time datetime="2026-02-15">2026/02/15</time><span>ご要望を受け付けました</span></li>
-              <li><time datetime="2026-03-08">2026/03/08</time><span>アップデート作業に着手しています</span></li>
-              <li><time datetime="2026-04-21">2026/04/21</time><span>アップデート版アプリのテストをしています</span></li>
-              <li><time datetime="2026-05-03">2026/05/03</time><span>アップストアの審査準備をしています</span></li>
-            </ol>
-            <div class="guest-status-good-row">
-              <button class="guest-status-good-button" type="button" data-good-button aria-pressed="false">
-                <span aria-hidden="true">👍</span>
-                <span>Good</span>
-                <strong data-good-count>142</strong>
-              </button>
-              <p class="guest-status-good-note" data-good-note>ログインするとGoodできます。</p>
-            </div>
-          </li>
-          <li class="guest-status-item" data-public-status="検討しています" data-request-id="AF-1037" data-good-base-count="88" data-app-name="GlucoSnap" data-accepted-date="2026-03-10" data-updated-date="2026-03-18" data-owned-by-current-user="false">
-            <b class="guest-status-pill">検討しています</b>
-            <div class="guest-status-meta">
-              <span class="guest-status-id">AF-1037</span>
-              <span class="guest-status-app">
-                <img class="guest-status-app-icon" src="https://apps.allnew.work/glucosnap-icon.png" alt="" loading="lazy" decoding="async">
-                GlucoSnap
-              </span>
-            </div>
-            <h3 class="guest-status-item-title">メモ候補を増やしたい</h3>
-            <p class="guest-status-timing">受付日: 2026/03/10 | 受付から69日経過 | 最新ステータス更新から10日経過</p>
-            <p class="guest-status-detail">食事や運動など、記録時のメモ候補を選びやすくしてほしいというご意見です。</p>
-            <ol class="guest-status-timeline" aria-label="メモ候補を増やしたい の進捗">
-              <li><time datetime="2026-03-10">2026/03/10</time><span>ご要望を受け付けました</span></li>
-              <li><time datetime="2026-03-18">2026/03/18</time><span>似たご意見とあわせて検討しています</span></li>
-            </ol>
-            <div class="guest-status-good-row">
-              <button class="guest-status-good-button" type="button" data-good-button aria-pressed="false">
-                <span aria-hidden="true">👍</span>
-                <span>Good</span>
-                <strong data-good-count>88</strong>
-              </button>
-              <p class="guest-status-good-note" data-good-note>ログインするとGoodできます。</p>
-            </div>
-          </li>
-          <li class="guest-status-item" data-public-status="出来ました" data-request-id="AF-1029" data-good-base-count="204" data-app-name="ThermoSnap" data-accepted-date="2026-01-24" data-updated-date="2026-05-12" data-owned-by-current-user="false">
-            <b class="guest-status-pill">出来ました</b>
-            <div class="guest-status-meta">
-              <span class="guest-status-id">AF-1029</span>
-              <span class="guest-status-app">
-                <img class="guest-status-app-icon" src="https://apps.allnew.work/thermosnap-icon.png" alt="" loading="lazy" decoding="async">
-                ThermoSnap
-              </span>
-            </div>
-            <h3 class="guest-status-item-title">表示を見やすくしてほしい</h3>
-            <p class="guest-status-timing">受付日: 2026/01/24 | 2026/05/12の更新で対応しました</p>
-            <p class="guest-status-detail">記録一覧の読みやすさについてのご意見に対応しました。</p>
-            <ol class="guest-status-timeline" aria-label="表示を見やすくしてほしい の進捗">
-              <li><time datetime="2026-01-24">2026/01/24</time><span>ご要望を受け付けました</span></li>
-              <li><time datetime="2026-02-09">2026/02/09</time><span>アップデート作業に着手しました</span></li>
-              <li><time datetime="2026-04-18">2026/04/18</time><span>アップデート版アプリのテストをしました</span></li>
-              <li><time datetime="2026-05-06">2026/05/06</time><span>アップストアの審査待ちです</span></li>
-              <li><time datetime="2026-05-12">2026/05/12</time><span>🎊アップデート版が公開されました👏👏👏👏</span></li>
-            </ol>
-            <div class="guest-status-good-row">
-              <button class="guest-status-good-button" type="button" data-good-button aria-pressed="false">
-                <span aria-hidden="true">👍</span>
-                <span>Good</span>
-                <strong data-good-count>204</strong>
-              </button>
-              <p class="guest-status-good-note" data-good-note>ログインするとGoodできます。</p>
-            </div>
-          </li>
-          <li class="guest-status-item" data-public-status="受け付けました" data-request-id="AF-1051" data-good-base-count="36" data-app-name="New App Idea" data-accepted-date="2026-05-18" data-updated-date="2026-05-18" data-owned-by-current-user="false">
-            <b class="guest-status-pill">受け付けました</b>
-            <div class="guest-status-meta">
-              <span class="guest-status-id">AF-1051</span>
-              <span class="guest-status-app">
-                <span class="guest-status-app-emoji" aria-hidden="true">🚀</span>
-                New App Idea
-              </span>
-            </div>
-            <h3 class="guest-status-item-title">集中タイマーのアプリ案</h3>
-            <p class="guest-status-timing">受付日: 2026/05/18 | 受付から確認へ進行中</p>
-            <p class="guest-status-detail">新しいアプリの案として受け付け、内容を確認しています。</p>
-            <ol class="guest-status-timeline" aria-label="集中タイマーのアプリ案 の進捗">
-              <li><time datetime="2026-05-18">2026/05/18</time><span>新しいアプリ案を受け付けました</span></li>
-            </ol>
-            <div class="guest-status-good-row">
-              <button class="guest-status-good-button" type="button" data-good-button aria-pressed="false">
-                <span aria-hidden="true">👍</span>
-                <span>Good</span>
-                <strong data-good-count>36</strong>
-              </button>
-              <p class="guest-status-good-note" data-good-note>ログインするとGoodできます。</p>
-            </div>
-          </li>
-          <li class="guest-status-item" data-public-status="ごめんなさい" data-request-id="AF-1048" data-good-base-count="9" data-app-name="公開可能な範囲" data-accepted-date="2026-04-30" data-updated-date="2026-05-02" data-owned-by-current-user="false">
-            <b class="guest-status-pill">ごめんなさい</b>
-            <div class="guest-status-meta">
-              <span class="guest-status-id">AF-1048</span>
-              <span class="guest-status-app">
-                <span class="guest-status-app-emoji" aria-hidden="true">✓</span>
-                公開可能な範囲
-              </span>
-            </div>
-            <h3 class="guest-status-item-title">公開可能な範囲で見送り</h3>
-            <p class="guest-status-timing">受付日: 2026/04/30 | 公開できる範囲で結果を表示しています</p>
-            <p class="guest-status-detail">今回は対応を見送らせていただきました。投稿者を推測できる情報が含まれるため、詳細は非公開とさせていただきます。</p>
-            <ol class="guest-status-timeline" aria-label="公開可能な範囲で見送り の進捗">
-              <li><time datetime="2026-04-30">2026/04/30</time><span>ご意見を受け付けました</span></li>
-              <li><time datetime="2026-05-02">2026/05/02</time><span>公開できる範囲で結果を表示しました</span></li>
-            </ol>
-            <div class="guest-status-good-row">
-              <button class="guest-status-good-button" type="button" data-good-button aria-pressed="false">
-                <span aria-hidden="true">👍</span>
-                <span>Good</span>
-                <strong data-good-count>9</strong>
-              </button>
-              <p class="guest-status-good-note" data-good-note>ログインするとGoodできます。</p>
-            </div>
-          </li>
-        </ol>
+        <ol class="guest-status-list" id="publicStatusList" aria-label="公開中の受付状況"></ol>
         <div class="guest-status-empty" id="guestStatusEmptyState" hidden>
-          条件に合う公開項目はまだありません。条件を少しゆるめてみてください。
+          公開中の受付はまだありません。登録すると、自分の要望を送って進み具合を確認できます。
         </div>
         <div class="guest-status-actions">
-          <button class="action-button primary" id="guestStatusSignInBtn" type="button">あなたのご要望をお聞かせください。</button>
+          <button class="action-button primary" id="guestStatusSignInBtn" type="button">登録して要望を送る</button>
         </div>
       </div>
     </section>
@@ -5437,6 +5314,7 @@
     </article>
   </template>
 
+  <script src="./i18n.js?v=20260606-bilingual" defer></script>
   <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/ja_JP/appleid.auth.js" defer></script>
   <script src="./app.js?v=20260605-my-reception-nickname" defer></script>
 </body>

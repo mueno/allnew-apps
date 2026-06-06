@@ -11,106 +11,7 @@ const appCatalogFallback = [
 
 let appCatalog = [...appCatalogFallback];
 
-const publicStatusItems = [
-  {
-    id: "AF-1042",
-    app: "WeightSnap",
-    appIcon: "https://apps.allnew.work/weightsnap-icon.png",
-    appTheme: "#006ee6",
-    category: "記録・同期",
-    status: "対応しています",
-    title: "週ごとのグラフを見たい",
-    acceptedDate: "2026-02-15",
-    updatedDate: "2026-05-03",
-    detail: "日ごとの変化だけでなく、週単位の傾向を見たいというご意見です。",
-    good: 142,
-    owned: false,
-    timeline: [
-      ["2026/02/15", "ご要望を受け付けました"],
-      ["2026/03/08", "アップデート作業に着手しています"],
-      ["2026/04/21", "アップデート版アプリのテストをしています"],
-      ["2026/05/03", "アップストアの審査準備をしています"]
-    ]
-  },
-  {
-    id: "AF-1037",
-    app: "GlucoSnap",
-    appIcon: "https://apps.allnew.work/glucosnap-icon.png",
-    appTheme: "#0b8d62",
-    category: "使いやすさ",
-    status: "検討しています",
-    title: "メモ候補を増やしたい",
-    acceptedDate: "2026-03-10",
-    updatedDate: "2026-03-18",
-    detail: "食事や運動など、記録時のメモ候補を選びやすくしてほしいというご意見です。",
-    good: 88,
-    owned: false,
-    timeline: [
-      ["2026/03/10", "ご要望を受け付けました"],
-      ["2026/03/18", "似たご意見とあわせて検討しています"]
-    ]
-  },
-  {
-    id: "AF-1029",
-    app: "ThermoSnap",
-    appIcon: "https://apps.allnew.work/thermosnap-icon.png",
-    appTheme: "#f05423",
-    category: "見た目・表示",
-    status: "出来ました",
-    title: "表示を見やすくしてほしい",
-    acceptedDate: "2026-01-24",
-    updatedDate: "2026-05-12",
-    detail: "記録一覧の読みやすさについてのご意見に対応しました。",
-    good: 204,
-    owned: false,
-    timeline: [
-      ["2026/01/24", "ご要望を受け付けました"],
-      ["2026/02/09", "アップデート作業に着手しました"],
-      ["2026/04/18", "アップデート版アプリのテストをしました"],
-      ["2026/05/08", "アップストアの審査待ちです"],
-      ["2026/05/12", "🎊アップデート版が公開されました👏👏👏👏"]
-    ]
-  },
-  {
-    id: "AF-1051",
-    app: "New App Idea",
-    appEmoji: "🚀",
-    appDisplayName: "新しいアプリ案",
-    appFilterable: false,
-    appTheme: "#0a7dff",
-    category: "新しい機能",
-    status: "受け付けました",
-    title: "集中タイマーのアプリ案",
-    acceptedDate: "2026-05-18",
-    updatedDate: "2026-05-18",
-    detail: "新しいアプリの案として受け付け、内容を確認しています。",
-    good: 36,
-    owned: false,
-    timeline: [
-      ["2026/05/18", "新しいアプリ案を受け付けました"]
-    ]
-  },
-  {
-    id: "AF-1048",
-    app: "",
-    appEmoji: "•",
-    appDisplayName: "対象アプリなし",
-    appFilterable: false,
-    appTheme: "#9aa3b2",
-    category: "その他",
-    status: "見送り・保留",
-    title: "今回は見送り・保留になりました",
-    acceptedDate: "2026-04-30",
-    updatedDate: "2026-05-02",
-    detail: "今回は対応を見送らせていただきました。",
-    good: 9,
-    owned: false,
-    timeline: [
-      ["2026/04/30", "ご意見を受け付けました"],
-      ["2026/05/02", "公開できる範囲で結果を表示しました"]
-    ]
-  }
-];
+const publicStatusItems = [];
 
 const filters = {
   status: "all",
@@ -408,6 +309,7 @@ function openDetail(item) {
 function render() {
   const baseItems = getBoardItems();
   document.body.classList.toggle("is-my-board", boardView === "mine");
+  document.body.classList.toggle("is-empty-public-board", boardView === "public" && baseItems.length === 0);
   updateMetrics();
   boardViewButtons.forEach((button) => {
     const isActive = button.dataset.boardView === boardView;
@@ -447,7 +349,7 @@ function findAppMeta(name) {
 
 async function loadAppCatalog() {
   try {
-    const response = await fetch("https://apps.allnew.work/?lang=ja", { mode: "cors" });
+    const response = await fetch(window.PoipoiI18n?.catalogUrl?.() || "https://apps.allnew.work/?lang=ja", { mode: "cors" });
     const html = await response.text();
     const doc = new DOMParser().parseFromString(html, "text/html");
     const itemList = [...doc.querySelectorAll('script[type="application/ld+json"]')]

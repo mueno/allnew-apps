@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const appsCatalogUrl = "https://apps.allnew.work/?lang=ja";
+  const appsCatalogUrl = window.PoipoiI18n?.catalogUrl?.() || "https://apps.allnew.work/?lang=ja";
   const appStoreLookupEndpoint = "https://itunes.apple.com/lookup";
   const feedbackChatApiUrl =
     window.POIPOI_FEEDBACK_CHAT_API_URL ||
@@ -589,7 +589,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function formatDateForReception(value) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return "";
-    return new Intl.DateTimeFormat("ja-JP", {
+    return new Intl.DateTimeFormat(window.PoipoiI18n?.language === "en" ? "en-US" : "ja-JP", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit"
@@ -2160,10 +2160,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function syncGuestBoardViewVisibility() {
     const showMine = isAuthenticated && guestBoardView === "mine";
+    const hasPublicItems = guestStatusItems.length > 0;
     if (myReceptionPanel) myReceptionPanel.hidden = !showMine;
-    if (publicStatusSummary) publicStatusSummary.hidden = showMine;
-    if (publicStatusTools) publicStatusTools.hidden = showMine;
-    if (guestStatusList) guestStatusList.hidden = showMine;
+    if (publicStatusSummary) publicStatusSummary.hidden = showMine || !hasPublicItems;
+    if (publicStatusTools) publicStatusTools.hidden = showMine || !hasPublicItems;
+    if (guestStatusList) guestStatusList.hidden = showMine || !hasPublicItems;
     if (guestStatusEmptyState && showMine) guestStatusEmptyState.hidden = true;
     guestBoardViewButtons.forEach((button) => {
       const isActive = (button.dataset.guestBoardView || "public") === (showMine ? "mine" : "public");
