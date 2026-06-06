@@ -1307,10 +1307,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const receptionType = selectedType || pendingReceptionType;
     if (receptionType === "不具合メモ") {
-      const privacyNote = appName === "WeightSnap"
-        ? "体重などの数値や氏名は不要です。"
-        : "氏名や連絡先は不要です。";
-      return `${appName}の不具合ですね。起きていることをそのまま書いてください。${privacyNote}`;
+      return `${appName}の不具合ですね。ご不便をおかけして申し訳ありません。不具合の具体的な内容を教えていただけますか？`;
     }
     if (receptionType === "改善の要望") {
       return `${appName}の改善アイデアですね。迷ったところ、使いづらかったところ、こうなると助かることを1つ書いてください。`;
@@ -1468,7 +1465,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ? "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。個人情報は不要です。"
         : buildStableCollectingReply({ extracted: { type: inferredType } });
     } else if (inferredType === "不具合メモ") {
-      reply = "ありがとうございます。不具合として受付できます。";
+      reply = "お知らせいただき、ありがとうございました。すぐに担当者と確認いたします。";
     } else if (inferredType === "新しいアプリ案") {
       reply = "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
     } else {
@@ -1558,7 +1555,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。";
     }
     if (type === "不具合メモ") {
-      return `${appName}の${inferBugTopicFromUserMessages()}ですね。どの操作のあとに起きるかだけ教えてください。`;
+      return `ありがとうございます。${inferBugTopicFromUserMessages()}の不具合ですね。`;
     }
     return `${appName}の改善アイデアですね。どう変わると使いやすいかを1つだけ教えてください。`;
   }
@@ -1587,7 +1584,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
       }
       if (type === "不具合メモ") {
-        return `ありがとうございます。${appName}の不具合として受付できます。`;
+        return "お知らせいただき、ありがとうございました。すぐに担当者と確認いたします。";
       }
       return `ありがとうございます。${appName}の改善アイデアとして受付できます。`;
     }
