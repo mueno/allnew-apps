@@ -613,32 +613,38 @@ document.addEventListener("DOMContentLoaded", () => {
   function getPoinaReceptionScript(visitCount = getStoredPoinaReceptionVisitCount()) {
     if (visitCount <= 1) {
       return {
-        title: "ポイナ受付へようこそ。お困りごとをお預かりします。",
-        lead: "ここでは、AllNewのアプリの不具合、改善アイデア、新しいアプリ案を短く安心して送れます。",
-        guide: "お名前や連絡先は書かず、今日はどういうご用件かを選んでください。"
+        title: "ポイナです。POIPOI受付へようこそ。",
+        lead: "AllNewアプリの不具合、改善アイデア、新しいアプリ案を送れます。",
+        guide: "今日はどのようなご用件でしょうか？"
       };
     }
 
     if (visitCount === 2) {
       return {
-        title: "おかえりなさい。今日のご用件をお聞かせください。",
-        lead: "前回の続きでも、新しい内容でも大丈夫です。用件と対象アプリを選ぶと、ポイナが必要な点だけ確認します。",
-        guide: "不具合、改善アイデア、新しいアプリ案のどれに近いですか？"
+        title: "おかえりなさい。今日もポイナがうかがいます。",
+        lead: "前回の続きでも、新しい内容でも大丈夫です。",
+        guide: "今日はどのようなご用件でしょうか？"
       };
     }
 
     return {
-      title: "いつもありがとうございます。要点から受付します。",
-      lead: "説明は短くて大丈夫です。ポイナが確認しやすい形でお預かりします。",
-      guide: "まず近いご用件を選んでください。迷ったら「改善アイデア」を選んでください。"
+      title: "いつもありがとうございます。",
+      lead: "",
+      guide: "今日はどのようなご用件でしょうか？"
     };
   }
 
   function updatePoinaReceptionScript(visitCount = getStoredPoinaReceptionVisitCount()) {
     const script = getPoinaReceptionScript(visitCount);
     if (poinaReceptionTitle) poinaReceptionTitle.textContent = script.title;
-    if (poinaReceptionLead) poinaReceptionLead.textContent = script.lead;
-    if (poinaReceptionGuide) poinaReceptionGuide.textContent = script.guide;
+    if (poinaReceptionLead) {
+      poinaReceptionLead.textContent = script.lead;
+      poinaReceptionLead.hidden = !script.lead;
+    }
+    if (poinaReceptionGuide) {
+      poinaReceptionGuide.textContent = script.guide;
+      poinaReceptionGuide.hidden = !script.guide;
+    }
   }
 
   function scrollToPoinaReception(options = {}) {
@@ -1129,7 +1135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isIdea) {
       if (poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title")) {
-        poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title").textContent = "その困りごと、ポイナが持ち帰ります。";
+        poipoiSubmitSummary.querySelector(".poipoi-submit-summary-title").textContent = "ありがとうございます。AllNewで検討します。";
       }
       if (poipoiSummaryNote) {
         poipoiSummaryNote.textContent = "いただいたアイデアは、AllNewの新しいアプリ案として検討します。氏名や連絡先などの個人情報は書かず、このまま送信してください。送信後に受付番号が表示されます。";
@@ -1164,17 +1170,17 @@ document.addEventListener("DOMContentLoaded", () => {
     bug: {
       type: "不具合メモ",
       filter: "all",
-      note: "不具合についてですね。対象アプリを選ぶと、起きたことをすぐ書けます。"
+      note: "不具合ですね。対象アプリを選択して下さい。"
     },
     improvement: {
       type: "改善の要望",
       filter: "all",
-      note: "改善アイデアですね。対象のアプリを選んでください。迷った点や、こうなったら良いことを聞かせてください。"
+      note: "改善アイデアですね。対象アプリを選択して下さい。"
     },
     idea: {
       type: "新しいアプリ案",
       filter: "idea",
-      note: "新しいアプリ案ですね。このままポイナが困りごとをお預かりします。"
+      note: "新しいアプリ案ですね。アイデアについてお聞かせください。"
     }
   });
 
@@ -1201,7 +1207,10 @@ document.addEventListener("DOMContentLoaded", () => {
     activeAppFilter = intent.filter || "all";
     appSearchQuery = "";
     if (appSearchInput) appSearchInput.value = "";
-    if (poinaSelectedIntentNote) poinaSelectedIntentNote.textContent = intent.note;
+    if (poinaSelectedIntentNote) {
+      poinaSelectedIntentNote.textContent = intent.note;
+      poinaSelectedIntentNote.hidden = false;
+    }
     updatePoinaIntentButtonState();
     setAppPickerSkippedForIdea(false);
 
@@ -1284,7 +1293,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function getPoinaOpeningMessage() {
     const appName = selectedApp?.name || "このアプリ";
     if (selectedApp?.isVirtual) {
-      return "新しいアプリ案ですね。まだ名前がなくても大丈夫です。誰が、どんな場面で、何に困っているかを思いつくまま書いてください。ポイナが受け取って、AllNewで検討できるようにお預かりします。";
+      return "新しいアプリ案ですね。アイデアについてお聞かせください。誰が、どんな場面で、何に困っているかを思いつくまま書いてください。";
     }
 
     const receptionType = selectedType || pendingReceptionType;
@@ -1297,7 +1306,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (receptionType === "改善の要望") {
       return `${appName}をもっと使いやすくするアイデアですね。ありがとうございます。迷ったところ、使いづらかったところ、こうなると助かることを1つ書いてください。`;
     }
-    return `${appName}についてお聞かせください。気になったことをそのまま書いてください。ポイナが内容を整理します。`;
+    return `${appName}についてお聞かせください。気になったことをそのまま書いてください。`;
   }
 
   function renderFeedbackChat() {
@@ -1356,7 +1365,7 @@ document.addEventListener("DOMContentLoaded", () => {
         decision: "block",
         publicStatus: "ごめんなさい",
         flags,
-        message: `この内容は受付できません。${blockingFlags.map((flag) => flag.label).join("、") || "いたずらの疑い"}にあたる可能性があります。表現を変えてください。`,
+        message: `この内容はそのままでは送信できません。${blockingFlags.map((flag) => flag.label).join("、") || "いたずらの疑い"}にあたる可能性があります。表現を変えてください。`,
         adminSummary: "受付不可カテゴリに該当する可能性があるため、公開・受付せず警告対象とする。",
         nextAction: "警告。一定回数を超えた場合は利用停止。"
       };
@@ -1378,7 +1387,7 @@ document.addEventListener("DOMContentLoaded", () => {
         decision: "warn",
         publicStatus: "下書き確認",
         flags: warningFlags,
-        message: `受付前に確認が必要です。${warningFlags.map((flag) => flag.label).join("、")}にあたる情報が含まれていないか見直してください。`,
+        message: `送る前に確認が必要です。${warningFlags.map((flag) => flag.label).join("、")}にあたる情報が含まれていないか見直してください。`,
         adminSummary: "注意情報の混入可能性。投稿前にユーザーへ見直しを促す。",
         nextAction: "ユーザーへ見直し依頼。"
       };
@@ -1388,7 +1397,7 @@ document.addEventListener("DOMContentLoaded", () => {
       decision: "accept",
       publicStatus: "受け付けました",
       flags: [],
-      message: payload.type === "新しいアプリ案" ? "ポイナがお預かりできる内容です。" : "このまま送信できます。",
+      message: "このまま送信できます。",
       adminSummary: `${payload.appName} / ${payload.type} として検討に値する内容。公開前に人間の運営管理者が要約とマスキングを確認する。`,
       nextAction: payload.type === "新しいアプリ案" ? "新しいアプリ案として運営が確認します。" : "対象アプリの改善・不具合として運営が確認します。"
     };
@@ -1400,7 +1409,7 @@ document.addEventListener("DOMContentLoaded", () => {
     aiReviewPreview.classList.remove("is-ok", "is-warn", "is-block");
     if (!payload.title && !payload.body) {
       aiReviewPreview.hidden = true;
-      aiReviewMessage.textContent = "入力された内容は、送信前にAIが受付できる内容か確認します。";
+      aiReviewMessage.textContent = "入力された内容は、送信前に送れる状態か確認します。";
       hideSubmitSummary();
       return review;
     }
@@ -1448,13 +1457,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (needsMore) {
       reply = inferredType === "新しいアプリ案"
         ? "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。個人情報は不要です。"
-        : "ありがとうございます。もう少しだけ教えてください。どの画面で、何をした時に、どうなったかを書いてもらえると内容を整理しやすくなります。";
+        : "ありがとうございます。もう少しだけお聞かせください。どの画面で、何をした時に、どうなったかを書いてください。";
     } else if (inferredType === "不具合メモ") {
-      reply = "不具合としてお預かりします。下の確認内容を見て、問題なければ送信してください。";
+      reply = "ありがとうございます。不具合として送信できます。";
     } else if (inferredType === "新しいアプリ案") {
-      reply = "それは時間を取り戻したい、という切実な困りごとですね。新しいアプリ案としてポイナがお預かりします。送信すると受付番号が出ます。";
+      reply = "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
     } else {
-      reply = "ありがとうございます。内容をお預かりできます。下の確認内容を見て、問題なければ送信してください。";
+      reply = "ありがとうございます。このまま送信できます。";
     }
 
     return {
@@ -1497,16 +1506,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const type = result?.extracted?.type || selectedType || inferFeedbackType(result?.extracted?.summary || "");
     if (result?.status === "ready") {
       if (selectedApp?.isVirtual || type === "新しいアプリ案") {
-        return "ありがとうございます。その困りごと、ポイナが新しいアプリ案としてお預かりします。送信すると受付番号が出ます。";
+        return "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
       }
       if (type === "不具合メモ") {
-        return `${appName}の不具合として整理しました。下の確認内容を見て、問題なければ送信してください。`;
+        return `ありがとうございます。${appName}の不具合として送信できます。`;
       }
-      return `ありがとうございます。${appName}の改善アイデアとしてお預かりします。下の確認内容を見て、問題なければ送信してください。`;
+      return `ありがとうございます。${appName}の改善アイデアとして送信できます。`;
     }
 
     if (result?.status === "blocked") {
-      return "すみません。この内容はそのままでは受付できません。個人情報や秘密情報を入れず、アプリの不具合や改善案にしぼって書き直してください。";
+      return "すみません。この内容はそのままでは送信できません。個人情報や秘密情報を入れず、アプリの不具合や改善案にしぼって書き直してください。";
     }
 
     return selectedApp?.isVirtual
@@ -1659,10 +1668,10 @@ document.addEventListener("DOMContentLoaded", () => {
       publicStatus: result.publicStatus || (decision === "accept" ? "受け付けました" : decision === "block" ? "ごめんなさい" : "下書き確認"),
       flags: riskFlags.map((label) => ({ label, severity: decision === "block" ? "block" : "warn" })),
       message: decision === "accept"
-        ? (selectedApp?.isVirtual ? "ポイナがお預かりできる内容です。" : "このまま送信できます。")
+        ? "このまま送信できます。"
         : decision === "block"
-          ? "この内容は受付できません。表現を変えてください。"
-          : "もう少し会話で情報を足すと、受付しやすくなります。",
+          ? "この内容はそのままでは送信できません。表現を変えてください。"
+          : "もう少し情報を足すと、内容が伝わりやすくなります。",
       adminSummary: result.adminReport?.summary || "",
       nextAction: result.adminReport?.nextAction || "運営が内容を確認する。"
     };
@@ -1773,7 +1782,7 @@ document.addEventListener("DOMContentLoaded", () => {
         typingMessage.remove();
         appendChatMessage(
           "assistant",
-          "すみません。ポイナのAI受付につながりませんでした。少し時間をおいて、もう一度送ってください。"
+          "すみません。いまポイナにつながりませんでした。少し時間をおいて、もう一度送ってください。"
         );
         setPoipoiChatBusy(false);
         poipoiChatInput.focus({ preventScroll: true });
@@ -3392,7 +3401,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setAppPickerSkippedForIdea(false);
     updatePoinaIntentButtonState();
     if (poinaSelectedIntentNote) {
-      poinaSelectedIntentNote.textContent = "まず近いご用件を選ぶか、そのまま下のアプリ選択へ進んでください。";
+      poinaSelectedIntentNote.textContent = "";
+      poinaSelectedIntentNote.hidden = true;
     }
     wizardStep2Section.classList.remove("is-open");
     poipoiChatHistory = [];
@@ -3432,7 +3442,8 @@ document.addEventListener("DOMContentLoaded", () => {
     wizardStep2Section.classList.remove("is-open");
     updatePoinaIntentButtonState();
     if (poinaSelectedIntentNote) {
-      poinaSelectedIntentNote.textContent = "まず近いご用件を選ぶか、そのまま下のアプリ選択へ進んでください。";
+      poinaSelectedIntentNote.textContent = "";
+      poinaSelectedIntentNote.hidden = true;
     }
     feedbackChatLog.replaceChildren();
     aiReviewPreview.hidden = true;
@@ -3491,7 +3502,7 @@ document.addEventListener("DOMContentLoaded", () => {
     rememberMyReception(payload, report);
     renderMyReceptionPanel();
 
-    alert(`受付が完了しました。\n\n【受付ID】${report.id}\n【呼び名】${currentNickname}\n【対象】${payload.appName}\n【内容】${getDisplayFeedbackType(payload.type)}\n【公開ステータス】${report.publicStatus}\n\nいただいた内容をお預かりしました。次回は「自分の受付」で進み具合を確認できます。`);
+    alert(`受付が完了しました。\n\n【受付ID】${report.id}\n【呼び名】${currentNickname}\n【対象】${payload.appName}\n【内容】${getDisplayFeedbackType(payload.type)}\n【公開ステータス】${report.publicStatus}\n\nいただいた内容を受け取りました。次回は「自分の受付」で進み具合を確認できます。`);
 
     submitFeedbackBtn.disabled = false;
     setSubmitButtonIdleLabel(payload);
