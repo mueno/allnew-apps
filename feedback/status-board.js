@@ -78,7 +78,8 @@ function mapMyReceptionToStatusItem(item) {
   return {
     id: item.id,
     app: item.appName || "New App Idea",
-    appEmoji: item.appName === "New App Idea" ? "🚀" : "•",
+    appEmoji: item.appName === "New App Idea" ? "□" : "•",
+    appIcon: item.appName === "New App Idea" ? "./assets/new-app-idea-icon.png?v=20260606-blank-state" : item.appIcon,
     appDisplayName: item.appName === "New App Idea" ? "新しいアプリ案" : item.appName || "受付内容",
     appFilterable: item.appName !== "New App Idea",
     appTheme: "#0a7dff",

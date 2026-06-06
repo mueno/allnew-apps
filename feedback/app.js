@@ -56,7 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
     id: "newapp",
     name: "New App Idea",
     category: "新しい提案",
-    icon: "🚀",
+    icon: "□",
+    iconUrl: "./assets/new-app-idea-icon.png?v=20260606-blank-state",
     filterGroup: "idea",
     isVirtual: true
   });
@@ -1225,10 +1226,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setAppPickerSkippedForIdea(shouldSkip) {
-    if (appPickerSection) appPickerSection.hidden = Boolean(shouldSkip);
+    const shouldShowAppPicker = !shouldSkip && Boolean(selectedReceptionIntent);
+    if (appPickerSection) appPickerSection.hidden = !shouldShowAppPicker;
     if (confirmAppPanel) {
-      confirmAppPanel.hidden = Boolean(shouldSkip);
-      if (shouldSkip) confirmAppPanel.classList.remove("is-open");
+      const shouldHideConfirm = shouldSkip || !shouldShowAppPicker;
+      confirmAppPanel.hidden = shouldHideConfirm;
+      if (shouldHideConfirm) confirmAppPanel.classList.remove("is-open");
     }
   }
 
