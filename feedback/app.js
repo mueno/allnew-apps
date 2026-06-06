@@ -646,6 +646,7 @@ document.addEventListener("DOMContentLoaded", () => {
       poinaReceptionGuide.textContent = script.guide;
       poinaReceptionGuide.hidden = !script.guide;
     }
+    window.PoipoiI18n?.setLanguage?.(window.PoipoiI18n.language || "ja", { updateUrl: false });
   }
 
   function scrollToPoinaReception(options = {}) {
