@@ -1177,12 +1177,12 @@ document.addEventListener("DOMContentLoaded", () => {
     bug: {
       type: "不具合メモ",
       filter: "all",
-      note: "不具合ですね。対象アプリを選択して下さい。"
+      note: "不具合ですね。対象アプリを選択してください。"
     },
     improvement: {
       type: "改善の要望",
       filter: "all",
-      note: "改善アイデアですね。対象アプリを選択して下さい。"
+      note: "改善アイデアですね。対象アプリを選択してください。"
     },
     idea: {
       type: "新しいアプリ案",
@@ -1262,7 +1262,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return "新しいアプリ案として進めますか？";
     }
     if (pendingReceptionType) {
-      return `${app.name}の${getDisplayFeedbackType(pendingReceptionType)}についてですね。この内容で進めますか？`;
+      return `${app.name}の${getDisplayFeedbackType(pendingReceptionType)}ですね。進めますか？`;
     }
     return `${app.name}についてですね。この内容で進めますか？`;
   }
@@ -1310,10 +1310,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const privacyNote = appName === "WeightSnap"
         ? "体重などの数値や氏名は不要です。"
         : "氏名や連絡先は不要です。";
-      return `${appName}で何が起きましたか？${privacyNote}どの画面で、何をした時に、どうなったかを分かる範囲で書いてください。`;
+      return `${appName}の不具合ですね。起きていることをそのまま書いてください。${privacyNote}`;
     }
     if (receptionType === "改善の要望") {
-      return `${appName}をもっと使いやすくするアイデアですね。ありがとうございます。迷ったところ、使いづらかったところ、こうなると助かることを1つ書いてください。`;
+      return `${appName}の改善アイデアですね。迷ったところ、使いづらかったところ、こうなると助かることを1つ書いてください。`;
     }
     return `${appName}についてお聞かせください。気になったことをそのまま書いてください。`;
   }
@@ -1406,7 +1406,7 @@ document.addEventListener("DOMContentLoaded", () => {
       decision: "accept",
       publicStatus: "受け付けました",
       flags: [],
-      message: "このまま送信できます。",
+      message: "この内容で受付できます。",
       adminSummary: `${payload.appName} / ${payload.type} として検討に値する内容。公開前に人間の運営管理者が要約とマスキングを確認する。`,
       nextAction: payload.type === "新しいアプリ案" ? "新しいアプリ案として運営が確認します。" : "対象アプリの改善・不具合として運営が確認します。"
     };
@@ -1462,17 +1462,17 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (riskLabels.includes("医療助言・診断に近い内容")) {
       reply = "ありがとうございます。診断や治療の判断にあたる内容は、この受付では扱えません。アプリの表示、操作、記録のしやすさについて気になった点を書いてください。";
     } else if (review.decision === "block") {
-      reply = "すみません。この内容はそのままでは受け付けできません。アプリの不具合、使いにくさ、あったらいい機能のどれかにしぼって書き直してください。";
+      reply = "この内容はそのままでは受付できません。アプリの不具合、使いにくさ、あったらいい機能のどれかにしぼって書き直してください。";
     } else if (needsMore) {
       reply = inferredType === "新しいアプリ案"
         ? "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。個人情報は不要です。"
-        : "ありがとうございます。もう少しだけお聞かせください。どの画面で、何をした時に、どうなったかを書いてください。";
+        : buildStableCollectingReply({ extracted: { type: inferredType } });
     } else if (inferredType === "不具合メモ") {
-      reply = "ありがとうございます。不具合として送信できます。";
+      reply = "ありがとうございます。不具合として受付できます。";
     } else if (inferredType === "新しいアプリ案") {
       reply = "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
     } else {
-      reply = "ありがとうございます。このまま送信できます。";
+      reply = "ありがとうございます。この内容で受付できます。";
     }
 
     return {
@@ -1506,30 +1506,97 @@ document.addEventListener("DOMContentLoaded", () => {
     return matches.some((match) => !isAllowedInlineLatinToken(match));
   }
 
+  function getUserChatMessages() {
+    return poipoiChatHistory
+      .filter((item) => item.role === "user")
+      .map((item) => String(item.content || "").trim())
+      .filter(Boolean);
+  }
+
+  function getLastUserChatMessage() {
+    const messages = getUserChatMessages();
+    return messages[messages.length - 1] || "";
+  }
+
+  function compactReceptionText(value) {
+    return String(value || "")
+      .replace(/\s+/g, " ")
+      .replace(/。{2,}/g, "。")
+      .trim();
+  }
+
+  function buildFaithfulDraftBody() {
+    const messages = getUserChatMessages().map(compactReceptionText).filter(Boolean);
+    if (!messages.length) return "";
+    const latest = messages[messages.length - 1];
+    if (latest.replace(/\s/g, "").length >= 12) return latest;
+    return [...new Set(messages)].join("。").replace(/。{2,}/g, "。").trim();
+  }
+
+  function getReceptionTypeFromResult(result) {
+    if (selectedApp?.isVirtual) return "新しいアプリ案";
+    const value = result?.extracted?.type || selectedType || pendingReceptionType || "";
+    if (/不具合|バグ/.test(value)) return "不具合メモ";
+    if (/改善|要望/.test(value)) return "改善の要望";
+    return value || inferFeedbackType(result?.extracted?.summary || getLastUserChatMessage());
+  }
+
+  function inferBugTopicFromUserMessages() {
+    const text = getUserChatMessages().join(" ");
+    if (/アイコン|icon/i.test(text)) return "アイコン表示";
+    if (/通知|notification/i.test(text)) return "通知";
+    if (/ログイン|サインイン|login|sign[ -]?in/i.test(text)) return "ログイン";
+    if (/保存|記録|save|record/i.test(text)) return "保存";
+    if (/表示|画面|レイアウト|display|screen|layout/i.test(text)) return "表示";
+    return "不具合";
+  }
+
+  function buildStableCollectingReply(result) {
+    const appName = selectedApp?.name || "このアプリ";
+    const type = getReceptionTypeFromResult(result);
+    if (selectedApp?.isVirtual || type === "新しいアプリ案") {
+      return "ありがとうございます。誰が、どんな場面で、何に困るかをもう少しだけ書いてください。";
+    }
+    if (type === "不具合メモ") {
+      return `${appName}の${inferBugTopicFromUserMessages()}ですね。どの操作のあとに起きるかだけ教えてください。`;
+    }
+    return `${appName}の改善アイデアですね。どう変わると使いやすいかを1つだけ教えてください。`;
+  }
+
   function replyAsksForMoreAfterReady(text) {
-    return /もう少し|教えて|いただけますか|ください|どんな使い方|どの画面|いつ、どこ/i.test(String(text || ""));
+    return /もう少し|教えて|いただけますか|ください|どんな使い方|どの画面|いつ、どこ|再現条件|再現手順|環境情報/i.test(String(text || ""));
+  }
+
+  function replyNeedsReceptionRewrite(text, result) {
+    const reply = String(text || "");
+    const type = getReceptionTypeFromResult(result);
+    if (!reply.trim()) return true;
+    if (/ご不便|申し訳|おさわがせ|確認しました|記録しますので|改善案を一緒|AI一次|下のAI|再現条件|再現手順|環境情報|クリック動作|未特定|現象を詳しく|どのアイコンが|まず「|次に、/.test(reply)) {
+      return true;
+    }
+    if (type === "不具合メモ" && /改善案/.test(reply)) return true;
+    if (type === "不具合メモ" && (reply.match(/教えてください/g) || []).length > 1) return true;
+    return false;
   }
 
   function buildStablePoinaReply(result) {
     const appName = selectedApp?.name || "このアプリ";
-    const type = result?.extracted?.type || selectedType || inferFeedbackType(result?.extracted?.summary || "");
+    const type = getReceptionTypeFromResult(result);
     if (result?.status === "ready") {
       if (selectedApp?.isVirtual || type === "新しいアプリ案") {
         return "ありがとうございます。その困りごと、AllNewで検討します。送ると受付番号が表示されます。";
       }
       if (type === "不具合メモ") {
-        return `ありがとうございます。${appName}の不具合として送信できます。`;
+        return `ありがとうございます。${appName}の不具合として受付できます。`;
       }
-      return `ありがとうございます。${appName}の改善アイデアとして送信できます。`;
+      return `ありがとうございます。${appName}の改善アイデアとして受付できます。`;
     }
 
     if (result?.status === "blocked") {
-      return "すみません。この内容はそのままでは送信できません。個人情報や秘密情報を入れず、アプリの不具合や改善案にしぼって書き直してください。";
+      return "この内容はそのままでは受付できません。個人情報や秘密情報を入れず、アプリの不具合や改善案にしぼって書き直してください。";
     }
 
-    return selectedApp?.isVirtual
-      ? "ありがとうございます。どんな場面で、どんなふうに助かるアプリかを1つだけ追記してください。"
-      : "ありがとうございます。いつ、どの画面で、どうなるとよいかを1つだけ追記してください。";
+    return buildStableCollectingReply(result);
   }
 
   function polishPoinaResultForDisplay(result) {
@@ -1550,7 +1617,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const isIdeaReady = result.status === "ready"
       && (selectedApp?.isVirtual || result.extracted?.type === "新しいアプリ案");
-    if (isIdeaReady || hasSuspiciousLatinJapaneseBlend(reply) || (result.status === "ready" && replyAsksForMoreAfterReady(reply))) {
+    if (isIdeaReady || hasSuspiciousLatinJapaneseBlend(reply) || replyNeedsReceptionRewrite(reply, result) || (result.status === "ready" && replyAsksForMoreAfterReady(reply))) {
       return { ...result, reply: buildStablePoinaReply(result) };
     }
     return result;
@@ -1677,7 +1744,7 @@ document.addEventListener("DOMContentLoaded", () => {
       publicStatus: result.publicStatus || (decision === "accept" ? "受け付けました" : decision === "block" ? "ごめんなさい" : "下書き確認"),
       flags: riskFlags.map((label) => ({ label, severity: decision === "block" ? "block" : "warn" })),
       message: decision === "accept"
-        ? "このまま送信できます。"
+        ? "この内容で受付できます。"
         : decision === "block"
           ? "この内容はそのままでは送信できません。表現を変えてください。"
           : "もう少し情報を足すと、内容が伝わりやすくなります。",
@@ -1688,7 +1755,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function applyChatResult(result) {
     const extracted = result.extracted || {};
-    const lastUserMessage = [...poipoiChatHistory].reverse().find((item) => item.role === "user")?.content || "";
+    const lastUserMessage = getLastUserChatMessage();
+    const faithfulBody = buildFaithfulDraftBody();
+    const extractedBody = extracted.detail || extracted.summary || "";
+    const draftBody = result.status === "ready"
+      ? faithfulBody || extractedBody || lastUserMessage
+      : extractedBody || faithfulBody || lastUserMessage;
     if (extracted.type && extracted.type !== "未分類" && extracted.type !== "受付不可") {
       selectedType = selectedApp?.isVirtual ? "新しいアプリ案" : extracted.type;
     }
@@ -1696,8 +1768,8 @@ document.addEventListener("DOMContentLoaded", () => {
       appId: selectedApp?.id || "",
       appName: selectedApp?.name || "",
       type: selectedType || extracted.type || "未分類",
-      title: extracted.title || lastUserMessage.replace(/\s+/g, " ").slice(0, 48),
-      body: extracted.detail || extracted.summary || lastUserMessage
+      title: extracted.title || draftBody.replace(/\s+/g, " ").slice(0, 48),
+      body: draftBody
     };
     latestReview = reviewFromChatResult(result);
     aiReviewPreview.classList.remove("is-ok", "is-warn", "is-block");
