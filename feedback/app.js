@@ -1472,7 +1472,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const fullText = bodyText && titleText && bodyText !== titleText
       ? `${titleText}\n${bodyText}`.trim()
       : (bodyText || titleText);
-    const flags = prohibitedTopicRules.filter((rule) => rule.pattern.test(fullText));
+    const isAppBugReport = payload.type === "不具合メモ";
+    const appBugContextPattern = /不具合|バグ|認識|表示|保存|同期|撮影|画像|画面|データ|ダミー|エラー|動かない|できない|うまくできない|読み取|OCR|camera|image|dummy|error|bug|display|recogn/i;
+    const flags = prohibitedTopicRules.filter((rule) => {
+      if (
+        isAppBugReport
+        && rule.label === "医療助言・診断に近い内容"
+        && appBugContextPattern.test(fullText)
+      ) {
+        return false;
+      }
+      return rule.pattern.test(fullText);
+    });
     const blockingFlags = flags.filter((flag) => flag.severity === "block");
     const warningFlags = flags.filter((flag) => flag.severity === "warn");
     const detailLength = fullText.replace(/\s/g, "").length;
@@ -1570,7 +1581,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let reply = "";
     if (riskLabels.includes("個人情報・秘密情報の混入")) {
       reply = "個人情報や秘密情報に見える内容が含まれているようです。恐れ入りますが、その部分を伏せて、起きたことやご要望だけを書き直してください。";
-    } else if (riskLabels.includes("医療助言・診断に近い内容")) {
+    } else if (riskLabels.includes("医療助言・診断に近い内容") && inferredType !== "不具合メモ") {
       reply = "ありがとうございます。診断や治療の判断にあたる内容は、この受付では扱えません。アプリの表示、操作、記録のしやすさについて気になった点を教えてください。";
     } else if (review.decision === "block") {
       reply = "恐れ入りますが、この内容はそのままではお預かりできません。アプリの不具合、使いにくさ、あったらいい機能のどれかに絞って書き直してください。";
@@ -1685,6 +1696,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (/おさわがせ|確認しました|記録しますので|改善案を一緒|AI一次|下のAI|再現条件|再現手順|環境情報|クリック動作|未特定|現象を詳しく|どのアイコンが|まず「|次に、/.test(reply)) {
       return true;
     }
+    if (type === "不具合メモ" && /医療判断|医療助言|診断や治療|法律に抵触|期待に添えず|ご要望はございませんか/.test(reply)) return true;
     if (type === "不具合メモ" && /改善案/.test(reply)) return true;
     if (type === "不具合メモ" && (reply.match(/教えてください/g) || []).length > 1) return true;
     return false;
@@ -1713,11 +1725,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function polishPoinaResultForDisplay(result) {
     const reply = String(result?.reply || "");
     if (!result || typeof result !== "object") return buildLocalChatResult("");
+    const lastUserMessage = [...poipoiChatHistory].reverse().find((item) => item.role === "user")?.content
+      || result.extracted?.detail
+      || result.extracted?.summary
+      || "";
     if (selectedApp?.isVirtual && result.status !== "blocked") {
-      const lastUserMessage = [...poipoiChatHistory].reverse().find((item) => item.role === "user")?.content
-        || result.extracted?.detail
-        || result.extracted?.summary
-        || "";
       const localIdeaResult = buildLocalChatResult(lastUserMessage);
       if (localIdeaResult.status === "ready") {
         return {
@@ -1725,6 +1737,21 @@ document.addEventListener("DOMContentLoaded", () => {
           reply: buildStablePoinaReply(localIdeaResult)
         };
       }
+    }
+    const localResult = buildLocalChatResult(lastUserMessage);
+    if (
+      getReceptionTypeFromResult(localResult) === "不具合メモ"
+      && localResult.status === "ready"
+      && (
+        result.status !== "ready"
+        || replyNeedsReceptionRewrite(reply, result)
+        || /医療判断|医療助言|診断や治療|法律に抵触|期待に添えず/.test(reply)
+      )
+    ) {
+      return {
+        ...localResult,
+        reply: buildStablePoinaReply(localResult)
+      };
     }
     const isIdeaReady = result.status === "ready"
       && (selectedApp?.isVirtual || result.extracted?.type === "新しいアプリ案");
@@ -3815,7 +3842,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", handleTermsModalKeydown);
   poipoiChatForm.addEventListener("submit", sendPoipoiChatMessage);
   poipoiChatInput.addEventListener("input", resizePoipoiChatInput);
+  let poipoiCompositionEndedAt = 0;
+  poipoiChatInput.addEventListener("compositionstart", () => {
+    poipoiChatInput.dataset.composing = "true";
+  });
+  poipoiChatInput.addEventListener("compositionend", () => {
+    poipoiChatInput.dataset.composing = "false";
+    poipoiCompositionEndedAt = performance.now();
+  });
   poipoiChatInput.addEventListener("keydown", (event) => {
+    const justFinishedCompositionEnter = event.key === "Enter" && performance.now() - poipoiCompositionEndedAt < 120;
+    if (event.isComposing || event.keyCode === 229 || poipoiChatInput.dataset.composing === "true" || justFinishedCompositionEnter) return;
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       poipoiChatForm.requestSubmit();
