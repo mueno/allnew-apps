@@ -597,6 +597,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }).format(date);
   }
 
+  function formatDateTimeForReception(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+    if (window.PoipoiI18n?.language === "en") {
+      return new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    }
+    const pad = (number) => String(number).padStart(2, "0");
+    return `${date.getFullYear()}年${pad(date.getMonth() + 1)}月${pad(date.getDate())}日 ${pad(date.getHours())}時${pad(date.getMinutes())}分`;
+  }
+
   function getStoredPoinaReceptionVisitCount() {
     const count = Number.parseInt(getCookieValue(poinaReceptionVisitCookieName) || "0", 10);
     return Number.isFinite(count) && count > 0 ? Math.min(count, 99) : 0;
@@ -966,6 +982,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${randomItem(prefixes)}${randomItem(roles)} ${randomItem(suffixes)}`;
   }
 
+  function isGeneratedPoinaNickname(value) {
+    const nickname = String(value || "").trim();
+    if (!nickname) return false;
+    return prefixes.some((prefix) => roles.some((role) => suffixes.some((suffix) => nickname === `${prefix}${role} ${suffix}`)));
+  }
+
   function resetLoginButtonLabel() {
     mockAppleLoginBtn.replaceChildren(document.createTextNode("Appleでサインイン"));
     mockAppleLoginBtn.classList.remove("signed-in");
@@ -1299,6 +1321,92 @@ document.addEventListener("DOMContentLoaded", () => {
     return message;
   }
 
+  function appendReceptionReceipt(payload, report) {
+    const message = document.createElement("div");
+    message.className = "chat-message bot chat-receipt-message";
+
+    const intro = document.createElement("p");
+    intro.className = "chat-receipt-intro";
+    intro.textContent = "下記の内容で受け付けました。";
+
+    const title = document.createElement("strong");
+    title.className = "chat-receipt-title";
+    title.textContent = "受付内容";
+
+    const rows = document.createElement("div");
+    rows.className = "chat-receipt-rows";
+    [
+      ["【日時】", formatDateTimeForReception(report.createdAt || new Date())],
+      ["【受付No.】", report.id],
+      ["【対象】", payload.appName || "New App Idea"],
+      ["【内容】", payload.body || payload.title || "受付内容"]
+    ].forEach(([label, value]) => {
+      const row = document.createElement("div");
+      row.className = "chat-receipt-row";
+      const labelNode = document.createElement("span");
+      labelNode.className = "chat-receipt-label";
+      labelNode.textContent = label;
+      const valueNode = document.createElement("span");
+      valueNode.className = "chat-receipt-value";
+      valueNode.textContent = value;
+      row.append(labelNode, valueNode);
+      rows.append(row);
+    });
+
+    message.append(intro, title, rows);
+    feedbackChatLog.append(message);
+    feedbackChatLog.scrollTop = feedbackChatLog.scrollHeight;
+    return message;
+  }
+
+  function disableReceptionActionButtons(message) {
+    message.querySelectorAll("button").forEach((button) => {
+      button.disabled = true;
+    });
+  }
+
+  function appendPostReceptionActions() {
+    const message = document.createElement("div");
+    message.className = "chat-message bot chat-post-reception-message";
+
+    const prompt = document.createElement("p");
+    prompt.className = "chat-post-reception-prompt";
+    prompt.textContent = "他にも何かお気づきの点がございましたら、お聞かせください。";
+
+    const actions = document.createElement("div");
+    actions.className = "chat-post-reception-actions";
+
+    const continueButton = document.createElement("button");
+    continueButton.type = "button";
+    continueButton.className = "chat-post-reception-button secondary";
+    continueButton.textContent = "続ける";
+    continueButton.addEventListener("click", () => {
+      disableReceptionActionButtons(message);
+      resetWizard();
+      showSubmissionEntry({ behavior: "smooth" });
+    });
+
+    const finishButton = document.createElement("button");
+    finishButton.type = "button";
+    finishButton.className = "chat-post-reception-button primary";
+    finishButton.textContent = "終了する";
+    finishButton.addEventListener("click", () => {
+      disableReceptionActionButtons(message);
+      appendChatMessage("assistant", "本日はご利用ありがとうございました。");
+      window.setTimeout(() => {
+        resetWizard();
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 1800);
+    });
+
+    actions.append(continueButton, finishButton);
+    message.append(prompt, actions);
+    feedbackChatLog.append(message);
+    feedbackChatLog.scrollTop = feedbackChatLog.scrollHeight;
+    return message;
+  }
+
   function getPoinaOpeningMessage() {
     const appName = selectedApp?.name || "このアプリ";
     if (selectedApp?.isVirtual) {
@@ -1475,7 +1583,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (inferredType === "新しいアプリ案") {
       reply = "ありがとうございます。その困りごとは、AllNewで検討します。送信後に受付番号が表示されます。";
     } else {
-      reply = `ありがとうございます。${selectedApp?.name || "このアプリ"}の改善アイデアとしてお預かりします。`;
+      reply = `ありがとうございます。${selectedApp?.name || "このアプリ"}の改善のご意見として、お預かりいたします。内部で確認の上、検討を進めてまいります。`;
     }
 
     return {
@@ -1592,7 +1700,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (type === "不具合メモ") {
         return "お知らせいただき、ありがとうございました。すぐに担当者と確認いたします。";
       }
-      return `ありがとうございます。${appName}の改善アイデアとしてお預かりします。`;
+      return `ありがとうございます。${appName}の改善のご意見として、お預かりいたします。内部で確認の上、検討を進めてまいります。`;
     }
 
     if (result?.status === "blocked") {
@@ -2598,7 +2706,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function normalizeAuthNickname(value) {
     const nickname = String(value || "").trim().slice(0, 80);
-    return nickname || generateNickname();
+    return isGeneratedPoinaNickname(nickname) ? nickname : generateNickname();
   }
 
   function saveAuthSession(nickname) {
@@ -2612,7 +2720,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function restoreAuthSession() {
     const session = getJsonCookie(authSessionCookieName);
     if (!session?.signedIn) return false;
-    signIn(session.nickname, { delayMs: 0, persist: false, scroll: true });
+    const nickname = normalizeAuthNickname(session.nickname);
+    if (nickname !== session.nickname) saveAuthSession(nickname);
+    signIn(nickname, { delayMs: 0, persist: false, scroll: true });
     return true;
   }
 
@@ -3587,12 +3697,15 @@ document.addEventListener("DOMContentLoaded", () => {
     rememberMyReception(payload, report);
     renderMyReceptionPanel();
 
-    alert(`受付が完了しました。\n\n【受付ID】${report.id}\n【呼び名】${currentNickname}\n【対象】${payload.appName}\n【内容】${getDisplayFeedbackType(payload.type)}\n【公開ステータス】${report.publicStatus}\n\nいただいた内容を受け取りました。次回は「自分の受付」で進み具合を確認できます。`);
-
     submitFeedbackBtn.disabled = false;
     setSubmitButtonIdleLabel(payload);
-    resetWizard();
-    setGuestStatusBoardVisible(true);
+    submitFeedbackBtn.hidden = true;
+    aiReviewPreview.hidden = true;
+    latestChatDraft = null;
+    latestReview = null;
+    hideSubmitSummary();
+    appendReceptionReceipt(payload, report);
+    appendPostReceptionActions();
   }
 
   function bindGuestStatusIconFallbacks() {

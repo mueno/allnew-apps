@@ -202,6 +202,15 @@
     "Appleでサインインすると、ポイナが呼び名を決めます。": "When you sign in with Apple, Poina will choose a nickname for you.",
     "ポイナが受付しました": "Poina received it",
     "受付内容": "Submission",
+    "下記の内容で受け付けました。": "We received the following details.",
+    "【日時】": "Date",
+    "【受付No.】": "Reception No.",
+    "【対象】": "Target",
+    "【内容】": "Content",
+    "他にも何かお気づきの点がございましたら、お聞かせください。": "If you noticed anything else, please tell us.",
+    "続ける": "Continue",
+    "終了する": "Finish",
+    "本日はご利用ありがとうございました。": "Thank you for using POIPOI today.",
     "受付内容はこの端末に控えています。公開ボードでは要約される場合があります。": "This device keeps a copy of your submission. The public board may show a summarized version."
   };
 
@@ -267,7 +276,7 @@
     [/^ありがとうございます。(.+)をより使いやすくするご提案ですね。どのように変わると助かるか、1つだけ教えていただけますか？$/, "Thank you. This is an improvement idea for $1. Please tell us one change that would help."],
     [/^ありがとうございます。(.+)の不具合として受付できます。$/, "Thank you. This can be received as a $1 bug report."],
     [/^ありがとうございます。(.+)の改善アイデアとして受付できます。$/, "Thank you. This can be received as a $1 improvement idea."],
-    [/^ありがとうございます。(.+)の改善アイデアとしてお預かりします。$/, "Thank you. We will receive this as a $1 improvement idea."],
+    [/^ありがとうございます。(.+)の改善のご意見として、お預かりいたします。内部で確認の上、検討を進めてまいります。$/, "Thank you. We will receive this as improvement feedback for $1 and review it internally."],
     [/^恐れ入りますが、この内容はそのままでは送信できません。(.+)$/, "This cannot be sent as written. $1"],
     [/^この内容はそのままでは受付できません。(.+)$/, "This cannot be received as written. $1"],
     [/^(.+)件を表示しています（全(.+)件）。$/, "Showing $1 of $2 items."],
