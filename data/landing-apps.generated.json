@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-08T19:04:56+00:00",
+  "generated_at": "2026-06-09T19:00:45+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -63,10 +63,10 @@
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-06-08T19:04:56+00:00",
-      "app_store_version": "1.0.11",
+      "updated_at": "2026-06-09T19:00:45+00:00",
+      "app_store_version": "1.0.12",
       "app_store_name": "ThermoSnap かんたん体温記録",
-      "app_store_current_version_release_date": "2026-06-08T04:59:47Z",
+      "app_store_current_version_release_date": "2026-06-08T21:36:34Z",
       "app_store_lookup_country": "jp"
     },
     {
@@ -125,14 +125,14 @@
       "bundle_id": "jp.allnew.glucosnap",
       "asc_app_id": "6759076419",
       "is_health_app": true,
-      "release_date": "2026-06-08",
+      "release_date": "2026-06-09",
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-06-08T19:04:56+00:00",
-      "app_store_version": "1.0.12",
+      "updated_at": "2026-06-09T19:00:45+00:00",
+      "app_store_version": "1.0.13",
       "app_store_name": "GlucoSnap 血糖値記録カメラ",
-      "app_store_current_version_release_date": "2026-06-08T11:02:23Z",
+      "app_store_current_version_release_date": "2026-06-09T01:44:20Z",
       "app_store_lookup_country": "jp"
     },
     {
