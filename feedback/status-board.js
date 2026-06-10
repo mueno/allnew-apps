@@ -112,6 +112,58 @@ const statusItems = [
   }
 ];
 
+const liveStatusApiUrl = "https://allnew-mobile-baas.vercel.app/api/feedback/public/list?limit=50";
+
+const STATUS_TIMELINE_NOTES = {
+  "受け付けました": "ご要望を受け付けました",
+  "検討しています": "チームで検討しています",
+  "対応しています": "対応を進めています",
+  "出来ました": "アップデートを公開しました",
+  "ごめんなさい": "今回は見送りとなりました"
+};
+
+function mapLiveItem(entry) {
+  const appName = entry.app?.name || (entry.app?.isVirtual ? "新しいアプリ案" : "アプリ");
+  const accepted = String(entry.createdAt || "").slice(0, 10);
+  const updated = String(entry.updatedAt || entry.createdAt || "").slice(0, 10) || accepted;
+  const timeline = [[accepted.replaceAll("-", "/"), "ご要望を受け付けました"]];
+  const status = entry.publicStatus || "受け付けました";
+  if (status !== "受け付けました" && updated && updated !== accepted) {
+    timeline.push([updated.replaceAll("-", "/"), STATUS_TIMELINE_NOTES[status] || status]);
+  }
+  return {
+    id: entry.id,
+    app: appName,
+    appIcon: "",
+    appTheme: "",
+    category: entry.type || "ご意見",
+    status,
+    title: entry.title || "（タイトルなし）",
+    acceptedDate: accepted,
+    updatedDate: updated,
+    detail: entry.summary || "",
+    good: Number(entry.goodCount) || 0,
+    owned: false,
+    timeline
+  };
+}
+
+async function loadLiveStatusItems() {
+  try {
+    const response = await fetch(liveStatusApiUrl, { mode: "cors", cache: "no-store" });
+    if (!response.ok) return false;
+    const payload = await response.json();
+    const items = Array.isArray(payload?.items) ? payload.items.map(mapLiveItem) : [];
+    if (!items.length) return false;
+    statusItems.length = 0;
+    statusItems.push(...items);
+    return true;
+  } catch {
+    // ライブ取得に失敗した場合は既存のサンプル表示のまま閲覧を止めない。
+    return false;
+  }
+}
+
 const filters = {
   status: "all",
   category: "all",
@@ -446,7 +498,9 @@ detailDialog?.addEventListener("click", (event) => {
   if (event.target === detailDialog) detailDialog.close();
 });
 
-loadAppCatalog().finally(() => {
-  setupAppFilter();
-  render();
+loadLiveStatusItems().finally(() => {
+  loadAppCatalog().finally(() => {
+    setupAppFilter();
+    render();
+  });
 });

@@ -694,7 +694,7 @@
     <section class="hero">
         <img src="../glucosnap-icon.png" alt="GlucoSnap" class="hero-icon">
         <h1 id="heroTitle">GlucoSnap</h1>
-        <p class="hero-subtitle" id="heroSubtitle">撮るだけ。タップ不要。<br>シンプルな血糖値記録。</p>
+        <p class="hero-subtitle" id="heroSubtitle">撮って、確認して、記録。<br>シンプルな血糖値ログ。</p>
     </section>
 
     <nav class="toc" id="toc">
@@ -770,10 +770,10 @@
                     <div class="faq-answer">
                         <p><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、「記録する」ボタンを押すとヘルスケアに保存されます。</p>
                         <ul>
-                            <li><strong>通常:</strong> 確認画面で数値を確認し、「記録する」を選択すると保存されます</li>
-                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にヘルスケアに記録されます</li>
+                            <li><strong>保存前確認:</strong> 確認画面で数値を確認し、「記録する」を選択すると保存されます</li>
+                            <li><strong>修正可能:</strong> 認識結果が異なる場合は、保存前に数値を修正できます</li>
                         </ul>
-                        <p>認識精度が低い場合は、自動記録がオンでも確認画面が表示されます。</p>
+                        <p>ヘルスケアへの記録は、ユーザーが確認操作を行った場合にのみ実行されます。</p>
                     </div>
                 </div>
 
@@ -944,8 +944,8 @@
                     <h3>7. 認識精度について</h3>
                     <ul>
                         <li><strong>認識精度の非保証:</strong> OCR認識および音声認識の精度は100%ではありません。撮影条件（照明、角度、ディスプレイの反射等）や音声条件（周囲の騒音、発話の明瞭さ、アクセント、マイクの状態等）により、認識精度が低下する場合があります。</li>
-                        <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
-                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
+                        <li><strong>保存前確認:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
+                        <li><strong>記録前の修正:</strong> 認識結果が異なる場合は、保存前にユーザーが値を修正できます。</li>
                         <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。</li>
                         <li><strong>免責:</strong> OCRおよび音声入力の誤認識による記録について、当社は責任を負いません。</li>
                     </ul>
@@ -1029,7 +1029,7 @@
             <section id="contact-ja" class="section">
                 <div class="contact-card">
                     <h2>お問い合わせ</h2>
-                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=GlucoSnap%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off-->
+                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=GlucoSnap%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off--><a href="https://apps.allnew.work/feedback/?app=glucosnap" class="contact-email" style="margin:12px 0 0 12px">💬 ご意見・ご要望を送る（POIPOI-STUDIO）</a>
                     <dl class="contact-details contact-details-top" style="border-bottom: none;">
                         <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
                         <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
@@ -1101,10 +1101,10 @@
                     <div class="faq-answer">
                         <p>The app automatically evaluates recognition confidence.</p>
                         <ul>
-                            <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
-                            <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value. "Record this value" saves it; "Don't Record" prompts you to retake.</li>
+                            <li><strong>Review before saving:</strong> The detected value is shown on a confirmation screen before it is written to HealthKit.</li>
+                            <li><strong>Editable value:</strong> If the recognized value is not correct, you can edit it before saving.</li>
                         </ul>
-                        <p>When the app determines confidence is low, data will not be saved unless you explicitly approve it.</p>
+                        <p>Data is written to HealthKit only after you explicitly approve the value.</p>
                     </div>
                 </div>
 
@@ -1274,8 +1274,8 @@
                     <h3>7. Recognition Accuracy</h3>
                     <ul>
                         <li><strong>No Guarantee:</strong> Neither OCR nor voice recognition accuracy is guaranteed to be 100%. Accuracy may decrease due to shooting conditions (lighting, angle, display reflections, etc.) or voice conditions (ambient noise, speech clarity, accent, microphone conditions, etc.).</li>
-                        <li><strong>Default Behavior:</strong> Recognition results are shown on a confirmation screen. Data is saved to Apple HealthKit only when you tap "Save".</li>
-                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
+                        <li><strong>Review Before Saving:</strong> Recognition results are shown on a confirmation screen. Data is saved to Apple HealthKit only when you tap "Save".</li>
+                        <li><strong>Edit Before Recording:</strong> If the recognized value is not correct, you can edit it before saving.</li>
                         <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan or re-input. Please refer to the Health app for detailed instructions.</li>
                         <li><strong>Disclaimer:</strong> We are not liable for inaccurate data recorded due to OCR or voice misrecognition.</li>
                     </ul>
@@ -1368,7 +1368,7 @@
             <section id="contact-en" class="section">
                 <div class="contact-card">
                     <h2>Contact Us</h2>
-                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=GlucoSnap%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off-->
+                    <!--email_off--><a href="mailto:app-support@allnew.work?subject=GlucoSnap%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off--><a href="https://apps.allnew.work/feedback/?app=glucosnap" class="contact-email" style="margin:12px 0 0 12px">💬 Share Feedback (POIPOI-STUDIO)</a>
                     <dl class="contact-details contact-details-top" style="border-bottom: none;">
                         <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
                         <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
@@ -1387,8 +1387,8 @@
         if (window.self !== window.top) { document.body.style.display = 'none'; }
         // Language Data
         const langData = {
-            ja: { label: '日本語', hero: 'GlucoSnap', subtitleLine1: '撮るだけ。タップ不要。', subtitleLine2: 'シンプルな血糖値記録。', toc: ['FAQ', 'プライバシー', '利用規約', '3rd Party Licensing Notice', '特定商取引法', 'お問い合わせ'] },
-            en: { label: 'English', hero: 'GlucoSnap', subtitleLine1: 'Just a Snap. No more Tap.', subtitleLine2: 'The Simplest Way to Log Your Blood Glucose.', toc: ['FAQ', 'Privacy', 'Terms', '3rd Party Licensing Notice', 'Seller Info', 'Contact'] }
+            ja: { label: '日本語', hero: 'GlucoSnap', subtitleLine1: '撮って、確認して、記録。', subtitleLine2: 'シンプルな血糖値ログ。', toc: ['FAQ', 'プライバシー', '利用規約', '3rd Party Licensing Notice', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'GlucoSnap', subtitleLine1: 'Snap, Review, Log.', subtitleLine2: 'A simple way to record blood glucose.', toc: ['FAQ', 'Privacy', 'Terms', '3rd Party Licensing Notice', 'Seller Info', 'Contact'] }
         };
 
         // Get current language from URL hash or default to ja
