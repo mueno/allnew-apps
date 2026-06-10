@@ -6,12 +6,65 @@ const appCatalogFallback = [
   { name: "WaistVox", label: "WaistVox | ウエスト", theme: "#3f76dc", icon: "https://apps.allnew.work/waistvox-icon.png" },
   { name: "CoughWav", label: "CoughWav | 咳", theme: "#0a9995", icon: "https://apps.allnew.work/coughwav-icon.png" },
   { name: "PupWeight", label: "PupWeight | ペット体重", theme: "#f26a10", icon: "https://apps.allnew.work/pupweight-icon.png" },
-  { name: "BOTTO", label: "BOTTO | 集中タイマー", theme: "#1f2937", icon: "https://apps.allnew.work/botto-icon.png" }
+  { name: "BOTTO", label: "BOTTO | 集中タイマー", theme: "#1f2937", icon: "https://apps.allnew.work/botto-icon.png" },
+  { name: "HIKAE Cards", label: "HIKAE Cards | カード控え", theme: "#0a7dff", icon: "https://apps.allnew.work/hikae-cards-icon.png" }
 ];
 
 let appCatalog = [...appCatalogFallback];
 
 const publicStatusItems = [];
+
+const publicStatusApiUrl = "https://allnew-mobile-baas.vercel.app/api/feedback/public/list?limit=50";
+
+const PUBLIC_STATUS_TIMELINE_NOTES = {
+  "受け付けました": "ご要望を受け付けました",
+  "検討しています": "チームで検討しています",
+  "対応しています": "対応を進めています",
+  "出来ました": "アップデートを公開しました",
+  "ごめんなさい": "今回は見送りとなりました"
+};
+
+function mapPublicApiItem(entry) {
+  const isVirtual = Boolean(entry.app?.isVirtual);
+  const appName = entry.app?.name || (isVirtual ? "New App Idea" : "アプリ");
+  const accepted = String(entry.createdAt || "").slice(0, 10);
+  const updated = String(entry.updatedAt || entry.createdAt || "").slice(0, 10) || accepted;
+  const status = entry.publicStatus || "受け付けました";
+  const timeline = [[accepted.replaceAll("-", "/"), "ご要望を受け付けました"]];
+  if (status !== "受け付けました" && updated && updated !== accepted) {
+    timeline.push([updated.replaceAll("-", "/"), PUBLIC_STATUS_TIMELINE_NOTES[status] || status]);
+  }
+  return {
+    id: entry.id,
+    app: isVirtual ? "New App Idea" : appName,
+    appEmoji: isVirtual ? "□" : "•",
+    appDisplayName: isVirtual ? "新しいアプリ案" : appName,
+    appFilterable: !isVirtual,
+    appTheme: "#0a7dff",
+    category: entry.type || "ご意見",
+    status,
+    title: entry.title || "（タイトルなし）",
+    acceptedDate: accepted,
+    updatedDate: updated,
+    detail: entry.summary || "",
+    good: Number(entry.goodCount) || 0,
+    owned: false,
+    timeline
+  };
+}
+
+async function loadPublicStatusItems() {
+  try {
+    const response = await fetch(publicStatusApiUrl, { mode: "cors", cache: "no-store" });
+    if (!response.ok) return;
+    const payload = await response.json();
+    const items = Array.isArray(payload?.items) ? payload.items.map(mapPublicApiItem) : [];
+    publicStatusItems.length = 0;
+    publicStatusItems.push(...items);
+  } catch {
+    // ライブ取得に失敗しても「自分の受付」ビューと閲覧は止めない。
+  }
+}
 
 const filters = {
   status: "all",
@@ -460,7 +513,7 @@ detailDialog?.addEventListener("click", (event) => {
   if (event.target === detailDialog) detailDialog.close();
 });
 
-loadAppCatalog().finally(() => {
+Promise.allSettled([loadPublicStatusItems(), loadAppCatalog()]).finally(() => {
   setupAppFilter();
   render();
 });
