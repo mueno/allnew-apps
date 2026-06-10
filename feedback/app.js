@@ -35,7 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
     BabyVox: "6759076543",
     BOTTO: "6759169189",
     PawPass: "6768502509",
-    MedReminder: "6767980716"
+    MedReminder: "6767980716",
+    "HIKAE Cards": "6772018672"
   });
   const appSearchAliasesByName = Object.freeze({
     WeightSnap: "体重 体重管理 weight scale",
@@ -50,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     BOTTO: "集中 没頭 タイマー focus timer",
     PawPass: "ペット 診察券 保険証 薬 犬 猫 pet",
     MedReminder: "服薬 通知 処方箋 薬 リマインダー medicine pill reminder",
+    "HIKAE Cards": "カード 控え 診察券 会員証 保険証 ウォレット wallet card holder ひかえ",
     "New App Idea": "新しい提案 新アプリ案 アイデア idea"
   });
   const newAppIdea = Object.freeze({
@@ -175,6 +177,16 @@ document.addEventListener("DOMContentLoaded", () => {
       catalogUrl: "https://apps.allnew.work/medreminder/",
       appStoreUrl: "https://apps.apple.com/jp/app/ai%E6%9C%8D%E8%96%AC%E9%80%9A%E7%9F%A5-%E5%87%A6%E6%96%B9%E7%AE%8B%E3%83%AA%E3%83%9E%E3%82%A4%E3%83%B3%E3%83%80%E3%83%BC/id6767980716?uo=4",
       iconUrl: "https://apps.allnew.work/medreminder-icon.png?v=20260605-appstore-icon"
+    },
+    {
+      id: "hikaecards",
+      name: "HIKAE Cards",
+      category: "カード控え",
+      filterGroup: "life",
+      appStoreId: "6772018672",
+      catalogUrl: "https://apps.allnew.work/hikae-cards/",
+      appStoreUrl: "https://apps.apple.com/jp/app/id6772018672?uo=4",
+      iconUrl: "https://apps.allnew.work/hikae-cards-icon.png"
     }
   ]);
   const canonicalReceptionApps = Object.freeze([
@@ -343,6 +355,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (normalizedName === "new app idea") return "idea";
     if (normalizedName === "pupweight" || normalizedName === "pawpass" || normalizedCategory.includes("ペット")) return "pet";
     if (normalizedName === "botto" || normalizedCategory.includes("集中")) return "focus";
+    if (normalizedName === "hikae cards" || normalizedCategory.includes("カード")) return "life";
     return "health";
   }
 

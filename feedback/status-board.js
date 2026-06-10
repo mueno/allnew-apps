@@ -6,7 +6,8 @@ const appCatalogFallback = [
   { name: "WaistVox", label: "WaistVox | ウエスト", theme: "#3f76dc", icon: "https://apps.allnew.work/waistvox-icon.png" },
   { name: "CoughWav", label: "CoughWav | 咳", theme: "#0a9995", icon: "https://apps.allnew.work/coughwav-icon.png" },
   { name: "PupWeight", label: "PupWeight | ペット体重", theme: "#f26a10", icon: "https://apps.allnew.work/pupweight-icon.png" },
-  { name: "BOTTO", label: "BOTTO | 集中タイマー", theme: "#1f2937", icon: "https://apps.allnew.work/botto-icon.png" }
+  { name: "BOTTO", label: "BOTTO | 集中タイマー", theme: "#1f2937", icon: "https://apps.allnew.work/botto-icon.png" },
+  { name: "HIKAE Cards", label: "HIKAE Cards | カード控え", theme: "#0a7dff", icon: "https://apps.allnew.work/hikae-cards-icon.png" }
 ];
 
 let appCatalog = [...appCatalogFallback];
