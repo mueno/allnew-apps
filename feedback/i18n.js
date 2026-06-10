@@ -148,9 +148,17 @@
     "本番では管理者認証の内側で、受付内容、公開ステータス、運営向け要約を確認する画面です。": "In production, this screen sits behind admin authentication for checking submissions, public status, and admin summaries.",
     "会社情報": "Company info",
     "事業者情報はAllNewコーポレートサイトの会社概要から確認できます。": "Company information is available on the AllNew corporate website.",
-    "Cookieと外部送信について": "About cookies and external transmission",
+    "Cookieと外部送信について": "Cookies and external transmission",
     "本サイトは、ログイン維持、不正対策、同意状態の保存に必要なCookieのみを使用します。": "This site uses only cookies needed to keep you signed in, prevent abuse, and save consent status.",
     "広告目的のトラッキングCookieは使用しません。Appleでサインインやポイナ受付を利用する場合、認証・AI応答のため外部サービスへ情報が送信されます。": "We do not use advertising tracking cookies. When you use Sign in with Apple or Poina Reception, information is sent to external services for authentication and AI responses.",
+    "本サイトは、サインイン状態の維持・不正対策・同意記録の保存に必要な「必須Cookie」を使用します。": "This site uses strictly necessary cookies to keep you signed in, prevent abuse, and store your consent record.",
+    "Goodの記録や受付履歴の表示に使う「機能Cookie・ブラウザ保存」は、同意いただいた場合のみ使用します。": "Functional cookies and browser storage (for your Good votes and submission history) are used only with your consent.",
+    "広告・アクセス解析目的のトラッキングCookieは使用しません。": "We do not use any advertising or analytics tracking cookies.",
+    "Appleでサインインやポイナ受付の利用時には、認証・AI応答のため外部サービスへ情報が送信されます。": "When you use Sign in with Apple or Poina Reception, information is sent to external services for authentication and AI responses.",
+    "選択は後からページ下部の「Cookie設定」でいつでも変更できます。": "You can change your choice at any time via \"Cookie settings\" at the bottom of the page.",
+    "必須のみ許可": "Essential only",
+    "すべて同意": "Accept all",
+    "Cookie設定": "Cookie settings",
     "くわしく見る": "Learn more",
     "確認して閉じる": "Got it",
     "はじめる前に、3つの重要事項をご確認ください。": "Before you begin, please review these three important points.",
@@ -415,11 +423,23 @@
   }
 
   function updateLinksForLanguage() {
+    // Local legal documents have dedicated English pages (terms-en.html,
+    // cookie-policy-en.html): keep links in sync with the selected language.
+    document.querySelectorAll('a[href*="terms"], a[href*="cookie-policy"]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      const match = href.match(/^(\.\/)?(terms|cookie-policy)(-en)?\.html(.*)$/);
+      if (!match) return;
+      const next = `./${match[2]}${activeLanguage === "en" ? "-en" : ""}.html${match[4] || ""}`;
+      if (href !== next) link.setAttribute("href", next);
+    });
     document.querySelectorAll('a[href*="allnew.work"]').forEach((link) => {
       try {
         const url = new URL(link.href);
         if (url.hostname.endsWith("allnew.work")) {
           url.searchParams.set("lang", activeLanguage);
+          // Corporate pages route by path prefix (/ja/privacy, /en/privacy):
+          // keep the document language in sync with the selected UI language.
+          url.pathname = url.pathname.replace(/^\/(ja|en)(\/|$)/, `/${activeLanguage}$2`);
           link.href = url.toString();
         }
       } catch {

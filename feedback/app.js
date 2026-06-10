@@ -206,6 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const myReceptionStorageKey = "poipoi_my_receptions_v1";
   const authSessionMaxAgeSeconds = 60 * 60 * 24 * 90;
   const preferenceCookieMaxAgeSeconds = 60 * 60 * 24 * 180;
+  const cookieConsentCookieName = "af_cookie_consent";
+  const cookieConsentVersion = 1;
   // Registration consent record: proves this browser already completed the
   // initial 3-checkbox consent ceremony. Bump the version to force re-consent
   // when the terms / privacy policy materially change.
@@ -342,6 +344,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const legalDocDisclosures = Array.from(document.querySelectorAll(".legal-doc-disclosure"));
   const cookieConsentBanner = document.getElementById("cookieConsentBanner");
   const cookieConsentAccept = document.getElementById("cookieConsentAccept");
+  const cookieConsentEssential = document.getElementById("cookieConsentEssential");
+  const cookieSettingsLink = document.getElementById("cookieSettingsLink");
   const isLocalPreviewHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
   let termsModalRequiresRegistrationConsent = false;
   let termsModalConsentChecklistRequired = false;
@@ -622,6 +626,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveMyReceptions(items) {
+    if (!isFunctionalStorageAllowed()) return;
     try {
       localStorage.setItem(myReceptionStorageKey, JSON.stringify(items.slice(0, 30)));
     } catch {
@@ -682,7 +687,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (poinaReceptionVisitCounted) return getStoredPoinaReceptionVisitCount();
 
     const nextCount = Math.min(getStoredPoinaReceptionVisitCount() + 1, 99);
-    setCookieValue(poinaReceptionVisitCookieName, String(nextCount), preferenceCookieMaxAgeSeconds);
+    if (isFunctionalStorageAllowed()) {
+      setCookieValue(poinaReceptionVisitCookieName, String(nextCount), preferenceCookieMaxAgeSeconds);
+    }
     poinaReceptionVisitCounted = true;
     return nextCount;
   }
@@ -737,12 +744,41 @@ document.addEventListener("DOMContentLoaded", () => {
     target?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function hasCookieConsentNotice() {
-    return getCookieValue("af_cookie_notice") === "accepted";
+  // GDPR-style cookie consent: essential cookies (session, security, consent
+  // record) are always allowed; functional storage (Good votes, reception
+  // history, visit counter) is used only after explicit opt-in.
+  function getCookieConsentDecision() {
+    const record = getJsonCookie(cookieConsentCookieName);
+    if (!record || record.v !== cookieConsentVersion) return null;
+    return record;
   }
 
-  function setCookieConsentNotice() {
-    setCookieValue("af_cookie_notice", "accepted", preferenceCookieMaxAgeSeconds);
+  function hasCookieConsentDecision() {
+    return getCookieConsentDecision() !== null;
+  }
+
+  function isFunctionalStorageAllowed() {
+    return getCookieConsentDecision()?.functional === true;
+  }
+
+  function setCookieConsentDecision(functionalAllowed) {
+    setJsonCookie(cookieConsentCookieName, {
+      v: cookieConsentVersion,
+      functional: functionalAllowed === true,
+      decidedAt: new Date().toISOString()
+    }, preferenceCookieMaxAgeSeconds);
+    // Retire the pre-GDPR notice-only cookie.
+    clearCookieValue("af_cookie_notice");
+    if (functionalAllowed !== true) {
+      // Withdraw: remove previously stored functional data (GDPR-friendly).
+      clearCookieValue(goodVoteCookieName);
+      clearCookieValue(poinaReceptionVisitCookieName);
+      try {
+        localStorage.removeItem(myReceptionStorageKey);
+      } catch {
+        // Storage may be unavailable; nothing to clean in that case.
+      }
+    }
   }
 
   function setCookieBannerVisible(isVisible) {
@@ -756,7 +792,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function initCookieConsentNotice() {
     if (!cookieConsentBanner || !cookieConsentAccept) return;
 
-    if (!hasCookieConsentNotice()) {
+    if (!hasCookieConsentDecision()) {
       const showBanner = () => {
         const stage = document.querySelector("[data-scrolly-stage]");
         const stageStep = Number(stage?.dataset.scrollyStep || "0");
@@ -786,8 +822,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     cookieConsentAccept.addEventListener("click", () => {
-      setCookieConsentNotice();
+      setCookieConsentDecision(true);
       setCookieBannerVisible(false);
+    });
+    cookieConsentEssential?.addEventListener("click", () => {
+      setCookieConsentDecision(false);
+      setCookieBannerVisible(false);
+    });
+    cookieSettingsLink?.addEventListener("click", () => {
+      setCookieBannerVisible(true);
+      cookieConsentBanner.scrollIntoView({ behavior: "smooth", block: "end" });
     });
   }
 
@@ -2684,6 +2728,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveGuestGoodVotes() {
+    if (!isFunctionalStorageAllowed()) return;
     try {
       setJsonCookie(goodVoteCookieName, guestGoodVotes, preferenceCookieMaxAgeSeconds);
     } catch {
@@ -2905,9 +2950,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadLegalDocContent(disclosure) {
     const container = disclosure.querySelector(".legal-doc-content");
-    if (!container || container.dataset.loaded) return;
+    if (!container) return;
+    const docLanguage = window.PoipoiI18n?.language === "en" ? "en" : "ja";
+    if (container.dataset.loaded === docLanguage || container.dataset.loaded === "fallback") return;
 
-    const sourceUrl = container.dataset.legalDocUrl;
+    let sourceUrl = container.dataset.legalDocUrl;
+    // Local legal docs have dedicated English pages: follow the UI language.
+    if (docLanguage === "en" && sourceUrl && !/^https?:\/\//.test(sourceUrl)) {
+      sourceUrl = sourceUrl.replace(/(terms|cookie-policy)\.html/, "$1-en.html");
+    }
     const isExternalSource = sourceUrl && /^https?:\/\//.test(sourceUrl) && !sourceUrl.startsWith(window.location.origin);
     if (!sourceUrl || window.location.protocol === "file:" || isExternalSource) {
       renderLegalDocFallback(container);
@@ -2926,7 +2977,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!legalArticle) throw new Error("Empty legal document");
 
       container.replaceChildren(legalArticle);
-      container.dataset.loaded = "true";
+      container.dataset.loaded = docLanguage;
     } catch (error) {
       renderLegalDocFallback(container);
     }

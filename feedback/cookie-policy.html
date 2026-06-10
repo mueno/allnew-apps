@@ -108,6 +108,12 @@
       font-weight: 800;
     }
 
+    .lang-link {
+      display: inline-flex;
+      margin: 0 0 18px 16px;
+      font-weight: 800;
+    }
+
     @media (max-width: 640px) {
       main {
         padding: 18px 10px 48px;
@@ -206,15 +212,18 @@
 <body>
   <main>
     <a class="back-link" href="./index.html">← フィードバックサイトへ戻る</a>
+    <a class="lang-link" href="./cookie-policy-en.html">English version</a>
     <article class="legal-card">
       <h1>Cookie/外部送信ポリシー</h1>
-      <p class="updated">最終更新日: 2026年5月23日</p>
+      <p class="updated">最終更新日: 2026年6月11日</p>
       <p class="notice">このページは、AllNew App Factory FeedbackにおけるCookie、Sign in with Apple、外部送信、サービス固有の情報取扱いを説明するものです。合同会社AllNewのプライバシーポリシーは、<a href="https://www.allnew.work/ja/privacy">コーポレートサイト掲載版</a>をご確認ください。</p>
 
       <h2>1. 基本方針</h2>
       <ul>
-        <li>本サービスは、ログイン維持、不正対策、同意状態の保存、投稿受付、通報・削除申出、開示・削除請求対応に必要なCookieおよび通信のみを使用します。</li>
-        <li>広告目的のCookie、行動ターゲティング、第三者広告SDK、クロスサイトトラッキングSDKは使用しません。</li>
+        <li>本サービスのCookie・ブラウザ保存は「必須」と「機能」の2区分で管理します。必須Cookieは、サインイン維持、不正対策、同意記録の保存、投稿受付、通報・削除申出、開示・削除請求対応に必要なものです。</li>
+        <li>機能Cookie・ブラウザ保存（Goodの記録、受付履歴の表示、ポイナの再訪あいさつ）は、初回表示される同意バナーで「すべて同意」を選択した場合のみ使用します。「必須のみ許可」を選択した場合は保存せず、保存済みの機能データも削除します。</li>
+        <li>同意の選択は、ページ下部の「Cookie設定」からいつでも変更（同意の撤回を含む）できます。撤回は同意と同じ操作回数でできます。</li>
+        <li>広告目的のCookie、行動ターゲティング、アクセス解析、第三者広告SDK、クロスサイトトラッキングSDKは使用しません。</li>
         <li>将来、解析、広告、外部SDK、追加の委託先を導入する場合は、事前にこのページを更新し、必要に応じて同意取得またはオプトアウト導線を設けます。</li>
       </ul>
 
@@ -231,18 +240,32 @@
         </thead>
         <tbody>
           <tr>
-            <td data-label="名称">af_cookie_notice</td>
-            <td data-label="目的">Cookie/外部送信に関する通知を確認済みであることを保存します。</td>
+            <td data-label="名称">af_cookie_consent【必須】</td>
+            <td data-label="目的">Cookie同意バナーでの選択内容（すべて同意／必須のみ許可）を保存します。</td>
             <td data-label="期間">180日</td>
             <td data-label="属性">SameSite=Lax。本番HTTPS環境ではSecure属性を付与します。画面表示制御のためJavaScriptから読み取れるCookieであり、HttpOnlyではありません。</td>
-            <td data-label="オプトアウト可否">ブラウザ設定で削除できます。削除後は通知が再表示されます。</td>
+            <td data-label="オプトアウト可否">同意状態の保存に必要です。ブラウザ設定で削除でき、削除後は同意バナーが再表示されます。</td>
           </tr>
           <tr>
-            <td data-label="名称">セッションCookie</td>
-            <td data-label="目的">Sign in with Apple後のログイン維持、CSRF/リプレイ防止、不正利用防止に使用します。</td>
-            <td data-label="期間">セッションまたは最長30日</td>
-            <td data-label="属性">本番ではSecure、HttpOnly、SameSite=LaxまたはSameSite=Strictを付与します。</td>
-            <td data-label="オプトアウト可否">ログイン機能に必要なため、無効化すると本サービスを利用できない場合があります。</td>
+            <td data-label="名称">poipoi_feedback_session【必須】</td>
+            <td data-label="目的">Sign in with Apple後のサインイン状態の維持に使用します。</td>
+            <td data-label="期間">最長90日（訪問のたびに更新）</td>
+            <td data-label="属性">SameSite=Lax。本番HTTPS環境ではSecure属性を付与します。画面表示制御のためJavaScriptから読み書きするCookieであり、HttpOnlyではありません。</td>
+            <td data-label="オプトアウト可否">サインイン機能に必要なため、無効化するとサインインを維持できません。</td>
+          </tr>
+          <tr>
+            <td data-label="名称">poipoi_apple_redirect_state【必須】 / poipoi_feedback_consent【必須】</td>
+            <td data-label="目的">Apple認証のリプレイ防止（state/nonceの照合、10分で失効）、および登録時に確認いただいた同意のバージョン記録（再同意の要否判定）に使用します。</td>
+            <td data-label="期間">10分／最長365日</td>
+            <td data-label="属性">SameSite=Lax。本番HTTPS環境ではSecure属性を付与します。</td>
+            <td data-label="オプトアウト可否">認証の安全性確保と同意管理に必要です。</td>
+          </tr>
+          <tr>
+            <td data-label="名称">poipoi_good_votes / poipoi_reception_visit_count / poipoi_my_receptions_v1（localStorage）【機能・同意制】</td>
+            <td data-label="目的">Goodの記録、ポイナ受付の再訪あいさつ、自分の受付履歴の表示に使用します。</td>
+            <td data-label="期間">180日（localStorageは削除まで）</td>
+            <td data-label="属性">SameSite=Lax。本番HTTPS環境ではSecure属性を付与します。</td>
+            <td data-label="オプトアウト可否">同意バナーで「必須のみ許可」を選ぶと保存されません。「Cookie設定」から撤回すると保存済みデータも削除します。</td>
           </tr>
           <tr>
             <td data-label="名称">同意・監査ログ識別子</td>

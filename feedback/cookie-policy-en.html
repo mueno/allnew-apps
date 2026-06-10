@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Cookie / External Transmission Policy | AllNew App Factory Feedback</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #050505;
+      --secondary: #5f6673;
+      --paper: #f7fbff;
+      --surface: #ffffff;
+      --surface-soft: #eef7ff;
+      --line: rgba(60, 60, 67, 0.12);
+      --blue: #0a7dff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(89, 211, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 96% 20%, rgba(10, 125, 255, 0.08), transparent 30%),
+        linear-gradient(180deg, #f7fbff 0%, #ffffff 48%, #f7fbff 100%);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", sans-serif;
+      line-height: 1.78;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      width: min(100%, 920px);
+      margin: 0 auto;
+      padding: 32px 20px 72px;
+    }
+
+    .legal-card {
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 24px 60px rgba(0, 82, 163, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(25px, 6.4vw, 44px);
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      margin: 36px 0 10px;
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    p, li, td, th {
+      color: var(--secondary);
+      font-size: 15px;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 0;
+      overflow-wrap: anywhere;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      background: var(--surface-soft);
+    }
+
+    .updated {
+      margin: 0 0 28px;
+      color: var(--secondary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .notice {
+      padding: 16px;
+      border-radius: 20px;
+      background: #eef7ff;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .back-link {
+      display: inline-flex;
+      margin-bottom: 18px;
+      font-weight: 800;
+    }
+
+    .lang-link {
+      display: inline-flex;
+      margin: 0 0 18px 16px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 18px 10px 48px;
+      }
+
+      .legal-card {
+        padding: 22px 14px 28px;
+        border-radius: 22px;
+      }
+
+      h1 {
+        font-size: 24px;
+        line-height: 1.22;
+      }
+
+      h2 {
+        margin-top: 30px;
+        font-size: 17px;
+      }
+
+      p, li, td, th {
+        font-size: 14px;
+      }
+
+      ul {
+        padding-left: 1.25em;
+      }
+
+      table,
+      tbody,
+      tr,
+      td {
+        display: block;
+      }
+
+      thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      tr {
+        margin: 12px 0;
+        padding: 14px;
+        border-radius: 18px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(238, 247, 255, 0.72));
+        box-shadow:
+          0 12px 28px rgba(0, 82, 163, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.86);
+      }
+
+      td {
+        display: grid;
+        grid-template-columns: minmax(6.5em, 38%) 1fr;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+        word-break: normal;
+        overflow-wrap: anywhere;
+      }
+
+      td:last-child {
+        border-bottom: 0;
+      }
+
+      td::before {
+        content: attr(data-label);
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 800;
+        line-height: 1.55;
+      }
+
+      .notice {
+        padding: 14px;
+        border-radius: 18px;
+        font-size: 13.5px;
+      }
+
+      .back-link {
+        margin: 0 0 12px 4px;
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back-link" href="./index.html?lang=en">&larr; Back to the feedback site</a>
+    <a class="lang-link" href="./cookie-policy.html">日本語版を見る</a>
+    <article class="legal-card">
+      <h1>Cookie / External Transmission Policy</h1>
+      <p class="updated">Last updated: June 11, 2026</p>
+      <p class="notice">This is a courtesy English translation provided for convenience. The <a href="./cookie-policy.html">Japanese version</a> is the official text, and in the event of any discrepancy, the Japanese version prevails. This page explains cookies, Sign in with Apple, external transmissions, and service-specific information handling on AllNew App Factory Feedback. For the AllNew LLC Privacy Policy, please see the <a href="https://www.allnew.work/en/privacy">corporate website version</a>.</p>
+
+      <h2>1. Basic Policy</h2>
+      <ul>
+        <li>Cookies and browser storage on this service are managed in two categories: "essential" and "functional." Essential cookies are those needed to keep you signed in, prevent abuse, store consent records, receive submissions, handle reports and takedown requests, and respond to disclosure/deletion requests.</li>
+        <li>Functional cookies and browser storage (your Good votes, submission history display, and Poina's returning-visitor greeting) are used only if you choose "Accept all" on the consent banner shown on first visit. If you choose "Essential only," they are not stored, and any previously stored functional data is deleted.</li>
+        <li>You can change your choice (including withdrawing consent) at any time via "Cookie settings" at the bottom of the page. Withdrawal takes the same number of steps as giving consent.</li>
+        <li>We do not use advertising cookies, behavioral targeting, access analytics, third-party advertising SDKs, or cross-site tracking SDKs.</li>
+        <li>If we introduce analytics, advertising, external SDKs, or additional contractors in the future, we will update this page in advance and provide consent or opt-out mechanisms as needed.</li>
+      </ul>
+
+      <h2>2. Cookies Used by This Service</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Purpose</th>
+            <th>Duration</th>
+            <th>Attributes</th>
+            <th>Opt-out</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Name">af_cookie_consent [Essential]</td>
+            <td data-label="Purpose">Stores your choice on the cookie consent banner (Accept all / Essential only).</td>
+            <td data-label="Duration">180 days</td>
+            <td data-label="Attributes">SameSite=Lax. The Secure attribute is applied in the production HTTPS environment. This cookie is readable by JavaScript for display control and is not HttpOnly.</td>
+            <td data-label="Opt-out">Required to store your consent state. You can delete it in your browser settings; the consent banner will reappear afterwards.</td>
+          </tr>
+          <tr>
+            <td data-label="Name">poipoi_feedback_session [Essential]</td>
+            <td data-label="Purpose">Keeps you signed in after Sign in with Apple.</td>
+            <td data-label="Duration">Up to 90 days (renewed on each visit)</td>
+            <td data-label="Attributes">SameSite=Lax. The Secure attribute is applied in the production HTTPS environment. This cookie is read and written by JavaScript for display control and is not HttpOnly.</td>
+            <td data-label="Opt-out">Needed for the sign-in feature; disabling it prevents staying signed in.</td>
+          </tr>
+          <tr>
+            <td data-label="Name">poipoi_apple_redirect_state [Essential] / poipoi_feedback_consent [Essential]</td>
+            <td data-label="Purpose">Replay protection for Apple authentication (state/nonce matching, expires in 10 minutes), and recording the version of the consent you confirmed at registration (to determine whether re-consent is needed).</td>
+            <td data-label="Duration">10 minutes / up to 365 days</td>
+            <td data-label="Attributes">SameSite=Lax. The Secure attribute is applied in the production HTTPS environment.</td>
+            <td data-label="Opt-out">Needed for authentication security and consent management.</td>
+          </tr>
+          <tr>
+            <td data-label="Name">poipoi_good_votes / poipoi_reception_visit_count / poipoi_my_receptions_v1 (localStorage) [Functional, consent-based]</td>
+            <td data-label="Purpose">Used for your Good votes, Poina Reception's returning-visitor greeting, and displaying your own submission history.</td>
+            <td data-label="Duration">180 days (localStorage: until deleted)</td>
+            <td data-label="Attributes">SameSite=Lax. The Secure attribute is applied in the production HTTPS environment.</td>
+            <td data-label="Opt-out">Not stored if you choose "Essential only" on the consent banner. Withdrawing via "Cookie settings" also deletes stored data.</td>
+          </tr>
+          <tr>
+            <td data-label="Name">Consent / audit log identifiers</td>
+            <td data-label="Purpose">Used to manage evidence of consent to the Terms of Use, Privacy Policy, and Cookie / External Transmission Policy, the rights-assignment agreement, and confirmation of being 18 or older.</td>
+            <td data-label="Duration">Consent logs are retained for up to 10 years. Raw IP addresses and User-Agents are deleted or anonymized after 6 months in principle.</td>
+            <td data-label="Attributes">In production, Secure, HttpOnly, and SameSite attributes are set appropriately.</td>
+            <td data-label="Opt-out">May not be deletable to the extent necessary for legal compliance, rights assignment, and dispute handling.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. External Transmission Destinations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Destination</th>
+            <th>Country</th>
+            <th>Data sent</th>
+            <th>Purpose of transmission</th>
+            <th>Use at destination</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Destination">Apple Inc.</td>
+            <td data-label="Country">United States</td>
+            <td data-label="Data sent">Apple-provided user identifier, name, email address, private relay email address, identity token, authorization code, state, nonce, and browser information required for authentication</td>
+            <td data-label="Purpose of transmission">Identification and login via Sign in with Apple, Apple ID unlinking, token revocation, and handling server-to-server notifications</td>
+            <td data-label="Use at destination">Authentication via Apple Account, security, fraud prevention, and provision of Sign in with Apple under Apple's privacy policy</td>
+          </tr>
+          <tr>
+            <td data-label="Destination">apps.allnew.work</td>
+            <td data-label="Country">Japan or contractor cloud regions</td>
+            <td data-label="Data sent">Access time, IP address, User-Agent, referrer, display language, and browser information needed to fetch the app catalog</td>
+            <td data-label="Purpose of transmission">To display AllNew's published app list, app names, descriptions, and catalog icon images within this service</td>
+            <td data-label="Use at destination">Delivery, maintenance, incident response, and security of the AllNew app catalog site</td>
+          </tr>
+          <tr>
+            <td data-label="Destination">Apple App Store / iTunes Lookup API / mzstatic.com</td>
+            <td data-label="Country">United States and other regions designated by Apple</td>
+            <td data-label="Data sent">Access time, IP address, User-Agent, app ID, and browser information needed for display</td>
+            <td data-label="Purpose of transmission">To fetch and display app names, store page URLs, and actual app icon images published on the App Store</td>
+            <td data-label="Use at destination">Apple's App Store information and image delivery, security, fraud prevention, and service improvement</td>
+          </tr>
+          <tr>
+            <td data-label="Destination">AllNew BaaS / OpenAI, L.L.C.</td>
+            <td data-label="Country">Japan or contractor cloud regions; United States</td>
+            <td data-label="Data sent">Pre-submission chat content, target app, information needed to infer the submission type, random nickname, access time, IP address, User-Agent, etc.</td>
+            <td data-label="Purpose of transmission">For the POIPOI receptionist's free-form chat responses, initial acceptance screening, and preparation of first-pass review reports for administrators</td>
+            <td data-label="Use at destination">AI response generation under our commission, security, abuse prevention, and incident response. We use contracts, settings, and access controls to prevent the destination from using the data for its own purposes.</td>
+          </tr>
+          <tr>
+            <td data-label="Destination">Contractors for hosting, databases, log management, monitoring, email delivery, etc.</td>
+            <td data-label="Country">To be specified when the production configuration is finalized</td>
+            <td data-label="Data sent">Access information, submissions, consent logs, reports and takedown requests, inquiries, security logs, etc.</td>
+            <td data-label="Purpose of transmission">Provision, maintenance, incident response, abuse prevention, and legal compliance of this service</td>
+            <td data-label="Use at destination">Processing under our commission. We use contracts, settings, and access controls to prevent contractors from using the data for their own purposes.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>4. Provision to Third Parties Located in Foreign Countries</h2>
+      <p>When you use Sign in with Apple, authentication-related information may be sent to Apple Inc. (United States). In addition, chat content may be sent to OpenAI, L.L.C. (United States) for the POIPOI receptionist's AI responses and first-pass review reports. In accordance with Article 28 of the Act on the Protection of Personal Information (Japan), before registration and before submission we present: your consent to providing personal data to third parties in foreign countries, the destination country names, information about the personal-information protection systems of those countries, the protective measures taken by the recipients, and how to obtain further information upon request.</p>
+      <p>If the destination country or protective measures cannot be identified at the time consent is obtained, we will state that fact, the reasons, and reference information helpful to you. If contractors located in foreign countries other than the United States, offshore re-subcontracting, access from abroad, foreign regions, or foreign support arise, we will add the destination names, countries, data items, purposes, and protective measures before production launch.</p>
+      <p>If we actively offer this service to residents of the EU/EEA, the United Kingdom, China, the State of California (USA), or other regions outside Japan, we will not begin offering it to such regions until the required notices, consents, rights procedures, cross-border transfer clauses, representative designations, and access or regional restrictions under GDPR, UK GDPR, China's PIPL, CCPA/CPRA, and other applicable foreign laws are implemented.</p>
+
+      <h2>5. Service-Specific Submission Information</h2>
+      <p>Please do not include in submissions any names, addresses, phone numbers, email addresses, health information, special care-required personal information, third-party confidential information, trade secrets, unpublished inventions, ideas planned for filing, or information that infringes third-party rights. Submissions you wish to make public may be published as moderator-reviewed public summaries, statuses, progress reports, and outcome reports. AI is used only as an aid and does not finalize publication decisions; final decisions are made by human moderators.</p>
+
+      <h2>6. Exercising Rights and Inquiries</h2>
+      <p>Disclosure/deletion requests, account deletion, Apple ID unlinking, suspension of third-party provision, reports, and takedown requests are accepted through the channels on the AllNew corporate website or our prescribed contact points. After identity verification, we respond in accordance with applicable laws and our prescribed procedures.</p>
+      <p>Company information: <a href="https://www.allnew.work/?lang=en#company">https://www.allnew.work/?lang=en#company</a></p>
+
+      <h2>7. Material Changes</h2>
+      <p>If there are material changes to cookies, external transmission destinations, data items, purposes, or the method of obtaining consent, we will notify you via this page, the registration screen, the submission screen, email, or other appropriate means.</p>
+    </article>
+  </main>
+</body>
+</html>
