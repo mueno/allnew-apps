@@ -3685,6 +3685,30 @@
       margin-top: 0;
     }
 
+    /* Returning sign-in mode: the browser already holds a versioned consent
+       record, so the first-time consent ceremony is hidden and replaced by a
+       short reminder. Legal documents stay accessible in the accordion. */
+    .returning-signin-lead {
+      display: none;
+      margin: 0 0 4px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--surface-soft);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    #termsModal.is-returning-signin .consent-lead,
+    #termsModal.is-returning-signin .consent-point-grid,
+    #termsModal.is-returning-signin .registration-consent-list {
+      display: none;
+    }
+
+    #termsModal.is-returning-signin .returning-signin-lead {
+      display: block;
+    }
+
     .registration-consent-item {
       display: grid;
       grid-template-columns: 24px 1fr;
@@ -5219,6 +5243,9 @@
         <p class="consent-lead">
           POIPOI-STUDIOは、AllNewのアプリ改善や、新しいアプリのアイデアを受け付けるフィードバックサイトです。
           ご登録の前に、利用条件の要点を必ずご確認ください。
+        </p>
+        <p class="returning-signin-lead">
+          ご登録済みのアカウントでサインインします。ご登録時に同意いただいた利用規約・プライバシーポリシー・Cookie/外部送信ポリシーが引き続き適用されます。各文書は下からいつでも確認できます。
         </p>
         <ol class="consent-point-grid" aria-label="登録前に確認する3つのポイント">
           <li class="consent-point-card">
