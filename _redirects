@@ -9,6 +9,10 @@
 # Cloudflare Pages syntax: `<source> <status>` returns that status
 # directly. `<source> <destination> <status>` rewrites first.
 
+# Legacy MeishiBridge support URL.
+/meishibridge /meishi-scanner/ 301
+/meishibridge/ /meishi-scanner/ 301
+
 # WordPress / PHP probes (we are pure static, no PHP)
 /wp-login.php 404
 /wp-admin/* 404

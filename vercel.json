@@ -11,6 +11,16 @@
       "permanent": true
     },
     {
+      "source": "/meishibridge",
+      "destination": "/meishi-scanner/",
+      "permanent": true
+    },
+    {
+      "source": "/meishibridge/",
+      "destination": "/meishi-scanner/",
+      "permanent": true
+    },
+    {
       "source": "/feedback",
       "destination": "/feedback/",
       "permanent": true
