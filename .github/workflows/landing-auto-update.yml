@@ -61,6 +61,10 @@ jobs:
         run: |
           python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
 
+      - name: Render landing page from generated data
+        run: |
+          python3 landing-automation/scripts/render_landing_page.py
+
       - name: Commit changes
         id: commit-changes
         env:
@@ -79,7 +83,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots
+          git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots index.html
 
           if git diff --cached --quiet; then
             echo "No staged changes"
@@ -114,8 +118,9 @@ jobs:
             else
               python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
             fi
+            python3 landing-automation/scripts/render_landing_page.py
 
-            git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots
+            git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots index.html
             if git diff --cached --quiet; then
               echo "No staged changes after refresh"
               echo "changed=false" >> "${GITHUB_OUTPUT}"
@@ -125,24 +130,15 @@ jobs:
             sleep $((attempt * 2))
           done
 
-      - name: Setup Node
-        if: ${{ steps.commit-changes.outputs.changed == 'true' }}
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
-        with:
-          node-version: "24"
-          cache: npm
-          cache-dependency-path: landing-automation/cloudflare-worker/package-lock.json
-
-      - name: Install Wrangler
-        if: ${{ steps.commit-changes.outputs.changed == 'true' }}
-        working-directory: landing-automation/cloudflare-worker
-        run: |
-          node --version
-          npm ci
-
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Vercel (production)
         if: ${{ steps.commit-changes.outputs.changed == 'true' }}
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: landing-automation/cloudflare-worker/node_modules/.bin/wrangler pages deploy . --project-name=allnew-apps
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_WeBWRfPVXtxNAoQpzCzTtyGD
+          VERCEL_PROJECT_ID: prj_C3k53GGOeuB0tyjgHnM5mAxx86rH
+        run: |
+          if [ -z "${VERCEL_TOKEN}" ]; then
+            echo "::error::VERCEL_TOKEN secret is not set. apps.allnew.work is served by Vercel; add the secret in repo settings."
+            exit 1
+          fi
+          npx --yes vercel@50 deploy --prod --yes --token "${VERCEL_TOKEN}"

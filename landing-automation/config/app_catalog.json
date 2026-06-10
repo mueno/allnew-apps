@@ -12,7 +12,10 @@
       "icon_path": "weightsnap-icon.png?v=2",
       "fallback_image_path": "weightsnap-promo.png",
       "card_image_path": "assets/onboarding/weightsnap-onboarding1.jpeg",
-      "input_methods": ["camera_ocr", "voice_input"],
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
       "is_health_app": true,
       "support_path": "weightsnap/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/weightsnap/id6758825019",
@@ -33,7 +36,10 @@
       "icon_path": "thermosnap-icon.png",
       "fallback_image_path": "thermosnap-promo.png",
       "card_image_path": "assets/onboarding/thermosnap-onboarding1.jpeg",
-      "input_methods": ["camera_ocr", "voice_input"],
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
       "is_health_app": true,
       "support_path": "thermosnap/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/thermosnap/id6759076372",
@@ -54,7 +60,10 @@
       "icon_path": "bpsnap-icon.png",
       "fallback_image_path": "bpsnap-promo.png",
       "card_image_path": "assets/onboarding/bloodpressuresnap-onboarding1.jpeg",
-      "input_methods": ["camera_ocr", "voice_input"],
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
       "is_health_app": true,
       "support_path": "bloodpressuresnap/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/bpsnap/id6759076255",
@@ -75,7 +84,10 @@
       "icon_path": "glucosnap-icon.png",
       "fallback_image_path": "glucosnap-promo.png",
       "card_image_path": "assets/onboarding/glucosnap-onboarding1.jpeg",
-      "input_methods": ["camera_ocr", "voice_input"],
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
       "is_health_app": true,
       "support_path": "glucosnap/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/glucosnap/id6759076419",
@@ -96,7 +108,10 @@
       "icon_path": "oxisnap-icon.png",
       "fallback_image_path": "oxisnap-promo.png",
       "card_image_path": "assets/onboarding/oxisnap-onboarding1.jpeg",
-      "input_methods": ["camera_ocr", "voice_input"],
+      "input_methods": [
+        "camera_ocr",
+        "voice_input"
+      ],
       "is_health_app": true,
       "support_path": "oxisnap/?lang=ja",
       "app_store_url": "",
@@ -117,7 +132,9 @@
       "icon_path": "pupweight-icon.png",
       "fallback_image_path": "pupweight-promo.png",
       "card_image_path": "assets/onboarding/pupweight-onboarding1.jpeg",
-      "input_methods": ["voice_input"],
+      "input_methods": [
+        "voice_input"
+      ],
       "is_health_app": false,
       "support_path": "pupweight/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/pupweight/id6759076505",
@@ -138,7 +155,9 @@
       "icon_path": "pawpass-icon.png",
       "fallback_image_path": "assets/onboarding/pawpass-onboarding1.png",
       "card_image_path": "assets/onboarding/pawpass-onboarding1.png",
-      "input_methods": ["camera_ocr"],
+      "input_methods": [
+        "camera_ocr"
+      ],
       "is_health_app": false,
       "support_path": "pawpass/?lang=ja",
       "app_store_url": "",
@@ -159,7 +178,9 @@
       "icon_path": "babyvox-icon.png",
       "fallback_image_path": "babyvox-promo.png",
       "card_image_path": "assets/onboarding/babyvox-onboarding1.jpeg",
-      "input_methods": ["voice_input"],
+      "input_methods": [
+        "voice_input"
+      ],
       "is_health_app": true,
       "support_path": "babyvox/?lang=ja",
       "app_store_url": "",
@@ -180,7 +201,9 @@
       "icon_path": "waistvox-icon.png",
       "fallback_image_path": "waistvox-promo.png",
       "card_image_path": "assets/onboarding/waistvox-onboarding1.jpeg",
-      "input_methods": ["voice_input"],
+      "input_methods": [
+        "voice_input"
+      ],
       "is_health_app": true,
       "support_path": "waistvox/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/waistvox/id6759076494",
@@ -201,7 +224,9 @@
       "icon_path": "coughwav-icon.png",
       "fallback_image_path": "coughwav-promo.png",
       "card_image_path": "assets/onboarding/coughwav-onboarding1.jpeg",
-      "input_methods": ["sound_detection"],
+      "input_methods": [
+        "sound_detection"
+      ],
       "is_health_app": true,
       "support_path": "coughwav/?lang=ja",
       "app_store_url": "https://apps.apple.com/app/coughwav/id6759076606",
@@ -251,6 +276,52 @@
       "asc_app_id": "",
       "sort_order": 110,
       "featured_priority": 15,
+      "bootstrap_visible": false
+    },
+    {
+      "slug": "medreminder",
+      "name": "MedReminder",
+      "name_ja": "服薬通知",
+      "category": "health",
+      "category_label": "Health",
+      "description_ja": "処方箋やお薬の予定を登録して、飲み忘れを通知でリマインド。服薬記録もかんたんに。",
+      "description_en": "Register prescriptions and medication schedules, get reminders, and keep simple dose records.",
+      "icon_path": "medreminder-icon.png",
+      "fallback_image_path": "medreminder-icon.png",
+      "card_image_path": "medreminder-icon.png",
+      "input_methods": [
+        "camera_ocr"
+      ],
+      "is_health_app": true,
+      "support_path": "medreminder/?lang=ja",
+      "app_store_url": "https://apps.apple.com/jp/app/id6767980716?uo=4",
+      "bundle_id": "jp.allnew.medreminder",
+      "asc_app_id": "6767980716",
+      "sort_order": 70,
+      "featured_priority": 70,
+      "bootstrap_visible": false
+    },
+    {
+      "slug": "hikae-cards",
+      "name": "HIKAE Cards",
+      "name_ja": "カード控え",
+      "category": "productivity",
+      "category_label": "Productivity",
+      "description_ja": "会員証・診察券・保険証などを撮影して、Apple Walletで確認できる控えパスに。お財布をもっと身軽に。",
+      "description_en": "Capture membership, clinic, and insurance cards into user-made copy passes you can check in Apple Wallet.",
+      "icon_path": "hikae-cards-icon.png",
+      "fallback_image_path": "hikae-cards-icon.png",
+      "card_image_path": "hikae-cards-icon.png",
+      "input_methods": [
+        "camera_ocr"
+      ],
+      "is_health_app": false,
+      "support_path": "hikae-cards/?lang=ja",
+      "app_store_url": "https://apps.apple.com/jp/app/id6772018672?uo=4",
+      "bundle_id": "jp.allnew.reserve003",
+      "asc_app_id": "6772018672",
+      "sort_order": 75,
+      "featured_priority": 75,
       "bootstrap_visible": false
     }
   ]
