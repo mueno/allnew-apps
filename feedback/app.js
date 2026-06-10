@@ -213,6 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedReceptionIntent = "";
   let pendingReceptionType = "";
   let currentNickname = "";
+  let currentFeedbackToken = "";
   let heroCompleted = false;
   let activeAppFilter = window.location.hash === "#idea" ? "idea" : "all";
   let appSearchQuery = "";
@@ -1863,6 +1864,7 @@ document.addEventListener("DOMContentLoaded", () => {
         body: payload.body,
         nickname: currentNickname,
         visibility: "public",
+        feedbackToken: currentFeedbackToken,
         poinaReview
       })
     });
@@ -2751,9 +2753,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function saveAuthSession(nickname) {
+    const existing = getJsonCookie(authSessionCookieName);
     setJsonCookie(authSessionCookieName, {
       signedIn: true,
       nickname: normalizeAuthNickname(nickname),
+      feedbackToken: currentFeedbackToken || existing?.feedbackToken || "",
       createdAt: new Date().toISOString()
     }, authSessionMaxAgeSeconds);
   }
@@ -2761,6 +2765,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function restoreAuthSession() {
     const session = getJsonCookie(authSessionCookieName);
     if (!session?.signedIn) return false;
+    currentFeedbackToken = session.feedbackToken || "";
     const nickname = normalizeAuthNickname(session.nickname);
     if (nickname !== session.nickname) saveAuthSession(nickname);
     signIn(nickname, { delayMs: 0, persist: false, scroll: true });
@@ -3269,7 +3274,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function completeAppleAuthorization(authorization, expected = {}) {
     try {
-      await exchangeAppleAuthorization(authorization ?? {}, expected);
+      const session = await exchangeAppleAuthorization(authorization ?? {}, expected);
+      currentFeedbackToken = (session && session.feedbackToken) || "";
       closeTermsModal();
       signIn(generateNickname());
     } catch {
@@ -3408,6 +3414,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function signOut() {
     isAuthenticated = false;
     currentNickname = "";
+    currentFeedbackToken = "";
     clearCookieValue(authSessionCookieName);
     document.body.classList.remove("is-authenticated");
     gatedContentArea.classList.remove("is-unlocked");
