@@ -206,6 +206,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const myReceptionStorageKey = "poipoi_my_receptions_v1";
   const authSessionMaxAgeSeconds = 60 * 60 * 24 * 90;
   const preferenceCookieMaxAgeSeconds = 60 * 60 * 24 * 180;
+  // Registration consent record: proves this browser already completed the
+  // initial 3-checkbox consent ceremony. Bump the version to force re-consent
+  // when the terms / privacy policy materially change.
+  const registrationConsentCookieName = "poipoi_feedback_consent";
+  const registrationConsentStorageKey = "poipoi_feedback_consent_v1";
+  const registrationConsentVersion = "2026-06";
+  const registrationConsentMaxAgeSeconds = 60 * 60 * 24 * 365;
 
   let isAuthenticated = false;
   let selectedApp = null;
@@ -337,6 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cookieConsentAccept = document.getElementById("cookieConsentAccept");
   const isLocalPreviewHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
   let termsModalRequiresRegistrationConsent = false;
+  let termsModalConsentChecklistRequired = false;
   let termsModalReturnFocusTarget = null;
   let appleSignInRuntimeConfig = null;
   let appleSignInConfigPromise = null;
@@ -565,6 +573,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setJsonCookie(name, value, maxAgeSeconds) {
     setCookieValue(name, JSON.stringify(value), maxAgeSeconds);
+  }
+
+  function readRegistrationConsentRecord() {
+    const fromCookie = getJsonCookie(registrationConsentCookieName);
+    if (fromCookie?.version) return fromCookie;
+    try {
+      const parsed = JSON.parse(localStorage.getItem(registrationConsentStorageKey) || "null");
+      return parsed && typeof parsed === "object" && parsed.version ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeRegistrationConsentRecord(record) {
+    setJsonCookie(registrationConsentCookieName, record, registrationConsentMaxAgeSeconds);
+    try {
+      localStorage.setItem(registrationConsentStorageKey, JSON.stringify(record));
+    } catch {
+      // Storage may be unavailable (private mode); cookie copy still applies.
+    }
+  }
+
+  function saveRegistrationConsentRecord() {
+    writeRegistrationConsentRecord({
+      version: registrationConsentVersion,
+      consentedAt: new Date().toISOString()
+    });
+  }
+
+  function refreshRegistrationConsentRecord() {
+    const record = readRegistrationConsentRecord();
+    if (record?.version !== registrationConsentVersion) return;
+    writeRegistrationConsentRecord(record);
+  }
+
+  function hasValidRegistrationConsent() {
+    return readRegistrationConsentRecord()?.version === registrationConsentVersion;
   }
 
   function loadMyReceptions() {
@@ -2767,7 +2812,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!session?.signedIn) return false;
     currentFeedbackToken = session.feedbackToken || "";
     const nickname = normalizeAuthNickname(session.nickname);
-    if (nickname !== session.nickname) saveAuthSession(nickname);
+    // Sliding renewal: rewrite the cookie on every visit so the session
+    // expiration counts from the latest visit (Safari ITP caps JS cookies
+    // at ~7 days, so re-stamping on each visit keeps frequent users in).
+    saveAuthSession(nickname);
+    refreshRegistrationConsentRecord();
     signIn(nickname, { delayMs: 0, persist: false, scroll: true });
     return true;
   }
@@ -3123,7 +3172,7 @@ document.addEventListener("DOMContentLoaded", () => {
         appleProgrammaticSignInReady = false;
         appleSignInSetupFailed = true;
         appleOfficialAuthZone.hidden = true;
-        if (allRegistrationConsentsChecked() && !isLocalPreviewHost) {
+        if ((!termsModalConsentChecklistRequired || allRegistrationConsentsChecked()) && !isLocalPreviewHost) {
           termsErrorText.textContent = "Appleサインインを準備できませんでした。ページを再読み込みしてもう一度お試しください。";
           termsErrorText.hidden = false;
         }
@@ -3148,7 +3197,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const checked = allRegistrationConsentsChecked();
+    const checked = !termsModalConsentChecklistRequired || allRegistrationConsentsChecked();
     const localFallbackReady = isLocalPreviewHost && appleSignInSetupFailed;
     const waitingForApple = checked && appleSignInPreparing && !appleProgrammaticSignInReady && !localFallbackReady;
     const unavailable = checked && appleSignInSetupFailed && !localFallbackReady;
@@ -3179,18 +3228,34 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTermsFooterNote("ローカル確認環境のため、仮のサインインで動きを確認します。");
     } else {
       updateTermsFooterNote(redirectReady
-        ? "同意内容を確認したうえで、Appleの認証画面へ進みます。"
+        ? (termsModalConsentChecklistRequired
+          ? "同意内容を確認したうえで、Appleの認証画面へ進みます。"
+          : "ご登録時の同意内容が引き続き適用されます。ボタンを押すとAppleの認証画面へ進みます。")
         : "Appleサインインを準備しています。");
     }
   }
 
-  function openTermsModal(requiresRegistrationConsent = false) {
+  function openTermsModal(requiresRegistrationConsent = false, options = {}) {
     if (!termsModal.classList.contains("show")) {
       termsModalReturnFocusTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     }
+    const requiresChecklist = requiresRegistrationConsent && options.requireConsentChecklist !== false;
     termsModalRequiresRegistrationConsent = requiresRegistrationConsent;
+    termsModalConsentChecklistRequired = requiresChecklist;
+    const isReturningSignIn = requiresRegistrationConsent && !requiresChecklist;
+    termsModal.classList.toggle("is-returning-signin", isReturningSignIn);
+    const modalKicker = termsModal.querySelector(".modal-title-kicker");
+    const modalTitle = document.getElementById("termsTitle");
+    if (modalKicker) {
+      modalKicker.textContent = isReturningSignIn ? "サインイン" : "初回登録のご確認";
+    }
+    if (modalTitle) {
+      modalTitle.textContent = isReturningSignIn
+        ? "おかえりなさい。Appleでサインインしてください。"
+        : "はじめる前に、3つの重要事項をご確認ください。";
+    }
     termsErrorText.hidden = true;
-    if (requiresRegistrationConsent) {
+    if (requiresChecklist) {
       registrationConsentChecks.forEach((check) => {
         check.checked = false;
       });
@@ -3209,6 +3274,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Sign-in entry point: browsers that already completed the registration
+  // consent ceremony (recorded with version) skip the 3-checkbox step and
+  // go straight to Apple sign-in. New browsers / stale consent versions
+  // still get the full registration consent flow.
+  function openSignInModal() {
+    openTermsModal(true, { requireConsentChecklist: !hasValidRegistrationConsent() });
+  }
+
   function closeTermsModal() {
     setTermsModalVisible(false);
   }
@@ -3219,10 +3292,16 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (!allRegistrationConsentsChecked()) {
+    if (termsModalConsentChecklistRequired && !allRegistrationConsentsChecked()) {
       termsErrorText.hidden = false;
       updateTermsActionState();
       return;
+    }
+
+    // Persist the consent record before leaving for Apple so the returning
+    // user path works even if the auth round-trip is interrupted.
+    if (termsModalConsentChecklistRequired) {
+      saveRegistrationConsentRecord();
     }
 
     if (isLocalPreviewHost && appleSignInSetupFailed) {
@@ -3276,6 +3355,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const session = await exchangeAppleAuthorization(authorization ?? {}, expected);
       currentFeedbackToken = (session && session.feedbackToken) || "";
+      saveRegistrationConsentRecord();
       closeTermsModal();
       signIn(generateNickname());
     } catch {
@@ -3343,14 +3423,14 @@ document.addEventListener("DOMContentLoaded", () => {
     clearCookieValue(appleRedirectStateCookieName);
 
     if (authorization.error) {
-      openTermsModal(true);
+      openSignInModal();
       termsErrorText.textContent = "Appleでサインインを完了できませんでした。もう一度お試しください。";
       termsErrorText.hidden = false;
       return true;
     }
 
     if (!expected.state || authorization.state !== expected.state || !expected.nonce) {
-      openTermsModal(true);
+      openSignInModal();
       termsErrorText.textContent = "Appleサインインの確認情報が一致しませんでした。ページを再読み込みしてもう一度お試しください。";
       termsErrorText.hidden = false;
       return true;
@@ -3403,7 +3483,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function startLocalApplePreview() {
-    if (!allRegistrationConsentsChecked()) {
+    if (termsModalConsentChecklistRequired && !allRegistrationConsentsChecked()) {
       termsErrorText.hidden = false;
       return;
     }
@@ -3866,13 +3946,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   guestStatusSignInBtn?.addEventListener("click", () => {
     setGuestStatusBoardVisible(false, { scroll: false });
-    openTermsModal(true);
+    openSignInModal();
   });
   accountBoardLink?.addEventListener("click", (event) => {
     event.preventDefault();
     window.location.href = "status-board.html";
   });
-  mockAppleLoginBtn.addEventListener("click", () => openTermsModal(true));
+  mockAppleLoginBtn.addEventListener("click", openSignInModal);
   logoutTrigger.addEventListener("click", signOut);
   appSearchInput.addEventListener("input", handleAppSearchInput);
   appFilterButtons.forEach((button) => {
@@ -3935,7 +4015,7 @@ document.addEventListener("DOMContentLoaded", () => {
   handleAppleRedirectCallback().then((handled) => {
     if (!handled) restoreAuthSession();
   }).catch(() => {
-    openTermsModal(true);
+    openSignInModal();
     termsErrorText.textContent = "Apple認証の確認中にエラーが発生しました。もう一度お試しください。";
     termsErrorText.hidden = false;
   });
