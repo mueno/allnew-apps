@@ -24,12 +24,33 @@ const PUBLIC_STATUS_TIMELINE_NOTES = {
   "ごめんなさい": "今回は見送りとなりました"
 };
 
+function formatBoardDate(value) {
+  const date = String(value || "").slice(0, 10);
+  return date ? date.replaceAll("-", "/") : "日付未記録";
+}
+
+function normalizeSimilarRequests(entry) {
+  const requests = Array.isArray(entry.similarRequests) ? entry.similarRequests : [];
+  return requests
+    .map((request) => ({
+      id: request.id || "",
+      title: request.title || "",
+      submitterName: request.submitterName || "匿名ユーザー",
+      submittedAt: request.submittedAt || "",
+      publicStatus: request.publicStatus || entry.publicStatus || "受け付けました"
+    }))
+    .filter((request) => request.id || request.title || request.submittedAt)
+    .slice(0, 8);
+}
+
 function mapPublicApiItem(entry) {
   const isVirtual = Boolean(entry.app?.isVirtual);
   const appName = entry.app?.name || (isVirtual ? "New App Idea" : "アプリ");
   const accepted = String(entry.createdAt || "").slice(0, 10);
   const updated = String(entry.updatedAt || entry.createdAt || "").slice(0, 10) || accepted;
   const status = entry.publicStatus || "受け付けました";
+  const similarRequests = normalizeSimilarRequests(entry);
+  const similarRequestCount = Math.max(Number(entry.similarRequestCount) || 0, similarRequests.length || 1);
   const timeline = [[accepted.replaceAll("-", "/"), "ご要望を受け付けました"]];
   if (status !== "受け付けました" && updated && updated !== accepted) {
     timeline.push([updated.replaceAll("-", "/"), PUBLIC_STATUS_TIMELINE_NOTES[status] || status]);
@@ -49,6 +70,8 @@ function mapPublicApiItem(entry) {
     detail: entry.summary || "",
     good: Number(entry.goodCount) || 0,
     owned: false,
+    similarRequestCount,
+    similarRequests,
     timeline
   };
 }
@@ -201,7 +224,10 @@ function itemMatches(item) {
   const categoryMatch = filters.category === "all" || item.category === filters.category;
   const appMatch = filters.app === "all" || item.app === filters.app;
   const query = filters.query.trim().toLowerCase();
-  const queryMatch = !query || `${item.id} ${item.app} ${item.appDisplayName || ""} ${item.category} ${item.title} ${item.detail}`.toLowerCase().includes(query);
+  const similarText = (item.similarRequests || [])
+    .map((request) => `${request.id} ${request.title} ${request.submitterName}`)
+    .join(" ");
+  const queryMatch = !query || `${item.id} ${item.app} ${item.appDisplayName || ""} ${item.category} ${item.title} ${item.detail} ${similarText}`.toLowerCase().includes(query);
   return statusMatch && categoryMatch && appMatch && queryMatch;
 }
 
@@ -264,6 +290,47 @@ function createTimeline(item, compact = false) {
   return timeline;
 }
 
+function createSimilarRequestsBlock(item, { compact = true } = {}) {
+  if (item.owned || Number(item.similarRequestCount || 0) <= 1) return null;
+  const requests = Array.isArray(item.similarRequests) ? item.similarRequests : [];
+  if (!requests.length) return null;
+
+  const block = document.createElement("div");
+  block.className = "request-similar";
+
+  const head = document.createElement("div");
+  head.className = "request-similar-head";
+  const label = document.createElement("strong");
+  label.textContent = `同じ声 ${item.similarRequestCount}件`;
+  const caption = document.createElement("span");
+  caption.textContent = "受付履歴";
+  head.append(label, caption);
+
+  const list = document.createElement("ul");
+  const visibleRequests = compact ? requests.slice(0, 3) : requests;
+  visibleRequests.forEach((request) => {
+    const row = document.createElement("li");
+    const when = document.createElement("time");
+    when.textContent = formatBoardDate(request.submittedAt);
+    const who = document.createElement("strong");
+    who.textContent = request.submitterName || "匿名ユーザー";
+    const title = document.createElement("span");
+    title.textContent = `${request.id ? `${request.id} / ` : ""}${request.title || item.title}`;
+    row.append(when, who, title);
+    list.append(row);
+  });
+
+  if (compact && requests.length > visibleRequests.length) {
+    const more = document.createElement("li");
+    more.className = "request-similar-more";
+    more.textContent = `ほか ${requests.length - visibleRequests.length}件は「詳しく見る」で確認できます。`;
+    list.append(more);
+  }
+
+  block.append(head, list);
+  return block;
+}
+
 function createCard(item) {
   const card = document.createElement("article");
   card.className = `request-card${item.owned ? " is-owned" : ""}`;
@@ -299,6 +366,7 @@ function createCard(item) {
   const detail = document.createElement("p");
   detail.className = "request-detail";
   detail.textContent = item.detail;
+  const similarBlock = createSimilarRequestsBlock(item, { compact: true });
   const compactStatus = document.createElement("p");
   compactStatus.className = "request-latest";
   const latest = item.timeline[item.timeline.length - 1];
@@ -327,7 +395,9 @@ function createCard(item) {
   if (!item.owned) actions.append(good);
   actions.append(detailButton);
 
-  card.append(top, title, timing, detail, compactStatus, actions);
+  card.append(top, title, timing, detail);
+  if (similarBlock) card.append(similarBlock);
+  card.append(compactStatus, actions);
   return card;
 }
 
@@ -353,10 +423,13 @@ function openDetail(item) {
   const detail = document.createElement("p");
   detail.className = "request-detail";
   detail.textContent = item.detail;
+  const similarBlock = createSimilarRequestsBlock(item, { compact: false });
   const timelineTitle = document.createElement("h3");
   timelineTitle.className = "detail-section-title";
   timelineTitle.textContent = "これまでの流れ";
-  detailBody.append(close, meta, status, title, detail, timelineTitle, createTimeline(item, false));
+  detailBody.append(close, meta, status, title, detail);
+  if (similarBlock) detailBody.append(similarBlock);
+  detailBody.append(timelineTitle, createTimeline(item, false));
   detailDialog.showModal();
 }
 
