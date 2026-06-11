@@ -346,6 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cookieConsentAccept = document.getElementById("cookieConsentAccept");
   const cookieConsentEssential = document.getElementById("cookieConsentEssential");
   const cookieSettingsLink = document.getElementById("cookieSettingsLink");
+  const signinCookieSettingsLink = document.getElementById("signinCookieSettingsLink");
   const isLocalPreviewHost = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
   let termsModalRequiresRegistrationConsent = false;
   let termsModalConsentChecklistRequired = false;
@@ -829,10 +830,12 @@ document.addEventListener("DOMContentLoaded", () => {
       setCookieConsentDecision(false);
       setCookieBannerVisible(false);
     });
-    cookieSettingsLink?.addEventListener("click", () => {
+    const reopenConsentBanner = () => {
       setCookieBannerVisible(true);
       cookieConsentBanner.scrollIntoView({ behavior: "smooth", block: "end" });
-    });
+    };
+    cookieSettingsLink?.addEventListener("click", reopenConsentBanner);
+    signinCookieSettingsLink?.addEventListener("click", reopenConsentBanner);
   }
 
   function setScrollyStep(stage, stepIndex) {

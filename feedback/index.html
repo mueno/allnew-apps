@@ -3796,8 +3796,11 @@
       cursor: progress;
     }
 
+    /* Always visible (incl. anonymous visitors) so the consent banner's
+       "ページ下部のCookie設定でいつでも変更できます" promise holds and
+       consent withdrawal stays as easy as giving it. */
     .portal-legal-footer {
-      display: none;
+      display: block;
       width: min(100%, 640px);
       margin: 48px auto 0;
       padding: 18px 10px 0;
@@ -3806,10 +3809,6 @@
       font-weight: 650;
       line-height: 1.7;
       text-align: center;
-    }
-
-    .is-authenticated .portal-legal-footer {
-      display: block;
     }
 
     .is-chat-active .portal-legal-footer {
@@ -3828,6 +3827,7 @@
 
     .portal-legal-links a,
     .signin-legal-links a,
+    .signin-legal-links .portal-legal-link-button,
     .policy-link {
       color: var(--blue);
       text-decoration: none;
@@ -3836,6 +3836,7 @@
 
     .portal-legal-links a:hover,
     .signin-legal-links a:hover,
+    .signin-legal-links .portal-legal-link-button:hover,
     .policy-link:hover {
       text-decoration: underline;
     }
@@ -4912,6 +4913,7 @@
                   <li><a href="./terms.html">利用規約</a></li>
                   <li><a href="https://www.allnew.work/ja/privacy">プライバシーポリシー</a></li>
                   <li><a href="./cookie-policy.html">Cookie/外部送信ポリシー</a></li>
+                  <li><button type="button" class="portal-legal-link-button" id="signinCookieSettingsLink">Cookie設定</button></li>
                 </ul>
               </div>
             </section>
@@ -5506,6 +5508,6 @@
 
   <script src="./i18n.js?v=20260611-legal-en" defer></script>
   <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/ja_JP/appleid.auth.js" defer></script>
-  <script src="./app.js?v=20260611-legal-en" defer></script>
+  <script src="./app.js?v=20260611-cookie-settings" defer></script>
 </body>
 </html>
