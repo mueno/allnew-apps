@@ -773,6 +773,51 @@
             justify-content: center;
         }
 
+        .news-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .news-item {
+            display: flex;
+            gap: 24px;
+            align-items: baseline;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .news-item:first-child {
+            border-top: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .news-date {
+            flex: 0 0 92px;
+            font-size: 13px;
+            color: var(--fg-tertiary);
+            letter-spacing: 0.04em;
+        }
+
+        .news-text {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--fg-secondary);
+            margin: 0;
+        }
+
+        .news-text a {
+            color: var(--fg);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        @media (max-width: 640px) {
+            .news-item {
+                flex-direction: column;
+                gap: 6px;
+            }
+        }
+
         .featured-eyebrow {
             font-size: 11px;
             font-weight: 500;
@@ -1469,6 +1514,28 @@
         </div>
     </section>
 
+    <!-- News -->
+    <section class="section" id="section-news" data-section="news">
+        <div class="section-inner">
+            <p class="section-label reveal" id="news-section-label">(News)</p>
+            <h2 class="section-heading reveal reveal-d1" id="news-section-title">お知らせ</h2>
+            <ul class="news-list">
+                <li class="news-item reveal">
+                    <span class="news-date">2026.06.11</span>
+                    <p class="news-text"><span id="news-item-1">プレスリリース「人間の仕事は『3つの承認』に集中。Agentic AIがiOSアプリ事業を自律運用」を配信しました。</span> <a href="https://prtimes.jp/main/html/rd/p/000000002.000060854.html" target="_blank" rel="noopener noreferrer">PR TIMES</a></p>
+                </li>
+                <li class="news-item reveal">
+                    <span class="news-date">2026.06.11</span>
+                    <p class="news-text"><span id="news-item-2">ご意見・新アプリ案の受付窓口「POIPOI-STUDIO」を正式公開しました。</span> <a href="https://apps.allnew.work/feedback/">POIPOI-STUDIO</a></p>
+                </li>
+                <li class="news-item reveal">
+                    <span class="news-date">2026.06.09</span>
+                    <p class="news-text"><span id="news-item-3">『HIKAE Cards カード控えをWalletに』をApp Storeで配信開始しました。</span> <a href="https://apps.apple.com/jp/app/hikae-cards/id6772018672" target="_blank" rel="noopener noreferrer">App Store</a></p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
     <!-- (Apps) — Health -->
     <section class="section accordion-open" id="section-health" data-section="health">
         <div class="section-inner">
@@ -1861,7 +1928,11 @@
                     'footer-legal-commercial': '特定商取引法に基づく表記',
                     'footer-legal-faq': 'FAQ',
                     'featured-app-store-link': 'App Storeでダウンロード',
-                    'featured-support-link': 'さらに詳しく →'
+                    'featured-support-link': 'さらに詳しく →',
+                    'news-section-title': 'お知らせ',
+                    'news-item-1': 'プレスリリース「人間の仕事は『3つの承認』に集中。Agentic AIがiOSアプリ事業を自律運用」を配信しました。',
+                    'news-item-2': 'ご意見・新アプリ案の受付窓口「POIPOI-STUDIO」を正式公開しました。',
+                    'news-item-3': '『HIKAE Cards カード控えをWalletに』をApp Storeで配信開始しました。'
                 },
                 html: {
                     'hero-title': 'あたりまえを、<br>もっとかんたんに。',
@@ -1914,7 +1985,11 @@
                     'footer-legal-commercial': 'Legal Notice',
                     'footer-legal-faq': 'FAQ',
                     'featured-app-store-link': 'Download on App Store',
-                    'featured-support-link': 'Learn More →'
+                    'featured-support-link': 'Learn More →',
+                    'news-section-title': 'News',
+                    'news-item-1': 'Published our press release: "Humans focus on just 3 approvals — Agentic AI autonomously runs our iOS app business."',
+                    'news-item-2': 'POIPOI-STUDIO, our portal for feedback and new app ideas, is now open.',
+                    'news-item-3': 'HIKAE Cards is now available on the App Store.'
                 },
                 html: {
                     'hero-title': 'Everyday Tasks,<br>Effortlessly.',
