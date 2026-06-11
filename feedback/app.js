@@ -249,12 +249,39 @@ document.addEventListener("DOMContentLoaded", () => {
     customEnd: "",
     sort: "updated-desc"
   };
+  // 個人情報・秘密情報の「実値」検知。
+  // 「電話番号」「パスワード」のようなカテゴリ語は機能説明（例:「OTP（ワンタイム
+  // パスワード）を自動抽出」）に普通に登場するため、語彙の出現だけで block すると
+  // 誤検知になる（2026-06-12 ポイナ停止事故）。実データのパターンのみ検知する。
+  // サーバー側の正本: allnew-baas vercel/api/_shared/personal-info.js（変更時は両方更新）。
+  function containsPersonalInfoValue(value) {
+    // 全角英数字・＠ → 半角
+    const text = String(value || "").replace(/[０-９Ａ-Ｚａ-ｚ＠]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0xfee0));
+    if (!text) return false;
+    // メールアドレス実値
+    if (/[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+/.test(text)) return true;
+    // 〒 + 郵便番号
+    if (/〒\s*\d{3}\s*[ー−–—‐-]?\s*\d{4}/.test(text)) return true;
+    // 都道府県 + 市区町村郡 + 番地相当（数字、または漢数字+丁目/番地/番/号）
+    if (/(?:東京都|北海道|京都府|大阪府|[一-龯]{2,3}県)[一-龯ぁ-んァ-ヶー]{1,15}[市区町村郡][一-龯ぁ-んァ-ヶー]{0,15}(?:[0-9]|[一二三四五六七八九十〇]+(?:丁目|番地|番|号))/.test(text)) return true;
+    // 「パスワードは xxxx」のようにラベルと実値が併記されたもの（ラベル単独は通す）
+    if (/(?:パスワード|暗証番号|認証コード|確認コード|ワンタイムパスワード|OTP|アクセストークン|APIキー)\s*(?:は|が|:|：|=)\s*[A-Za-z0-9!#$%&*+\-_.@?]{4,}/i.test(text)) return true;
+    // 日本の電話番号実値（区切りあり/なし、+81、桁数検証付き）
+    const phoneCandidates = text.match(/(?:\+81[ー−–—‐()\s-]?|0)\d(?:[ー−–—‐()\s-]?\d){8,12}/g) || [];
+    if (phoneCandidates.some((candidate) => {
+      const digits = candidate.replace(/\D/g, "");
+      return digits.length >= 10 && digits.length <= 13;
+    })) return true;
+    // マイナンバー（12桁）・カード番号（14-16桁）相当の数字列
+    return /(?:^|\D)\d{4}[ー−–—‐\s-]?\d{4}[ー−–—‐\s-]?\d{4}(?:[ー−–—‐\s-]?\d{1,4})?(?!\d)/.test(text);
+  }
+
   const prohibitedTopicRules = Object.freeze([
     { label: "誹謗中傷・攻撃的表現", pattern: /死ね|消えろ|殺す|バカ|馬鹿|クソ|くそ|無能|カス|晒す|差別/i, severity: "block" },
     { label: "犯罪・違法行為の助長", pattern: /違法|犯罪|詐欺|盗む|ハッキング|不正アクセス|薬物|爆弾|殺害/i, severity: "block" },
     { label: "アダルト・出会い系用途", pattern: /アダルト|性的|出会い|マッチング|援交|わいせつ|裸|セックス/i, severity: "block" },
     { label: "政治・宗教の主張", pattern: /政党|選挙|政治活動|宗教|信仰|布教|教団/i, severity: "block" },
-    { label: "個人情報・秘密情報の混入", pattern: /住所|電話番号|メールアドレス|パスワード|秘密情報|社外秘|診断書|マイナンバー/i, severity: "block" },
+    { label: "個人情報・秘密情報の混入", test: containsPersonalInfoValue, severity: "block" },
     { label: "医療助言・診断に近い内容", pattern: /インスリン|投薬|服薬量|薬の量|処方|診断|治療方針|医療助言/i, severity: "warn" },
     { label: "いたずら・スパムの疑い", pattern: /(.)\1{9,}|https?:\/\/|無料で稼げる|副業/i, severity: "warn" }
   ]);
@@ -1596,7 +1623,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ) {
         return false;
       }
-      return rule.pattern.test(fullText);
+      return typeof rule.test === "function" ? rule.test(fullText) : rule.pattern.test(fullText);
     });
     const blockingFlags = flags.filter((flag) => flag.severity === "block");
     const warningFlags = flags.filter((flag) => flag.severity === "warn");
