@@ -645,6 +645,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title: payload.title || payload.body?.slice(0, 48) || "受付内容",
       body: payload.body || "",
       publicStatus: report.publicStatus || "受け付けました",
+      similarRequest: report.similarRequest || null,
       acceptedAt: receivedAt,
       updatedAt: report.updatedAt || receivedAt,
       nickname: currentNickname || generateNickname()
@@ -1461,6 +1462,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     message.append(intro, title, rows);
+    if (report.similarRequest?.message) {
+      const similar = document.createElement("p");
+      similar.className = "chat-receipt-similar";
+      similar.textContent = report.similarRequest.message;
+      message.append(similar);
+    }
     feedbackChatLog.append(message);
     feedbackChatLog.scrollTop = feedbackChatLog.scrollHeight;
     return message;
@@ -1965,7 +1972,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!response.ok || result.ok !== true) {
       throw new Error(result.error || `feedback_submit_${response.status}`);
     }
-    return result.item;
+    return {
+      ...(result.item || {}),
+      similarRequest: result.similarRequest || result.item?.similarRequest || null
+    };
   }
 
   function getUserFacingSubmitError(error) {
@@ -2161,6 +2171,7 @@ document.addEventListener("DOMContentLoaded", () => {
       publicStatus: persistedItem?.publicStatus || review.publicStatus,
       adminState: persistedItem?.adminState || "needs_review",
       factoryJobId: persistedItem?.factoryJobId || null,
+      similarRequest: persistedItem?.similarRequest || null,
       suggestedNextStatus: review.decision === "accept" ? "検討しています" : "ごめんなさい",
       flags,
       adminSummary: review.adminSummary,
