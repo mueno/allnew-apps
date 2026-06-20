@@ -70,12 +70,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://apps.allnew.work/inlinememo/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  
   <url>
     <loc>https://apps.allnew.work/medreminder/</loc>
     <lastmod>2026-06-13</lastmod>
@@ -88,12 +83,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://apps.allnew.work/minutepilot/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  
   <url>
     <loc>https://apps.allnew.work/oxisnap/</loc>
     <lastmod>2026-06-13</lastmod>
@@ -112,12 +102,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://apps.allnew.work/pocketluma/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  
   <url>
     <loc>https://apps.allnew.work/pupmeds/</loc>
     <lastmod>2026-06-13</lastmod>
@@ -130,24 +115,14 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://apps.allnew.work/settingsgenie/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  
   <url>
     <loc>https://apps.allnew.work/thermosnap/</loc>
     <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://apps.allnew.work/vitalize/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+  
   <url>
     <loc>https://apps.allnew.work/voicedeal/</loc>
     <lastmod>2026-06-13</lastmod>
