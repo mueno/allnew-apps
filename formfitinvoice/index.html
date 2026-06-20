@@ -3,52 +3,293 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>見積・請求書作成 サポート</title>
+  <title>見積・請求書作成 サポート・法務</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif; margin: 0; color: #172033; background: #f7fafc; }
-    main { max-width: 880px; margin: 0 auto; padding: 32px 20px 56px; }
-    header { padding: 28px 0 18px; }
-    h1 { font-size: 2rem; margin: 0 0 8px; }
-    h2 { font-size: 1.25rem; margin: 28px 0 10px; }
-    section { background: #fff; border: 1px solid #d8e0ea; border-radius: 8px; padding: 18px; margin: 16px 0; }
-    a { color: #0f6b8f; }
-    dl { display: grid; grid-template-columns: minmax(130px, 180px) 1fr; gap: 8px 16px; }
-    dt { font-weight: 700; }
-    dd { margin: 0; }
+    :root {
+      color-scheme: light;
+      --bg: #f5f8fb;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #697586;
+      --line: #dbe5ef;
+      --brand: #1b7ee8;
+      --brand-soft: #e8f2ff;
+      --green: #1f9d73;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 0%, #e7f3ff 0, transparent 28rem), var(--bg);
+      line-height: 1.75;
+    }
+    a { color: #0969a8; text-underline-offset: 0.18em; }
+    .page { max-width: 920px; margin: 0 auto; padding: 20px 18px 64px; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 0 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: 0; }
+    .brand span:last-child { color: var(--muted); font-weight: 600; }
+    .lang {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.86);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font: inherit;
+      color: var(--text);
+    }
+    .hero {
+      padding: 42px 0 26px;
+      text-align: center;
+    }
+    .hero-icon {
+      width: 66px;
+      height: 66px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #1b7ee8, #19b8d4);
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 16px 32px rgba(27,126,232,0.22);
+    }
+    h1 { margin: 18px 0 6px; font-size: clamp(2rem, 8vw, 3rem); line-height: 1.15; }
+    .hero p { margin: 0 auto; max-width: 560px; color: var(--muted); font-size: 1.05rem; }
+    .updated {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.9rem;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--green); }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin: 8px 0 24px;
+    }
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.86);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 650;
+      font-size: 0.94rem;
+    }
+    .section {
+      background: rgba(255,255,255,0.96);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+      margin: 18px 0;
+      box-shadow: 0 10px 24px rgba(15, 35, 55, 0.05);
+    }
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .section-icon {
+      width: 34px;
+      height: 34px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+    h2 { margin: 0; font-size: 1.35rem; line-height: 1.35; }
+    h3 { margin: 20px 0 8px; font-size: 1.05rem; }
+    p { margin: 0 0 12px; }
+    .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(150px, 220px) 1fr;
+      gap: 10px 18px;
+      margin: 10px 0 0;
+    }
+    dt { font-weight: 750; color: var(--text); }
+    dd { margin: 0; color: #2f3b4d; }
+    .callout {
+      border-left: 4px solid var(--brand);
+      background: #f2f7ff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 14px 0;
+    }
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="ja"] { display: none; }
+    body.lang-en [data-lang="en"] { display: block; }
+    body.lang-en .nav[data-lang="en"] { display: flex; }
+    @media (max-width: 640px) {
+      .page { padding-inline: 16px; }
+      .section { border-radius: 14px; padding: 20px; }
+      .grid { grid-template-columns: 1fr; gap: 4px; }
+      .topbar { align-items: flex-start; }
+    }
   </style>
 </head>
-<body>
-<main>
-  <header>
-    <h1>見積・請求書作成</h1>
-    <p>FormFit Invoice support and privacy information.</p>
-  </header>
-  <section id="faq-ja">
-    <h2>サポート / Support</h2>
-    <p>見積・請求書作成 は、フリーランスや小規模事業者が端末内で見積書・注文書・納品書・検収書・請求書を作成し、PDFとして共有するためのアプリです。</p>
-    <p>お問い合わせは <a href="mailto:app-support@allnew.work">app-support@allnew.work</a> までご連絡ください。</p>
-    <dl>
-      <dt>対応言語</dt><dd>日本語</dd>
-      <dt>受付</dt><dd>平日 11:00-15:00 JST</dd>
-      <dt>データ保存</dt><dd>入力した書類・取引先・自社情報・印影は端末内に保存されます。</dd>
-      <dt>バックアップ</dt><dd>端末紛失・アプリ削除に備えて、アプリ内のPDF、CSV、JSONバックアップを書き出してください。</dd>
-      <dt>税務上の注意</dt><dd>本アプリは書類作成を支援しますが、税務・法務上の適合性を保証するものではありません。</dd>
-    </dl>
-  </section>
-  <section id="privacy-ja">
-    <h2>プライバシーポリシー / Privacy Policy</h2>
-    <p>見積・請求書作成 は、トラッキング、広告用識別子の収集、外部アカウント作成、クラウド同期を行いません。</p>
-    <p>会社情報、取引先、書類、印影などの入力データは、アプリのローカル保存領域に保存されます。PDF、CSV、JSONバックアップの共有時は、利用者が選択した共有先にファイルが渡されます。</p>
-    <p>サポートにメールでお問い合わせいただいた場合、返信に必要な範囲でメールアドレスと問い合わせ内容を扱います。</p>
-  </section>
-  <section id="terms-ja">
-    <h2>利用条件</h2>
-    <p>本アプリは書類作成支援ツールです。税務・法務上の判断が必要な場合は、税理士・弁護士等の専門家に確認してください。</p>
-  </section>
-  <section id="contact-ja">
-    <h2>お問い合わせ</h2>
-    <p><a href="mailto:app-support@allnew.work">app-support@allnew.work</a></p>
-  </section>
-</main>
+<body data-template-source="v47-shared-legal-support-baseline" data-template-version="formfitinvoice-2026-06-21">
+  <div class="page">
+    <header class="topbar">
+      <div class="brand"><strong>AllNew</strong><span>|</span><span>FormFit Invoice</span></div>
+      <select class="lang" id="langPicker" aria-label="Language">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+      </select>
+    </header>
+
+    <section class="hero" data-lang="ja">
+      <div class="hero-icon" aria-hidden="true">FI</div>
+      <h1>見積・請求書作成</h1>
+      <p>サポート、プライバシーポリシー、利用規約、特定商取引法に基づく表記を確認できます。</p>
+      <div class="updated"><span class="dot" aria-hidden="true"></span>最終更新: 2026年6月21日</div>
+    </section>
+
+    <section class="hero" data-lang="en">
+      <div class="hero-icon" aria-hidden="true">FI</div>
+      <h1>FormFit Invoice</h1>
+      <p>Support, Privacy Policy, Terms of Service, and commercial disclosure for the app.</p>
+      <div class="updated"><span class="dot" aria-hidden="true"></span>Last updated: June 21, 2026</div>
+    </section>
+
+    <nav class="nav" data-lang="ja" aria-label="ページ内リンク">
+      <a href="#faq-ja">FAQ</a>
+      <a href="#privacy-ja">プライバシー</a>
+      <a href="#terms-ja">利用規約</a>
+      <a href="#commercial-ja">特定商取引法</a>
+      <a href="#contact-ja">お問い合わせ</a>
+    </nav>
+    <nav class="nav" data-lang="en" aria-label="Page links">
+      <a href="#faq-en">FAQ</a>
+      <a href="#privacy-en">Privacy</a>
+      <a href="#terms-en">Terms</a>
+      <a href="#commercial-en">Commercial Disclosure</a>
+      <a href="#contact-en">Contact</a>
+    </nav>
+
+    <main>
+      <section id="faq-ja" class="section" data-lang="ja">
+        <div class="section-header"><div class="section-icon">?</div><div><h2>よくある質問</h2><p class="muted">書類作成、保存、バックアップについて</p></div></div>
+        <h3>このアプリで作成できる書類は何ですか。</h3>
+        <p>見積書、注文書、納品書、検収書、請求書を作成できます。見積書から後続書類へ変換し、PDFとして共有できます。</p>
+        <h3>データはどこに保存されますか。</h3>
+        <p>会社情報、取引先、書類、印影、PDF作成状態、書類ライフサイクル履歴は端末内に保存されます。アカウント作成やクラウド同期はありません。</p>
+        <h3>バックアップはできますか。</h3>
+        <p>アプリ内からPDF、CSV、JSONバックアップを書き出せます。端末紛失やアプリ削除に備えて、利用者自身が安全な場所へ保管してください。</p>
+        <h3>税務・法務の判断もできますか。</h3>
+        <p>本アプリは書類作成を支援するツールです。税務・法務上の適合性を保証するものではないため、必要に応じて専門家へ確認してください。</p>
+      </section>
+
+      <section id="privacy-ja" class="section" data-lang="ja">
+        <div class="section-header"><div class="section-icon">P</div><div><h2>プライバシーポリシー</h2><p class="muted">端末内処理と共有時の取り扱い</p></div></div>
+        <p>見積・請求書作成は、トラッキング、広告用識別子の収集、外部アカウント作成、クラウド同期を行いません。</p>
+        <p>会社情報、取引先、書類、印影などの入力データは、アプリのローカル保存領域に保存されます。PDF、CSV、JSONバックアップの共有時は、利用者が選択した共有先にファイルが渡されます。</p>
+        <p>連絡先を読み込む場合は、利用者が選択した連絡先のみを候補として扱います。複数の住所、電話番号、メールアドレスがある場合は、登録前に選択できます。</p>
+        <p>サポートにメールでお問い合わせいただいた場合、返信に必要な範囲でメールアドレスと問い合わせ内容を扱います。</p>
+      </section>
+
+      <section id="terms-ja" class="section" data-lang="ja">
+        <div class="section-header"><div class="section-icon">T</div><div><h2>利用規約</h2><p class="muted">サービスのご利用条件</p></div></div>
+        <p>本アプリは、フリーランスおよび小規模事業者向けの書類作成支援ツールです。利用者は自身の責任で入力内容、取引条件、税率、金額、宛先、印影、PDF出力内容を確認した上で利用します。</p>
+        <p>本アプリの出力物は、税務・法務・会計上の適合性を保証するものではありません。専門的判断が必要な場合は、税理士、弁護士、その他の専門家に相談してください。</p>
+        <p>利用者がアプリから共有、保存、送信したPDF、CSV、JSONファイルの管理は利用者の責任で行うものとします。</p>
+      </section>
+
+      <section id="commercial-ja" class="section" data-lang="ja">
+        <div class="section-header"><div class="section-icon">C</div><div><h2>特定商取引法に基づく表記</h2><p class="muted">販売事業者情報</p></div></div>
+        <dl class="grid">
+          <dt>販売事業者</dt><dd>合同会社AllNew</dd>
+          <dt>運営統括責任者</dt><dd>植野 正徳</dd>
+          <dt>所在地</dt><dd>東京都</dd>
+          <dt>電話番号</dt><dd>請求があれば遅滞なく開示します（特定商取引法第11条ただし書に基づく省略表示）</dd>
+          <dt>取引条件</dt><dd>販売価格、支払方法、提供時期、解約・返金等は App Store の購入画面または本アプリの表示に従います。</dd>
+        </dl>
+      </section>
+
+      <section id="contact-ja" class="section" data-lang="ja">
+        <div class="section-header"><div class="section-icon">@</div><div><h2>お問い合わせ</h2><p class="muted">サポート窓口</p></div></div>
+        <dl class="grid">
+          <dt>メール</dt><dd><a href="mailto:app-support@allnew.work">app-support@allnew.work</a></dd>
+          <dt>受付</dt><dd>平日 11:00-15:00 JST</dd>
+          <dt>対応言語</dt><dd>日本語</dd>
+        </dl>
+        <div class="callout">お問い合わせ時は、端末名、iOSバージョン、アプリのバージョン、発生している操作手順を可能な範囲でお知らせください。</div>
+      </section>
+
+      <section id="faq-en" class="section" data-lang="en">
+        <div class="section-header"><div class="section-icon">?</div><div><h2>FAQ</h2><p class="muted">Documents, storage, and backups</p></div></div>
+        <p>FormFit Invoice helps users create estimates, purchase orders, delivery notes, inspection reports, and invoices, then share them as PDFs.</p>
+        <p>Business, client, document, stamp image, PDF status, and lifecycle history data are stored on device. The app does not create accounts or provide cloud sync.</p>
+      </section>
+
+      <section id="privacy-en" class="section" data-lang="en">
+        <div class="section-header"><div class="section-icon">P</div><div><h2>Privacy Policy</h2><p class="muted">On-device processing and sharing</p></div></div>
+        <p>The app does not track users, collect advertising identifiers, create external accounts, or sync data to a cloud service.</p>
+        <p>When the user exports or shares PDF, CSV, or JSON backup files, those files are handed to the destination selected by the user.</p>
+      </section>
+
+      <section id="terms-en" class="section" data-lang="en">
+        <div class="section-header"><div class="section-icon">T</div><div><h2>Terms of Service</h2><p class="muted">Service conditions</p></div></div>
+        <p>The app is a document creation support tool. Users are responsible for reviewing entered information, transaction conditions, tax rates, amounts, recipients, stamps, and PDF output.</p>
+        <p>The app does not guarantee tax, legal, or accounting suitability. Consult a qualified professional when needed.</p>
+      </section>
+
+      <section id="commercial-en" class="section" data-lang="en">
+        <div class="section-header"><div class="section-icon">C</div><div><h2>Commercial Disclosure</h2><p class="muted">Seller information</p></div></div>
+        <dl class="grid">
+          <dt>Seller</dt><dd>AllNew LLC</dd>
+          <dt>Operator</dt><dd>Masanori Ueno</dd>
+          <dt>Address</dt><dd>Tokyo, Japan</dd>
+          <dt>Phone</dt><dd>Disclosed without delay upon request where required by Japanese law.</dd>
+          <dt>Transaction terms</dt><dd>Prices, payment method, availability, cancellation, and refunds are shown in the App Store purchase flow or in the app where applicable.</dd>
+        </dl>
+      </section>
+
+      <section id="contact-en" class="section" data-lang="en">
+        <div class="section-header"><div class="section-icon">@</div><div><h2>Contact</h2><p class="muted">Support desk</p></div></div>
+        <dl class="grid">
+          <dt>Email</dt><dd><a href="mailto:app-support@allnew.work">app-support@allnew.work</a></dd>
+          <dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd>
+          <dt>Language</dt><dd>Japanese</dd>
+        </dl>
+      </section>
+    </main>
+  </div>
+  <script>
+    const picker = document.getElementById('langPicker');
+    const params = new URLSearchParams(window.location.search);
+    const initialLang = params.get('lang') === 'en' ? 'en' : 'ja';
+    function setLang(lang) {
+      document.documentElement.lang = lang;
+      document.body.classList.toggle('lang-en', lang === 'en');
+      picker.value = lang;
+    }
+    picker.addEventListener('change', function(event) {
+      setLang(event.target.value);
+    });
+    setLang(initialLang);
+  </script>
 </body>
 </html>
