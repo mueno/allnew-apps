@@ -17,11 +17,14 @@ on:
         required: false
         default: "false"
   schedule:
-    - cron: "15 18 * * *"
+    # Safety-net reconcile every 6 hours: webhooks are the fast path, this
+    # loop guarantees convergence even when every event is missed.
+    - cron: "15 */6 * * *"
 
 permissions:
   contents: write
   deployments: write
+  issues: write
 
 concurrency:
   group: landing-auto-update-${{ github.ref }}
@@ -46,24 +49,45 @@ jobs:
           ${{ toJson(github.event) }}
           JSON
 
-      - name: App Store reconcile mode (schedule or manual)
-        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.reconcile == 'true') }}
+      - name: Event mode (repository_dispatch)
+        if: ${{ github.event_name == 'repository_dispatch' }}
         run: |
-          python3 landing-automation/scripts/update_landing_data.py --reconcile-app-store
+          python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
 
       - name: Bootstrap mode (manual)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true' && inputs.reconcile != 'true' }}
         run: |
           python3 landing-automation/scripts/update_landing_data.py --bootstrap
-
-      - name: Event mode (repository_dispatch)
-        if: ${{ github.event_name == 'repository_dispatch' || (github.event_name == 'workflow_dispatch' && inputs.bootstrap != 'true' && inputs.reconcile != 'true') }}
-        run: |
-          python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
-
-      - name: Render landing page from generated data
-        run: |
           python3 landing-automation/scripts/render_landing_page.py
+
+      - name: Landing sync (discovery + reconcile + render + parity gate)
+        id: landing-sync
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true' && inputs.reconcile != 'true') }}
+        run: |
+          python3 landing-automation/scripts/landing_sync.py
+
+      - name: ANDON — open parity issue on gate block
+        if: ${{ failure() && steps.landing-sync.outcome == 'failure' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh label create landing-parity-andon --force \
+            --description "Landing/App Store parity gate blocked" --color B60205 || true
+          report=""
+          if [ -f landing-automation/state/parity_report.json ]; then
+            report=$(cat landing-automation/state/parity_report.json)
+          fi
+          body=$(printf 'The landing parity gate blocked this run.\n\nRun: %s\n\nParity report:\n```json\n%s\n```\n\nResolve by fixing the gap, adding a reasoned exclusion in landing-automation/config/parity_exclusions.json, or (for confirmed false positives under repair) a time-boxed landing-automation/state/parity_circuit_breaker.json.' \
+            "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" "$report")
+          existing=$(gh issue list --label landing-parity-andon --state open \
+            --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "ANDON: landing parity gate blocked" \
+              --label landing-parity-andon --body "$body"
+          fi
 
       - name: Commit changes
         id: commit-changes
@@ -75,7 +99,38 @@ jobs:
         run: |
           set -euo pipefail
 
-          if git diff --quiet; then
+          COMMIT_PATHS=(
+            data/landing-apps.generated.json
+            landing-automation/state
+            landing-automation/config/app_catalog.json
+            assets/asc-screenshots
+            assets/app-icons
+            assets/onboarding
+            index.html
+          )
+
+          stage_changes() {
+            for path in "${COMMIT_PATHS[@]}"; do
+              if [ -e "$path" ]; then
+                git add -- "$path"
+              fi
+            done
+          }
+
+          rebuild() {
+            if [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ] && [ "${RECONCILE_INPUT}" != "true" ]; then
+              python3 landing-automation/scripts/update_landing_data.py --bootstrap
+              python3 landing-automation/scripts/render_landing_page.py
+              return
+            fi
+            if [ "${EVENT_NAME}" = "repository_dispatch" ]; then
+              python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
+            fi
+            python3 landing-automation/scripts/landing_sync.py
+          }
+
+          stage_changes
+          if git diff --cached --quiet; then
             echo "No changes"
             echo "changed=false" >> "${GITHUB_OUTPUT}"
             exit 0
@@ -83,14 +138,6 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots index.html
-
-          if git diff --cached --quiet; then
-            echo "No staged changes"
-            echo "changed=false" >> "${GITHUB_OUTPUT}"
-            exit 0
-          fi
-
           git commit -m "chore: auto update landing apps data"
 
           # Retry push because repository_dispatch events can arrive in bursts.
@@ -111,16 +158,8 @@ jobs:
             git fetch origin "${TARGET_BRANCH}"
             git reset --hard "origin/${TARGET_BRANCH}"
 
-            if [ "${EVENT_NAME}" = "schedule" ] || { [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${RECONCILE_INPUT}" = "true" ]; }; then
-              python3 landing-automation/scripts/update_landing_data.py --reconcile-app-store
-            elif [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ]; then
-              python3 landing-automation/scripts/update_landing_data.py --bootstrap
-            else
-              python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
-            fi
-            python3 landing-automation/scripts/render_landing_page.py
-
-            git add data/landing-apps.generated.json landing-automation/state/landing_state.json assets/asc-screenshots index.html
+            rebuild
+            stage_changes
             if git diff --cached --quiet; then
               echo "No staged changes after refresh"
               echo "changed=false" >> "${GITHUB_OUTPUT}"

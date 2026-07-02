@@ -1,0 +1,237 @@
+{
+  "schema_version": "factory-maker/1",
+  "business": {
+    "theme": "apps.allnew.work landing page auto-sync with the public App Store",
+    "model": "Every AllNew app that reaches READY_FOR_SALE appears on the landing page automatically; the page is the storefront that converts App Store presence into user acquisition without manual ops.",
+    "north_star_metric": "parity gap = publicly released apps missing from the landing page (target: 0, detected within 6h)",
+    "operating_cadence": "per-trigger (ASC webhook) + scheduled safety-net reconcile every 6 hours",
+    "constraints": [
+      "Ground truth is the public iTunes Lookup artist listing (id=1875164184), never internal state or self-reported events",
+      "Existing catalog entries are never mutated by automation; discovery only ADDS",
+      "Per-app support/legal pages are out of scope; only landing data + index.html are written",
+      "No credentials required anywhere in the loop (works in GitHub Actions with the default token)"
+    ]
+  },
+  "ssot": {
+    "blueprint_path": "landing-automation/factory/blueprint.json",
+    "derived_docs": [
+      "landing-automation/factory/README.md"
+    ]
+  },
+  "phases": [
+    {
+      "id": "observe",
+      "name": "Observe (store discovery)",
+      "purpose": "Fetch the full public app list for the AllNew artist from the App Store so that unknown releases are structurally impossible to miss, and auto-onboard them into the catalog.",
+      "deliverables": [
+        {
+          "name": "Synced app catalog",
+          "path": "landing-automation/config/app_catalog.json",
+          "quality_criteria": [
+            "Every publicly released app id has a catalog entry",
+            "New entries carry auto_onboarded=true and slug_resolution provenance",
+            "Existing entries are byte-identical after sync (adds only)"
+          ]
+        }
+      ],
+      "gates": ["ground_truth_lookup"],
+      "autonomy_tier": "L3"
+    },
+    {
+      "id": "reconcile",
+      "name": "Reconcile landing data",
+      "purpose": "Refresh data/landing-apps.generated.json for every catalog app from the public App Store Lookup so status, URLs and release dates reflect reality.",
+      "deliverables": [
+        {
+          "name": "Generated landing data",
+          "path": "data/landing-apps.generated.json",
+          "quality_criteria": [
+            "Every publicly released catalog app has status=released with app_store_url",
+            "Release dates come from currentVersionReleaseDate / releaseDate",
+            "Idempotent: unchanged inputs produce a byte-identical file"
+          ]
+        }
+      ],
+      "gates": ["reconcile_nonempty"],
+      "autonomy_tier": "L3"
+    },
+    {
+      "id": "render",
+      "name": "Render landing page",
+      "purpose": "Bake the generated data into index.html (cards, JSON-LD, footer) deterministically so the deployed page equals the data even without runtime JS.",
+      "deliverables": [
+        {
+          "name": "Rendered landing page",
+          "path": "index.html",
+          "quality_criteria": [
+            "JSON-LD ItemList parses and numberOfItems equals released app count",
+            "One work-card per released app",
+            "Deterministic and idempotent output"
+          ]
+        }
+      ],
+      "gates": ["render_validation"],
+      "autonomy_tier": "L3"
+    },
+    {
+      "id": "verify",
+      "name": "Verify parity (fail-closed)",
+      "purpose": "Prove that every publicly released app is on the landing page before the run may succeed; a gap turns CI red and opens the ANDON issue instead of being silently skipped.",
+      "deliverables": [
+        {
+          "name": "Parity report",
+          "path": "landing-automation/state/parity_report.json",
+          "quality_criteria": [
+            "Records verdict, missing apps, exclusions, stale entries and enrichment backlog",
+            "Written on every run including failures",
+            "Timestamp churn suppressed when semantically unchanged"
+          ]
+        }
+      ],
+      "gates": ["parity_gate"],
+      "autonomy_tier": "L3"
+    }
+  ],
+  "gates": [
+    {
+      "id": "ground_truth_lookup",
+      "name": "Artist lookup ground truth present",
+      "external_signal": {
+        "kind": "http",
+        "detail": "GET https://itunes.apple.com/lookup?id=1875164184&entity=software (jp+us) returns >0 software results; zero results or network failure after 3 retries aborts the run",
+        "self_report_allowed": false
+      },
+      "precision_plan": {
+        "measures": ["recall", "detection_time"],
+        "false_positive_review": "Apple Lookup outages show up as red runs with 'zero public apps'; reviewed via Actions history, bridged with the time-boxed circuit breaker if confirmed"
+      },
+      "risk_tier": "read_only",
+      "escape_valve": {
+        "max_consecutive_blocks": 4,
+        "on_exhaust": "escalate_human"
+      },
+      "fail_mode": "fail_closed"
+    },
+    {
+      "id": "reconcile_nonempty",
+      "name": "Reconcile lookup non-empty",
+      "external_signal": {
+        "kind": "http",
+        "detail": "update_landing_data.py --reconcile-app-store raises when App Store Lookup returns no results for known app ids (exit code observed by CI)",
+        "self_report_allowed": false
+      },
+      "precision_plan": {
+        "measures": ["recall", "detection_time"],
+        "false_positive_review": "Red run inspection; lookup flakiness distinguished from real delisting by the next scheduled run"
+      },
+      "risk_tier": "reversible",
+      "escape_valve": {
+        "max_consecutive_blocks": 4,
+        "on_exhaust": "escalate_human"
+      },
+      "fail_mode": "fail_closed"
+    },
+    {
+      "id": "render_validation",
+      "name": "Rendered page structural validation",
+      "external_signal": {
+        "kind": "computation",
+        "detail": "render_landing_page.py re-parses its own output: all JSON-LD blocks parse, ItemList count and work-card count match released apps; SystemExit on mismatch",
+        "self_report_allowed": false
+      },
+      "precision_plan": {
+        "measures": ["precision", "detection_time"],
+        "false_positive_review": "A false block means anchors/JSON-LD drifted in index.html; caught in PR review of template changes and covered by pytest"
+      },
+      "risk_tier": "reversible",
+      "escape_valve": {
+        "max_consecutive_blocks": 3,
+        "on_exhaust": "escalate_human"
+      },
+      "fail_mode": "fail_closed"
+    },
+    {
+      "id": "parity_gate",
+      "name": "Public apps subset of landing page",
+      "external_signal": {
+        "kind": "http",
+        "detail": "landing_parity_gate.py compares the artist lookup listing against data/landing-apps.generated.json; any non-excluded public app missing/not-released/without store URL exits 1 (CI red + ANDON issue)",
+        "self_report_allowed": false
+      },
+      "precision_plan": {
+        "measures": ["precision", "recall", "detection_time"],
+        "false_positive_review": "False blocks are recorded as reasoned exclusions in config/parity_exclusions.json (audited list); state/parity_report.json keeps the last verdict and circuit-breaker use"
+      },
+      "risk_tier": "external",
+      "escape_valve": {
+        "max_consecutive_blocks": 4,
+        "on_exhaust": "escalate_human"
+      },
+      "fail_mode": "fail_closed"
+    }
+  ],
+  "assurance": {
+    "qms_artifacts": [
+      "landing-automation/state/parity_report.json",
+      "landing-automation/config/parity_exclusions.json",
+      "GitHub issue label landing-parity-andon (open issue = ANDON open)"
+    ],
+    "andon": {
+      "open_on": [
+        "parity_gate block (missing public app on landing page)",
+        "ground_truth_lookup block (empty/failed artist lookup)",
+        "render_validation block (page structure drift)"
+      ],
+      "block_forward_ops": true
+    },
+    "meta_andon": {
+      "trigger_consecutive_failures": 3
+    },
+    "kaizen": {
+      "anti_regression_required": true,
+      "learning_routing": "Every miss class becomes a structural guard: catalog-gated discovery miss (2026-07 basalsnap/meishibridge) became artist-lookup discovery + the fail-closed parity gate with pytest regression coverage in landing-automation/tests"
+    }
+  },
+  "governance": {
+    "autonomy_tiers": {
+      "L1": {
+        "description": "Propose only: automation produces diffs, human merges",
+        "graduation_criteria": [
+          "10 consecutive green runs with zero manual corrections"
+        ]
+      },
+      "L2": {
+        "description": "Auto-commit data updates, human approves onboarding of new apps",
+        "graduation_criteria": [
+          "3 auto-onboarded apps published with correct slug/category without correction"
+        ]
+      },
+      "L3": {
+        "description": "Fully autonomous publish; humans pulled in only via ANDON issue or enrichment backlog",
+        "graduation_criteria": [
+          "Parity gap detected and self-healed within one scheduled cycle",
+          "False-positive rate of the parity gate below 1 per 30 days"
+        ]
+      }
+    },
+    "guard_precision_ledger": "landing-automation/state/parity_report.json",
+    "human_gates": [
+      {
+        "at": "parity_gate",
+        "reason": "external_publish"
+      }
+    ]
+  },
+  "metrics": {
+    "history_path": "landing-automation/state/parity_report.json",
+    "tracked": [
+      "public_apps",
+      "landing_released",
+      "missing_count",
+      "excluded_count",
+      "false_positive_exclusion_count (guard precision of parity_gate)",
+      "gate_verdict",
+      "enrichment_backlog_size"
+    ]
+  }
+}
