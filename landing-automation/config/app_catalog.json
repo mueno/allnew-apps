@@ -1,5 +1,7 @@
 {
   "schema_version": 1,
+  "artist_id": "1875164184",
+  "slug_overrides": {},
   "apps": [
     {
       "slug": "weightsnap",
@@ -323,6 +325,52 @@
       "sort_order": 75,
       "featured_priority": 75,
       "bootstrap_visible": false
+    },
+    {
+      "slug": "basalsnap",
+      "name": "BasalSnap",
+      "name_ja": "基礎体温記録",
+      "category": "health",
+      "category_label": "Health",
+      "description_ja": "基礎体温記録は、婦人体温計の表示を撮影・音声・手入力で記録し、 Appleヘルスに基礎体温として保存するためのアプリです。",
+      "description_en": "基礎体温記録は、婦人体温計の表示を撮影・音声・手入力で記録し、 Appleヘルスに基礎体温として保存するためのアプリです。",
+      "icon_path": "basalsnap-icon.png",
+      "fallback_image_path": "",
+      "card_image_path": "basalsnap-icon.png",
+      "input_methods": [],
+      "is_health_app": true,
+      "support_path": "basalsnap/?lang=ja",
+      "app_store_url": "https://apps.apple.com/jp/app/%E5%9F%BA%E7%A4%8E%E4%BD%93%E6%B8%A9%E8%A8%98%E9%8C%B2/id6772019458",
+      "bundle_id": "jp.allnew.reserve006",
+      "asc_app_id": "6772019458",
+      "sort_order": 120,
+      "featured_priority": 999,
+      "bootstrap_visible": false,
+      "auto_onboarded": true,
+      "slug_resolution": "support_page_match"
+    },
+    {
+      "slug": "meishibridge",
+      "name": "MeishiBridge",
+      "name_ja": "名刺登録",
+      "category": "productivity",
+      "category_label": "Productivity",
+      "description_ja": "MeishiBridgeは、名刺をカメラまたは写真から読み取り、確認した情報をApple純正の連絡先へ登録する補助ツールです。",
+      "description_en": "MeishiBridge helps users scan business cards from the camera or photo library, review extracted fields, and save the…",
+      "icon_path": "assets/app-icons/meishibridge-icon.jpg",
+      "fallback_image_path": "",
+      "card_image_path": "assets/app-icons/meishibridge-icon.jpg",
+      "input_methods": [],
+      "is_health_app": false,
+      "support_path": "meishibridge/?lang=ja",
+      "app_store_url": "https://apps.apple.com/jp/app/meishibridge-%E5%90%8D%E5%88%BA%E7%99%BB%E9%8C%B2/id6772019638",
+      "bundle_id": "jp.allnew.reserve007",
+      "asc_app_id": "6772019638",
+      "sort_order": 130,
+      "featured_priority": 999,
+      "bootstrap_visible": false,
+      "auto_onboarded": true,
+      "slug_resolution": "derived_dir"
     }
   ]
 }

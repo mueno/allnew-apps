@@ -47,3 +47,9 @@
 - 2026-02-15: Switched featured date display to `YYYY.MM.DD` and added landing-level JA/EN switching with `?lang=`.
 - 2026-02-15: Hardened webhook and ingestion security (secret-required signature verification, payload limits, replay protection, screenshot URL allowlist, SHA-pinned GitHub Actions).
 - 2026-05-06: Added scheduled App Store Lookup reconcile for public metadata drift (URL, bundle id, version, current-version release date).
+- 2026-07-02: Factory-maker hardening after the basalsnap/meishibridge miss. Root cause: discovery was gated on the manually-maintained `app_catalog.json`, so unknown released apps were silently skipped by both webhook slug resolution and the reconcile. New design (see `landing-automation/factory/blueprint.json`, validated by the factory-maker assurance gate):
+  - Ground truth is the public iTunes Lookup **artist listing** (`id=1875164184`); `scripts/store_discovery.py` auto-onboards unknown released apps into the catalog (adds only, never mutates existing entries; multi-signal slug resolution with provenance).
+  - `scripts/landing_sync.py` is the single choke point (discovery → reconcile → render → parity gate) used by every workflow trigger.
+  - `scripts/landing_parity_gate.py` fails closed when any non-excluded public app is missing from the landing data; CI turns red and an ANDON GitHub issue (`landing-parity-andon`) opens. Escape valves: reasoned exclusions (`config/parity_exclusions.json`) and a time-boxed circuit breaker (`state/parity_circuit_breaker.json`).
+  - Schedule tightened from daily to every 6 hours; webhooks remain the fast path, the reconcile loop guarantees convergence.
+  - `landing-automation/tests/` (pytest) covers slug resolution, onboarding and gate verdicts; runs in CI via `.github/workflows/landing-tests.yml`.

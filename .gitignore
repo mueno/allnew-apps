@@ -10,3 +10,7 @@ landing-automation/cloudflare-worker/node_modules/
 CLAUDE_*
 HANDOFF_*
 .vercel
+
+# Python
+__pycache__/
+*.pyc

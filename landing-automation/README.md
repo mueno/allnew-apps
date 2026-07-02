@@ -7,7 +7,24 @@
 - ランディングページの**見た目は維持**したまま、アプリ紹介データを自動更新する
 - 個別サポートページ（`/<app>/` 配下）には影響を与えない
 - ASCイベント（審査提出 / 公開）をトリガーにデータ更新する
-- 毎日の定期実行で App Store Lookup の公開情報と照合する
+- 6時間ごとの定期実行で App Store の公開情報（artist一覧）と照合し、漏れを構造的に防ぐ
+
+## 漏れ防止アーキテクチャ（2026-07 factory-maker適用）
+
+すべての自動実行は単一チョークポイント `scripts/landing_sync.py` を通る:
+
+```
+store_discovery.py      … artistId起点で全公開アプリを取得し、未知アプリをcatalogへ自動追加
+update_landing_data.py  … --reconcile-app-store で全catalogアプリのデータ更新
+render_landing_page.py  … index.html へ決定論的に焼き込み（自己検証つき）
+landing_parity_gate.py  … 公開アプリ ⊆ LP掲載 を fail-closed 検証（違反で exit 1 → ANDON issue）
+```
+
+- 真実源: `https://itunes.apple.com/lookup?id=1875164184&entity=software`（認証不要）
+- 除外したいアプリ: `config/parity_exclusions.json` に `{app_id, reason}` を追加（理由必須）
+- ゲート誤検知の一時停止: `state/parity_circuit_breaker.json` に `{expires_at, reason}`（期限付き）
+- 設計SSOT: `factory/blueprint.json`（factory-maker assurance gate PASS済み）
+- テスト: `python3 -m pytest landing-automation/tests -q`
 
 ## 変更対象
 

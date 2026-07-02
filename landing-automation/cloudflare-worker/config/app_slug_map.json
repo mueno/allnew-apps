@@ -10,7 +10,11 @@
     "6759076543": "babyvox",
     "6759076494": "waistvox",
     "6759076606": "coughwav",
-    "6759169189": "botto"
+    "6759169189": "botto",
+    "6767980716": "medreminder",
+    "6772018672": "hikae-cards",
+    "6772019458": "basalsnap",
+    "6772019638": "meishibridge"
   },
   "by_bundle_id": {
     "jp.allnew.weightsnap": "weightsnap",
@@ -26,6 +30,8 @@
     "jp.allnew.coughwav": "coughwav",
     "jp.allnew.botto": "botto",
     "jp.allnew.zenflip": "botto",
-    "jp.allnew.mofulens": "mofulens"
+    "jp.allnew.mofulens": "mofulens",
+    "jp.allnew.reserve006": "basalsnap",
+    "jp.allnew.reserve007": "meishibridge"
   }
 }
