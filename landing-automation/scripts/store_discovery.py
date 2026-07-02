@@ -193,8 +193,13 @@ def first_sentence(text: str, limit: int = 120) -> str:
     return truncated.rstrip(" ,、;:") + "…"
 
 
-def resolve_icon_path(root: Path, slug: str, track: dict[str, Any]) -> str:
-    """Prefer the repo-root icon convention; else download the store artwork."""
+def resolve_icon_path(root: Path, slug: str, track: dict[str, Any], *, force: bool = False) -> str:
+    """Prefer the repo-root icon convention; else download the store artwork.
+
+    force=True re-downloads a machine-owned assets/app-icons/ file (used when
+    the store artwork URL changed). Root-convention icons are curated assets
+    and are never overwritten.
+    """
     root_icon = root / f"{slug}-icon.png"
     if root_icon.exists():
         return f"{slug}-icon.png"
@@ -212,7 +217,7 @@ def resolve_icon_path(root: Path, slug: str, track: dict[str, Any]) -> str:
     icons_dir.mkdir(parents=True, exist_ok=True)
     extension = uld.guess_extension(secure_url)
     target = icons_dir / f"{slug}-icon{extension}"
-    if not target.exists():
+    if force or not target.exists():
         request = urllib.request.Request(
             secure_url, headers={"User-Agent": "allnew-landing-sync/1.0"}
         )

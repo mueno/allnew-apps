@@ -66,29 +66,6 @@ jobs:
         run: |
           python3 landing-automation/scripts/landing_sync.py
 
-      - name: ANDON — open parity issue on gate block
-        if: ${{ failure() && steps.landing-sync.outcome == 'failure' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          gh label create landing-parity-andon --force \
-            --description "Landing/App Store parity gate blocked" --color B60205 || true
-          report=""
-          if [ -f landing-automation/state/parity_report.json ]; then
-            report=$(cat landing-automation/state/parity_report.json)
-          fi
-          body=$(printf 'The landing parity gate blocked this run.\n\nRun: %s\n\nParity report:\n```json\n%s\n```\n\nResolve by fixing the gap, adding a reasoned exclusion in landing-automation/config/parity_exclusions.json, or (for confirmed false positives under repair) a time-boxed landing-automation/state/parity_circuit_breaker.json.' \
-            "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" "$report")
-          existing=$(gh issue list --label landing-parity-andon --state open \
-            --json number --jq '.[0].number' 2>/dev/null || true)
-          if [ -n "$existing" ]; then
-            gh issue comment "$existing" --body "$body"
-          else
-            gh issue create --title "ANDON: landing parity gate blocked" \
-              --label landing-parity-andon --body "$body"
-          fi
-
       - name: Commit changes
         id: commit-changes
         env:
@@ -181,3 +158,56 @@ jobs:
             exit 1
           fi
           npx --yes vercel@50 deploy --prod --yes --token "${VERCEL_TOKEN}"
+
+      - name: Live verification (production readback, one self-heal redeploy)
+        id: live-verify
+        if: ${{ steps.landing-sync.outcome == 'success' && steps.commit-changes.outcome == 'success' }}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_WeBWRfPVXtxNAoQpzCzTtyGD
+          VERCEL_PROJECT_ID: prj_C3k53GGOeuB0tyjgHnM5mAxx86rH
+        run: |
+          set -uo pipefail
+          verify() {
+            python3 landing-automation/scripts/landing_live_verify.py \
+              --lookup-file /tmp/allnew-artist-lookup.json "$@"
+          }
+          if verify; then
+            exit 0
+          fi
+          if [ -z "${VERCEL_TOKEN}" ]; then
+            echo "::error::live drift detected and VERCEL_TOKEN is unavailable for self-heal"
+            exit 1
+          fi
+          echo "Live drift detected; redeploying production from committed main HEAD"
+          npx --yes vercel@50 deploy --prod --yes --token "${VERCEL_TOKEN}"
+          verify --retries 8
+
+      - name: ANDON — open issue on gate block or live drift
+        if: ${{ failure() && (steps.landing-sync.outcome == 'failure' || steps.live-verify.outcome == 'failure') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SYNC_OUTCOME: ${{ steps.landing-sync.outcome }}
+          LIVE_OUTCOME: ${{ steps.live-verify.outcome }}
+        run: |
+          set -euo pipefail
+          gh label create landing-parity-andon --force \
+            --description "Landing/App Store parity or live drift blocked" --color B60205 || true
+          stage="parity gate (repo)"
+          if [ "${LIVE_OUTCOME}" = "failure" ]; then
+            stage="live verification (production readback)"
+          fi
+          report=""
+          if [ -f landing-automation/state/parity_report.json ]; then
+            report=$(cat landing-automation/state/parity_report.json)
+          fi
+          body=$(printf 'The landing pipeline blocked at: %s\n\nRun: %s\n\nLast parity report:\n```json\n%s\n```\n\nResolve by fixing the gap, adding a reasoned exclusion in landing-automation/config/parity_exclusions.json, or (for confirmed false positives under repair) a time-boxed landing-automation/state/parity_circuit_breaker.json.' \
+            "$stage" "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" "$report")
+          existing=$(gh issue list --label landing-parity-andon --state open \
+            --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "ANDON: landing pipeline blocked" \
+              --label landing-parity-andon --body "$body"
+          fi

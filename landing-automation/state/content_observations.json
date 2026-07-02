@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-07-02T13:31:34+00:00",
+  "apps": {
+    "6758825019": {
+      "slug": "weightsnap",
+      "track_name": "WeightSnap - カメラで体重記録",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/28/3a/f5/283af50d-5de9-9a85-2815-1c4438101a61/AppIcon-0-0-1x_U007ephone-0-1-85-220.jpeg/512x512bb.jpg"
+    },
+    "6759076145": {
+      "slug": "oxisnap",
+      "track_name": "OxiSnap - SpO2を声で記録",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/81/46/7a/81467aa6-018c-9538-706e-57d0d0cf218d/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6759076255": {
+      "slug": "bloodpressuresnap",
+      "track_name": "BPSnap 血圧かんたんノート",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/b5/e1/28/b5e128bc-3d0d-119c-3dda-185cf758c470/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6759076372": {
+      "slug": "thermosnap",
+      "track_name": "ThermoSnap かんたん体温記録",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e7/ae/5d/e7ae5db4-e633-cb5e-c5c4-3493b4e7aa1c/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6759076419": {
+      "slug": "glucosnap",
+      "track_name": "GlucoSnap 血糖値記録カメラ",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6b/ae/b8/6baeb88c-d76f-00b0-39a3-0234837ed559/AppIcon-0-0-1x_U007ephone-0-1-85-220.jpeg/512x512bb.jpg"
+    },
+    "6759076494": {
+      "slug": "waistvox",
+      "track_name": "WaistVox ウェストサイズかんたん記録",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/b5/57/0e/b5570e60-27a4-47fb-a308-933c0819aa85/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6759076505": {
+      "slug": "pupweight",
+      "track_name": "PupWeight ワンコとニャンコの体重記録",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/7e/e7/a7/7ee7a740-4750-648b-b71e-02ec73d77c06/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6759076543": {
+      "slug": "babyvox",
+      "track_name": "BabyVox 赤ちゃんの成長記録ノート",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/c1/79/b5/c179b58b-fcdc-cefc-1f79-c1c6e9c9cf8e/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6759076606": {
+      "slug": "coughwav",
+      "track_name": "CoughWav 咳（せき）ノート",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e5/a9/8b/e5a98b5d-34a3-1355-94d5-c50b55411514/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6759169189": {
+      "slug": "botto",
+      "track_name": "BOTTO - 没頭タイマー",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e2/53/4b/e2534b1a-95ec-6606-c1f0-3923381a71a2/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg"
+    },
+    "6767980716": {
+      "slug": "medreminder",
+      "track_name": "AI服薬通知 - 処方箋リマインダー",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a6/37/2b/a6372b61-28da-61e7-41b8-f4aeb36ea303/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6768502509": {
+      "slug": "pawpass",
+      "track_name": "PawPass",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a8/8a/37/a88a37ec-4900-9ea3-b4c9-94a579052aec/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6772018672": {
+      "slug": "hikae-cards",
+      "track_name": "HIKAE Cards",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/b6/35/35/b63535ac-b45c-8c0c-a948-fc2ce35ee13c/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6772019458": {
+      "slug": "basalsnap",
+      "track_name": "基礎体温記録",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/42/08/bb/4208bbe0-ed67-4c88-b2b2-146d108b8fb4/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
+    },
+    "6772019638": {
+      "slug": "meishibridge",
+      "track_name": "MeishiBridge 名刺登録",
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e5/d1/d4/e5d1d47b-a364-e2ae-15f0-f515411adc68/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+    }
+  },
+  "warnings": []
+}

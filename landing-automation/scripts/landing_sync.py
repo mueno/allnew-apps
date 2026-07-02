@@ -5,12 +5,14 @@ Every automated path (scheduled reconcile, webhook event follow-up, manual run)
 goes through this orchestrator, so no path can skip discovery or the parity
 gate. Steps, each fail-closed:
 
-  1. store_discovery   — ground truth from the App Store artist listing;
-                         auto-onboards unknown released apps into the catalog
-  2. update_landing_data --reconcile-app-store
-                        — refreshes landing data for every catalog app
-  3. render_landing_page — bakes cards/JSON-LD into index.html (validates)
-  4. landing_parity_gate — asserts public apps ⊆ landing page (exit 1 on gap)
+  1. store_discovery    — ground truth from the App Store artist listing;
+                          auto-onboards unknown released apps into the catalog
+  2. store_content_sync — converges machine-owned entries with published
+                          store content; surfaces drift on curated entries
+  3. update_landing_data --reconcile-app-store
+                         — refreshes landing data for every catalog app
+  4. render_landing_page — bakes cards/JSON-LD into index.html (validates)
+  5. landing_parity_gate — asserts public apps ⊆ landing page (exit 1 on gap)
 
 A non-zero exit from any step aborts the run with that step's exit code.
 """
@@ -41,6 +43,10 @@ def main() -> int:
     run_step(
         "discovery",
         [python, str(SCRIPTS_DIR / "store_discovery.py"), "--lookup-cache", str(lookup_cache)],
+    )
+    run_step(
+        "content-sync",
+        [python, str(SCRIPTS_DIR / "store_content_sync.py"), "--lookup-file", str(lookup_cache)],
     )
     run_step(
         "reconcile",
