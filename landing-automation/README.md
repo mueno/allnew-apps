@@ -15,10 +15,20 @@
 
 ```
 store_discovery.py      … artistId起点で全公開アプリを取得し、未知アプリをcatalogへ自動追加
+store_content_sync.py   … auto_onboardedエントリを店頭内容へ自動収束。キュレーション済みはドリフト警告のみ
 update_landing_data.py  … --reconcile-app-store で全catalogアプリのデータ更新
 render_landing_page.py  … index.html へ決定論的に焼き込み（自己検証つき）
 landing_parity_gate.py  … 公開アプリ ⊆ LP掲載 を fail-closed 検証（違反で exit 1 → ANDON issue）
+landing_live_verify.py  … デプロイ後に本番ページを読み戻し検証（repo=live=store。自己修復再デプロイ1回付き）
 ```
+
+### コンテンツ所有権モデル（安全な自動収束）
+
+- `auto_onboarded: true` のエントリ=機械所有。名称/説明/カテゴリ/ストアURL/アイコンは店頭の変更に自動追随。
+  `input_methods`・`sort_order`・オンボーディング画像等の人手強化フィールドは維持される
+- フラグを外すと完全に人間所有になり、自動編集は一切停止する
+- キュレーション済みエントリは**絶対に自動編集しない**。店頭側のリネーム/アイコン変更は
+  `state/content_observations.json` の warnings に記録され、人が判断して反映する
 
 - 真実源: `https://itunes.apple.com/lookup?id=1875164184&entity=software`（認証不要）
 - 除外したいアプリ: `config/parity_exclusions.json` に `{app_id, reason}` を追加（理由必須）
