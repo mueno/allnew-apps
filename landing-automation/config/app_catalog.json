@@ -290,7 +290,7 @@
       "description_en": "Register prescriptions and medication schedules, get reminders, and keep simple dose records.",
       "icon_path": "medreminder-icon.png",
       "fallback_image_path": "medreminder-icon.png",
-      "card_image_path": "medreminder-icon.png",
+      "card_image_path": "assets/asc-screenshots/medreminder.jpg",
       "input_methods": [
         "camera_ocr"
       ],
@@ -301,7 +301,9 @@
       "asc_app_id": "6767980716",
       "sort_order": 70,
       "featured_priority": 70,
-      "bootstrap_visible": false
+      "bootstrap_visible": false,
+      "promo_image_path": "assets/asc-screenshots/medreminder.jpg",
+      "promo_image_source": "asc_first_screenshot"
     },
     {
       "slug": "hikae-cards",
@@ -313,7 +315,7 @@
       "description_en": "Capture membership, clinic, and insurance cards into user-made copy passes you can check in Apple Wallet.",
       "icon_path": "hikae-cards-icon.png",
       "fallback_image_path": "hikae-cards-icon.png",
-      "card_image_path": "hikae-cards-icon.png",
+      "card_image_path": "assets/asc-screenshots/hikae-cards.jpg",
       "input_methods": [
         "camera_ocr"
       ],
@@ -324,7 +326,9 @@
       "asc_app_id": "6772018672",
       "sort_order": 75,
       "featured_priority": 75,
-      "bootstrap_visible": false
+      "bootstrap_visible": false,
+      "promo_image_path": "assets/asc-screenshots/hikae-cards.jpg",
+      "promo_image_source": "asc_first_screenshot"
     },
     {
       "slug": "basalsnap",
@@ -336,7 +340,7 @@
       "description_en": "基礎体温記録は、婦人体温計の表示を撮影・音声・手入力で記録し、 Appleヘルスに基礎体温として保存するためのアプリです。",
       "icon_path": "basalsnap-icon.png",
       "fallback_image_path": "",
-      "card_image_path": "basalsnap-icon.png",
+      "card_image_path": "assets/asc-screenshots/basalsnap.jpg",
       "input_methods": [],
       "is_health_app": true,
       "support_path": "basalsnap/?lang=ja",
@@ -347,7 +351,9 @@
       "featured_priority": 999,
       "bootstrap_visible": false,
       "auto_onboarded": true,
-      "slug_resolution": "support_page_match"
+      "slug_resolution": "support_page_match",
+      "promo_image_path": "assets/asc-screenshots/basalsnap.jpg",
+      "promo_image_source": "asc_first_screenshot"
     },
     {
       "slug": "meishibridge",
@@ -359,7 +365,7 @@
       "description_en": "MeishiBridge helps users scan business cards from the camera or photo library, review extracted fields, and save the…",
       "icon_path": "assets/app-icons/meishibridge-icon.jpg",
       "fallback_image_path": "",
-      "card_image_path": "assets/app-icons/meishibridge-icon.jpg",
+      "card_image_path": "assets/asc-screenshots/meishibridge.jpg",
       "input_methods": [],
       "is_health_app": false,
       "support_path": "meishibridge/?lang=ja",
@@ -370,7 +376,9 @@
       "featured_priority": 999,
       "bootstrap_visible": false,
       "auto_onboarded": true,
-      "slug_resolution": "derived_dir"
+      "slug_resolution": "derived_dir",
+      "promo_image_path": "assets/asc-screenshots/meishibridge.jpg",
+      "promo_image_source": "asc_first_screenshot"
     }
   ]
 }

@@ -98,10 +98,17 @@ def refresh_machine_owned_entry(
             if new_icon and new_icon != old_icon:
                 entry["icon_path"] = new_icon
                 changed = True
-            if new_icon and entry.get("card_image_path") in ("", old_icon):
-                entry["card_image_path"] = sd.find_onboarding_image(root, slug) or new_icon
-                changed = True
         # Root-convention icons (<slug>-icon.png) are curated assets: warn only.
+
+    # Card image must stay a real app screen, never the icon. If it was left
+    # empty or (from the pre-2026-07-03 bug) pointed at the icon, re-resolve to
+    # an onboarding slide or committed store screenshot.
+    card = str(entry.get("card_image_path") or "")
+    if not card or card == str(entry.get("icon_path") or "") or card.startswith("assets/app-icons/"):
+        resolved_card = sd.resolve_card_image(root, slug)
+        if resolved_card != card:
+            entry["card_image_path"] = resolved_card
+            changed = True
 
     return changed
 

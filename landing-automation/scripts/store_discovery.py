@@ -244,6 +244,29 @@ def find_onboarding_image(root: Path, slug: str) -> str:
     return ""
 
 
+def find_store_screenshot(root: Path, slug: str) -> str:
+    """A committed App Store first-screenshot asset for this app, if present.
+
+    This is the card image fallback for apps with no onboarding capture:
+    a real store banner, never the app icon.
+    """
+    for extension in ("jpg", "jpeg", "png", "webp"):
+        candidate = root / "assets" / "asc-screenshots" / f"{slug}.{extension}"
+        if candidate.exists():
+            return candidate.relative_to(root).as_posix()
+    return ""
+
+
+def resolve_card_image(root: Path, slug: str) -> str:
+    """Card image = onboarding first slide, else App Store first screenshot.
+
+    Never the app icon: the card design shows a real app screen; a large icon
+    is a visual regression (see 2026-07-03 fix). Empty when neither exists,
+    which the enrichment backlog flags for a human to supply.
+    """
+    return find_onboarding_image(root, slug) or find_store_screenshot(root, slug)
+
+
 def build_catalog_entry(
     app_id: str,
     slug: str,
@@ -259,8 +282,10 @@ def build_catalog_entry(
     has_support_page = (root / slug / "index.html").exists()
     track = track_jp or track_us
     icon_path = resolve_icon_path(root, slug, track)
-    # Card image falls back to the icon so runtime and static renderers agree.
-    card_image_path = find_onboarding_image(root, slug) or icon_path
+    # Card image is a real app screen (onboarding slide or store screenshot),
+    # never the icon. promo mirrors any store screenshot for the Featured slot.
+    card_image_path = resolve_card_image(root, slug)
+    store_screenshot = find_store_screenshot(root, slug)
 
     return {
         "slug": slug,
@@ -272,6 +297,8 @@ def build_catalog_entry(
         "description_en": first_sentence((track_us or {}).get("description", "")),
         "icon_path": icon_path,
         "fallback_image_path": "",
+        "promo_image_path": store_screenshot,
+        "promo_image_source": "asc_first_screenshot" if store_screenshot else "catalog",
         "card_image_path": card_image_path,
         "input_methods": [],
         "is_health_app": category == "health",
