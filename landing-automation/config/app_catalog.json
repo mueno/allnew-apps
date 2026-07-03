@@ -303,7 +303,9 @@
       "featured_priority": 70,
       "bootstrap_visible": false,
       "promo_image_path": "assets/asc-screenshots/medreminder.jpg",
-      "promo_image_source": "asc_first_screenshot"
+      "promo_image_source": "asc_first_screenshot",
+      "card_image_path_en": "assets/asc-screenshots/medreminder-en.jpg",
+      "promo_image_path_en": "assets/asc-screenshots/medreminder-en.jpg"
     },
     {
       "slug": "hikae-cards",
@@ -328,7 +330,9 @@
       "featured_priority": 75,
       "bootstrap_visible": false,
       "promo_image_path": "assets/asc-screenshots/hikae-cards.jpg",
-      "promo_image_source": "asc_first_screenshot"
+      "promo_image_source": "asc_first_screenshot",
+      "card_image_path_en": "assets/asc-screenshots/hikae-cards-en.jpg",
+      "promo_image_path_en": "assets/asc-screenshots/hikae-cards-en.jpg"
     },
     {
       "slug": "basalsnap",

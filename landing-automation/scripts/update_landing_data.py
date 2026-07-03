@@ -474,6 +474,8 @@ def default_output_entry(app: dict[str, Any]) -> dict[str, Any]:
         "icon_path": app.get("icon_path", ""),
         "promo_image_path": app.get("fallback_image_path", ""),
         "card_image_path": default_card_image_path(app),
+        "card_image_path_en": str(app.get("card_image_path_en", "")),
+        "promo_image_path_en": str(app.get("promo_image_path_en", "")),
         "promo_image_source": "catalog",
         "input_methods": methods,
         "input_methods_label": input_methods_label(methods),
@@ -520,6 +522,10 @@ def apply_catalog_defaults(entry: dict[str, Any], catalog_entry: dict[str, Any])
     elif not merged.get("promo_image_path") and catalog_entry.get("fallback_image_path"):
         merged["promo_image_path"] = catalog_entry["fallback_image_path"]
         merged["promo_image_source"] = "catalog"
+
+    # English-locale card/promo images are catalog-owned; let updates flow through.
+    merged["card_image_path_en"] = str(catalog_entry.get("card_image_path_en", "") or "")
+    merged["promo_image_path_en"] = str(catalog_entry.get("promo_image_path_en", "") or "")
 
     # Self-heal: card image must never be the icon. Prefer the catalog's card
     # image (onboarding slide or store screenshot); else fall back to the promo
