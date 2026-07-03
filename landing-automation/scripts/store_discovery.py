@@ -244,14 +244,16 @@ def find_onboarding_image(root: Path, slug: str) -> str:
     return ""
 
 
-def find_store_screenshot(root: Path, slug: str) -> str:
+def find_store_screenshot(root: Path, slug: str, *, locale: str = "") -> str:
     """A committed App Store first-screenshot asset for this app, if present.
 
     This is the card image fallback for apps with no onboarding capture:
-    a real store banner, never the app icon.
+    a real store banner, never the app icon. locale="en" looks for the
+    English (US storefront) variant `<slug>-en.<ext>`.
     """
+    suffix = f"-{locale}" if locale else ""
     for extension in ("jpg", "jpeg", "png", "webp"):
-        candidate = root / "assets" / "asc-screenshots" / f"{slug}.{extension}"
+        candidate = root / "assets" / "asc-screenshots" / f"{slug}{suffix}.{extension}"
         if candidate.exists():
             return candidate.relative_to(root).as_posix()
     return ""
@@ -286,6 +288,7 @@ def build_catalog_entry(
     # never the icon. promo mirrors any store screenshot for the Featured slot.
     card_image_path = resolve_card_image(root, slug)
     store_screenshot = find_store_screenshot(root, slug)
+    store_screenshot_en = find_store_screenshot(root, slug, locale="en")
 
     return {
         "slug": slug,
@@ -299,6 +302,8 @@ def build_catalog_entry(
         "fallback_image_path": "",
         "promo_image_path": store_screenshot,
         "promo_image_source": "asc_first_screenshot" if store_screenshot else "catalog",
+        "card_image_path_en": store_screenshot_en,
+        "promo_image_path_en": store_screenshot_en,
         "card_image_path": card_image_path,
         "input_methods": [],
         "is_health_app": category == "health",

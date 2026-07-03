@@ -121,6 +121,21 @@
     return app.description_ja || app.description_en || '';
   }
 
+  // Card image follows the display language: the English page shows the English
+  // App Store screenshot when the app has one, else falls back to the default
+  // (Japanese) card image. Language-neutral onboarding shots have no *_en
+  // variant and so serve both languages unchanged.
+  function pickCardImage(app) {
+    if (!app) return '';
+    if (currentLang === 'en') {
+      return normalizeImagePath(
+        app.card_image_path_en || app.promo_image_path_en ||
+        app.card_image_path || app.promo_image_path
+      );
+    }
+    return normalizeImagePath(app.card_image_path || app.promo_image_path);
+  }
+
   function withLangParam(path, lang) {
     if (!path || isExternalPath(path)) return path;
 
@@ -189,7 +204,7 @@
 
   function buildWorkCard(app, fallbackTag) {
     const supportPath = resolveSupportPath(app);
-    const promoImage = normalizeImagePath(app.card_image_path || app.promo_image_path);
+    const promoImage = pickCardImage(app);
     const iconPath = normalizeImagePath(app.icon_path);
     const baseTag = buildInputMethodLabel(app, fallbackTag);
     const statusTag = app.status === 'submitted' ? (currentLang === 'en' ? 'In Review' : '審査中') : '';
@@ -334,7 +349,7 @@
     }
 
     const imageEl = document.getElementById('featured-image');
-    const imagePath = normalizeImagePath(app.card_image_path || app.promo_image_path);
+    const imagePath = pickCardImage(app);
     if (imageEl && imagePath) {
       imageEl.src = imagePath;
       imageEl.alt = app.name;
