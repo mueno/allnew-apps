@@ -490,16 +490,47 @@ def default_output_entry(app: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def is_icon_like_card(card_value: str, catalog_entry: dict[str, Any]) -> bool:
+    """A card image that is really the app icon — the design regression to heal.
+
+    The card must show a real app screen; an icon path here (root-convention
+    <slug>-icon.png or assets/app-icons/...) is the 2026-07-03 bug.
+    """
+    card = str(card_value or "")
+    if not card:
+        return False
+    if card == str(catalog_entry.get("icon_path") or ""):
+        return True
+    if "assets/app-icons/" in card:
+        return True
+    slug = str(catalog_entry.get("slug") or "")
+    return bool(slug) and card.rsplit("/", 1)[-1].startswith(f"{slug}-icon.")
+
+
 def apply_catalog_defaults(entry: dict[str, Any], catalog_entry: dict[str, Any]) -> dict[str, Any]:
     merged = default_output_entry(catalog_entry)
     merged.update(entry)
 
-    if not merged.get("promo_image_path") and catalog_entry.get("fallback_image_path"):
+    # The catalog owns the promo/ASC screenshot; let a catalog update flow through
+    # instead of being pinned to a stale generated value.
+    catalog_promo = str(catalog_entry.get("promo_image_path") or "")
+    if catalog_promo and catalog_entry.get("promo_image_source") == "asc_first_screenshot":
+        merged["promo_image_path"] = catalog_promo
+        merged["promo_image_source"] = "asc_first_screenshot"
+    elif not merged.get("promo_image_path") and catalog_entry.get("fallback_image_path"):
         merged["promo_image_path"] = catalog_entry["fallback_image_path"]
         merged["promo_image_source"] = "catalog"
 
-    if not merged.get("card_image_path"):
-        merged["card_image_path"] = default_card_image_path(catalog_entry)
+    # Self-heal: card image must never be the icon. Prefer the catalog's card
+    # image (onboarding slide or store screenshot); else fall back to the promo
+    # screenshot; never the icon.
+    if not merged.get("card_image_path") or is_icon_like_card(merged.get("card_image_path"), catalog_entry):
+        merged["card_image_path"] = (
+            default_card_image_path(catalog_entry)
+            or merged.get("promo_image_path", "")
+        )
+        if is_icon_like_card(merged["card_image_path"], catalog_entry):
+            merged["card_image_path"] = merged.get("promo_image_path", "")
 
     merged_methods = parse_input_methods(
         merged.get("input_methods"),

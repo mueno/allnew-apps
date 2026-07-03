@@ -34,7 +34,7 @@ APPLICATION_CATEGORY = {
 CARD_TEMPLATE = """
                 <a class="work-card" href="{support_path}">
                     <div class="work-card-img" style="background:#f5f5f5;">
-                        <img src="{card_image}" alt="{name}" loading="lazy">
+                        {card_image_block}
                     </div>
                     <div class="work-card-body">
                         <div class="work-card-meta">
@@ -138,10 +138,21 @@ def render_grid(page: str, category: str, apps: list[dict]) -> str:
     for app in apps:
         if app.get("category") != category:
             continue
+        # Card image is a real app screen (onboarding slide or store screenshot),
+        # never the icon. Mirror the runtime (card_image_path || promo_image_path).
+        # No real image -> render the empty grey box, not a blown-up icon.
+        card_image = app.get("card_image_path") or app.get("promo_image_path") or ""
+        if card_image:
+            card_image_block = (
+                f'<img src="{html.escape(card_image, quote=True)}" '
+                f'alt="{html.escape(app["name"])}" loading="lazy">'
+            )
+        else:
+            card_image_block = ""
         cards.append(
             CARD_TEMPLATE.format(
                 support_path=html.escape(app.get("support_path") or f"{app['slug']}/?lang=ja", quote=True),
-                card_image=html.escape(app.get("card_image_path") or app.get("icon_path") or "", quote=True),
+                card_image_block=card_image_block,
                 name=html.escape(app["name"]),
                 name_ja=html.escape(app.get("name_ja") or app["name"]),
                 icon=html.escape(app.get("icon_path") or "", quote=True),
