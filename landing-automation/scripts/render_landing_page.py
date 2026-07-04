@@ -58,6 +58,26 @@ def load_released_apps() -> list[dict]:
     return [app for app in apps if app.get("status") == "released"]
 
 
+def html_safe_json_dumps(payload: object) -> str:
+    """Serialize JSON for safe embedding inside an HTML ``<script>`` element.
+
+    ``json.dumps`` escapes ``"`` ``\\`` and control chars, but leaves ``<`` ``>``
+    ``&`` raw. HTML parses ``<script>`` content as raw text and terminates the
+    element at the first *case-insensitive* ``</script`` — even inside a JSON
+    string — so a value such as ``</ScRiPt>...`` would break out of the JSON-LD
+    block in the browser while still passing a naive lowercase-``</script>``
+    validator. Encoding these characters as JSON ``\\uXXXX`` escapes keeps the
+    payload valid JSON (``json.loads`` round-trips) yet makes it impossible to
+    close the element from string data.
+    """
+    return (
+        json.dumps(payload, ensure_ascii=False, indent=4)
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+    )
+
+
 def build_json_ld(apps: list[dict]) -> str:
     items = []
     for position, app in enumerate(apps, start=1):
@@ -89,15 +109,18 @@ def build_json_ld(apps: list[dict]) -> str:
         "numberOfItems": len(apps),
         "itemListElement": items,
     }
-    return json.dumps(payload, ensure_ascii=False, indent=4)
+    return html_safe_json_dumps(payload)
 
 
 def replace_json_ld(page: str, json_ld: str) -> str:
     # スクリプトブロック単位で走査する。貪欲マッチで隣の JSON-LD
     # （Organization 等）を巻き込まないため、`</script>` を境界として
     # 各ブロックを個別に判定する。
+    # re.I: browsers close a <script> at the first case-insensitive </script>,
+    # so the block boundary must be matched case-insensitively too — otherwise a
+    # mixed-case </ScRiPt> inside data slips past both replace and validation.
     pattern = re.compile(
-        r'(<script type="application/ld\+json">)(.*?)(</script>)', re.S
+        r'(<script type="application/ld\+json">)(.*?)(</script>)', re.I | re.S
     )
     for match in pattern.finditer(page):
         body = match.group(2)
@@ -188,7 +211,7 @@ def main() -> None:
     # 検証: 全 JSON-LD ブロックがパース可能で、ItemList が期待件数であること
     # （feedback portal / status board は静的 JSON-LD を DOMParser で読む前提）
     blocks = re.findall(
-        r'<script type="application/ld\+json">(.*?)</script>', page, re.S
+        r'<script type="application/ld\+json">(.*?)</script>', page, re.I | re.S
     )
     item_lists = []
     for body in blocks:

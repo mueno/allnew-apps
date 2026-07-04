@@ -37,11 +37,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          # Do not persist GITHUB_TOKEN in .git/config: the deploy steps run the
+          # Vercel CLI, and a compromised CLI must not be able to reuse a
+          # write-capable git credential. The commit step pushes with an
+          # explicit, scoped token instead (see below).
+          persist-credentials: false
 
       - name: Setup Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: "3.12"
+
+      - name: Install Vercel CLI
+        # Exact pinned version installed WITHOUT the Vercel token in env, so npm
+        # lifecycle scripts cannot read it. Replaces `npx vercel@50` — an
+        # unpinned semver range that fetches and executes new CLI code at deploy
+        # time in the same step that holds VERCEL_TOKEN.
+        run: npm install --global vercel@50.40.0
 
       - name: Write event payload
         run: |
@@ -73,6 +86,10 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           RECONCILE_INPUT: ${{ inputs.reconcile }}
           BOOTSTRAP_INPUT: ${{ inputs.bootstrap }}
+          # Write-capable token scoped to this commit step only (kept out of the
+          # Vercel deploy step's environment). checkout uses persist-credentials:
+          # false, so the push must supply this token explicitly.
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
@@ -120,7 +137,7 @@ jobs:
           # Retry push because repository_dispatch events can arrive in bursts.
           # On failure, rebuild from latest branch head with the same event payload.
           for attempt in 1 2 3; do
-            if git push origin "HEAD:${TARGET_BRANCH}"; then
+            if git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${TARGET_BRANCH}"; then
               echo "Push succeeded on attempt ${attempt}"
               echo "changed=true" >> "${GITHUB_OUTPUT}"
               exit 0
@@ -157,7 +174,7 @@ jobs:
             echo "::error::VERCEL_TOKEN secret is not set. apps.allnew.work is served by Vercel; add the secret in repo settings."
             exit 1
           fi
-          npx --yes vercel@50 deploy --prod --yes --token "${VERCEL_TOKEN}"
+          vercel deploy --prod --yes --token "${VERCEL_TOKEN}"
 
       - name: Live verification (production readback, one self-heal redeploy)
         id: live-verify
@@ -180,7 +197,7 @@ jobs:
             exit 1
           fi
           echo "Live drift detected; redeploying production from committed main HEAD"
-          npx --yes vercel@50 deploy --prod --yes --token "${VERCEL_TOKEN}"
+          vercel deploy --prod --yes --token "${VERCEL_TOKEN}"
           verify --retries 8
 
       - name: ANDON — open issue on gate block or live drift
