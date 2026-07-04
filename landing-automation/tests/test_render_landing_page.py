@@ -54,8 +54,11 @@ def test_all_json_ld_string_fields_are_escaped():
     assert item["alternateName"] == "日本<>"
 
 
-def test_replace_and_validate_survive_mixed_case_close_tag():
-    """replace_json_ld + the fail-closed validator both handle mixed-case."""
+def test_escaping_neutralizes_mixed_case_close_tag_in_data():
+    """A mixed-case </ScRiPt> inside a *description* is neutralized by the
+    output escaping (the real control), so replace_json_ld still produces one
+    clean, parseable block. (This asserts the escaping layer, not re.I —
+    test_replace_json_ld_matches_mixed_case_boundary covers re.I.)"""
     page = (
         "<html><head>"
         '<script type="application/ld+json">'
@@ -66,7 +69,6 @@ def test_replace_and_validate_survive_mixed_case_close_tag():
     json_ld = rlp.build_json_ld([_app(description_ja="</ScRiPt> boom")])
     replaced = rlp.replace_json_ld(page, json_ld)
 
-    # The case-insensitive validation regex must see exactly one clean block.
     blocks = re.findall(
         r'<script type="application/ld\+json">(.*?)</script>', replaced, re.I | re.S
     )
@@ -74,6 +76,30 @@ def test_replace_and_validate_survive_mixed_case_close_tag():
     parsed = json.loads(blocks[0])
     assert parsed["@type"] == "ItemList"
     assert parsed["numberOfItems"] == 1
+
+
+def test_replace_json_ld_matches_mixed_case_boundary():
+    """replace_json_ld must recognize the existing ItemList block even when its
+    closing tag is a mixed-case </ScRiPt> — this actually exercises the re.I
+    flag on the production block-matching regex. With re.S only (re.I removed),
+    the boundary is not matched and replace_json_ld raises 'block not found',
+    so this test fails if that defense-in-depth flag is ever reverted."""
+    page = (
+        "<html><head>"
+        '<script type="application/ld+json">'
+        '{"@type":"ItemList","numberOfItems":0,"itemListElement":[]}'
+        "</ScRiPt>"  # mixed-case boundary: re.S-only would not match this block
+        "</head><body></body></html>"
+    )
+    json_ld = rlp.build_json_ld([_app(description_ja="safe")])
+
+    replaced = rlp.replace_json_ld(page, json_ld)  # raises if re.I is missing
+
+    blocks = re.findall(
+        r'<script type="application/ld\+json">(.*?)</script>', replaced, re.I | re.S
+    )
+    assert len(blocks) == 1
+    assert json.loads(blocks[0])["numberOfItems"] == 1
 
 
 def test_benign_content_still_renders_valid_json_ld():
