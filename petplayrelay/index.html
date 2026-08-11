@@ -634,6 +634,14 @@
     const requested = params.get('lang') || (navigator.language || '').slice(0, 2);
     setLang(requested === 'ja' ? 'ja' : 'en');
     checkCommercialAnchor();
+    function restoreHashAnchor() {
+      if (!location.hash) return;
+      const target = document.getElementById(location.hash.slice(1));
+      if (target) target.scrollIntoView();
+    }
+    requestAnimationFrame(function() {
+      requestAnimationFrame(restoreHashAnchor);
+    });
     window.addEventListener('hashchange', checkCommercialAnchor);
   </script>
 </body>
