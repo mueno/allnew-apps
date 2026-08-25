@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-02T13:31:34+00:00",
+  "updated_at": "2026-08-25T06:24:31+00:00",
   "apps": {
     "6758825019": {
       "slug": "weightsnap",
@@ -55,7 +55,7 @@
     "6767980716": {
       "slug": "medreminder",
       "track_name": "AI服薬通知 - 処方箋リマインダー",
-      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a6/37/2b/a6372b61-28da-61e7-41b8-f4aeb36ea303/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/72/1c/79/721c79df-2c66-385b-bda0-4f8e607993e8/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
     },
     "6768502509": {
       "slug": "pawpass",
@@ -78,5 +78,12 @@
       "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e5/d1/d4/e5d1d47b-a364-e2ae-15f0-f515411adc68/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
     }
   },
-  "warnings": []
+  "warnings": [
+    {
+      "app_id": "6767980716",
+      "slug": "medreminder",
+      "kind": "icon_changed",
+      "detail": "store icon artwork changed; curated icon asset left untouched"
+    }
+  ]
 }
