@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-25T18:24:03+00:00",
+  "updated_at": "2026-08-26T00:25:53+00:00",
   "apps": {
     "6758825019": {
       "slug": "weightsnap",
@@ -78,12 +78,5 @@
       "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/e5/d1/d4/e5d1d47b-a364-e2ae-15f0-f515411adc68/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.jpg"
     }
   },
-  "warnings": [
-    {
-      "app_id": "6767980716",
-      "slug": "medreminder",
-      "kind": "icon_changed",
-      "detail": "store icon artwork changed; curated icon asset left untouched"
-    }
-  ]
+  "warnings": []
 }
