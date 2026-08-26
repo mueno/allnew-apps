@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-25T12:24:22+00:00",
+  "generated_at": "2026-08-26T12:24:29+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -510,6 +510,38 @@
       "app_store_version": "1.0",
       "app_store_name": "MeishiBridge 名刺登録",
       "app_store_current_version_release_date": "2026-06-12T12:47:58Z",
+      "app_store_lookup_country": "jp"
+    },
+    {
+      "slug": "atsumareonelog",
+      "name": "AtsumareOneLog",
+      "name_ja": "録",
+      "status": "released",
+      "category": "productivity",
+      "category_label": "Productivity",
+      "description_ja": "One録は、作業時間をワンアクションで記録できるシンプルなタイムトラッカーです。",
+      "description_en": "One録は、作業時間をワンアクションで記録できるシンプルなタイムトラッカーです。",
+      "icon_path": "atsumareonelog-icon.png",
+      "promo_image_path": "",
+      "card_image_path": "",
+      "card_image_path_en": "",
+      "promo_image_path_en": "",
+      "promo_image_source": "catalog",
+      "input_methods": [],
+      "input_methods_label": "",
+      "support_path": "atsumareonelog/?lang=ja",
+      "app_store_url": "https://apps.apple.com/jp/app/one%E9%8C%B2/id6777605653?uo=4",
+      "bundle_id": "jp.allnew.reserve031",
+      "asc_app_id": "6777605653",
+      "is_health_app": false,
+      "release_date": "2026-08-26",
+      "featured_priority": 999,
+      "sort_order": 140,
+      "published_to_landing": true,
+      "updated_at": "2026-08-26T12:24:29+00:00",
+      "app_store_version": "1.0",
+      "app_store_name": "One録",
+      "app_store_current_version_release_date": "2026-08-26T07:19:04Z",
       "app_store_lookup_country": "jp"
     }
   ]

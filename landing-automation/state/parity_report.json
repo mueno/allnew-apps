@@ -2,14 +2,15 @@
   "schema_version": 1,
   "verdict": "pass",
   "circuit_breaker": null,
-  "updated_at": "2026-07-02T12:59:02+00:00",
-  "public_apps": 15,
-  "landing_released": 15,
+  "updated_at": "2026-08-26T12:24:29+00:00",
+  "public_apps": 16,
+  "landing_released": 16,
   "missing": [],
   "excluded_app_ids": [],
   "false_positive_exclusion_ids": [],
   "stale_landing_app_ids": [],
   "enrichment_backlog": [
+    "atsumareonelog",
     "basalsnap",
     "meishibridge"
   ]

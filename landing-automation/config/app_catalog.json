@@ -383,6 +383,33 @@
       "slug_resolution": "derived_dir",
       "promo_image_path": "assets/asc-screenshots/meishibridge.jpg",
       "promo_image_source": "asc_first_screenshot"
+    },
+    {
+      "slug": "atsumareonelog",
+      "name": "AtsumareOneLog",
+      "name_ja": "録",
+      "category": "productivity",
+      "category_label": "Productivity",
+      "description_ja": "One録は、作業時間をワンアクションで記録できるシンプルなタイムトラッカーです。",
+      "description_en": "One録は、作業時間をワンアクションで記録できるシンプルなタイムトラッカーです。",
+      "icon_path": "atsumareonelog-icon.png",
+      "fallback_image_path": "",
+      "promo_image_path": "",
+      "promo_image_source": "catalog",
+      "card_image_path_en": "",
+      "promo_image_path_en": "",
+      "card_image_path": "",
+      "input_methods": [],
+      "is_health_app": false,
+      "support_path": "atsumareonelog/?lang=ja",
+      "app_store_url": "https://apps.apple.com/jp/app/one%E9%8C%B2/id6777605653",
+      "bundle_id": "jp.allnew.reserve031",
+      "asc_app_id": "6777605653",
+      "sort_order": 140,
+      "featured_priority": 999,
+      "bootstrap_visible": false,
+      "auto_onboarded": true,
+      "slug_resolution": "support_page_match"
     }
   ]
 }
