@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-26T12:24:28+00:00",
+  "updated_at": "2026-08-27T21:23:35+00:00",
   "apps": {
     "6758825019": {
       "slug": "weightsnap",
@@ -15,7 +15,7 @@
     "6759076255": {
       "slug": "bloodpressuresnap",
       "track_name": "BPSnap 血圧かんたんノート",
-      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/b5/e1/28/b5e128bc-3d0d-119c-3dda-185cf758c470/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
+      "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/a8/11/ca/a811cab6-d719-9db1-9b41-caeceeca6853/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
     },
     "6759076372": {
       "slug": "thermosnap",
@@ -83,5 +83,12 @@
       "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/b6/23/d3/b623d37a-3dad-9c8a-398d-93a4403d921e/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
     }
   },
-  "warnings": []
+  "warnings": [
+    {
+      "app_id": "6759076255",
+      "slug": "bloodpressuresnap",
+      "kind": "icon_changed",
+      "detail": "store icon artwork changed; curated icon asset left untouched"
+    }
+  ]
 }

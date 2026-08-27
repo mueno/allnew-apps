@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-26T12:24:29+00:00",
+  "generated_at": "2026-08-27T21:23:36+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -98,14 +98,14 @@
       "bundle_id": "jp.allnew.bpsnap",
       "asc_app_id": "6759076255",
       "is_health_app": true,
-      "release_date": "2026-06-13",
+      "release_date": "2026-08-27",
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
-      "app_store_version": "1.0.15",
+      "updated_at": "2026-08-27T21:23:36+00:00",
+      "app_store_version": "1.0.16",
       "app_store_name": "BPSnap 血圧かんたんノート",
-      "app_store_current_version_release_date": "2026-06-13T22:32:54Z",
+      "app_store_current_version_release_date": "2026-08-27T18:08:55Z",
       "app_store_lookup_country": "jp"
     },
     {
