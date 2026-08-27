@@ -150,6 +150,36 @@ h1 {
   gap: 18px;
 }
 
+.campaign-cta {
+  margin-top: 28px;
+  padding: clamp(24px, 4vw, 34px);
+  border: 1px solid rgba(23, 105, 224, 0.18);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(23, 105, 224, 0.15), transparent 42%),
+    rgba(255, 255, 255, 0.86);
+  box-shadow: 0 14px 36px rgba(25, 50, 85, 0.06);
+}
+
+.campaign-cta p {
+  max-width: 760px;
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.campaign-cta .campaign-cta-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 750;
+}
+
+.campaign-cta a {
+  color: var(--blue-dark);
+  font-weight: 750;
+  text-underline-offset: 3px;
+}
+
 .app-card {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

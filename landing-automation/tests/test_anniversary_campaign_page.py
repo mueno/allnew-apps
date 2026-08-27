@@ -61,6 +61,10 @@ def test_language_pages_link_to_campaign_assets_and_each_other() -> None:
     assert "/anniversary-2026/campaign.js" in en_html
     assert 'href="/anniversary-2026/en/"' in ja_html
     assert 'href="/anniversary-2026/"' in en_html
+    assert "App Storeでひとこと評価" in ja_html
+    assert "A quick App Store rating would make our day" in en_html
+    assert "https://x.com/allnew_llc" in ja_html
+    assert "https://x.com/allnew_llc" in en_html
 
 
 def test_lifetime_unlock_count_matches_campaign_evidence() -> None:
