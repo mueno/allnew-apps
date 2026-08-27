@@ -19,6 +19,30 @@
 
   const list = document.querySelector("[data-app-list]");
   const count = document.querySelector("[data-app-count]");
+  const campaignTokens = new Set([
+    "xanniv26jptraffic",
+    "xanniv26ustraffic",
+    "xanniv26jpengage",
+    "xanniv26usengage",
+  ]);
+
+  function trackedAppStoreURL(rawURL) {
+    const pageParams = new URLSearchParams(window.location.search);
+    const campaignToken = pageParams.get("asc_ct");
+    const isPaidXVisit =
+      pageParams.get("utm_source") === "x" &&
+      pageParams.get("utm_medium") === "paid_social";
+
+    if (!isPaidXVisit || !campaignTokens.has(campaignToken)) {
+      return rawURL;
+    }
+
+    const url = new URL(rawURL);
+    url.searchParams.set("pt", "125369561");
+    url.searchParams.set("ct", campaignToken);
+    url.searchParams.set("mt", "8");
+    return url.toString();
+  }
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -51,7 +75,7 @@
     body.append(badges);
 
     const link = element("a", "store-link", copy.appStore);
-    link.href = localized.url;
+    link.href = trackedAppStoreURL(localized.url);
     link.rel = "noopener noreferrer";
     link.setAttribute("aria-label", `${localized.name} — ${copy.appStore}`);
     body.append(link);
