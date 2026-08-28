@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-27T21:23:35+00:00",
+  "updated_at": "2026-08-28T03:22:23+00:00",
   "apps": {
     "6758825019": {
       "slug": "weightsnap",
@@ -83,12 +83,5 @@
       "icon_url": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/b6/23/d3/b623d37a-3dad-9c8a-398d-93a4403d921e/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
     }
   },
-  "warnings": [
-    {
-      "app_id": "6759076255",
-      "slug": "bloodpressuresnap",
-      "kind": "icon_changed",
-      "detail": "store icon artwork changed; curated icon asset left untouched"
-    }
-  ]
+  "warnings": []
 }
