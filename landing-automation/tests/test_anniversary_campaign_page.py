@@ -61,14 +61,25 @@ def test_language_pages_link_to_campaign_assets_and_each_other() -> None:
     assert "/anniversary-2026/campaign.js" in en_html
     assert 'href="/anniversary-2026/en/"' in ja_html
     assert 'href="/anniversary-2026/"' in en_html
-    assert "App Storeでひとこと評価" in ja_html
-    assert "A quick App Store rating would make our day" in en_html
+    assert "使ってみた感想をApp Storeで評価" in ja_html
+    assert "an App Store rating would make our day" in en_html
     assert "https://x.com/allnew_llc" in ja_html
     assert "https://x.com/allnew_llc" in en_html
 
 
 def test_lifetime_unlock_count_matches_campaign_evidence() -> None:
     assert sum(bool(app["lifetimeUnlockFree"]) for app in load_apps()) == 11
+
+
+def test_campaign_pages_clearly_show_that_the_offer_has_ended() -> None:
+    ja_html = (CAMPAIGN_ROOT / "index.html").read_text(encoding="utf-8")
+    en_html = (CAMPAIGN_ROOT / "en" / "index.html").read_text(encoding="utf-8")
+    script = (CAMPAIGN_ROOT / "campaign.js").read_text(encoding="utf-8")
+
+    assert "無料キャンペーンは終了しました。" in ja_html
+    assert "The free campaign has ended." in en_html
+    assert "8/27限定 無料" not in script
+    assert "Free on Aug 27" not in script
 
 
 def test_every_campaign_icon_is_a_local_existing_asset() -> None:
