@@ -5,15 +5,11 @@
   const copy = {
     ja: {
       loadError: "アプリ一覧を読み込めませんでした。時間をおいて再度お試しください。",
-      appStore: "App Storeで見る",
-      appFree: "8/27限定 無料",
-      unlockFree: "対象の買い切り機能も無料",
+      appStore: "App Storeで現在の価格を見る",
     },
     en: {
       loadError: "The app list could not be loaded. Please try again shortly.",
-      appStore: "View on the App Store",
-      appFree: "Free on Aug 27",
-      unlockFree: "Eligible lifetime unlock also free",
+      appStore: "View current price on the App Store",
     },
   }[language];
 
@@ -66,13 +62,6 @@
     const body = element("div", "app-body");
     body.append(element("h2", "app-name", localized.name));
     body.append(element("p", "app-description", localized.description));
-
-    const badges = element("div", "badges");
-    badges.append(element("span", "badge badge-primary", copy.appFree));
-    if (app.lifetimeUnlockFree) {
-      badges.append(element("span", "badge", copy.unlockFree));
-    }
-    body.append(badges);
 
     const link = element("a", "store-link", copy.appStore);
     link.href = trackedAppStoreURL(localized.url);
