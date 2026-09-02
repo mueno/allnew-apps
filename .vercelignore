@@ -1,0 +1,8 @@
+.git/
+.github/
+.planning/
+landing-automation/
+tests/
+**/__pycache__/
+**/.pytest_cache/
+**/*.pyc

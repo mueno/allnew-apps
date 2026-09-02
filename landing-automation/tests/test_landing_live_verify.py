@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+from types import SimpleNamespace
 
 import landing_live_verify as lv
+import store_discovery as sd
 
 
 def generated(*slugs, status="released"):
@@ -46,6 +48,10 @@ class TestHtmlChecks:
 
     def test_missing_card_detected(self):
         assert lv.html_missing_slugs(html_for("a"), ["a", "b"]) == ["b"]
+
+    def test_hidden_non_card_link_does_not_satisfy_readback(self):
+        html = '<html><a href="secret-app/?lang=ja" hidden>not a card</a></html>'
+        assert lv.html_missing_slugs(html, ["secret-app"]) == ["secret-app"]
 
     def test_itemlist_count_parsed(self):
         assert lv.html_itemlist_count(html_for("a", "b", "c")) == 3
@@ -109,3 +115,33 @@ class TestVerifyOnce:
         problems = lv.verify_once("https://x.test", live, lookup, catalog, {})
         assert any("card link missing for b" in p for p in problems)
         assert any("ItemList count" in p for p in problems)
+
+
+def test_live_readback_failure_cannot_be_downgraded_by_breaker(monkeypatch, tmp_path):
+    catalog = tmp_path / "catalog.json"
+    output = tmp_path / "output.json"
+    exclusions = tmp_path / "exclusions.json"
+    lookup = tmp_path / "lookup.json"
+    catalog.write_text(json.dumps({"artist_id": "999", "apps": [{"slug": "a", "asc_app_id": "1000"}]}))
+    output.write_text(json.dumps(generated("a")))
+    exclusions.write_text(json.dumps({"exclusions": []}))
+    lookup.write_text(
+        json.dumps(sd.build_lookup_cache({"jp": {"1000": {"trackName": "A"}}, "us": {}}))
+    )
+    monkeypatch.setattr(
+        lv,
+        "parse_args",
+        lambda: SimpleNamespace(
+            base_url="https://x.test",
+            output=output,
+            catalog=catalog,
+            exclusions=exclusions,
+            lookup_file=lookup,
+            allow_lookup_fixture=True,
+            retries=1,
+            interval=0.0,
+        ),
+    )
+    monkeypatch.setattr(lv, "verify_once", lambda *_args, **_kwargs: ["production drift"])
+
+    assert lv.main() == 1

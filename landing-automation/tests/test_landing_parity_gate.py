@@ -45,6 +45,19 @@ def catalog_with(*app_ids):
     }
 
 
+def valid_breaker(*, opened_at=None, expires_at=None, entry_id="breaker-1"):
+    opened = opened_at or (datetime.now(timezone.utc) - timedelta(minutes=5))
+    expires = expires_at or (opened + timedelta(hours=1))
+    return {
+        "entry_id": entry_id,
+        "opened_at": opened.isoformat(),
+        "expires_at": expires.isoformat(),
+        "opened_by": "release-manager@example.invalid",
+        "andon_issue": "https://github.com/mueno/allnew-apps/issues/123",
+        "reason": "confirmed false positive under repair",
+    }
+
+
 class TestEvaluateParity:
     def test_pass_when_all_public_apps_released(self):
         report = gate.evaluate_parity(
@@ -97,7 +110,7 @@ class TestEvaluateParity:
         assert report["missing"] == []
         assert report["excluded_app_ids"] == ["2"]
 
-    def test_stale_landing_entry_is_warned_not_blocked(self):
+    def test_stale_landing_entry_enters_grace_period(self):
         report = gate.evaluate_parity(
             lookup_with("1"),
             generated_with(released("1"), released("9")),
@@ -107,6 +120,47 @@ class TestEvaluateParity:
         assert report["missing"] == []
         assert report["stale_landing_app_ids"] == ["9"]
 
+    def test_stale_landing_entry_blocks_after_seven_days(self):
+        now = datetime(2026, 9, 2, tzinfo=timezone.utc)
+        first_seen, expired = gate.classify_stale_apps(
+            ["9"],
+            {"stale_first_seen": {"9": (now - timedelta(days=8)).isoformat()}},
+            at=now,
+        )
+        assert "9" in first_seen
+        assert expired == ["9"]
+
+    def test_new_stale_landing_entry_does_not_block_immediately(self):
+        now = datetime(2026, 9, 2, tzinfo=timezone.utc)
+        _first_seen, expired = gate.classify_stale_apps(["9"], {}, at=now)
+        assert expired == []
+
+
+def test_metrics_ledger_is_append_only_and_reports_denominator(tmp_path):
+    ledger = tmp_path / "metrics.jsonl"
+    started = datetime(2026, 9, 2, 0, 0, tzinfo=timezone.utc)
+    summary = gate.append_metrics(
+        ledger,
+        run_id="run-1",
+        started_at=started,
+        finished_at=started + timedelta(seconds=2),
+        verdict="block",
+        report={"missing": [{"app_id": "1"}], "expired_stale_app_ids": [], "false_positive_exclusion_ids": []},
+    )
+    gate.append_metrics(
+        ledger,
+        run_id="run-2",
+        started_at=started + timedelta(minutes=1),
+        finished_at=started + timedelta(minutes=1, seconds=2),
+        verdict="pass",
+        report={"missing": [], "expired_stale_app_ids": [], "false_positive_exclusion_ids": ["2"]},
+    )
+
+    assert len(ledger.read_text().splitlines()) == 2
+    assert summary["true_positive_count"] == 1
+    assert summary["false_positive_count"] == 0
+    assert summary["precision"] == 1.0
+
 
 class TestExclusionsAndBreaker:
     def test_exclusion_requires_reason(self, tmp_path):
@@ -115,22 +169,97 @@ class TestExclusionsAndBreaker:
         with pytest.raises(ValueError):
             gate.load_exclusions(path)
 
+    def test_exclusion_requires_owner_expiry_and_review(self, tmp_path):
+        path = tmp_path / "exclusions.json"
+        path.write_text(json.dumps({"exclusions": [{"app_id": "1", "reason": "temporary"}]}))
+
+        with pytest.raises(ValueError, match="owner"):
+            gate.load_exclusions(path)
+
+    def test_expired_exclusion_fails_closed(self, tmp_path):
+        path = tmp_path / "exclusions.json"
+        path.write_text(
+            json.dumps(
+                {
+                    "exclusions": [
+                        {
+                            "app_id": "1",
+                            "reason": "temporary",
+                            "owner": "release-manager@example.invalid",
+                            "review_by": "2026-01-01T00:00:00Z",
+                            "expires_at": "2026-01-02T00:00:00Z",
+                        }
+                    ]
+                }
+            )
+        )
+
+        with pytest.raises(ValueError, match="expired"):
+            gate.load_exclusions(path)
+
     def test_breaker_active_until_expiry(self, tmp_path):
         path = tmp_path / "breaker.json"
-        future = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
-        path.write_text(json.dumps({"expires_at": future, "reason": "repairing FP"}))
-        active, reason = gate.circuit_breaker_active(path)
+        ledger = tmp_path / "parity_circuit_breaker_ledger.json"
+        breaker = valid_breaker()
+        path.write_text(json.dumps(breaker))
+        ledger.write_text(json.dumps({"entries": [breaker]}))
+        active, reason = gate.circuit_breaker_active(path, ledger)
         assert active is True
-        assert reason == "repairing FP"
+        assert reason == "confirmed false positive under repair"
 
     def test_breaker_expired(self, tmp_path):
         path = tmp_path / "breaker.json"
-        past = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
-        path.write_text(json.dumps({"expires_at": past, "reason": "old"}))
-        assert gate.circuit_breaker_active(path) == (False, "")
+        ledger = tmp_path / "parity_circuit_breaker_ledger.json"
+        opened = datetime.now(timezone.utc) - timedelta(hours=2)
+        breaker = valid_breaker(opened_at=opened, expires_at=opened + timedelta(hours=1))
+        path.write_text(json.dumps(breaker))
+        ledger.write_text(json.dumps({"entries": [breaker]}))
+        assert gate.circuit_breaker_active(path, ledger) == (False, "confirmed false positive under repair")
 
     def test_breaker_absent(self, tmp_path):
         assert gate.circuit_breaker_active(tmp_path / "none.json") == (False, "")
+
+    def test_breaker_over_72_hours_is_rejected(self, tmp_path):
+        path = tmp_path / "breaker.json"
+        ledger = tmp_path / "parity_circuit_breaker_ledger.json"
+        opened = datetime.now(timezone.utc) - timedelta(minutes=1)
+        breaker = valid_breaker(opened_at=opened, expires_at=opened + timedelta(hours=73))
+        path.write_text(json.dumps(breaker))
+        ledger.write_text(json.dumps({"entries": [breaker]}))
+
+        decision = gate._breaker_decision(path, ledger)
+
+        assert decision["active"] is False
+        assert "circuit_breaker_duration_exceeds_72_hours" in decision["errors"]
+
+    def test_breaker_requires_owner_andon_and_ledger_binding(self, tmp_path):
+        path = tmp_path / "breaker.json"
+        breaker = valid_breaker()
+        breaker.pop("opened_by")
+        path.write_text(json.dumps(breaker))
+
+        decision = gate._breaker_decision(path, tmp_path / "missing-ledger.json")
+
+        assert decision["active"] is False
+        assert "circuit_breaker_opened_by_missing" in decision["errors"]
+        assert "circuit_breaker_ledger_missing_or_invalid" in decision["errors"]
+
+    def test_breaker_30_day_cumulative_limit_is_rejected(self, tmp_path):
+        path = tmp_path / "breaker.json"
+        ledger = tmp_path / "parity_circuit_breaker_ledger.json"
+        now = datetime.now(timezone.utc)
+        current = valid_breaker(opened_at=now - timedelta(hours=1), expires_at=now + timedelta(hours=1))
+        history = []
+        for index in range(3):
+            opened = now - timedelta(days=3 + index * 4)
+            history.append(valid_breaker(opened_at=opened, expires_at=opened + timedelta(hours=72), entry_id=f"old-{index}"))
+        path.write_text(json.dumps(current))
+        ledger.write_text(json.dumps({"entries": [*history, current]}))
+
+        decision = gate._breaker_decision(path, ledger, at=now)
+
+        assert decision["active"] is False
+        assert "circuit_breaker_30_day_cumulative_limit_exceeded" in decision["errors"]
 
 
 class TestGateProcess:
@@ -148,8 +277,12 @@ class TestGateProcess:
         exclusions = tmp_path / "exclusions.json"
         exclusions.write_text(json.dumps({"exclusions": []}), encoding="utf-8")
         breaker_path = tmp_path / "breaker.json"
+        breaker_ledger_path = tmp_path / "breaker-ledger.json"
         if breaker:
             breaker_path.write_text(json.dumps(breaker), encoding="utf-8")
+            breaker_ledger_path.write_text(
+                json.dumps({"entries": [breaker]}), encoding="utf-8"
+            )
         report = tmp_path / "report.json"
         result = subprocess.run(
             [
@@ -159,8 +292,11 @@ class TestGateProcess:
                 "--output", str(paths["generated"]),
                 "--exclusions", str(exclusions),
                 "--circuit-breaker", str(breaker_path),
+                "--circuit-breaker-ledger", str(breaker_ledger_path),
                 "--report", str(report),
                 "--lookup-file", str(paths["lookup"]),
+                "--allow-unsealed-lookup-fixture",
+                "--metrics-ledger", str(tmp_path / "metrics.jsonl"),
             ],
             capture_output=True,
             text=True,
@@ -182,16 +318,28 @@ class TestGateProcess:
         assert json.loads(report.read_text())["verdict"] == "block"
 
     def test_circuit_breaker_downgrades_to_warn(self, tmp_path):
-        future = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
         result, report = self.run_gate(
             tmp_path,
             lookup_with("1", "2"),
             generated_with(released("1")),
             catalog_with("1"),
-            breaker={"expires_at": future, "reason": "known FP under repair"},
+            breaker=valid_breaker(),
         )
         assert result.returncode == 0
         assert json.loads(report.read_text())["verdict"] == "warn_circuit_breaker"
+
+    def test_unbounded_breaker_does_not_downgrade(self, tmp_path):
+        result, report = self.run_gate(
+            tmp_path,
+            lookup_with("1", "2"),
+            generated_with(released("1")),
+            catalog_with("1"),
+            breaker={"expires_at": "2099-12-31T23:59:59+00:00", "reason": "temporary"},
+        )
+        assert result.returncode == 1
+        payload = json.loads(report.read_text())
+        assert payload["verdict"] == "block"
+        assert "circuit_breaker_duration_exceeds_72_hours" in payload["circuit_breaker_errors"] or "circuit_breaker_opened_at_missing" in payload["circuit_breaker_errors"]
 
     def test_empty_ground_truth_fails_closed(self, tmp_path):
         result, _report = self.run_gate(

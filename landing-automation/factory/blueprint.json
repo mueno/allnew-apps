@@ -139,6 +139,10 @@
         "detail": "GET https://itunes.apple.com/lookup?id=1875164184&entity=software (jp+us) returns >0 software results; zero results or network failure after 3 retries aborts the run",
         "self_report_allowed": false
       },
+      "wiring": {
+        "implementation_path": "../scripts/store_discovery.py",
+        "negative_fixture": "../tests/test_landing_parity_gate.py::test_empty_ground_truth_fails_closed"
+      },
       "precision_plan": {
         "measures": [
           "recall",
@@ -160,6 +164,10 @@
         "kind": "http",
         "detail": "update_landing_data.py --reconcile-app-store raises when App Store Lookup returns no results for known app ids (exit code observed by CI)",
         "self_report_allowed": false
+      },
+      "wiring": {
+        "implementation_path": "../scripts/update_landing_data.py",
+        "negative_fixture": "../tests/test_store_content_sync.py::test_baseline_run_produces_no_warnings"
       },
       "precision_plan": {
         "measures": [
@@ -183,6 +191,10 @@
         "detail": "render_landing_page.py re-parses its own output: all JSON-LD blocks parse, ItemList count and work-card count match released apps; SystemExit on mismatch",
         "self_report_allowed": false
       },
+      "wiring": {
+        "implementation_path": "../scripts/render_landing_page.py",
+        "negative_fixture": "../tests/test_landing_live_verify.py::test_itemlist_absent_returns_minus_one"
+      },
       "precision_plan": {
         "measures": [
           "precision",
@@ -204,6 +216,10 @@
         "kind": "http",
         "detail": "landing_parity_gate.py compares the artist lookup listing against data/landing-apps.generated.json; any non-excluded public app missing/not-released/without store URL exits 1 (CI red + ANDON issue)",
         "self_report_allowed": false
+      },
+      "wiring": {
+        "implementation_path": "../scripts/landing_parity_gate.py",
+        "negative_fixture": "../tests/test_landing_parity_gate.py::test_exit_one_on_missing_app"
       },
       "precision_plan": {
         "measures": [
@@ -228,6 +244,10 @@
         "detail": "landing_live_verify.py fetches https://apps.allnew.work (JSON + HTML) with retries and compares against the repo artifacts and the artist lookup; any residual mismatch after one self-heal redeploy exits 1 (CI red + ANDON issue)",
         "self_report_allowed": false
       },
+      "wiring": {
+        "implementation_path": "../scripts/landing_live_verify.py",
+        "negative_fixture": "../tests/test_landing_live_verify.py::test_live_readback_failure_cannot_be_downgraded_by_breaker"
+      },
       "precision_plan": {
         "measures": [
           "precision",
@@ -246,6 +266,7 @@
     }
   ],
   "assurance": {
+    "wiring_verification_required": true,
     "qms_artifacts": [
       "landing-automation/state/parity_report.json",
       "landing-automation/config/parity_exclusions.json",

@@ -1,0 +1,47 @@
+name: Landing dead-man switch
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+jobs:
+  verify-liveness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read reconciliation history
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/workflows/landing-auto-update.yml/runs?status=completed&per_page=20" \
+            > /tmp/landing-runs.json
+      - name: Verify success within 12 hours
+        id: liveness
+        continue-on-error: true
+        run: python3 landing-automation/scripts/landing_deadman.py --runs-json /tmp/landing-runs.json
+      - name: Open or refresh ANDON
+        if: steps.liveness.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="ANDON: landing reconciliation silent for more than 12 hours"
+          existing=$(gh issue list --state open --search "${title} in:title" --json number --jq '.[0].number // empty')
+          body="The independent dead-man switch found no successful landing-auto-update run within the last 12 hours. Investigate workflow scheduling, credentials, and the parity gate before deploying."
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body" --label andon
+          fi
+      - name: Preserve fail-closed status
+        if: steps.liveness.outcome == 'failure'
+        run: exit 1

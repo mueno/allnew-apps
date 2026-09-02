@@ -196,7 +196,7 @@ def main() -> int:
     catalog = uld.load_json(args.catalog, {})
     if not catalog.get("apps"):
         raise RuntimeError(f"catalog has no apps: {args.catalog}")
-    lookup = json.loads(args.lookup_file.read_text(encoding="utf-8"))
+    lookup = sd.load_lookup_cache(args.lookup_file)
     observations = uld.load_json(args.observations, {"schema_version": 1, "apps": {}, "warnings": []})
 
     catalog_changed, next_observations = sync_content(args.root, catalog, lookup, observations)

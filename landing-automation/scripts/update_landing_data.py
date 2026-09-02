@@ -27,14 +27,9 @@ CATALOG_PATH = ROOT / "landing-automation" / "config" / "app_catalog.json"
 OUTPUT_PATH = ROOT / "data" / "landing-apps.generated.json"
 STATE_PATH = ROOT / "landing-automation" / "state" / "landing_state.json"
 ASSETS_DIR = ROOT / "assets" / "asc-screenshots"
-ALLOWED_SCREENSHOT_DOMAINS = tuple(
-    domain.strip().lower()
-    for domain in os.getenv(
-        "LANDING_ALLOWED_SCREENSHOT_DOMAINS",
-        "mzstatic.com,apple.com",
-    ).split(",")
-    if domain.strip()
-)
+# Security policy input is intentionally frozen in source.  A workflow or
+# caller must not widen the network boundary through an environment variable.
+ALLOWED_SCREENSHOT_DOMAINS = ("mzstatic.com", "apple.com")
 MAX_SCREENSHOT_BYTES = int(os.getenv("LANDING_MAX_SCREENSHOT_BYTES", str(10 * 1024 * 1024)))
 APP_STORE_LOOKUP_URL = "https://itunes.apple.com/lookup"
 APP_STORE_LOOKUP_TIMEOUT = int(os.getenv("LANDING_APP_STORE_LOOKUP_TIMEOUT", "30"))
@@ -369,6 +364,25 @@ def validate_screenshot_url(url: str) -> str:
     return parsed.geturl()
 
 
+class ScreenshotRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Revalidate every redirect before urllib follows it."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
+        absolute_url = urllib.parse.urljoin(req.full_url, newurl)
+        secure_url = validate_screenshot_url(absolute_url)
+        return super().redirect_request(req, fp, code, msg, headers, secure_url)
+
+
+SCREENSHOT_OPENER = urllib.request.build_opener(ScreenshotRedirectHandler())
+
+
+def open_screenshot(request: urllib.request.Request, *, timeout: int = 30):
+    """Open an allowlisted screenshot URL with redirect revalidation."""
+
+    validate_screenshot_url(request.full_url)
+    return SCREENSHOT_OPENER.open(request, timeout=timeout)
+
+
 def safe_slug(slug: str) -> str:
     normalized = "".join(ch for ch in slug.lower() if ch.isalnum() or ch == "-")
     if not normalized:
@@ -386,7 +400,7 @@ def download_screenshot(url: str, slug: str) -> tuple[str, bool]:
 
     request = urllib.request.Request(secure_url, headers={"User-Agent": "allnew-landing-sync/1.0"})
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:  # nosec: URL is validated by allowlist before access
+        with open_screenshot(request, timeout=30) as response:
             content_type = response.headers.get("Content-Type", "")
             if not content_type.lower().startswith("image/"):
                 raise RuntimeError("screenshot response is not image content")
