@@ -2,24 +2,8 @@ name: Landing Automation Tests
 
 on:
   pull_request:
-    paths:
-      - "landing-automation/**"
-      - "data/**"
-      - "index.html"
-      - ".github/workflows/deploy.yml"
-      - ".github/workflows/landing-auto-update.yml"
-      - ".github/workflows/reusable-landing-sync.yml"
-      - ".github/workflows/landing-tests.yml"
   push:
     branches: [main]
-    paths:
-      - "landing-automation/**"
-      - "data/**"
-      - "index.html"
-      - ".github/workflows/deploy.yml"
-      - ".github/workflows/landing-auto-update.yml"
-      - ".github/workflows/reusable-landing-sync.yml"
-      - ".github/workflows/landing-tests.yml"
 
 permissions:
   contents: read
@@ -41,3 +25,24 @@ jobs:
 
       - name: Run landing-automation tests
         run: python3 -m pytest landing-automation/tests -q
+
+  landing-release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+
+      - name: Run fail-closed landing release gate
+        run: python3 landing-automation/scripts/landing_sync.py --no-record
+
+      - name: Reject stale tracked or untracked release artifacts
+        shell: bash
+        run: |
+          git diff --exit-code -- index.html data/landing-apps.generated.json
+          untracked=$(git ls-files --others --exclude-standard -- index.html data/landing-apps.generated.json)
+          test -z "$untracked"
