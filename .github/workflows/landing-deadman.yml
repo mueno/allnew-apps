@@ -40,7 +40,7 @@ jobs:
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body"
           else
-            gh issue create --title "$title" --body "$body" --label andon
+            gh issue create --title "$title" --body "$body"
           fi
       - name: Preserve fail-closed status
         if: steps.liveness.outcome == 'failure'

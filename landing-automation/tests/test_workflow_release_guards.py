@@ -43,11 +43,14 @@ def test_dispatch_requires_readiness_validation() -> None:
     assert "repo scope" not in text
 
 
-def test_published_artifact_changes_trigger_gate_ci() -> None:
+def test_landing_tests_expose_an_unfiltered_required_release_gate() -> None:
     text = _workflow("landing-tests.yml")
 
-    assert text.count('"data/**"') == 2
-    assert text.count('"index.html"') == 2
+    assert "paths:" not in text
+    assert "landing-release-gate:" in text
+    assert "landing_sync.py --no-record" in text
+    assert "git diff --exit-code -- index.html data/landing-apps.generated.json" in text
+    assert "git ls-files --others --exclude-standard" in text
 
 
 def test_live_readback_refetches_store_grounding() -> None:
@@ -61,7 +64,8 @@ def test_live_readback_refetches_store_grounding() -> None:
 def test_deadman_opens_andon_and_preserves_failure() -> None:
     text = _workflow("landing-deadman.yml")
     assert "landing_deadman.py" in text
-    assert "gh issue create" in text
+    assert 'gh issue create --title "$title" --body "$body"' in text
+    assert "--label andon" not in text
     assert "run: exit 1" in text
 
 
