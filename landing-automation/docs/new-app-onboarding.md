@@ -118,7 +118,7 @@ python3 landing-automation/scripts/validate_app_readiness.py \
 ### 1-6. コミット & プッシュ
 
 ```bash
-git add -A
+git add -- landing-automation/config/app_catalog.json landing-automation/config/app_slug_map.json assets/onboarding/<slug>-onboarding1.jpeg <slug>/index.html
 git commit -m "feat: add newapp to landing pipeline"
 git push
 ```
@@ -137,17 +137,10 @@ python3 landing-automation/scripts/generate_caller_workflows.py --write
 python3 landing-automation/scripts/generate_caller_workflows.py --slug newapp --write
 ```
 
-### 2-2. GitHub Secret を設定
-
-アプリリポの Settings → Secrets → Actions:
-
-| Secret 名 | 値 |
-|-----------|-----|
-| `ALLNEW_APPS_DISPATCH_TOKEN` | `mueno/allnew-apps` への `repo` スコープ付き GitHub PAT |
-
-### 2-3. 動作確認
+### 2-2. 動作確認
 
 アプリリポで push するか、Actions タブから `workflow_dispatch` → `validate` を実行。
+アプリリポにクロスリポジトリ用PATを置く必要はない。
 
 ---
 
@@ -163,21 +156,13 @@ ASC で以下の状態変化が発生すると、Worker が自動で `repository
 | READY_FOR_DISTRIBUTION 等 | `asc_app_released` |
 | その他 | `asc_status_changed` |
 
-### 手動経路（fallback dispatch）
+### 手動経路
 
-ASC Webhook が動かない場合や補完として:
+Webhookが届かない場合は、`allnew-apps` の `Landing Auto Update` を手動実行する。
+この実行も公開App Store一覧を再取得するため、アプリリポからイベント内容を送る必要はない。
 
 ```bash
-# 審査提出時
-gh workflow run landing-sync.yml \
-  -R mueno/NewApp \
-  -f action=dispatch-submitted
-
-# 公開時
-gh workflow run landing-sync.yml \
-  -R mueno/NewApp \
-  -f action=dispatch-released \
-  -f app_store_url="https://apps.apple.com/app/newapp/id1234567890"
+gh workflow run landing-auto-update.yml -R mueno/allnew-apps -f reconcile=true
 ```
 
 ---
@@ -214,7 +199,6 @@ gh workflow run landing-sync.yml \
 ### アプリリポ
 
 - [ ] `.github/workflows/landing-sync.yml` 配置
-- [ ] `ALLNEW_APPS_DISPATCH_TOKEN` secret 設定
 - [ ] push 時の validate が PASS
 
 ### ASC 申請後

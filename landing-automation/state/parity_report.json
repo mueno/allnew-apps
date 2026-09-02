@@ -2,7 +2,16 @@
   "schema_version": 1,
   "verdict": "pass",
   "circuit_breaker": null,
-  "updated_at": "2026-08-26T12:24:29+00:00",
+  "circuit_breaker_errors": [],
+  "guard_precision_30d": {
+    "window_days": 30,
+    "run_count": 1,
+    "true_positive_count": 0,
+    "false_positive_count": 0,
+    "precision": null,
+    "false_positives_per_30_days": 0
+  },
+  "updated_at": "2026-09-02T04:41:37+00:00",
   "public_apps": 16,
   "landing_released": 16,
   "missing": [],
@@ -13,5 +22,7 @@
     "atsumareonelog",
     "basalsnap",
     "meishibridge"
-  ]
+  ],
+  "stale_first_seen": {},
+  "expired_stale_app_ids": []
 }

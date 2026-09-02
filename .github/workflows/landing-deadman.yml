@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
+    inputs:
+      proof_mode:
+        description: "Create, read back, and close a non-production stale-run proof issue"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   actions: read
@@ -21,27 +27,48 @@ jobs:
       - name: Read reconciliation history
         env:
           GH_TOKEN: ${{ github.token }}
+          PROOF_MODE: ${{ inputs.proof_mode || false }}
         run: |
-          gh api \
-            "repos/${GITHUB_REPOSITORY}/actions/workflows/landing-auto-update.yml/runs?status=completed&per_page=20" \
-            > /tmp/landing-runs.json
+          if [ "${PROOF_MODE}" = "true" ]; then
+            printf '{"workflow_runs":[]}' > /tmp/landing-runs.json
+          else
+            gh api \
+              "repos/${GITHUB_REPOSITORY}/actions/workflows/landing-auto-update.yml/runs?status=completed&per_page=20" \
+              > /tmp/landing-runs.json
+          fi
       - name: Verify success within 12 hours
         id: liveness
         continue-on-error: true
         run: python3 landing-automation/scripts/landing_deadman.py --runs-json /tmp/landing-runs.json
       - name: Open or refresh ANDON
+        id: andon
         if: steps.liveness.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
+          PROOF_MODE: ${{ inputs.proof_mode || false }}
         run: |
           title="ANDON: landing reconciliation silent for more than 12 hours"
+          if [ "${PROOF_MODE}" = "true" ]; then
+            title="PROOF: landing dead-man stale-run ${GITHUB_RUN_ID}"
+          fi
           existing=$(gh issue list --state open --search "${title} in:title" --json number --jq '.[0].number // empty')
           body="The independent dead-man switch found no successful landing-auto-update run within the last 12 hours. Investigate workflow scheduling, credentials, and the parity gate before deploying."
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body"
+            echo "issue_number=${existing}" >> "${GITHUB_OUTPUT}"
           else
-            gh issue create --title "$title" --body "$body"
+            issue_url=$(gh issue create --title "$title" --body "$body")
+            echo "issue_number=${issue_url##*/}" >> "${GITHUB_OUTPUT}"
           fi
+      - name: Read back and close proof issue
+        if: ${{ inputs.proof_mode == true && steps.andon.outputs.issue_number != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ steps.andon.outputs.issue_number }}
+        run: |
+          test "$(gh issue view "${ISSUE_NUMBER}" --json state --jq .state)" = "OPEN"
+          gh issue close "${ISSUE_NUMBER}" --comment "Bounded dead-man proof completed by run ${GITHUB_RUN_ID}."
+          test "$(gh issue view "${ISSUE_NUMBER}" --json state --jq .state)" = "CLOSED"
       - name: Preserve fail-closed status
-        if: steps.liveness.outcome == 'failure'
+        if: steps.liveness.outcome == 'failure' && inputs.proof_mode != true
         run: exit 1
