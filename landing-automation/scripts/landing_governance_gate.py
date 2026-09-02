@@ -27,6 +27,7 @@ WORKFLOW_RUNS_URL = (
     "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/"
     "landing-auto-update.yml/runs?status=completed&per_page=20"
 )
+WORKFLOW_JOBS_URL = "https://api.github.com/repos/mueno/allnew-apps/actions/runs/{run_id}/jobs?per_page=100"
 PRECISION_WINDOW_DAYS = 30
 MIN_PRECISION_RUNS = 10
 MIN_PRECISION_ELAPSED = timedelta(hours=72)
@@ -60,7 +61,42 @@ def load_workflow_runs(path: Path | None) -> dict[str, Any]:
         headers={"Accept": "application/vnd.github+json", "User-Agent": "allnew-landing-governance/1"},
     )
     with urllib.request.urlopen(request, timeout=20) as response:  # noqa: S310 - fixed HTTPS URL
-        return json.loads(response.read().decode("utf-8"))
+        payload = json.loads(response.read().decode("utf-8"))
+    rows = payload.get("workflow_runs") if isinstance(payload, dict) else None
+    if not isinstance(rows, list):
+        return payload
+    for row in rows:
+        if not isinstance(row, dict) or row.get("status") != "completed" or row.get("conclusion") == "success":
+            continue
+        run_id = str(row.get("id") or "")
+        if not re.fullmatch(r"[1-9][0-9]*", run_id):
+            continue
+        jobs_request = urllib.request.Request(
+            WORKFLOW_JOBS_URL.format(run_id=run_id),
+            headers={"Accept": "application/vnd.github+json", "User-Agent": "allnew-landing-governance/1"},
+        )
+        try:
+            with urllib.request.urlopen(jobs_request, timeout=20) as response:  # noqa: S310 - fixed HTTPS URL
+                jobs_payload = json.loads(response.read().decode("utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        jobs = jobs_payload.get("jobs") if isinstance(jobs_payload, dict) else None
+        steps = [
+            step
+            for job in jobs if isinstance(jobs, list) and isinstance(job, dict)
+            for step in job.get("steps", [])
+            if isinstance(step, dict)
+        ] if isinstance(jobs, list) else []
+        deployment = next(
+            (step for step in steps if step.get("name") == "Deploy to Vercel (production)"),
+            None,
+        )
+        row["preproduction_block"] = bool(
+            isinstance(deployment, dict)
+            and deployment.get("status") == "completed"
+            and deployment.get("conclusion") == "skipped"
+        )
+    return payload
 
 
 def consecutive_successes(payload: dict[str, Any]) -> int:
@@ -71,9 +107,13 @@ def consecutive_successes(payload: dict[str, Any]) -> int:
     completed.sort(key=lambda row: str(row.get("created_at") or ""), reverse=True)
     count = 0
     for row in completed:
+        if row.get("conclusion") == "success":
+            count += 1
+            continue
+        if row.get("preproduction_block") is True:
+            continue
         if row.get("conclusion") != "success":
             break
-        count += 1
     return count
 
 

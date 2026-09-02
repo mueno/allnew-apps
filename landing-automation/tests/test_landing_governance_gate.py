@@ -52,6 +52,13 @@ def test_one_byte_semantic_tamper_returns_to_hold(monkeypatch) -> None:
     assert evidence["consecutive_successful_runs"] == 0
 
 
+def test_verified_preproduction_block_does_not_break_production_success_streak() -> None:
+    payload = _runs(11, first_conclusion="failure")
+    payload["workflow_runs"][0]["preproduction_block"] = True
+
+    assert gate.consecutive_successes(payload) == 10
+
+
 def test_precision_window_uses_verified_production_runs_when_ledger_is_absent(
     monkeypatch, tmp_path: Path
 ) -> None:
