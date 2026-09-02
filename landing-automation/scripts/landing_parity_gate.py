@@ -358,6 +358,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--report", type=Path, default=REPORT_PATH)
     parser.add_argument("--metrics-ledger", type=Path, default=METRICS_LEDGER_PATH)
+    parser.add_argument(
+        "--no-record",
+        action="store_true",
+        help="Evaluate the identical gate without mutating report or metrics state",
+    )
     parser.add_argument("--artist-id", default=None)
     parser.add_argument(
         "--lookup-file",
@@ -446,23 +451,24 @@ def main() -> int:
             + ", ".join(report["enrichment_backlog"])
         )
 
-    finished_at = now_utc()
-    metrics = append_metrics(
-        args.metrics_ledger,
-        run_id=str(uuid.uuid4()),
-        started_at=started_at,
-        finished_at=finished_at,
-        verdict=verdict,
-        report=report,
-    )
-    write_report(
-        args.report,
-        report,
-        verdict,
-        breaker_reason if breaker_active else "",
-        list(breaker["errors"]),
-        metrics,
-    )
+    if not args.no_record:
+        finished_at = now_utc()
+        metrics = append_metrics(
+            args.metrics_ledger,
+            run_id=str(uuid.uuid4()),
+            started_at=started_at,
+            finished_at=finished_at,
+            verdict=verdict,
+            report=report,
+        )
+        write_report(
+            args.report,
+            report,
+            verdict,
+            breaker_reason if breaker_active else "",
+            list(breaker["errors"]),
+            metrics,
+        )
     print(
         f"[GATE:{verdict.upper()}] public={report['public_apps']} "
         f"landing_released={report['landing_released']} "
