@@ -16,6 +16,7 @@ import hashlib
 import hmac
 import json
 import os
+import sqlite3
 import threading
 import time
 from dataclasses import dataclass
@@ -68,6 +69,43 @@ class RelayConfig:
     max_request_bytes: int
     replay_ttl_seconds: int
     event_freshness_seconds: int
+    replay_db_path: Path
+
+
+class ReplayStore:
+    """Process- and restart-safe replay register backed by SQLite."""
+
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._lock = threading.Lock()
+        with self._connect() as connection:
+            connection.execute(
+                "CREATE TABLE IF NOT EXISTS replay_events ("
+                "event_id TEXT PRIMARY KEY, expires_at REAL NOT NULL)"
+            )
+
+    def _connect(self) -> sqlite3.Connection:
+        connection = sqlite3.connect(self.path, timeout=5.0, isolation_level=None)
+        connection.execute("PRAGMA journal_mode=WAL")
+        connection.execute("PRAGMA synchronous=FULL")
+        return connection
+
+    def register(self, event_id: str, ttl_seconds: int, *, now: float | None = None) -> bool:
+        observed = time.time() if now is None else now
+        with self._lock, self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            connection.execute("DELETE FROM replay_events WHERE expires_at <= ?", (observed,))
+            try:
+                connection.execute(
+                    "INSERT INTO replay_events(event_id, expires_at) VALUES (?, ?)",
+                    (event_id, observed + ttl_seconds),
+                )
+            except sqlite3.IntegrityError:
+                connection.execute("ROLLBACK")
+                return False
+            connection.execute("COMMIT")
+            return True
 
 
 def now_iso() -> str:
@@ -319,8 +357,7 @@ class RelayHandler(BaseHTTPRequestHandler):
     config: RelayConfig
     slug_by_app_id: dict[str, str]
     slug_by_bundle: dict[str, str]
-    replay_cache: dict[str, float] = {}
-    replay_cache_lock = threading.Lock()
+    replay_store: ReplayStore
 
     def _write_json(self, status: int, payload: dict[str, Any]) -> None:
         body = (json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
@@ -340,18 +377,7 @@ class RelayHandler(BaseHTTPRequestHandler):
 
     @classmethod
     def register_event(cls, event_id: str, ttl_seconds: int) -> bool:
-        now = time.time()
-        with cls.replay_cache_lock:
-            expired = [key for key, expires_at in cls.replay_cache.items() if expires_at <= now]
-            for key in expired:
-                cls.replay_cache.pop(key, None)
-
-            existing_expires = cls.replay_cache.get(event_id)
-            if existing_expires and existing_expires > now:
-                return False
-
-            cls.replay_cache[event_id] = now + ttl_seconds
-            return True
+        return cls.replay_store.register(event_id, ttl_seconds)
 
     def do_POST(self) -> None:  # noqa: N802
         if self.path != self.config.path:
@@ -396,7 +422,7 @@ class RelayHandler(BaseHTTPRequestHandler):
 
         try:
             payload = json.loads(body.decode("utf-8"))
-        except json.JSONDecodeError as error:
+        except json.JSONDecodeError:
             self._write_json(
                 HTTPStatus.BAD_REQUEST,
                 {"ok": False, "error": "invalid json"},
@@ -487,6 +513,11 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=parse_positive_int(os.getenv("ASC_EVENT_FRESHNESS_SECONDS", str(DEFAULT_EVENT_FRESHNESS_SECONDS)), DEFAULT_EVENT_FRESHNESS_SECONDS),
     )
+    parser.add_argument(
+        "--replay-db",
+        type=Path,
+        default=Path(os.getenv("ASC_REPLAY_DB", "/var/lib/allnew-asc-relay/replay.sqlite3")),
+    )
 
     return parser.parse_args()
 
@@ -514,6 +545,7 @@ def main() -> int:
         max_request_bytes=parse_positive_int(args.max_request_bytes, DEFAULT_MAX_REQUEST_BYTES),
         replay_ttl_seconds=parse_positive_int(args.replay_ttl_seconds, DEFAULT_REPLAY_TTL_SECONDS),
         event_freshness_seconds=parse_positive_int(args.event_freshness_seconds, DEFAULT_EVENT_FRESHNESS_SECONDS),
+        replay_db_path=args.replay_db,
     )
 
     slug_by_app_id, slug_by_bundle = load_catalog_maps(config.catalog_path)
@@ -521,6 +553,7 @@ def main() -> int:
     RelayHandler.config = config
     RelayHandler.slug_by_app_id = slug_by_app_id
     RelayHandler.slug_by_bundle = slug_by_bundle
+    RelayHandler.replay_store = ReplayStore(config.replay_db_path)
 
     server = ThreadingHTTPServer((config.host, config.port), RelayHandler)
     print(

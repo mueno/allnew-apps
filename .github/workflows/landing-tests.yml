@@ -4,11 +4,21 @@ on:
   pull_request:
     paths:
       - "landing-automation/**"
+      - "data/**"
+      - "index.html"
+      - ".github/workflows/deploy.yml"
+      - ".github/workflows/landing-auto-update.yml"
+      - ".github/workflows/reusable-landing-sync.yml"
       - ".github/workflows/landing-tests.yml"
   push:
     branches: [main]
     paths:
       - "landing-automation/**"
+      - "data/**"
+      - "index.html"
+      - ".github/workflows/deploy.yml"
+      - ".github/workflows/landing-auto-update.yml"
+      - ".github/workflows/reusable-landing-sync.yml"
       - ".github/workflows/landing-tests.yml"
 
 permissions:

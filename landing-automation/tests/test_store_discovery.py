@@ -3,10 +3,35 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
 import store_discovery as sd
+
+
+def test_lookup_cache_rejects_tampering(tmp_path):
+    lookup = {"jp": {"1": {"trackId": 1}}, "us": {}}
+    envelope = sd.build_lookup_cache(lookup)
+    envelope["lookup"]["jp"]["2"] = {"trackId": 2}
+    path = tmp_path / "lookup.json"
+    path.write_text(json.dumps(envelope))
+
+    with pytest.raises(ValueError, match="hash mismatch"):
+        sd.load_lookup_cache(path)
+
+
+def test_lookup_cache_rejects_stale_snapshot(tmp_path):
+    now = datetime(2026, 9, 2, tzinfo=timezone.utc)
+    envelope = sd.build_lookup_cache(
+        {"jp": {"1": {"trackId": 1}}, "us": {}},
+        fetched_at=now - timedelta(minutes=16),
+    )
+    path = tmp_path / "lookup.json"
+    path.write_text(json.dumps(envelope))
+
+    with pytest.raises(ValueError, match="stale"):
+        sd.load_lookup_cache(path, at=now)
 
 
 def make_repo(tmp_path, dirs=(), bodies=None):

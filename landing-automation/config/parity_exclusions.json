@@ -1,5 +1,5 @@
 {
   "schema_version": 1,
-  "_doc": "Escape valve for the landing parity gate. Every exclusion MUST carry app_id and a human-readable reason (intentional delisting, B2B-only app, confirmed false positive under repair). Reviewed whenever the gate blocks.",
+  "_doc": "Escape valve for the landing parity gate. Every exclusion MUST carry app_id, reason, owner, review_by, and expires_at. Expired entries fail closed.",
   "exclusions": []
 }

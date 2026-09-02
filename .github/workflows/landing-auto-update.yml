@@ -58,11 +58,9 @@ jobs:
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true' && inputs.reconcile != 'true' }}
         run: |
           python3 landing-automation/scripts/update_landing_data.py --bootstrap
-          python3 landing-automation/scripts/render_landing_page.py
 
       - name: Landing sync (discovery + reconcile + render + parity gate)
         id: landing-sync
-        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.bootstrap == 'true' && inputs.reconcile != 'true') }}
         run: |
           python3 landing-automation/scripts/landing_sync.py
 
@@ -97,8 +95,6 @@ jobs:
           rebuild() {
             if [ "${EVENT_NAME}" = "workflow_dispatch" ] && [ "${BOOTSTRAP_INPUT}" = "true" ] && [ "${RECONCILE_INPUT}" != "true" ]; then
               python3 landing-automation/scripts/update_landing_data.py --bootstrap
-              python3 landing-automation/scripts/render_landing_page.py
-              return
             fi
             if [ "${EVENT_NAME}" = "repository_dispatch" ]; then
               python3 landing-automation/scripts/update_landing_data.py --event-file /tmp/landing-event.json
@@ -169,8 +165,7 @@ jobs:
         run: |
           set -uo pipefail
           verify() {
-            python3 landing-automation/scripts/landing_live_verify.py \
-              --lookup-file /tmp/allnew-artist-lookup.json "$@"
+            python3 landing-automation/scripts/landing_live_verify.py "$@"
           }
           if verify; then
             exit 0

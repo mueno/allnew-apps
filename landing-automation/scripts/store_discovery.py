@@ -20,12 +20,15 @@ Slug resolution (multi-signal, deterministic):
 from __future__ import annotations
 
 import argparse
+import hashlib
+import hmac
 import json
 import re
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +37,55 @@ import update_landing_data as uld
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = ROOT / "landing-automation" / "config" / "app_catalog.json"
 LOOKUP_URL = "https://itunes.apple.com/lookup"
+LOOKUP_CACHE_SCHEMA = "allnew/artist-lookup-cache/1"
+LOOKUP_CACHE_MAX_AGE_SECONDS = 15 * 60
+
+
+def _canonical_json_bytes(value: Any) -> bytes:
+    return json.dumps(
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+
+
+def build_lookup_cache(
+    lookup: dict[str, dict[str, dict[str, Any]]],
+    *,
+    fetched_at: datetime | None = None,
+) -> dict[str, Any]:
+    observed = fetched_at or datetime.now(timezone.utc)
+    return {
+        "schema_version": LOOKUP_CACHE_SCHEMA,
+        "fetched_at": observed.replace(microsecond=0).isoformat(),
+        "payload_sha256": hashlib.sha256(_canonical_json_bytes(lookup)).hexdigest(),
+        "lookup": lookup,
+    }
+
+
+def load_lookup_cache(
+    path: Path,
+    *,
+    at: datetime | None = None,
+    max_age_seconds: int = LOOKUP_CACHE_MAX_AGE_SECONDS,
+) -> dict[str, dict[str, dict[str, Any]]]:
+    try:
+        envelope = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError("lookup cache is unreadable") from error
+    if not isinstance(envelope, dict) or envelope.get("schema_version") != LOOKUP_CACHE_SCHEMA:
+        raise ValueError("lookup cache envelope is missing or invalid")
+    lookup = envelope.get("lookup")
+    if not isinstance(lookup, dict):
+        raise ValueError("lookup cache payload is invalid")
+    digest = hashlib.sha256(_canonical_json_bytes(lookup)).hexdigest()
+    if not hmac.compare_digest(str(envelope.get("payload_sha256") or ""), digest):
+        raise ValueError("lookup cache hash mismatch")
+    fetched_at = uld.parse_iso_datetime(envelope.get("fetched_at"))
+    current = at or datetime.now(timezone.utc)
+    if fetched_at is None or fetched_at > current + timedelta(seconds=30):
+        raise ValueError("lookup cache timestamp is invalid")
+    if current - fetched_at > timedelta(seconds=max_age_seconds):
+        raise ValueError("lookup cache is stale")
+    return lookup
 LOOKUP_COUNTRIES = ("jp", "us")
 LOOKUP_RETRIES = 3
 HEALTH_GENRES = {"health & fitness", "medical", "ヘルスケア／フィットネス", "メディカル"}
@@ -222,7 +274,7 @@ def resolve_icon_path(root: Path, slug: str, track: dict[str, Any], *, force: bo
             secure_url, headers={"User-Agent": "allnew-landing-sync/1.0"}
         )
         try:
-            with urllib.request.urlopen(request, timeout=30) as response:  # nosec: allowlisted host
+            with uld.open_screenshot(request, timeout=30) as response:
                 content_type = str(response.headers.get("Content-Type", ""))
                 if not content_type.lower().startswith("image/"):
                     raise RuntimeError("icon response is not image content")
@@ -413,7 +465,7 @@ def main() -> int:
     if args.lookup_cache:
         args.lookup_cache.parent.mkdir(parents=True, exist_ok=True)
         args.lookup_cache.write_text(
-            json.dumps(lookup, ensure_ascii=False), encoding="utf-8"
+            json.dumps(build_lookup_cache(lookup), ensure_ascii=False), encoding="utf-8"
         )
 
     changed, onboarded = sync_catalog(args.root, catalog, lookup)

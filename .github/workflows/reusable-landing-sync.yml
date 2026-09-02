@@ -54,19 +54,18 @@ on:
         default: "[]"
     secrets:
       dispatch_token:
-        description: "GitHub PAT with repo scope for mueno/allnew-apps"
+        description: "Fine-grained token limited to mueno/allnew-apps with Contents: write"
         required: true
 
 jobs:
   validate:
-    if: inputs.action == 'validate'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout allnew-apps
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: mueno/allnew-apps
-          token: ${{ secrets.dispatch_token }}
+          persist-credentials: false
 
       - name: Setup Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
@@ -84,6 +83,7 @@ jobs:
 
   dispatch:
     if: inputs.action == 'dispatch-submitted' || inputs.action == 'dispatch-released'
+    needs: validate
     runs-on: ubuntu-latest
     steps:
       - name: Send repository_dispatch

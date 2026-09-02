@@ -10,8 +10,8 @@ is. It fetches the live site and fails closed unless all three agree:
   3. live index.html contains a card link for every released app and a
      JSON-LD ItemList whose count matches (the page users see is complete)
 
-Retries with backoff absorb CDN propagation; the parity circuit breaker
-(state/parity_circuit_breaker.json) downgrades BLOCK to WARN while active.
+Retries with backoff absorb CDN propagation. Production readback has no circuit
+breaker: a mismatch in the page users actually receive always remains a block.
 
 Exit codes: 0 = production verified, 1 = drift (fail closed), 2 = config error.
 """
@@ -25,6 +25,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -61,8 +62,30 @@ def released_slugs(data: dict[str, Any]) -> list[str]:
     ]
 
 
+class _WorkCardParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.card_hrefs: set[str] = set()
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.casefold() != "a":
+            return
+        values = {key.casefold(): value or "" for key, value in attrs}
+        classes = set(values.get("class", "").split())
+        href = values.get("href", "")
+        if "work-card" in classes and href:
+            self.card_hrefs.add(href)
+
+
 def html_missing_slugs(html: str, slugs: list[str]) -> list[str]:
-    return [slug for slug in slugs if f'href="{slug}/' not in html]
+    parser = _WorkCardParser()
+    parser.feed(html)
+    present = {
+        href.removeprefix("/").split("/", 1)[0]
+        for href in parser.card_hrefs
+        if "/" in href.removeprefix("/")
+    }
+    return [slug for slug in slugs if slug not in present]
 
 
 def html_itemlist_count(html: str) -> int:
@@ -118,8 +141,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=ROOT / "data" / "landing-apps.generated.json")
     parser.add_argument("--catalog", type=Path, default=gate.CATALOG_PATH)
     parser.add_argument("--exclusions", type=Path, default=gate.EXCLUSIONS_PATH)
-    parser.add_argument("--circuit-breaker", type=Path, default=gate.CIRCUIT_BREAKER_PATH)
     parser.add_argument("--lookup-file", type=Path, default=None)
+    parser.add_argument(
+        "--allow-lookup-fixture",
+        action="store_true",
+        help="Tests only: use the supplied lookup cache instead of live App Store grounding",
+    )
     parser.add_argument("--retries", type=int, default=6)
     parser.add_argument("--interval", type=float, default=15.0)
     return parser.parse_args()
@@ -139,13 +166,19 @@ def main() -> int:
         print(f"[LIVE:ERROR] {error}")
         return 2
 
-    if args.lookup_file and args.lookup_file.exists():
-        lookup = json.loads(args.lookup_file.read_text(encoding="utf-8"))
-    else:
-        artist_id = str(catalog.get("artist_id") or "")
-        if not artist_id:
-            print("[LIVE:ERROR] artist_id missing from catalog")
+    artist_id = str(catalog.get("artist_id") or "")
+    if not artist_id:
+        print("[LIVE:ERROR] artist_id missing from catalog")
+        return 2
+    if args.lookup_file and args.allow_lookup_fixture:
+        try:
+            lookup = sd.load_lookup_cache(args.lookup_file)
+        except ValueError as error:
+            print(f"[LIVE:ERROR] {error}")
             return 2
+    else:
+        # Production readback is grounded at verification time, not in a
+        # pre-deploy /tmp snapshot that third-party deployment code can alter.
         lookup = sd.fetch_artist_lookup(artist_id)
 
     problems: list[str] = ["not yet verified"]
@@ -161,13 +194,8 @@ def main() -> int:
             print(f"[LIVE:RETRY] attempt {attempt}: {len(problems)} problem(s); waiting {args.interval}s")
             time.sleep(args.interval)
 
-    breaker_active, breaker_reason = gate.circuit_breaker_active(args.circuit_breaker)
-    label = "WARN" if breaker_active else "BLOCK"
     for problem in problems:
-        print(f"[LIVE:{label}] {problem}")
-    if breaker_active:
-        print(f"[LIVE:WARN] circuit breaker active ({breaker_reason}); downgrading BLOCK")
-        return 0
+        print(f"[LIVE:BLOCK] {problem}")
     return 1
 
 
