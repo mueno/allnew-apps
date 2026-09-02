@@ -346,3 +346,38 @@ class TestGateProcess:
             tmp_path, {"jp": {}, "us": {}}, generated_with(released("1")), catalog_with("1")
         )
         assert result.returncode == 1
+
+
+def test_no_record_mode_does_not_mutate_state(monkeypatch, tmp_path):
+    report = tmp_path / "report.json"
+    metrics = tmp_path / "metrics.jsonl"
+    report.write_text('{"schema_version":1,"sentinel":true}')
+    monkeypatch.setattr(
+        gate,
+        "parse_args",
+        lambda: type(
+            "Args",
+            (),
+            {
+                "catalog": tmp_path / "catalog.json",
+                "output": tmp_path / "output.json",
+                "exclusions": tmp_path / "exclusions.json",
+                "circuit_breaker": tmp_path / "breaker.json",
+                "circuit_breaker_ledger": tmp_path / "breaker-ledger.json",
+                "report": report,
+                "metrics_ledger": metrics,
+                "artist_id": None,
+                "lookup_file": tmp_path / "lookup.json",
+                "allow_unsealed_lookup_fixture": True,
+                "no_record": True,
+            },
+        )(),
+    )
+    (tmp_path / "catalog.json").write_text(json.dumps(catalog_with("1")))
+    (tmp_path / "output.json").write_text(json.dumps(generated_with(released("1"))))
+    (tmp_path / "exclusions.json").write_text(json.dumps({"exclusions": []}))
+    (tmp_path / "lookup.json").write_text(json.dumps(lookup_with("1")))
+
+    assert gate.main() == 0
+    assert json.loads(report.read_text()) == {"schema_version": 1, "sentinel": True}
+    assert not metrics.exists()

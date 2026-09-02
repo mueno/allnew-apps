@@ -20,6 +20,10 @@ def test_direct_deploy_runs_repo_gate_and_live_readback_before_completion() -> N
     readback = text.index("landing-automation/scripts/landing_live_verify.py")
 
     assert gate < deploy < readback
+    assert "id: landing-sync" in text
+    assert "id: live-verify" in text
+    assert "landing_sync.py --no-record" in text
+    assert 'test -z "$(git status --porcelain' in text
 
 
 def test_bootstrap_cannot_skip_landing_sync_or_live_readback() -> None:

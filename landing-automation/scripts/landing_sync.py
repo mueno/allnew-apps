@@ -19,6 +19,7 @@ A non-zero exit from any step aborts the run with that step's exit code.
 
 from __future__ import annotations
 
+import argparse
 import subprocess
 import sys
 import tempfile
@@ -37,6 +38,13 @@ def run_step(name: str, command: list[str]) -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--no-record",
+        action="store_true",
+        help="Run the full gate without writing report/metrics state",
+    )
+    args = parser.parse_args()
     lookup_cache = Path(tempfile.gettempdir()) / "allnew-artist-lookup.json"
     python = sys.executable
 
@@ -53,10 +61,15 @@ def main() -> int:
         [python, str(SCRIPTS_DIR / "update_landing_data.py"), "--reconcile-app-store"],
     )
     run_step("render", [python, str(SCRIPTS_DIR / "render_landing_page.py")])
-    run_step(
-        "parity-gate",
-        [python, str(SCRIPTS_DIR / "landing_parity_gate.py"), "--lookup-file", str(lookup_cache)],
-    )
+    parity_command = [
+        python,
+        str(SCRIPTS_DIR / "landing_parity_gate.py"),
+        "--lookup-file",
+        str(lookup_cache),
+    ]
+    if args.no_record:
+        parity_command.append("--no-record")
+    run_step("parity-gate", parity_command)
     print("[landing-sync] all steps passed")
     return 0
 
