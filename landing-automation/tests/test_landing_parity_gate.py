@@ -139,9 +139,18 @@ class TestEvaluateParity:
 def test_metrics_ledger_is_append_only_and_reports_denominator(tmp_path):
     ledger = tmp_path / "metrics.jsonl"
     started = datetime(2026, 9, 2, 0, 0, tzinfo=timezone.utc)
+    base_identity = {
+        "provider": "github-actions",
+        "run_attempt": 1,
+        "repository": "mueno/allnew-apps",
+        "workflow_ref": "mueno/allnew-apps/.github/workflows/landing-auto-update.yml@refs/heads/main",
+        "event_name": "schedule",
+        "ref": "refs/heads/main",
+        "head_sha": "a" * 40,
+    }
     summary = gate.append_metrics(
         ledger,
-        run_id="run-1",
+        run_identity={**base_identity, "run_id": "33630802197"},
         started_at=started,
         finished_at=started + timedelta(seconds=2),
         verdict="block",
@@ -149,7 +158,7 @@ def test_metrics_ledger_is_append_only_and_reports_denominator(tmp_path):
     )
     gate.append_metrics(
         ledger,
-        run_id="run-2",
+        run_identity={**base_identity, "run_id": "33630802198"},
         started_at=started + timedelta(minutes=1),
         finished_at=started + timedelta(minutes=1, seconds=2),
         verdict="pass",
@@ -273,7 +282,8 @@ class TestGateProcess:
             ("catalog", catalog),
         ):
             paths[name] = tmp_path / f"{name}.json"
-            paths[name].write_text(json.dumps(payload), encoding="utf-8")
+            stored = gate.store_discovery.build_lookup_cache(payload) if name == "lookup" else payload
+            paths[name].write_text(json.dumps(stored), encoding="utf-8")
         exclusions = tmp_path / "exclusions.json"
         exclusions.write_text(json.dumps({"exclusions": []}), encoding="utf-8")
         breaker_path = tmp_path / "breaker.json"
@@ -295,7 +305,6 @@ class TestGateProcess:
                 "--circuit-breaker-ledger", str(breaker_ledger_path),
                 "--report", str(report),
                 "--lookup-file", str(paths["lookup"]),
-                "--allow-unsealed-lookup-fixture",
                 "--metrics-ledger", str(tmp_path / "metrics.jsonl"),
             ],
             capture_output=True,
@@ -368,7 +377,7 @@ def test_no_record_mode_does_not_mutate_state(monkeypatch, tmp_path):
                 "metrics_ledger": metrics,
                 "artist_id": None,
                 "lookup_file": tmp_path / "lookup.json",
-                "allow_unsealed_lookup_fixture": True,
+                "record_ci_observation": False,
                 "no_record": True,
             },
         )(),
@@ -376,8 +385,44 @@ def test_no_record_mode_does_not_mutate_state(monkeypatch, tmp_path):
     (tmp_path / "catalog.json").write_text(json.dumps(catalog_with("1")))
     (tmp_path / "output.json").write_text(json.dumps(generated_with(released("1"))))
     (tmp_path / "exclusions.json").write_text(json.dumps({"exclusions": []}))
-    (tmp_path / "lookup.json").write_text(json.dumps(lookup_with("1")))
+    (tmp_path / "lookup.json").write_text(
+        json.dumps(gate.store_discovery.build_lookup_cache(lookup_with("1")))
+    )
 
     assert gate.main() == 0
     assert json.loads(report.read_text()) == {"schema_version": 1, "sentinel": True}
     assert not metrics.exists()
+
+
+def test_production_metric_identity_rejects_local_uuid() -> None:
+    identity, errors = gate.production_run_identity(
+        {
+            "GITHUB_ACTIONS": "false",
+            "GITHUB_RUN_ID": "3c60aeda-9e3b-4d54-9acd-73ac5bb897df",
+        }
+    )
+
+    assert identity == {}
+    assert "not_github_actions" in errors
+    assert "run_id_invalid" in errors
+
+
+def test_production_metric_identity_binds_main_workflow_run() -> None:
+    identity, errors = gate.production_run_identity(
+        {
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_RUN_ID": "33630802197",
+            "GITHUB_RUN_ATTEMPT": "2",
+            "GITHUB_REPOSITORY": "mueno/allnew-apps",
+            "GITHUB_WORKFLOW_REF": (
+                "mueno/allnew-apps/.github/workflows/landing-auto-update.yml@refs/heads/main"
+            ),
+            "GITHUB_EVENT_NAME": "schedule",
+            "GITHUB_REF": "refs/heads/main",
+            "GITHUB_SHA": "a" * 40,
+        }
+    )
+
+    assert errors == []
+    assert identity["run_id"] == "33630802197"
+    assert identity["run_attempt"] == 2

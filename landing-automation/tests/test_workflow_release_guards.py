@@ -76,3 +76,10 @@ def test_vercel_upload_excludes_control_plane() -> None:
     ignored = (ROOT / ".vercelignore").read_text(encoding="utf-8")
     assert "landing-automation/" in ignored
     assert ".planning/" in ignored
+
+
+def test_no_workflow_can_enable_unsealed_lookup_fixtures() -> None:
+    forbidden = "--allow-unsealed-lookup-fixture"
+
+    for workflow in WORKFLOWS.glob("*.yml"):
+        assert forbidden not in workflow.read_text(encoding="utf-8"), workflow.name

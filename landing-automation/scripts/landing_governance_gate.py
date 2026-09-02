@@ -27,6 +27,11 @@ WORKFLOW_RUNS_URL = (
     "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/"
     "landing-auto-update.yml/runs?status=completed&per_page=20"
 )
+WORKFLOW_JOBS_URL = "https://api.github.com/repos/mueno/allnew-apps/actions/runs/{run_id}/jobs?per_page=100"
+PRECISION_WINDOW_DAYS = 30
+MIN_PRECISION_RUNS = 10
+MIN_PRECISION_ELAPSED = timedelta(hours=72)
+PRODUCTION_EVENTS = frozenset({"schedule", "repository_dispatch", "workflow_dispatch"})
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -56,7 +61,42 @@ def load_workflow_runs(path: Path | None) -> dict[str, Any]:
         headers={"Accept": "application/vnd.github+json", "User-Agent": "allnew-landing-governance/1"},
     )
     with urllib.request.urlopen(request, timeout=20) as response:  # noqa: S310 - fixed HTTPS URL
-        return json.loads(response.read().decode("utf-8"))
+        payload = json.loads(response.read().decode("utf-8"))
+    rows = payload.get("workflow_runs") if isinstance(payload, dict) else None
+    if not isinstance(rows, list):
+        return payload
+    for row in rows:
+        if not isinstance(row, dict) or row.get("status") != "completed" or row.get("conclusion") == "success":
+            continue
+        run_id = str(row.get("id") or "")
+        if not re.fullmatch(r"[1-9][0-9]*", run_id):
+            continue
+        jobs_request = urllib.request.Request(
+            WORKFLOW_JOBS_URL.format(run_id=run_id),
+            headers={"Accept": "application/vnd.github+json", "User-Agent": "allnew-landing-governance/1"},
+        )
+        try:
+            with urllib.request.urlopen(jobs_request, timeout=20) as response:  # noqa: S310 - fixed HTTPS URL
+                jobs_payload = json.loads(response.read().decode("utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        jobs = jobs_payload.get("jobs") if isinstance(jobs_payload, dict) else None
+        steps = [
+            step
+            for job in jobs if isinstance(jobs, list) and isinstance(job, dict)
+            for step in job.get("steps", [])
+            if isinstance(step, dict)
+        ] if isinstance(jobs, list) else []
+        deployment = next(
+            (step for step in steps if step.get("name") == "Deploy to Vercel (production)"),
+            None,
+        )
+        row["preproduction_block"] = bool(
+            isinstance(deployment, dict)
+            and deployment.get("status") == "completed"
+            and deployment.get("conclusion") == "skipped"
+        )
+    return payload
 
 
 def consecutive_successes(payload: dict[str, Any]) -> int:
@@ -67,9 +107,13 @@ def consecutive_successes(payload: dict[str, Any]) -> int:
     completed.sort(key=lambda row: str(row.get("created_at") or ""), reverse=True)
     count = 0
     for row in completed:
+        if row.get("conclusion") == "success":
+            count += 1
+            continue
+        if row.get("preproduction_block") is True:
+            continue
         if row.get("conclusion") != "success":
             break
-        count += 1
     return count
 
 
@@ -127,27 +171,105 @@ def catalog_lineage() -> dict[str, Any]:
     }
 
 
-def precision_window(now: datetime | None = None) -> dict[str, Any]:
-    at = now or datetime.now(timezone.utc)
-    if not METRICS.is_file():
-        return {"pass": False, "reason": "precision_ledger_missing", "run_count": 0}
-    start = at - timedelta(days=30)
-    run_count = 0
-    false_positive_count = 0
-    for line in METRICS.read_text(encoding="utf-8").splitlines():
-        try:
-            row = json.loads(line)
-        except json.JSONDecodeError:
-            return {"pass": False, "reason": "precision_ledger_invalid_json", "run_count": run_count}
-        observed = _parse_time(row.get("finished_at"))
-        if observed is None or observed < start or observed > at:
+def _production_runs(payload: dict[str, Any], *, start: datetime, end: datetime) -> list[dict[str, Any]]:
+    rows = payload.get("workflow_runs")
+    if not isinstance(rows, list):
+        return []
+    observed: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
             continue
-        run_count += 1
-        false_positive_count += max(int(row.get("false_positive_count", 0)), 0)
+        run_id = str(row.get("id") or "")
+        created_at = _parse_time(row.get("created_at"))
+        if (
+            not re.fullmatch(r"[1-9][0-9]*", run_id)
+            or created_at is None
+            or created_at < start
+            or created_at > end
+            or row.get("status") != "completed"
+            or row.get("conclusion") != "success"
+            or row.get("head_branch") != "main"
+            or row.get("event") not in PRODUCTION_EVENTS
+        ):
+            continue
+        observed[run_id] = {**row, "run_id": run_id, "observed_at": created_at}
+    return sorted(observed.values(), key=lambda row: row["observed_at"])
+
+
+def _metric_row_errors(row: dict[str, Any], production_run_ids: set[str]) -> list[str]:
+    errors: list[str] = []
+    run_id = str(row.get("run_id") or "")
+    if row.get("schema_version") != 2:
+        errors.append("schema_version_invalid")
+    if not re.fullmatch(r"[1-9][0-9]*", run_id) or run_id not in production_run_ids:
+        errors.append("run_id_not_bound_to_production")
+    if row.get("provider") != "github-actions" or row.get("repository") != "mueno/allnew-apps":
+        errors.append("provider_identity_invalid")
+    workflow_ref = str(row.get("workflow_ref") or "")
+    if ".github/workflows/landing-auto-update.yml@refs/heads/main" not in workflow_ref:
+        errors.append("workflow_ref_invalid")
+    if row.get("ref") != "refs/heads/main" or row.get("event_name") not in PRODUCTION_EVENTS:
+        errors.append("production_context_invalid")
+    if not isinstance(row.get("run_attempt"), int) or row["run_attempt"] < 1:
+        errors.append("run_attempt_invalid")
+    if not re.fullmatch(r"[0-9a-f]{40}", str(row.get("head_sha") or "")):
+        errors.append("head_sha_invalid")
+    return errors
+
+
+def precision_window(workflow_runs: dict[str, Any], now: datetime | None = None) -> dict[str, Any]:
+    at = now or datetime.now(timezone.utc)
+    start = at - timedelta(days=PRECISION_WINDOW_DAYS)
+    production_runs = _production_runs(workflow_runs, start=start, end=at)
+    production_run_ids = {row["run_id"] for row in production_runs}
+    run_count = len(production_runs)
+    elapsed = (
+        production_runs[-1]["observed_at"] - production_runs[0]["observed_at"]
+        if len(production_runs) >= 2
+        else timedelta(0)
+    )
+    false_positive_count = 0
+    metric_run_ids: set[str] = set()
+    if METRICS.is_file():
+        for line_number, line in enumerate(METRICS.read_text(encoding="utf-8").splitlines(), start=1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError:
+                return {
+                    "pass": False,
+                    "reason": "precision_ledger_invalid_json",
+                    "run_count": run_count,
+                    "invalid_line": line_number,
+                }
+            if not isinstance(row, dict):
+                return {"pass": False, "reason": "precision_ledger_row_invalid", "run_count": run_count}
+            row_errors = _metric_row_errors(row, production_run_ids)
+            run_id = str(row.get("run_id") or "")
+            if run_id in metric_run_ids:
+                row_errors.append("duplicate_run_id")
+            metric_run_ids.add(run_id)
+            if row_errors:
+                return {
+                    "pass": False,
+                    "reason": "precision_ledger_unbound_row",
+                    "run_count": run_count,
+                    "invalid_line": line_number,
+                    "row_errors": sorted(set(row_errors)),
+                }
+            false_positive_count += max(int(row.get("false_positive_count", 0)), 0)
+    enough_runs = run_count >= MIN_PRECISION_RUNS
+    enough_elapsed = elapsed >= MIN_PRECISION_ELAPSED
+    passed = enough_runs and enough_elapsed and false_positive_count < 1
     return {
-        "pass": run_count > 0 and false_positive_count < 1,
-        "reason": "ok" if run_count > 0 and false_positive_count < 1 else "precision_window_not_satisfied",
+        "pass": passed,
+        "reason": "ok" if passed else "precision_window_not_satisfied",
+        "window_days": PRECISION_WINDOW_DAYS,
+        "minimum_run_count": MIN_PRECISION_RUNS,
+        "minimum_elapsed_hours": int(MIN_PRECISION_ELAPSED.total_seconds() // 3600),
         "run_count": run_count,
+        "elapsed_hours": int(elapsed.total_seconds() // 3600),
         "false_positive_count": false_positive_count,
     }
 
@@ -168,7 +290,7 @@ def production_route() -> dict[str, Any]:
 def autonomy_verdict(workflow_runs: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
     successes = consecutive_successes(workflow_runs)
     lineage = catalog_lineage()
-    precision = precision_window()
+    precision = precision_window(workflow_runs)
     route = production_route()
     evidence = {
         "consecutive_successful_runs": successes,

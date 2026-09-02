@@ -22,9 +22,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
-import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -48,6 +48,9 @@ BREAKER_WINDOW = timedelta(days=30)
 ANDON_ISSUE_RE = re.compile(r"^https://github\.com/[^/]+/[^/]+/issues/[1-9][0-9]*$")
 STALE_GRACE_PERIOD = timedelta(days=7)
 METRICS_WINDOW = timedelta(days=30)
+PRODUCTION_REPOSITORY = "mueno/allnew-apps"
+PRODUCTION_WORKFLOW_MARKER = ".github/workflows/landing-auto-update.yml@refs/heads/main"
+PRODUCTION_EVENTS = frozenset({"schedule", "repository_dispatch", "workflow_dispatch"})
 
 
 def now_utc() -> datetime:
@@ -269,7 +272,7 @@ def classify_stale_apps(
 def append_metrics(
     path: Path,
     *,
-    run_id: str,
+    run_identity: dict[str, Any],
     started_at: datetime,
     finished_at: datetime,
     verdict: str,
@@ -281,8 +284,8 @@ def append_metrics(
     block_count = len(report.get("missing", [])) + len(report.get("expired_stale_app_ids", []))
     true_positive_count = max(block_count - false_positive_count, 0)
     entry = {
-        "schema_version": 1,
-        "run_id": run_id,
+        "schema_version": 2,
+        **run_identity,
         "started_at": started_at.replace(microsecond=0).isoformat(),
         "finished_at": finished_at.replace(microsecond=0).isoformat(),
         "verdict": verdict,
@@ -318,6 +321,44 @@ def append_metrics(
         "precision": (tp / denominator) if denominator else None,
         "false_positives_per_30_days": fp,
     }
+
+
+def production_run_identity(environment: dict[str, str] | None = None) -> tuple[dict[str, Any], list[str]]:
+    env = environment or dict(os.environ)
+    run_id = str(env.get("GITHUB_RUN_ID") or "")
+    run_attempt = str(env.get("GITHUB_RUN_ATTEMPT") or "")
+    repository = str(env.get("GITHUB_REPOSITORY") or "")
+    workflow_ref = str(env.get("GITHUB_WORKFLOW_REF") or "")
+    event_name = str(env.get("GITHUB_EVENT_NAME") or "")
+    ref = str(env.get("GITHUB_REF") or "")
+    head_sha = str(env.get("GITHUB_SHA") or "")
+    errors: list[str] = []
+    if env.get("GITHUB_ACTIONS") != "true":
+        errors.append("not_github_actions")
+    if not re.fullmatch(r"[1-9][0-9]*", run_id):
+        errors.append("run_id_invalid")
+    if not re.fullmatch(r"[1-9][0-9]*", run_attempt):
+        errors.append("run_attempt_invalid")
+    if repository != PRODUCTION_REPOSITORY:
+        errors.append("repository_invalid")
+    if PRODUCTION_WORKFLOW_MARKER not in workflow_ref:
+        errors.append("workflow_ref_invalid")
+    if event_name not in PRODUCTION_EVENTS or ref != "refs/heads/main":
+        errors.append("production_context_invalid")
+    if not re.fullmatch(r"[0-9a-f]{40}", head_sha):
+        errors.append("head_sha_invalid")
+    if errors:
+        return {}, sorted(set(errors))
+    return {
+        "provider": "github-actions",
+        "run_id": run_id,
+        "run_attempt": int(run_attempt),
+        "repository": repository,
+        "workflow_ref": workflow_ref,
+        "event_name": event_name,
+        "ref": ref,
+        "head_sha": head_sha,
+    }, []
 
 
 def write_report(
@@ -358,10 +399,16 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--report", type=Path, default=REPORT_PATH)
     parser.add_argument("--metrics-ledger", type=Path, default=METRICS_LEDGER_PATH)
-    parser.add_argument(
+    record_mode = parser.add_mutually_exclusive_group()
+    record_mode.add_argument(
+        "--record-ci-observation",
+        action="store_true",
+        help="Persist an observation only when bound to the production GitHub Actions run",
+    )
+    record_mode.add_argument(
         "--no-record",
         action="store_true",
-        help="Evaluate the identical gate without mutating report or metrics state",
+        help="Deprecated compatibility flag; evaluation is non-mutating by default",
     )
     parser.add_argument("--artist-id", default=None)
     parser.add_argument(
@@ -369,11 +416,6 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=None,
         help="Pre-fetched lookup payload (from store_discovery --lookup-cache)",
-    )
-    parser.add_argument(
-        "--allow-unsealed-lookup-fixture",
-        action="store_true",
-        help="Tests only: accept a raw lookup JSON file instead of a signed cache envelope",
     )
     return parser.parse_args()
 
@@ -394,14 +436,11 @@ def main() -> int:
         return 2
 
     if args.lookup_file:
-        if args.allow_unsealed_lookup_fixture:
-            lookup = json.loads(args.lookup_file.read_text(encoding="utf-8"))
-        else:
-            try:
-                lookup = store_discovery.load_lookup_cache(args.lookup_file)
-            except ValueError as error:
-                print(f"[GATE:ERROR] {error}")
-                return 2
+        try:
+            lookup = store_discovery.load_lookup_cache(args.lookup_file)
+        except ValueError as error:
+            print(f"[GATE:ERROR] {error}")
+            return 2
     else:
         artist_id = str(args.artist_id or catalog.get("artist_id") or "")
         if not artist_id:
@@ -451,16 +490,22 @@ def main() -> int:
             + ", ".join(report["enrichment_backlog"])
         )
 
-    if not args.no_record:
+    metrics: dict[str, Any] | None = None
+    if args.record_ci_observation:
+        run_identity, identity_errors = production_run_identity()
+        if identity_errors:
+            print("[GATE:ERROR] production metric identity invalid: " + ", ".join(identity_errors))
+            return 2
         finished_at = now_utc()
         metrics = append_metrics(
             args.metrics_ledger,
-            run_id=str(uuid.uuid4()),
+            run_identity=run_identity,
             started_at=started_at,
             finished_at=finished_at,
             verdict=verdict,
             report=report,
         )
+    if not args.no_record:
         write_report(
             args.report,
             report,
