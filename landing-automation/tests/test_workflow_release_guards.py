@@ -35,12 +35,13 @@ def test_bootstrap_cannot_skip_landing_sync_or_live_readback() -> None:
     assert "steps.landing-sync.outcome == 'success'" in live_block
 
 
-def test_dispatch_requires_readiness_validation() -> None:
+def test_reusable_readiness_has_no_cross_repository_dispatch_credential() -> None:
     text = _workflow("reusable-landing-sync.yml")
-    dispatch = text.split("\n  dispatch:\n", 1)[1]
 
-    assert "needs: validate" in dispatch
-    assert "repo scope" not in text
+    assert "Validate app readiness" in text
+    assert 'test "${APP_ACTION}" = "validate"' in text
+    assert "dispatch_token" not in text
+    assert "Send repository_dispatch" not in text
 
 
 def test_landing_tests_expose_an_unfiltered_required_release_gate() -> None:
@@ -65,6 +66,8 @@ def test_deadman_opens_andon_and_preserves_failure() -> None:
     text = _workflow("landing-deadman.yml")
     assert "landing_deadman.py" in text
     assert 'gh issue create --title "$title" --body "$body"' in text
+    assert "PROOF: landing dead-man stale-run" in text
+    assert "Read back and close proof issue" in text
     assert "--label andon" not in text
     assert "run: exit 1" in text
 

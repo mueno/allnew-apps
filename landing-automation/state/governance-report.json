@@ -1,0 +1,43 @@
+{
+  "autonomy_tier": "L3",
+  "evidence": {
+    "catalog_lineage": {
+      "entries": [
+        {
+          "category": "health",
+          "commit": "34aa0cee030c73033d5160742ca15e3e30eeadb9",
+          "id": "6772019458",
+          "slug": "basalsnap"
+        },
+        {
+          "category": "productivity",
+          "commit": "34aa0cee030c73033d5160742ca15e3e30eeadb9",
+          "id": "6772019638",
+          "slug": "meishibridge"
+        },
+        {
+          "category": "productivity",
+          "commit": "3df84223d53d481a5c6b297769a34f203f4d1642",
+          "id": "6777605653",
+          "slug": "atsumareonelog"
+        }
+      ],
+      "pass": true,
+      "reason": "ok"
+    },
+    "consecutive_successful_runs": 20,
+    "precision_window": {
+      "false_positive_count": 0,
+      "pass": true,
+      "reason": "ok",
+      "run_count": 1
+    },
+    "production_route": {
+      "failures": [],
+      "pass": true
+    }
+  },
+  "forward_ops_allowed": true,
+  "schema_version": 1,
+  "verdict": "pass"
+}

@@ -178,6 +178,16 @@ jobs:
           npx --yes vercel@50 deploy --prod --yes --token "${VERCEL_TOKEN}"
           verify --retries 8
 
+      - name: Record live-readback governance escalation
+        if: ${{ failure() && steps.live-verify.outcome == 'failure' }}
+        run: |
+          set +e
+          python3 landing-automation/scripts/landing_governance_gate.py \
+            --stage block --failed-gate live_readback
+          rc=$?
+          set -e
+          test "$rc" -eq 1
+
       - name: ANDON — open issue on gate block or live drift
         if: ${{ failure() && (steps.landing-sync.outcome == 'failure' || steps.live-verify.outcome == 'failure') }}
         env:
@@ -192,11 +202,11 @@ jobs:
           if [ "${LIVE_OUTCOME}" = "failure" ]; then
             stage="live verification (production readback)"
           fi
-          report=""
-          if [ -f landing-automation/state/parity_report.json ]; then
-            report=$(cat landing-automation/state/parity_report.json)
+          report="{}"
+          if [ -f landing-automation/state/governance-report.json ]; then
+            report=$(cat landing-automation/state/governance-report.json)
           fi
-          body=$(printf 'The landing pipeline blocked at: %s\n\nRun: %s\n\nLast parity report:\n```json\n%s\n```\n\nResolve by fixing the gap, adding a reasoned exclusion in landing-automation/config/parity_exclusions.json, or (for confirmed false positives under repair) a time-boxed landing-automation/state/parity_circuit_breaker.json.' \
+          body=$(printf 'The landing pipeline blocked at: %s\n\nRun: %s\n\nGovernance report:\n```json\n%s\n```\n\nResolve by fixing the gap, adding an owned expiring exclusion in landing-automation/config/parity_exclusions.json, or using the bounded repair circuit breaker where permitted. Production live-readback failure is never downgraded.' \
             "$stage" "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" "$report")
           existing=$(gh issue list --label landing-parity-andon --state open \
             --json number --jq '.[0].number' 2>/dev/null || true)
