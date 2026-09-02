@@ -51,15 +51,21 @@ jobs:
         with:
           node-version: "24"
 
+      # Install the CLI in a step WITHOUT the Vercel secrets in env, so npm
+      # package lifecycle scripts (preinstall/install/postinstall) of vercel or
+      # any transitive dependency cannot read the production deploy token.
+      - name: Install Vercel CLI
+        run: |
+          node --version
+          npm --version
+          npm install --global vercel@50.40.0
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          node --version
-          npm --version
-          npm install --global vercel@50.40.0
           vercel pull --yes --environment=production --token "$VERCEL_TOKEN"
           vercel deploy --prod --yes --token "$VERCEL_TOKEN"
 
