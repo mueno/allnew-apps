@@ -25,12 +25,16 @@
       "pass": true,
       "reason": "ok"
     },
-    "consecutive_successful_runs": 20,
+    "consecutive_successful_runs": 18,
     "precision_window": {
+      "elapsed_hours": 99,
       "false_positive_count": 0,
+      "minimum_elapsed_hours": 72,
+      "minimum_run_count": 10,
       "pass": true,
       "reason": "ok",
-      "run_count": 1
+      "run_count": 18,
+      "window_days": 30
     },
     "production_route": {
       "failures": [],
