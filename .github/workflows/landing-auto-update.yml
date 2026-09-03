@@ -1,11 +1,6 @@
 name: Landing Auto Update
 
 on:
-  repository_dispatch:
-    types:
-      - asc_app_submitted
-      - asc_app_released
-      - asc_status_changed
   workflow_dispatch:
     inputs:
       reconcile:
@@ -16,10 +11,6 @@ on:
         description: "Rebuild from catalog bootstrap set"
         required: false
         default: "false"
-  schedule:
-    # Safety-net reconcile every 6 hours: webhooks are the fast path, this
-    # loop guarantees convergence even when every event is missed.
-    - cron: "15 */6 * * *"
 
 permissions:
   contents: write
@@ -32,7 +23,7 @@ concurrency:
 
 jobs:
   update-landing:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, macOS]
 
     steps:
       - name: Checkout
