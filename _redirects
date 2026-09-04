@@ -31,6 +31,18 @@
 /config.json 404
 /credentials.json 404
 
+# Internal working docs accidentally colocated in served dirs.
+# These are draft/spec/audit/security notes, not published pages — 404 them.
+# (Also excluded from Vercel via .vercelignore and from crawlers via robots.txt.)
+/TECHBLOG_DRAFT_ZENN.md 404
+/feedback/README.md 404
+/feedback/audit-report.md 404
+/feedback/deployment-security.md 404
+/feedback/legal-draft.md 404
+/feedback/privacy-policy-draft.md 404
+/feedback/product-spec.md 404
+/feedback/ux-concept-2026.md 404
+
 # Hide internal/runtime paths from crawlers (also Disallowed in robots.txt).
 # IMPORTANT: index.html references `landing-automation/runtime/landing-runtime.js`
 # — that exact path must still serve 200. Allowlist it BEFORE the wildcard block
