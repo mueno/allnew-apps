@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-27T21:23:36+00:00",
+  "generated_at": "2026-09-14T03:04:25+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -530,18 +530,18 @@
       "input_methods": [],
       "input_methods_label": "",
       "support_path": "atsumareonelog/?lang=ja",
-      "app_store_url": "https://apps.apple.com/jp/app/one%E9%8C%B2/id6777605653?uo=4",
+      "app_store_url": "https://apps.apple.com/jp/app/%E3%82%8F%E3%82%93%E9%8C%B2/id6777605653?uo=4",
       "bundle_id": "jp.allnew.reserve031",
       "asc_app_id": "6777605653",
       "is_health_app": false,
-      "release_date": "2026-08-26",
+      "release_date": "2026-09-09",
       "featured_priority": 999,
       "sort_order": 140,
       "published_to_landing": true,
-      "updated_at": "2026-08-26T12:24:29+00:00",
-      "app_store_version": "1.0",
-      "app_store_name": "One録",
-      "app_store_current_version_release_date": "2026-08-26T07:19:04Z",
+      "updated_at": "2026-09-14T03:04:25+00:00",
+      "app_store_version": "1.0.1",
+      "app_store_name": "わん録",
+      "app_store_current_version_release_date": "2026-09-09T06:24:48Z",
       "app_store_lookup_country": "jp"
     }
   ]
