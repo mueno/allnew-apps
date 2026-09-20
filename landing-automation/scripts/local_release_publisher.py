@@ -12,6 +12,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 import uuid
 
 REPO = "mueno/allnew-apps"
@@ -40,7 +41,15 @@ def json_bytes(value) -> bytes:
 
 
 def run(args, root: Path, *, data: bytes | None = None):
-    return subprocess.run(args, cwd=root, input=data, capture_output=True, timeout=1200)
+    # Inherited pytest options can turn a full run into collect-only. Git
+    # overrides and ignored bytecode can similarly hide unreviewed inputs.
+    env = {k: v for k, v in os.environ.items()
+           if not k.startswith(("PYTHON", "PYTEST_", "GIT_"))}
+    with tempfile.TemporaryDirectory(prefix="allnew-local-verification-") as cache:
+        env.update(PYTEST_DISABLE_PLUGIN_AUTOLOAD="1", PYTHONDONTWRITEBYTECODE="1",
+                   PYTHONPYCACHEPREFIX=cache, GIT_NO_REPLACE_OBJECTS="1")
+        return subprocess.run(args, cwd=root, input=data, capture_output=True,
+                              timeout=1200, env=env)
 
 
 def checked(args, root: Path, *, data: bytes | None = None) -> bytes:
@@ -140,6 +149,8 @@ def execute_command(root: Path, out: Path, index: int, command: tuple[str, ...])
     (out / name).write_bytes(log)
     if result.returncode or (command == COMMANDS[-1] and result.stdout.strip()):
         raise Rejected(f"Release command failed: {command!r}; see {name}")
+    if command == COMMANDS[0] and not re.search(rb"\b[1-9][0-9]* passed\b", result.stdout):
+        raise Rejected("pytest did not report executed passing tests")
     return {"command": list(command), "started_at": started, "exit_code": result.returncode,
             "log": name, "log_sha256": digest(log), "command_sha256": digest(json_bytes(list(command)))}
 
@@ -172,14 +183,25 @@ def publish_evidence(root: Path, out: Path, report: dict) -> str:
     return f"https://github.com/{REPO}/blob/{commit['sha']}/report.json"
 
 
-def perform(root: Path, out: Path, number: int, reviewed: str, publish: bool) -> dict:
-    root = root.resolve(); out = out.resolve()
-    if out == root or root in out.parents:
-        raise Rejected("Evidence output must be outside the clean worktree")
-    out.mkdir(parents=True, exist_ok=False)
-    assert_clean(root)
-    source_hash = assert_source(root, reviewed)
-    initial = snapshot(root, number, reviewed)
+def register_status(root: Path, head: str, payload: dict) -> dict:
+    """One POST only; reconcile an ambiguous response through a live GET."""
+    response = None
+    post_error = None
+    try:
+        response = api(root, f"statuses/{head}", payload)
+    except Exception as exc:
+        post_error = exc
+    rows = api(root, f"commits/{head}/statuses?per_page=100")
+    latest = next((s for s in rows if s["context"] == CONTEXT), None)
+    if latest is None or any(latest.get(k) != v for k, v in payload.items()):
+        raise Rejected(f"Status not confirmed applied; POST error={post_error!r}")
+    if response is not None and latest["id"] != response["id"]:
+        raise Rejected("A different status superseded this attempt")
+    return latest
+
+
+def verify_and_publish(root: Path, out: Path, number: int, reviewed: str,
+                       publish: bool, source_hash: str, initial: dict) -> dict:
     commands = [execute_command(root, out, i, cmd) for i, cmd in enumerate(COMMANDS, 1)]
     assert_clean(root)
     if assert_source(root, reviewed) != source_hash or snapshot(root, number, reviewed) != initial:
@@ -188,12 +210,12 @@ def perform(root: Path, out: Path, number: int, reviewed: str, publish: bool) ->
               "github_actions_run": False, "repo": REPO, "pr": number, "head": reviewed,
               "base": initial["base"], "reviewed_source_commit": reviewed, "publisher_sha256": source_hash,
               "authority": "landing-automation/docs/local-release-publisher.md",
+              "environment_policy": "Remove PYTHON/PYTEST_/GIT_ overrides, disable plugin autoload, fresh bytecode path, disable replace objects",
               "workflow_sha256": WORKFLOW_SHA256, "commands": commands, "snapshot": initial,
               "verified_at": dt.datetime.now(dt.timezone.utc).isoformat(), "result": "passed"}
     (out / "report.json").write_bytes(json_bytes(report))
     if not publish:
         return report
-    # Each mutation follows fresh no-Actions/head/base checks. No report-import mode.
     if snapshot(root, number, reviewed) != initial:
         raise Rejected("Remote state changed before evidence publication")
     url = publish_evidence(root, out, report)
@@ -201,23 +223,48 @@ def perform(root: Path, out: Path, number: int, reviewed: str, publish: bool) ->
     assert_source(root, reviewed)
     if snapshot(root, number, reviewed) != initial:
         raise Rejected("Remote state changed before success registration")
-    status = api(root, f"statuses/{reviewed}", {"state": "success", "context": CONTEXT,
-                 "description": f"LOCAL tests + release gate; base {initial['base'][:10]}; not Actions",
-                 "target_url": url})
+    payload = {"state": "success", "context": CONTEXT,
+               "description": f"LOCAL tests + release gate; base {initial['base'][:10]}; not Actions",
+               "target_url": url}
+    (out / "success-attempt.json").write_bytes(json_bytes(payload))
+    status = register_status(root, reviewed, payload)
     (out / "status-response.json").write_bytes(json_bytes(status))
-    try:
-        rows = api(root, f"commits/{reviewed}/statuses?per_page=100")
-        latest = next(s for s in rows if s["context"] == CONTEXT)
-        if latest["id"] != status["id"] or latest["state"] != "success" or latest["target_url"] != url:
-            raise Rejected("Status read-back mismatch")
-        if snapshot(root, number, reviewed) != initial:
-            raise Rejected("PR or policy changed after success registration")
-    except Exception:
-        api(root, f"statuses/{reviewed}", {"state": "error", "context": CONTEXT,
-            "description": "LOCAL verification invalidated: remote read-back/state changed", "target_url": url})
-        raise
-    (out / "status-readback.json").write_bytes(json_bytes(latest))
+    if snapshot(root, number, reviewed) != initial:
+        raise Rejected("PR or policy changed after success registration")
+    (out / "status-readback.json").write_bytes(json_bytes(status))
     return report
+
+
+def perform(root: Path, out: Path, number: int, reviewed: str, publish: bool) -> dict:
+    root = root.resolve(); out = out.resolve()
+    if out == root or root in out.parents:
+        raise Rejected("Evidence output must be outside the clean worktree")
+    out.mkdir(parents=True, exist_ok=False)
+    assert_clean(root)
+    source_hash = assert_source(root, reviewed)
+    initial = snapshot(root, number, reviewed)
+    attempt_url = (f"https://github.com/{REPO}/blob/{reviewed}/"
+                   f"landing-automation/docs/local-release-publisher.md#attempt-{uuid.uuid4().hex}")
+    pending = {"state": "pending", "context": CONTEXT,
+               "description": "LOCAL verification running; not GitHub Actions", "target_url": attempt_url}
+    failed = {"state": "error", "context": CONTEXT,
+              "description": "LOCAL verification failed or invalidated; see local attempt evidence",
+              "target_url": attempt_url}
+    # Save compensation identity before any effect, so disk failure after
+    # success cannot prevent invalidation. Never retry an ambiguous POST.
+    (out / "status-attempts.json").write_bytes(json_bytes({"pending": pending, "failure": failed}))
+    try:
+        if publish:
+            register_status(root, reviewed, pending)
+        return verify_and_publish(root, out, number, reviewed, publish, source_hash, initial)
+    except Exception as original:
+        if publish:
+            try:
+                receipt = register_status(root, reviewed, failed)
+                (out / "failure-status-readback.json").write_bytes(json_bytes(receipt))
+            except Exception as compensation:
+                raise Rejected(f"Verification failed ({original}); invalidation could not be fully recorded ({compensation}). Reconcile live status before merge; do not retry effects blindly.") from original
+        raise
 
 
 def main() -> int:

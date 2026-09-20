@@ -15,6 +15,11 @@ workflow bytes are pinned: a change requires review of the actual command
 contract and the pin, never arbitrary commands supplied on the CLI. A report
 or exit code supplied by a caller cannot publish success.
 
+Child commands remove inherited Python/pytest/Git override variables, disable
+third-party pytest plugin auto-loading and Git replacement objects, and use a
+fresh bytecode path. Pytest must report executed passing tests; collect-only
+output is rejected even if its process exits zero.
+
 Before using the producer, independently review its exact source commit,
 including failure/stale-head/dirty-worktree/rejected-command tests. The owner
 explicitly authorized initial bootstrapping from that reviewed candidate;
@@ -37,6 +42,11 @@ orphan branch. An immutable commit URL is the status target. It reads those
 remote bytes and the resulting status back. Evidence publication does not
 modify PR head or main. Output must be a new directory. Failed runs cannot be
 imported or resumed into success; rerun the producer after correcting the cause.
+Publishing runs first register `pending`; any later failure registers `error`,
+including failures while saving a successful POST receipt. A status POST is
+never retried: a lost response is reconciled by matching its unique attempt URL
+and payload to live status. Failed invalidation/read-back is a blocking result
+requiring live reconciliation, never permission to merge on an older success.
 
 All repository Actions workflows must remain remotely disabled, including
 before evidence publication and status registration. Dynamic Dependabot and

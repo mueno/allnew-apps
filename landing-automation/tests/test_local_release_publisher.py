@@ -129,7 +129,7 @@ def harness(monkeypatch, tmp_path):
         if payload is not None:
             return {**payload, "id": 7}
         if "/statuses?" in path:
-            return [{**next(payload for _, payload in calls if payload), "id": 7}]
+            return [{**next(payload for _, payload in reversed(calls) if payload), "id": 7}]
         raise AssertionError(path)
 
     monkeypatch.setattr(pub, "api", api)
@@ -142,7 +142,7 @@ def test_head_or_base_change_after_checks_cannot_publish(monkeypatch, tmp_path):
     monkeypatch.setattr(pub, "snapshot", lambda *_: next(snapshots))
     with pytest.raises(pub.Rejected, match="changed during"):
         pub.perform(root, tmp_path / "out", 110, HEAD, True)
-    assert calls == []
+    assert [p["state"] for _, p in calls if p] == ["pending", "error"]
 
 
 def test_failure_during_command_never_publishes(monkeypatch, tmp_path):
@@ -152,7 +152,7 @@ def test_failure_during_command_never_publishes(monkeypatch, tmp_path):
     monkeypatch.setattr(pub, "execute_command", fail)
     with pytest.raises(pub.Rejected):
         pub.perform(root, tmp_path / "out", 110, HEAD, True)
-    assert calls == []
+    assert [p["state"] for _, p in calls if p] == ["pending", "error"]
 
 
 def test_post_status_drift_invalidates_success(monkeypatch, tmp_path):
@@ -161,7 +161,7 @@ def test_post_status_drift_invalidates_success(monkeypatch, tmp_path):
     monkeypatch.setattr(pub, "snapshot", lambda *_: next(snapshots))
     with pytest.raises(pub.Rejected, match="after success"):
         pub.perform(root, tmp_path / "out", 110, HEAD, True)
-    assert [p["state"] for _, p in calls if p] == ["success", "error"]
+    assert [p["state"] for _, p in calls if p] == ["pending", "success", "error"]
 
 
 def test_success_has_explicit_local_label_and_readback(monkeypatch, tmp_path):
@@ -172,7 +172,8 @@ def test_success_has_explicit_local_label_and_readback(monkeypatch, tmp_path):
     assert len(result["commands"]) == len(pub.COMMANDS)
     assert (tmp_path / "out/status-readback.json").exists()
     posted = [p for _, p in calls if p]
-    assert len(posted) == 1 and posted[0]["description"].startswith("LOCAL")
+    assert [p["state"] for p in posted] == ["pending", "success"]
+    assert all(p["description"].startswith("LOCAL") for p in posted)
 
 
 def test_evidence_inside_or_existing_output_is_rejected(monkeypatch, tmp_path):
@@ -191,3 +192,70 @@ def test_log_tampering_cannot_be_published(tmp_path, monkeypatch):
     monkeypatch.setattr(pub, "api", lambda *a, **kw: pytest.fail("must not publish tampered evidence"))
     with pytest.raises(pub.Rejected, match="log changed"):
         pub.publish_evidence(tmp_path, tmp_path, report)
+
+
+def test_collect_only_environment_cannot_skip_failing_tests(tmp_path, monkeypatch):
+    root = tmp_path / "repo"; root.mkdir()
+    tests = root / "landing-automation/tests"; tests.mkdir(parents=True)
+    (tests / "test_real.py").write_text("def test_actually_runs():\n    assert False, 'executed failing test'\n")
+    monkeypatch.setenv("PYTEST_ADDOPTS", "--collect-only")
+    out = tmp_path / "out"; out.mkdir()
+    with pytest.raises(pub.Rejected, match="Release command failed"):
+        pub.execute_command(root, out, 1, pub.COMMANDS[0])
+    assert b"1 failed" in (out / "command-1.log").read_bytes()
+
+
+def test_environment_and_existing_bytecode_cannot_replace_reviewed_source(tmp_path, monkeypatch):
+    import importlib.util
+    import os
+    import py_compile
+    root = tmp_path / "repo"; root.mkdir()
+    source = root / "controlled.py"
+    good = "raise SystemExit(19)\n".ljust(80)
+    bad = "raise SystemExit(0)\n".ljust(80)
+    source.write_text(bad)
+    stamp = source.stat().st_mtime
+    py_compile.compile(str(source), cfile=importlib.util.cache_from_source(str(source)), doraise=True)
+    source.write_text(good); os.utime(source, (stamp, stamp))
+    result = pub.run(["python3", "-c", "import controlled"], root)
+    assert result.returncode == 19
+
+
+def test_success_receipt_disk_failure_still_invalidates(monkeypatch, tmp_path):
+    root, _, calls = harness(monkeypatch, tmp_path)
+    original = Path.write_bytes
+    def disk_failure(path, data):
+        if path.name == "status-response.json":
+            raise OSError("fixture disk full")
+        return original(path, data)
+    monkeypatch.setattr(Path, "write_bytes", disk_failure)
+    with pytest.raises(OSError, match="disk full"):
+        pub.perform(root, tmp_path / "out", 110, HEAD, True)
+    assert [p["state"] for _, p in calls if p] == ["pending", "success", "error"]
+
+
+def test_lost_post_response_is_reconciled_without_retry(monkeypatch, tmp_path):
+    payload = {"state": "success", "context": pub.CONTEXT, "description": "LOCAL actual run",
+               "target_url": "https://github.com/mueno/allnew-apps/blob/unique/report.json"}
+    posts = []
+    def api(root, path, body=None):
+        if body:
+            posts.append(body)
+            raise pub.Rejected("response lost after server applied")
+        return [{**payload, "id": 17}]
+    monkeypatch.setattr(pub, "api", api)
+    assert pub.register_status(tmp_path, HEAD, payload)["id"] == 17
+    assert posts == [payload]
+
+
+def test_not_applied_post_is_never_retried(monkeypatch, tmp_path):
+    posts = []
+    def api(root, path, body=None):
+        if body:
+            posts.append(body)
+            raise pub.Rejected("response unavailable")
+        return []
+    monkeypatch.setattr(pub, "api", api)
+    with pytest.raises(pub.Rejected, match="not confirmed applied"):
+        pub.register_status(tmp_path, HEAD, {"context": pub.CONTEXT, "state": "success"})
+    assert len(posts) == 1
