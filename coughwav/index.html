@@ -663,7 +663,8 @@ The recorder retains up to 180 local sessions; audio older than 14 days is delet
       });
     }
     const params = new URLSearchParams(location.search);
-    const requested = params.get('lang') || (navigator.language || '').slice(0, 2);
+    const fragmentLocale = /^#(?:faq|privacy|terms|commercial|contact|oss)-(ja|en)$/.exec(location.hash)?.[1];
+    const requested = params.get('lang') || fragmentLocale || (navigator.language || '').slice(0, 2);
     setLang(requested === 'ja' ? 'ja' : 'en');
     checkCommercialAnchor();
     function restoreHashAnchor() {
@@ -671,10 +672,13 @@ The recorder retains up to 180 local sessions; audio older than 14 days is delet
       const target = document.getElementById(location.hash.slice(1));
       if (target) target.scrollIntoView();
     }
-    requestAnimationFrame(function() {
+    requestAnimationFrame(function() { requestAnimationFrame(restoreHashAnchor); });
+    window.addEventListener('hashchange', function() {
+      const nextLocale = /^#(?:faq|privacy|terms|commercial|contact|oss)-(ja|en)$/.exec(location.hash)?.[1];
+      if (!params.get('lang') && nextLocale) setLang(nextLocale);
+      checkCommercialAnchor();
       requestAnimationFrame(restoreHashAnchor);
     });
-    window.addEventListener('hashchange', checkCommercialAnchor);
   </script>
 </body>
 </html>
