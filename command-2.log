@@ -1,0 +1,22 @@
+{"autonomy_tier": "L3", "evidence": {"catalog_lineage": {"entries": [{"category": "health", "commit": "34aa0cee030c73033d5160742ca15e3e30eeadb9", "id": "6772019458", "slug": "basalsnap"}, {"category": "productivity", "commit": "34aa0cee030c73033d5160742ca15e3e30eeadb9", "id": "6772019638", "slug": "meishibridge"}, {"category": "productivity", "commit": "3df84223d53d481a5c6b297769a34f203f4d1642", "id": "6777605653", "slug": "atsumareonelog"}], "pass": true, "reason": "ok"}, "consecutive_successful_runs": 16, "precision_window": {"elapsed_hours": 90, "false_positive_count": 0, "minimum_elapsed_hours": 72, "minimum_run_count": 10, "pass": true, "reason": "ok", "run_count": 16, "window_days": 30}, "production_route": {"failures": [], "pass": true}}, "forward_ops_allowed": true, "schema_version": 1, "verdict": "pass"}
+{"public_apps": 16, "onboarded": [], "catalog_changed": false}
+{"catalog_changed": false, "warnings": 0}
+changed=false
+render_landing_page: no changes
+[GATE:INFO] auto-onboarded apps awaiting human enrichment: atsumareonelog, basalsnap, meishibridge
+[GATE:PASS] public=16 landing_released=16 missing=0 excluded=0
+::group::landing-sync governance
+::endgroup::
+::group::landing-sync discovery
+::endgroup::
+::group::landing-sync content-sync
+::endgroup::
+::group::landing-sync reconcile
+::endgroup::
+::group::landing-sync render
+::endgroup::
+::group::landing-sync parity-gate
+::endgroup::
+[landing-sync] all steps passed
+
+--- stderr ---
