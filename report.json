@@ -1,0 +1,193 @@
+{
+  "authority": "landing-automation/docs/local-release-publisher.md",
+  "base": "0f6f93f275ead6965f720236fc99b6ddaefa63b5",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "pytest",
+        "landing-automation/tests",
+        "-q"
+      ],
+      "command_sha256": "c580ea46d884d17f8ef55e4194339869da374a1a221cfacd275bd8efd0e5d422",
+      "exit_code": 0,
+      "log": "command-1.log",
+      "log_sha256": "0cd8bab887784974aaf6b5b9b89efc0544abcf7f04e3a56e11a47a5283555173",
+      "started_at": "2026-09-23T11:50:52.388150+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "landing-automation/scripts/landing_sync.py",
+        "--no-record"
+      ],
+      "command_sha256": "70e0ace28c284c6e3b8321f62bfdc24d353bba5a0f53195fef8ba88212a1eee2",
+      "exit_code": 0,
+      "log": "command-2.log",
+      "log_sha256": "c3de3a51492d281f1c84be0f8130f841d96136e80e2b8895d584e7614ad728f2",
+      "started_at": "2026-09-23T11:50:57.331633+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--exit-code",
+        "--",
+        "index.html",
+        "data/landing-apps.generated.json"
+      ],
+      "command_sha256": "a004ca3a0ac36b4e01bde3c19fdf4bebd6bfce88446ddb5852e750d7302d971c",
+      "exit_code": 0,
+      "log": "command-3.log",
+      "log_sha256": "d8760763be63067f00789fcf42648cb7e89259b37690e733415676ec0b8b6596",
+      "started_at": "2026-09-23T11:51:03.634479+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "ls-files",
+        "--others",
+        "--exclude-standard",
+        "--",
+        "index.html",
+        "data/landing-apps.generated.json"
+      ],
+      "command_sha256": "e0db351a04ee26fb3a74a1cdd7c0fe50954f3dccc5aaf062f6a9bb7318528cef",
+      "exit_code": 0,
+      "log": "command-4.log",
+      "log_sha256": "d8760763be63067f00789fcf42648cb7e89259b37690e733415676ec0b8b6596",
+      "started_at": "2026-09-23T11:51:03.642475+00:00"
+    }
+  ],
+  "environment_policy": "Remove PYTHON/PYTEST_/GIT_ overrides, disable plugin autoload, fresh bytecode path, disable replace objects",
+  "github_actions_run": false,
+  "head": "9deb427b2a8fd6ed4d85fd24aed3f8cae681f926",
+  "pr": 116,
+  "publisher_sha256": "113559b055cdf5c0b12419ae99d2e62f16a14ab78b6d078b4126b34266baa0b2",
+  "repo": "mueno/allnew-apps",
+  "result": "passed",
+  "reviewed_source_commit": "9deb427b2a8fd6ed4d85fd24aed3f8cae681f926",
+  "runner": "local",
+  "schema_version": "allnew-apps.local-release-verification.v1",
+  "snapshot": {
+    "base": "0f6f93f275ead6965f720236fc99b6ddaefa63b5",
+    "head": "9deb427b2a8fd6ed4d85fd24aed3f8cae681f926",
+    "pages_build_type": "workflow",
+    "pr": 116,
+    "required_status_checks": {
+      "checks": [
+        {
+          "app_id": null,
+          "context": "landing-release-gate"
+        }
+      ],
+      "contexts": [
+        "landing-release-gate"
+      ],
+      "contexts_url": "https://api.github.com/repos/mueno/allnew-apps/branches/main/protection/required_status_checks/contexts",
+      "strict": true,
+      "url": "https://api.github.com/repos/mueno/allnew-apps/branches/main/protection/required_status_checks"
+    },
+    "workflow_inventory": [
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/workflows/Deploy%20to%20Vercel/badge.svg",
+        "created_at": "2026-02-24T11:48:49.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/blob/main/.github/workflows/deploy.yml",
+        "id": 237870196,
+        "name": "Deploy to Vercel",
+        "node_id": "W_kwDORHoMJM4OLZx0",
+        "path": ".github/workflows/deploy.yml",
+        "state": "disabled_manually",
+        "updated_at": "2026-09-14T12:12:42.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/237870196"
+      },
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/workflows/Deploy%20to%20GitHub%20Pages/badge.svg",
+        "created_at": "2026-05-06T23:18:47.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/blob/main/.github/workflows/github-pages.yml",
+        "id": 272063947,
+        "name": "Deploy to GitHub Pages",
+        "node_id": "W_kwDORHoMJM4QN13L",
+        "path": ".github/workflows/github-pages.yml",
+        "state": "disabled_manually",
+        "updated_at": "2026-09-03T13:44:41.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/272063947"
+      },
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/workflows/Landing%20Auto%20Update/badge.svg",
+        "created_at": "2026-02-15T12:48:23.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/blob/main/.github/workflows/landing-auto-update.yml",
+        "id": 234453495,
+        "name": "Landing Auto Update",
+        "node_id": "W_kwDORHoMJM4N-Xn3",
+        "path": ".github/workflows/landing-auto-update.yml",
+        "state": "disabled_manually",
+        "updated_at": "2026-09-03T13:44:42.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/234453495"
+      },
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/workflows/Landing%20dead-man%20switch/badge.svg",
+        "created_at": "2026-09-02T12:21:57.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/blob/main/.github/workflows/landing-deadman.yml",
+        "id": 348065821,
+        "name": "Landing dead-man switch",
+        "node_id": "W_kwDORHoMJM4UvxAd",
+        "path": ".github/workflows/landing-deadman.yml",
+        "state": "disabled_manually",
+        "updated_at": "2026-09-03T13:44:43.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/348065821"
+      },
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/workflows/Landing%20Automation%20Tests/badge.svg",
+        "created_at": "2026-07-02T22:03:26.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/blob/main/.github/workflows/landing-tests.yml",
+        "id": 306000128,
+        "name": "Landing Automation Tests",
+        "node_id": "W_kwDORHoMJM4SPTEA",
+        "path": ".github/workflows/landing-tests.yml",
+        "state": "disabled_manually",
+        "updated_at": "2026-09-14T12:12:40.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/306000128"
+      },
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/workflows/Reusable%20Landing%20Sync/badge.svg",
+        "created_at": "2026-02-16T17:28:31.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/blob/main/.github/workflows/reusable-landing-sync.yml",
+        "id": 234778911,
+        "name": "Reusable Landing Sync",
+        "node_id": "W_kwDORHoMJM4N_nEf",
+        "path": ".github/workflows/reusable-landing-sync.yml",
+        "state": "disabled_manually",
+        "updated_at": "2026-09-03T13:44:45.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/234778911"
+      },
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/actions/workflows/dependabot/dependabot-updates/badge.svg",
+        "created_at": "2026-02-24T17:26:30.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/actions/workflows/dependabot/dependabot-updates",
+        "id": 237964390,
+        "name": "Dependabot Updates",
+        "node_id": "W_kwDORHoMJM4OLwxm",
+        "path": "dynamic/dependabot/dependabot-updates",
+        "state": "active",
+        "updated_at": "2026-02-24T17:26:30.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/237964390"
+      },
+      {
+        "badge_url": "https://github.com/mueno/allnew-apps/actions/workflows/pages/pages-build-deployment/badge.svg",
+        "created_at": "2026-02-03T21:46:00.000+09:00",
+        "html_url": "https://github.com/mueno/allnew-apps/actions/workflows/pages/pages-build-deployment",
+        "id": 230018409,
+        "name": "pages-build-deployment",
+        "node_id": "W_kwDORHoMJM4Ntc1p",
+        "path": "dynamic/pages/pages-build-deployment",
+        "state": "active",
+        "updated_at": "2026-02-03T21:46:00.000+09:00",
+        "url": "https://api.github.com/repos/mueno/allnew-apps/actions/workflows/230018409"
+      }
+    ]
+  },
+  "verified_at": "2026-09-23T11:51:05.929475+00:00",
+  "workflow_sha256": "01b6347981062401f7db8b5cfbeba5c15bc6d36f2954ca135b665173f42b6491"
+}
