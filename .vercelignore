@@ -3,6 +3,18 @@
 .planning/
 landing-automation/
 tests/
+test-results/
 **/__pycache__/
 **/.pytest_cache/
 **/*.pyc
+
+# Internal working docs — never deploy to the public CDN.
+# These are draft/spec/audit/security notes, not published pages.
+TECHBLOG_DRAFT_ZENN.md
+feedback/README.md
+feedback/audit-report.md
+feedback/deployment-security.md
+feedback/legal-draft.md
+feedback/privacy-policy-draft.md
+feedback/product-spec.md
+feedback/ux-concept-2026.md

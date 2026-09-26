@@ -2,5 +2,6 @@
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' https://cdn.vercel-insights.com https://appleid.cdn-apple.com https://itunes.apple.com https://static.cloudflareinsights.com; img-src 'self' https://appleid.cdn-apple.com https://apps.allnew.work https://is1-ssl.mzstatic.com https://*.mzstatic.com data:; connect-src 'self' https://va.vercel-scripts.com https://appleid.apple.com https://apps.allnew.work https://allnew-mobile-baas.vercel.app https://itunes.apple.com; frame-src https://appleid.apple.com; object-src 'none'; base-uri 'self'; form-action 'self' https://appleid.apple.com; frame-ancestors 'none'
