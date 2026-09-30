@@ -95,10 +95,7 @@ def verify_public(catalog, data, lookup, page):
             require(not changed, f'Machine-owned content drift: {app["slug"]}')
     report = parity.evaluate_parity(lookup, data, catalog, {})
     require(not report['missing'], 'Public-app parity failed')
-    rendered = render.replace_json_ld(page, render.build_json_ld(apps))
-    for category in render.GRID_CATEGORIES:
-        rendered = render.render_grid(rendered, category, apps)
-        rendered = render.render_footer(rendered, category, apps)
+    rendered = render.render_page(page, apps)
     require(rendered == page, 'Rendered HTML differs from verified data')
     return report
 
