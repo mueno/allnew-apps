@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!--
+    apps.allnew.work sitemap.
+
+    Only pages that are (a) self-canonical to apps.allnew.work AND
+    (b) actually indexable (no `noindex` robots meta) belong here.
+
+    Individual app pages (weightsnap/, glucosnap/, ... ) are intentionally
+    marked `noindex, nofollow` as support/landing pages, so they are
+    deliberately EXCLUDED — listing a noindex URL in a sitemap triggers a
+    "Submitted URL marked noindex" error in Search Console.
+
+    Company/legal pages (/ja/, /en/, privacy, terms, tokusho) canonicalize
+    to www.allnew.work and belong to a separate www sitemap, not this one.
+  -->
   <url>
     <loc>https://apps.allnew.work/</loc>
     <xhtml:link rel="alternate" hreflang="ja" href="https://apps.allnew.work/?lang=ja"/>
@@ -17,128 +31,21 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://apps.allnew.work/babyvox/</loc>
+    <loc>https://apps.allnew.work/anniversary-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://apps.allnew.work/anniversary-2026/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apps.allnew.work/anniversary-2026/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://apps.allnew.work/anniversary-2026/"/>
     <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://apps.allnew.work/basalsnap/</loc>
+    <loc>https://apps.allnew.work/anniversary-2026/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://apps.allnew.work/anniversary-2026/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apps.allnew.work/anniversary-2026/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://apps.allnew.work/anniversary-2026/"/>
     <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/bloodpressuresnap/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/botto/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/cardvaultsnap/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/coughwav/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/countsnap/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/glucosnap/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/hikae-cards/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://apps.allnew.work/medreminder/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/meishi-scanner/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://apps.allnew.work/oxisnap/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/pawpass/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/pillcue/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://apps.allnew.work/pupmeds/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/pupweight/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://apps.allnew.work/thermosnap/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
-  <url>
-    <loc>https://apps.allnew.work/voicedeal/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/waistvox/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/weightsnap/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

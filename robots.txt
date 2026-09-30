@@ -27,6 +27,9 @@ Disallow: /debug/
 Disallow: /test-results/
 Disallow: /.planning/
 Disallow: /assets/raw/
+# Internal working docs (draft/spec/audit/security notes), not public pages.
+Disallow: /feedback/*.md$
+Disallow: /TECHBLOG_DRAFT_ZENN.md
 Crawl-delay: 10
 
 # --- Major search engines: allow ---
