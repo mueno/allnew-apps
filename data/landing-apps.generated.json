@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T03:04:25+00:00",
+  "generated_at": "2026-09-30T01:44:07+00:00",
   "source": "app_store_reconcile",
   "apps": [
     {
@@ -10,7 +10,7 @@
       "status": "released",
       "category": "health",
       "category_label": "Health",
-      "description_ja": "体重計のディスプレイをカメラで撮るだけ。数値を自動認識して Apple HealthKit に記録します。毎日の体重管理を、かんたんに。",
+      "description_ja": "体重計の数字をカメラで読み取るか、声で入力。確認した体重をAppleヘルスケアに記録し、推移をグラフで振り返れます。",
       "description_en": "Use camera OCR or voice input to log your weight to Apple HealthKit in seconds.",
       "icon_path": "weightsnap-icon.png?v=2",
       "promo_image_path": "weightsnap-promo.png",
@@ -28,15 +28,17 @@
       "bundle_id": "jp.allnew.weightsnap",
       "asc_app_id": "6758825019",
       "is_health_app": true,
-      "release_date": "2026-06-01",
+      "release_date": "2026-09-30",
       "featured_priority": 1,
       "sort_order": 10,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
-      "app_store_version": "2.0.12",
+      "updated_at": "2026-09-30T01:44:07+00:00",
+      "app_store_version": "3.1.1",
       "app_store_name": "WeightSnap - カメラで体重記録",
-      "app_store_current_version_release_date": "2026-06-01T21:28:32Z",
-      "app_store_lookup_country": "jp"
+      "app_store_current_version_release_date": "2026-09-30T01:26:37Z",
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "thermosnap",
@@ -67,11 +69,13 @@
       "featured_priority": 20,
       "sort_order": 20,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.14",
       "app_store_name": "ThermoSnap かんたん体温記録",
       "app_store_current_version_release_date": "2026-06-12T14:48:02Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "bloodpressuresnap",
@@ -80,8 +84,8 @@
       "status": "released",
       "category": "health",
       "category_label": "Health",
-      "description_ja": "血圧計を撮るだけ。最高・最低血圧と脈拍を自動認識して Apple HealthKit に記録。",
-      "description_en": "Capture your monitor or say the readings. Systolic, diastolic, and pulse are logged to Apple HealthKit.",
+      "description_ja": "血圧計の数字をカメラで読み取るか、声で入力。確認した血圧をAppleヘルスケアに記録し、推移を振り返れます。",
+      "description_en": "Read your blood pressure monitor with the camera or say the readings. Review and save systolic and diastolic values to Apple Health.",
       "icon_path": "bpsnap-icon.png",
       "promo_image_path": "bpsnap-promo.png",
       "card_image_path": "assets/onboarding/bloodpressuresnap-onboarding1.jpeg",
@@ -102,11 +106,13 @@
       "featured_priority": 30,
       "sort_order": 30,
       "published_to_landing": true,
-      "updated_at": "2026-08-27T21:23:36+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.16",
       "app_store_name": "BPSnap 血圧かんたんノート",
       "app_store_current_version_release_date": "2026-08-27T18:08:55Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "glucosnap",
@@ -137,11 +143,13 @@
       "featured_priority": 40,
       "sort_order": 40,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.13",
       "app_store_name": "GlucoSnap 血糖値記録カメラ",
       "app_store_current_version_release_date": "2026-06-09T01:44:20Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "oxisnap",
@@ -150,8 +158,8 @@
       "status": "released",
       "category": "health",
       "category_label": "Health",
-      "description_ja": "パルスオキシメーターを撮るだけ。SpO2 を自動認識して Apple HealthKit に記録。",
-      "description_en": "Capture your pulse oximeter or speak the value to log SpO2 to Apple HealthKit.",
+      "description_ja": "パルスオキシメーターのSpO2の数値を声で入力。認識結果を確認してAppleヘルスケアに記録し、推移をグラフで振り返れます。",
+      "description_en": "Speak your SpO2 reading, review the recognized value, and save it to Apple Health. View trends over time.",
       "icon_path": "oxisnap-icon.png",
       "promo_image_path": "oxisnap-promo.png",
       "card_image_path": "assets/onboarding/oxisnap-onboarding1.jpeg",
@@ -159,10 +167,9 @@
       "promo_image_path_en": "",
       "promo_image_source": "catalog",
       "input_methods": [
-        "camera_ocr",
         "voice_input"
       ],
-      "input_methods_label": "Camera + OCR + Voice Input",
+      "input_methods_label": "Voice Input",
       "support_path": "oxisnap/?lang=ja",
       "app_store_url": "https://apps.apple.com/jp/app/oxisnap-spo2%E3%82%92%E5%A3%B0%E3%81%A7%E8%A8%98%E9%8C%B2/id6759076145?uo=4",
       "bundle_id": "jp.allnew.oxisnap",
@@ -172,11 +179,13 @@
       "featured_priority": 50,
       "sort_order": 50,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.15",
       "app_store_name": "OxiSnap - SpO2を声で記録",
       "app_store_current_version_release_date": "2026-06-25T18:00:27Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "pupweight",
@@ -206,11 +215,13 @@
       "featured_priority": 60,
       "sort_order": 60,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.17",
       "app_store_name": "PupWeight ワンコとニャンコの体重記録",
       "app_store_current_version_release_date": "2026-06-28T13:17:25Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "pawpass",
@@ -240,11 +251,13 @@
       "featured_priority": 65,
       "sort_order": 65,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.6",
       "app_store_name": "PawPass",
       "app_store_current_version_release_date": "2026-06-03T22:29:18Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "babyvox",
@@ -274,21 +287,23 @@
       "featured_priority": 70,
       "sort_order": 70,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.13",
       "app_store_name": "BabyVox 赤ちゃんの成長記録ノート",
       "app_store_current_version_release_date": "2026-06-28T13:17:48Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "medreminder",
-      "name": "MedReminder",
-      "name_ja": "服薬通知",
+      "name": "AI MedReminder",
+      "name_ja": "AI服薬通知",
       "status": "released",
       "category": "health",
       "category_label": "Health",
-      "description_ja": "処方箋やお薬の予定を登録して、飲み忘れを通知でリマインド。服薬記録もかんたんに。",
-      "description_en": "Register prescriptions and medication schedules, get reminders, and keep simple dose records.",
+      "description_ja": "処方箋の写真から薬名・用量・服用時刻の入力を補助。内容を確認して服薬予定を登録し、通知で飲み忘れを防ぎます。",
+      "description_en": "Scan a prescription to assist entry of medicine names, doses, and schedules. Review the details, save your schedule, and receive medication reminders.",
       "icon_path": "medreminder-icon.png",
       "promo_image_path": "assets/asc-screenshots/medreminder.jpg",
       "card_image_path": "assets/asc-screenshots/medreminder.jpg",
@@ -308,11 +323,13 @@
       "featured_priority": 70,
       "sort_order": 70,
       "published_to_landing": true,
-      "updated_at": "2026-08-25T12:24:22+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.6",
       "app_store_name": "AI服薬通知 - 処方箋リマインダー",
       "app_store_current_version_release_date": "2026-08-25T05:45:21Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "hikae-cards",
@@ -342,11 +359,13 @@
       "featured_priority": 75,
       "sort_order": 75,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0",
       "app_store_name": "HIKAE Cards",
       "app_store_current_version_release_date": "2026-06-09T08:52:42Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "waistvox",
@@ -376,11 +395,13 @@
       "featured_priority": 80,
       "sort_order": 80,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.11",
       "app_store_name": "WaistVox ウェストサイズかんたん記録",
       "app_store_current_version_release_date": "2026-06-05T05:55:13Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "coughwav",
@@ -389,8 +410,8 @@
       "status": "released",
       "category": "health",
       "category_label": "Health",
-      "description_ja": "咳の音を機械学習でリアルタイム検出。咳の回数を Apple HealthKit に記録するモニタリングアプリ。",
-      "description_en": "Detect cough sounds in real time and record cough count trends to Apple HealthKit.",
+      "description_ja": "iPhone上で咳の音を検知し、回数や時間帯、日々の傾向を記録。任意の録音保存・Appleヘルスケア連携と、買い切りのマルチデバイス確認に対応します。",
+      "description_en": "Detect and count coughs on your iPhone, then review sessions and daily trends. Optional local recordings and Apple Health integration; multi-device monitoring is a one-time purchase.",
       "icon_path": "coughwav-icon.png",
       "promo_image_path": "coughwav-promo.png",
       "card_image_path": "assets/onboarding/coughwav-onboarding1.jpeg",
@@ -406,15 +427,17 @@
       "bundle_id": "jp.allnew.coughwav",
       "asc_app_id": "6759076606",
       "is_health_app": true,
-      "release_date": "2026-06-11",
+      "release_date": "2026-09-26",
       "featured_priority": 90,
       "sort_order": 90,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
-      "app_store_version": "1.0.12",
+      "updated_at": "2026-09-30T01:44:07+00:00",
+      "app_store_version": "2.0.1",
       "app_store_name": "CoughWav 咳（せき）ノート",
-      "app_store_current_version_release_date": "2026-06-11T21:39:12Z",
-      "app_store_lookup_country": "jp"
+      "app_store_current_version_release_date": "2026-09-26T16:58:36Z",
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "botto",
@@ -442,15 +465,17 @@
       "featured_priority": 10,
       "sort_order": 100,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.8",
       "app_store_name": "BOTTO - 没頭タイマー",
       "app_store_current_version_release_date": "2026-06-11T14:47:51Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "basalsnap",
-      "name": "BasalSnap",
+      "name": "基礎体温記録",
       "name_ja": "基礎体温記録",
       "status": "released",
       "category": "health",
@@ -474,11 +499,13 @@
       "featured_priority": 999,
       "sort_order": 120,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.1",
       "app_store_name": "基礎体温記録",
       "app_store_current_version_release_date": "2026-06-12T00:34:21Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "meishibridge",
@@ -506,21 +533,23 @@
       "featured_priority": 999,
       "sort_order": 130,
       "published_to_landing": true,
-      "updated_at": "2026-07-03T03:11:48+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0",
       "app_store_name": "MeishiBridge 名刺登録",
       "app_store_current_version_release_date": "2026-06-12T12:47:58Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 500.0,
+      "app_store_currency": "JPY"
     },
     {
       "slug": "atsumareonelog",
-      "name": "One録",
-      "name_ja": "One録",
+      "name": "わん録",
+      "name_ja": "わん録",
       "status": "released",
       "category": "productivity",
       "category_label": "Productivity",
-      "description_ja": "One録は、作業時間をワンアクションで記録できるシンプルなタイムトラッカーです。",
-      "description_en": "A simple time tracker for recording work sessions in one action.",
+      "description_ja": "わん録は、毎日の作業を犬の相棒とたどる、作業記憶アプリです。",
+      "description_en": "わん録は、毎日の作業を犬の相棒とたどる、作業記憶アプリです。",
       "icon_path": "atsumareonelog-icon.png",
       "promo_image_path": "assets/asc-screenshots/atsumareonelog.png",
       "card_image_path": "assets/asc-screenshots/atsumareonelog.png",
@@ -538,11 +567,13 @@
       "featured_priority": 999,
       "sort_order": 140,
       "published_to_landing": true,
-      "updated_at": "2026-09-14T03:04:25+00:00",
+      "updated_at": "2026-09-30T01:44:07+00:00",
       "app_store_version": "1.0.1",
       "app_store_name": "わん録",
       "app_store_current_version_release_date": "2026-09-09T06:24:48Z",
-      "app_store_lookup_country": "jp"
+      "app_store_lookup_country": "jp",
+      "app_store_price": 0.0,
+      "app_store_currency": "JPY"
     }
   ]
 }

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import html
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -74,11 +75,15 @@ def build_json_ld(apps: list[dict]) -> str:
                 app.get("category", ""), "MobileApplication"
             ),
             "operatingSystem": "iOS",
-            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "JPY"},
             "author": {"@type": "Organization", "name": "AllNew LLC"},
         }
         if app.get("app_store_url"):
             item["installUrl"] = app["app_store_url"]
+        price = app.get("app_store_price")
+        currency = app.get("app_store_currency")
+        if (type(price) in (int, float) and math.isfinite(price) and price >= 0
+                and isinstance(currency, str) and re.fullmatch(r"[A-Z]{3}", currency)):
+            item["offers"] = {"@type": "Offer", "price": str(price), "priceCurrency": currency}
         items.append({"@type": "ListItem", "position": position, "item": item})
 
     payload = {
