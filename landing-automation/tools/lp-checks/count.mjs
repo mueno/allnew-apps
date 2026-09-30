@@ -7,6 +7,16 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..'
 const {chromium,webkit}=await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(process.env.PLAYWRIGHT_MODULE).href : 'playwright');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const runtime=fs.readFileSync(path.join(root,'landing-automation/runtime/landing-runtime.js'),'utf8');
+// Vercel checks directory paths without trailing slashes while walking the tree.
+// Pass its compatible ignore package when verifying the upload selection.
+let packagingVerified=false;
+if(process.env.IGNORE_MODULE){
+ const {default:ignore}=await import(pathToFileURL(process.env.IGNORE_MODULE).href);
+ const filter=ignore().add(fs.readFileSync(path.join(root,'.vercelignore'),'utf8'));
+ for(const name of ['landing-automation','landing-automation/runtime','landing-automation/runtime/landing-runtime.js'])assert(!filter.ignores(name),name+' must be traversable');
+ for(const name of ['landing-automation/scripts','landing-automation/config','landing-automation/state','landing-automation/tests','landing-automation/tools','landing-automation/runtime/private.json'])assert(filter.ignores(name),name+' must remain excluded');
+ packagingVerified=true;
+}
 const original=JSON.parse(fs.readFileSync(path.join(root,'data/landing-apps.generated.json'))).apps;
 const clone=x=>structuredClone(x);
 const added={...clone(original[0]),slug:'new-public-app',asc_app_id:'999999999'};
@@ -45,4 +55,4 @@ for(const [engine,type,executablePath] of [['chromium',chromium,process.env.CHRO
   }
  }finally{await browser.close();}
 }
-console.log(JSON.stringify({passed:results.length,results},null,2));
+console.log(JSON.stringify({passed:results.length,packagingVerified,results},null,2));

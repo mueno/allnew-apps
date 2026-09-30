@@ -2,7 +2,7 @@
 .github/
 .planning/
 landing-automation/*
-!landing-automation/runtime/
+!landing-automation/runtime
 landing-automation/runtime/*
 !landing-automation/runtime/landing-runtime.js
 tests/
