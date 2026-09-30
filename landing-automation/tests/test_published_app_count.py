@@ -62,6 +62,8 @@ def test_deploy_allows_only_public_runtime():
     def ignored(path):
         return subprocess.run(['git','-c','core.excludesFile='+str(r.ROOT/'.vercelignore'),
             'check-ignore','--no-index','-q',path],cwd=r.ROOT).returncode == 0
+    # Vercel traverses directory names without trailing slashes.
+    assert not ignored('landing-automation/runtime')
     assert not ignored('landing-automation/runtime/landing-runtime.js')
     for path in ['runtime/private.json','scripts/render_landing_page.py',
                  'config/app_catalog.json','state/landing_state.json',
