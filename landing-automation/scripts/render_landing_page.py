@@ -14,6 +14,7 @@ fails validation, so CI stops instead of deploying a broken page.
 from __future__ import annotations
 
 import html
+import hashlib
 import json
 import math
 import re
@@ -24,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[2]
 DATA_PATH = ROOT / "data" / "landing-apps.generated.json"
 INDEX_PATH = ROOT / "index.html"
 BASE_URL = "https://apps.allnew.work"
+RENDER_CONTRACT = "allnew.landing-render.v2"
 GRID_CATEGORIES = ("health", "pet", "productivity")
 FOOTER_LABELS = {"health": "Health", "pet": "Pet", "productivity": "Productivity"}
 APPLICATION_CATEGORY = {
@@ -56,7 +58,48 @@ CARD_TEMPLATE = """
 def load_released_apps() -> list[dict]:
     data = json.loads(DATA_PATH.read_text(encoding="utf-8"))
     apps = data if isinstance(data, list) else data.get("apps", [])
-    return [app for app in apps if app.get("status") == "released"]
+    return normalize_released_apps(apps)
+
+
+def normalize_released_apps(apps: list[dict]) -> list[dict]:
+    """One public listing per Store ID/slug, shared by grids and statistics."""
+    result, ids, slugs = [], set(), set()
+    for app in apps:
+        if not isinstance(app, dict) or app.get("status") != "released":
+            continue
+        slug = str(app.get("slug") or "").strip()
+        store_id = str(app.get("asc_app_id") or "").strip()
+        if not slug or app.get("category") not in GRID_CATEGORIES:
+            continue
+        if slug in slugs or (store_id and store_id in ids):
+            continue
+        slugs.add(slug)
+        if store_id:
+            ids.add(store_id)
+        result.append(app)
+    return result
+
+
+def render_statistics(page: str, apps: list[dict]) -> str:
+    values = {"total-app-count": len(apps),
+              "category-count": len({app["category"] for app in apps})}
+    for element_id, value in values.items():
+        pattern = rf'(<div class="stat-number" id="{element_id}">)[^<]*(</div>)'
+        page, count = re.subn(pattern, lambda m: m[1] + str(value) + m[2], page)
+        if count != 1:
+            raise SystemExit(f"render_landing_page: unique statistic anchor missing: {element_id}")
+    return page
+
+
+def render_runtime_reference(page: str, runtime: bytes | None = None) -> str:
+    # A new URL avoids a cached 404 after the runtime becomes deployable.
+    relative = "landing-automation/runtime/landing-runtime.js"
+    digest = hashlib.sha256(runtime if runtime is not None else (ROOT / relative).read_bytes()).hexdigest()[:16]
+    pattern = rf'(<script src="{re.escape(relative)})(?:\?[^"<>]*)?("></script>)'
+    page, count = re.subn(pattern, lambda m: m[1] + "?v=" + digest + m[2], page)
+    if count != 1:
+        raise SystemExit("render_landing_page: unique runtime reference missing")
+    return page
 
 
 def build_json_ld(apps: list[dict]) -> str:
@@ -179,13 +222,15 @@ def render_footer(page: str, category: str, apps: list[dict]) -> str:
     return pattern.sub(rf"\g<1>{label}: {html.escape(names)}\g<2>", page)
 
 
-def main() -> None:
-    apps = load_released_apps()
+def render_page(page: str, apps: list[dict], runtime: bytes | None = None) -> str:
+    """The sole complete rendering contract for local and pinned cloud candidates."""
+    apps = normalize_released_apps(apps)
     if not apps:
         raise SystemExit("render_landing_page: no released apps in generated data")
 
-    page = INDEX_PATH.read_text(encoding="utf-8")
     page = replace_json_ld(page, build_json_ld(apps))
+    page = render_statistics(page, apps)
+    page = render_runtime_reference(page, runtime)
     for category in GRID_CATEGORIES:
         page = render_grid(page, category, apps)
         page = render_footer(page, category, apps)
@@ -202,8 +247,49 @@ def main() -> None:
             item_lists.append(parsed)
     if len(item_lists) != 1 or item_lists[0].get("numberOfItems") != len(apps):
         raise SystemExit("render_landing_page: JSON-LD validation failed")
-    if page.count('class="work-card"') < len(apps):
+    if page.count('class="work-card"') != len(apps):
         raise SystemExit("render_landing_page: card count mismatch")
+
+    return page
+
+
+def render_contract(runtime: bytes | None = None) -> dict:
+    """Fingerprints of trusted local code, never values accepted from a candidate."""
+    return {"version": RENDER_CONTRACT,
+            "renderer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "runtime_sha256": hashlib.sha256(runtime if runtime is not None else (ROOT / "landing-automation/runtime/landing-runtime.js").read_bytes()).hexdigest()}
+
+
+def verify_candidate(directory: Path, expected_source: str) -> dict:
+    """Read-only intake check; not publication authority or a replacement for parity."""
+    if not re.fullmatch(r"[0-9a-f]{40}", expected_source):
+        raise SystemExit("candidate: independently reviewed full source SHA required")
+    contents = {}
+    for name in ("candidate.json", "data.json", "index.html", "lookup.json"):
+        path = directory / name
+        if path.is_symlink() or not path.is_file() or path.stat().st_size > 5 * 1024 * 1024:
+            raise SystemExit("candidate: invalid or oversized artifact")
+        contents[name] = path.read_bytes()
+    record = json.loads(contents["candidate.json"])
+    if (record.get("source") != expected_source or record.get("render_contract") != render_contract()
+            or record.get("published") is not False or record.get("status") != "candidate_ready"):
+        raise SystemExit("candidate: stale source or render contract")
+    hashes = {name: hashlib.sha256(contents[name]).hexdigest()
+              for name in ("data.json", "index.html", "lookup.json")}
+    if record.get("sha256") != hashes:
+        raise SystemExit("candidate: artifact hash mismatch")
+    data = json.loads(contents["data.json"])
+    # Re-render from the trusted checkout template, not the candidate HTML.
+    canonical = render_page(INDEX_PATH.read_text(encoding="utf-8"), data["apps"])
+    if canonical.encode() != contents["index.html"]:
+        raise SystemExit("candidate: HTML differs from canonical renderer")
+    return {"verified": True, "publication_authorized": False,
+            "source": expected_source, "render_contract": render_contract(), "sha256": hashes}
+
+
+def main() -> None:
+    apps = load_released_apps()
+    page = render_page(INDEX_PATH.read_text(encoding="utf-8"), apps)
 
     if INDEX_PATH.read_text(encoding="utf-8") != page:
         INDEX_PATH.write_text(page, encoding="utf-8")
@@ -213,4 +299,16 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--verify-candidate", type=Path)
+    parser.add_argument("--expected-source", help="Full independently approved site source commit")
+    args = parser.parse_args()
+    if args.verify_candidate:
+        if not args.expected_source:
+            parser.error("--expected-source is required for candidate intake")
+        print(json.dumps(verify_candidate(args.verify_candidate, args.expected_source), indent=2))
+    else:
+        if args.expected_source:
+            parser.error("--expected-source requires --verify-candidate")
+        main()

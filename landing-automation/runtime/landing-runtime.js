@@ -3,7 +3,7 @@
 
   const DATA_PATH = 'data/landing-apps.generated.json';
   const SUPPORTED_LANGS = new Set(['ja', 'en']);
-  const VISIBLE_STATUSES = new Set(['submitted', 'released']);
+  const VISIBLE_STATUSES = new Set(['released']);
   const HEALTH_CATEGORIES = new Set(['health']);
   const INPUT_METHOD_LABELS = {
     camera_ocr: 'Camera + OCR',
@@ -76,9 +76,17 @@
   }
 
   function normalizeVisibleApps(apps) {
+    const ids = new Set();
+    const slugs = new Set();
     return (apps || [])
       .filter(function (app) {
-        return app && VISIBLE_STATUSES.has(app.status);
+        if (!app || !VISIBLE_STATUSES.has(app.status) || !resolveGridCategory(app)) return false;
+        const slug = String(app.slug || '').trim();
+        const storeId = String(app.asc_app_id || '').trim();
+        if (!slug || slugs.has(slug) || (storeId && ids.has(storeId))) return false;
+        slugs.add(slug);
+        if (storeId) ids.add(storeId);
+        return true;
       })
       .sort(function (a, b) {
         return Number(a.sort_order || 999) - Number(b.sort_order || 999);
@@ -285,10 +293,6 @@
         return resolveGridCategory(app) === category;
       });
 
-      if (categoryApps.length === 0) {
-        return;
-      }
-
       grid.replaceChildren.apply(
         grid,
         categoryApps.map(function (app) {
@@ -365,19 +369,18 @@
       : { health: '健康', pet: 'ペット', productivity: '生産性' };
 
     var footerHealth = document.getElementById('footer-apps-health');
-    if (footerHealth && health.length > 0) footerHealth.textContent = labels.health + ': ' + health.join(', ');
+    if (footerHealth) footerHealth.textContent = labels.health + ': ' + health.join(', ');
 
     var footerPet = document.getElementById('footer-apps-pet');
-    if (footerPet && pet.length > 0) footerPet.textContent = labels.pet + ': ' + pet.join(', ');
+    if (footerPet) footerPet.textContent = labels.pet + ': ' + pet.join(', ');
 
     var footerProductivity = document.getElementById('footer-apps-productivity');
-    if (footerProductivity && productivity.length > 0) footerProductivity.textContent = labels.productivity + ': ' + productivity.join(', ');
+    if (footerProductivity) footerProductivity.textContent = labels.productivity + ': ' + productivity.join(', ');
   }
 
   function applyData(payload) {
     syncLanguage();
     const apps = normalizeVisibleApps(payload.apps || []);
-    if (apps.length === 0) return;
 
     updateAppCount(apps);
     renderCategoryGrids(apps);
