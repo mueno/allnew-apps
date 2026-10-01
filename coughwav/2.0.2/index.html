@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoughWav - Cough Tracker &amp; Log 2.0.2 Support</title>
+  <meta name="description" content="Legal and support page for CoughWav - Cough Tracker &amp; Log, including Privacy Policy, Terms of Service, commercial disclosure, and contact details.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="bingbot" content="noindex, nofollow, noarchive">
+  <meta name="GPTBot" content="noindex, nofollow">
+  <meta name="CCBot" content="noindex, nofollow">
+  <meta name="anthropic-ai" content="noindex, nofollow">
+  <meta name="Google-Extended" content="noindex, nofollow">
+  <style>
+    :root {
+      --bg-primary: #fafafa;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f5f5f7;
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-tertiary: #86868b;
+      --accent: #279679;
+      --accent-hover: #1f7f67;
+      --border: rgba(0,0,0,0.08);
+      --glass: rgba(255,255,255,0.72);
+      --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+      --radius-sm: 12px;
+      --radius-lg: 28px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #000000;
+        --bg-secondary: #1c1c1e;
+        --bg-tertiary: #2c2c2e;
+        --text-primary: #f5f5f7;
+        --text-secondary: #a1a1a6;
+        --text-tertiary: #6e6e73;
+        --accent: #62d1b4;
+        --accent-hover: #7ee0c8;
+        --border: rgba(255,255,255,0.1);
+        --glass: rgba(28,28,30,0.72);
+        --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Hiragino Sans", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 20px;
+      background: var(--glass);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .logo-link {
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .logo { font-size: 1.2rem; font-weight: 600; letter-spacing: 0; }
+    .logo-divider { width: 1px; height: 18px; background: var(--border); }
+    .app-name {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .lang-dropdown { position: relative; flex-shrink: 0; }
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 980px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+    .lang-btn::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text-secondary);
+    }
+    .lang-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 160px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      z-index: 200;
+    }
+    .lang-dropdown.open .lang-menu { display: block; }
+    .lang-option {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+    .lang-option.active, .lang-option:hover {
+      background: var(--bg-tertiary);
+      color: var(--accent);
+    }
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+    .hero-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      object-fit: cover;
+      display: block;
+    }
+    .hero-icon:hover { animation: wiggle 0.5s ease; }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg) scale(1.05); }
+      75% { transform: rotate(5deg) scale(1.05); }
+    }
+    .hero h1 { font-size: 2rem; font-weight: 700; letter-spacing: 0; margin-bottom: 8px; }
+    .hero-subtitle { font-size: 1rem; color: var(--text-secondary); }
+    .toc {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .toc-link {
+      padding: 8px 16px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 980px;
+    }
+    .toc-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+    .main { max-width: 800px; margin: 0 auto; padding: 0 20px 80px; }
+    .section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 80px;
+    }
+    .section:last-child { border-bottom: none; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--bg-tertiary);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .section-title { font-size: 1.4rem; font-weight: 600; letter-spacing: 0; }
+    .section-subtitle { font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px; }
+    .faq-item {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 18px 24px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    .faq-question:hover { background: var(--bg-tertiary); }
+    .faq-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.25s ease, padding 0.25s ease; }
+    .faq-item.open .faq-answer { max-height: 800px; padding: 0 24px 24px; }
+    .faq-item.open .faq-icon { background: var(--accent); color: white; transform: rotate(45deg); }
+    .faq-answer p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .legal-section { margin-bottom: 28px; }
+    .legal-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .legal-section h3::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .legal-section h4 {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      margin: 18px 0 8px;
+    }
+    .legal-section p, .legal-section li {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .legal-section ul, .legal-section ol { padding-left: 20px; }
+    .legal-section a { color: var(--accent); text-decoration: none; }
+    .legal-section a:hover { text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; overflow-wrap: anywhere; }
+    th, td { border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; padding: 9px 6px; }
+    .commercial-accordion {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .commercial-header {
+      width: 100%;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .commercial-header:hover { background: var(--bg-tertiary); }
+    .commercial-header .section-header { margin-bottom: 0; }
+    .commercial-toggle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 20px;
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+    .commercial-accordion.open .commercial-toggle { background: var(--accent); color: white; transform: rotate(45deg); }
+    .commercial-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .commercial-accordion.open .commercial-content { max-height: 1400px; padding: 0 24px 24px; }
+    .contact-card {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .contact-card h2 { font-size: 1.4rem; font-weight: 600; margin-bottom: 22px; }
+    .contact-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--accent);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 980px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .contact-email:hover { background: var(--accent-hover); transform: scale(1.02); }
+    .contact-details {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: left;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .contact-details-top {
+      margin-top: 24px;
+      margin-bottom: 24px;
+      padding-top: 0;
+      padding-bottom: 16px;
+      border-top: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-item { font-size: 0.85rem; }
+    .contact-item dt { color: var(--text-tertiary); font-weight: 500; margin-bottom: 4px; }
+    .contact-item dd { color: var(--text-primary); margin: 0; overflow-wrap: anywhere; }
+    .muted { color: var(--text-tertiary); }
+    [data-lang="en"] { display: none; }
+    body.lang-en [data-lang="ja"] { display: none; }
+    body.lang-en [data-lang="en"] { display: block; }
+    @media (max-width: 640px) {
+      .header-inner { gap: 12px; }
+      .app-name { max-width: 150px; }
+      .hero { padding: 40px 20px 30px; }
+      .hero h1 { font-size: 1.6rem; }
+      .toc { gap: 4px; }
+      .toc-link { padding: 6px 12px; font-size: 0.8rem; }
+      .section { padding: 32px 0; }
+      .section-header { flex-direction: column; text-align: center; }
+      .commercial-header .section-header { flex-direction: row; text-align: left; }
+      .contact-card { padding: 28px; }
+      .contact-details { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="logo-link" aria-label="AllNew CoughWav 咳（せき）ノート">
+        <span class="logo">AllNew</span>
+        <span class="logo-divider" aria-hidden="true"></span>
+        <span class="app-name" data-lang="ja">CoughWav 咳（せき）ノート</span>
+        <span class="app-name" data-lang="en">CoughWav - Cough Tracker &amp; Log</span>
+      </a>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-btn" type="button" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false"><span id="currentLang">日本語</span></button>
+        <div class="lang-menu" role="menu">
+          <button class="lang-option" type="button" data-lang-option="ja" onclick="setLang('ja')" role="menuitem">日本語</button>
+          <button class="lang-option" type="button" data-lang-option="en" onclick="setLang('en')" role="menuitem">English</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" data-lang="ja">
+    <img src="./coughwav-icon.png" alt="CoughWav 咳（せき）ノート" class="hero-icon">
+    <h1>CoughWav 咳（せき）ノート</h1>
+    <p class="hero-subtitle">プライバシーポリシー、利用規約、<br>特定商取引法に基づく表記。</p>
+    <p class="hero-subtitle" data-version-notice="2.0.2">2.0.2向けの文書です。新版がApp Storeで公開された時点から適用します。公開前の現行版には現行ページの文書が適用されます。 <a href="/coughwav/?lang=ja">現行ページ</a></p>
+  </section>
+  <section class="hero" data-lang="en">
+    <img src="./coughwav-icon.png" alt="CoughWav - Cough Tracker &amp; Log" class="hero-icon">
+    <h1>CoughWav - Cough Tracker &amp; Log</h1>
+    <p class="hero-subtitle">Privacy Policy, Terms of Service,<br>commercial disclosure, and support.</p>
+    <p class="hero-subtitle" data-version-notice="2.0.2">This document is for version 2.0.2 and takes effect when that version is publicly released on the App Store. Until then, the current page applies to the currently released version. <a href="/coughwav/?lang=en">Current page</a></p>
+  </section>
+
+  <nav class="toc" data-lang="ja">
+<a class="toc-link" href="#faq-ja">FAQ</a>
+<a class="toc-link" href="#privacy-ja">プライバシー</a>
+<a class="toc-link" href="#terms-ja">利用規約</a>
+<a class="toc-link" href="#oss-ja">3rd Party Licensing Notice</a>
+<a class="toc-link" href="#commercial-ja">特定商取引法</a>
+<a class="toc-link" href="#contact-ja">お問い合わせ</a>
+</nav>
+  <nav class="toc" data-lang="en">
+<a class="toc-link" href="#faq-en">FAQ</a>
+<a class="toc-link" href="#privacy-en">Privacy</a>
+<a class="toc-link" href="#terms-en">Terms</a>
+<a class="toc-link" href="#oss-en">3rd Party Licensing Notice</a>
+<a class="toc-link" href="#commercial-en">Commercial</a>
+<a class="toc-link" href="#contact-en">Contact</a>
+</nav>
+
+  <main class="main">
+    <section id="faq-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">よくある質問</div><div class="section-subtitle">使い方や機能についてお答えします</div></div></div><div class="legal-section"><div class="faq-item open"><div class="faq-question">無料で使える範囲は？<span class="faq-icon">+</span></div><div class="faq-answer"><p>アプリ本体のダウンロードは無料です。親機・子機の連携（モニタリング）は有料の買い切りオプションで、アプリのダウンロードだけでは利用権は付与されません。既存の購入権と購入の復元を維持します。 単体記録の既存の無料回数・購入権の条件は引き続き適用されます。オプション価格は購入画面で確認してください。</p></div></div><div class="faq-item"><div class="faq-question">単体で使えますか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>初期状態は単体記録です。モニタリングの購入や対話式設定を終えなくても、従来の無料回数・単体購入権の範囲で記録できます。以前の単体購入と保存した記録は維持されます。</p></div></div><div class="faq-item"><div class="faq-question">モニタリングと単体記録の購入は同じですか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>別々の買い切り商品で、継続課金はありません。モニタリングの購入権が確認された両端末では、モニタリング記録に旧単体購入や無料回数は不要です。モニタリングの購入に単体記録の無制限利用は含まれません。価格は購入画面で確認してください。</p></div></div><div class="faq-item"><div class="faq-question">家族の端末で使うには？<span class="faq-icon">+</span></div><div class="faq-answer"><p>モニタリングはAppleのファミリー共有に対応する商品を対象に、家族と購入共有の条件を満たし、各端末で購入権を復元・確認して使います。確認できない間は解放されません。返金や共有終了などで権利を失うとモニタリングを停止します。複数台へのインストールと同時接続数は異なり、接続できるのは、モニタリング（子機）1台とモニタリング（親機）1台です。 Appleの購入共有は、管理者・購入者・利用する家族それぞれの共有設定が必要です。購入履歴でアプリを非表示にすると共有できません。</p></div></div><div class="faq-item"><div class="faq-question">何が相手の端末に送られますか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>iPhoneは単体利用・子機・親機、iPadは親機、Apple Watchは子機iPhoneへ直接接続する親機またはOSペア済み親機iPhoneの補助表示に対応します。子機の直接の受信先は1台です。Watchの直接接続とiPhone経由の補助表示は同時に使いません。バックグラウンド受信はOSの制限を受けます。
+
+役割名（「モニタリング（子機）」）、記録中の状態、推定回数、経過時間、記録レベル、直近の検出時刻、時間別回数、開始・終了の要求IDと実行結果を、選んだ相手と暗号化して共有します。役割名は端末の実際の名前ではありません。iPhone・iPadのWi-Fi接続では、アプリが生成する接続用UUIDを端末内に保存し、先頭12文字を暗号化された接続内で相手を確認するアプリ内識別名として使います。このUUIDは切断や同意撤回後も端末内に残ります。
+
+モニタリングで音声を自動送信しません。接続時の同意で相手からの遠隔開始を許可します。開始ごとの確認はありません。終了には子機で毎回確認が必要です。子機での手動切断や同意撤回時はモニタリングの記録を停止・保存します。Watchからの解除要求は通信断中に届かないため、必要なときは子機を直接停止してください。一時的な通信断では子機の記録を継続します。設定 ＞ モニタリングモード ＞「共有への同意を撤回」で取り消せます。受信した現在の状態はメモリに保持し、切断時に消去します。同期用の送信集計と受信集計は、各端末でそれぞれ最大180件保存します。役割を変えた端末には両方の記録が残る場合があります。子機は親機から保存確認を受けた終了済みの集計から整理し、未同期分で上限に達した場合は追加の同期保存ができないことを表示します。親機は上限に達すると古い集計から整理します。これらの同期記録は通常の切断後も残り、端末バックアップの対象外です。共有への同意撤回または全データ削除で、その操作を行った端末内の同期記録を削除します。相手側のコピーは遠隔削除されないため、相手の端末でも削除してください。同意した版・日時・同意済みの状態は端末内に保存し、切断後も保持します。旧版で入力した相手の呼び名・権限の選択が残っている場合は、再同意または同意撤回時に削除します。同意を撤回すると、それらの同意記録を削除します。
+
+子機の記録は最新180件、録音は14日を超えると一覧読込時に削除します。録音一覧の共有操作で選んだ相手や保存先へ渡したコピーは、元の録音の削除や同意撤回では削除されません。検出の誤り・見逃し、通信や通知の遅延・中断があります。医療機器・診断・緊急通報・安全保証には使えません。
+
+子機iPhoneの直接の受信先は、親機iPhone・iPadまたはApple Watchの1台で、両経路を同時に使いません。iPhone・iPad間はAppleのNetwork.frameworkによるBonjour・TLS・WebSocketを使います。親機で子機のQRを読み取り、子機でも相手を確認してください。カメラを使えない場合は32桁の接続キーを入力できます。QRやキーを他人へ共有しないでください。このWi-Fiキーはメモリだけに保持し、手動切断・アプリ終了後は再設定します。
+
+Watchの直接接続では、子機iPhoneとWatchを同じLANにつなぎます。Watchのアプリで、実物の子機画面に表示されたHTTPS接続先、64桁すべての証明書指紋、64桁のアクセスキーを入力してください。指紋の一部だけでは確認できません。アクセスキーは許可するWatchだけに登録し、画像やメッセージで他人へ共有しないでください。AppleのFoundation URLSession・Security・OSのTLSとApple NIOのHTTP処理を使い、登録した証明書と相手の利用許可を確認します。Bluetoothや旧版への自動切替はありません。閲覧・同期・遠隔操作のすべてに、子機とWatchの対応新版が必要です。各端末のApp Storeで更新してください。直接接続には記録する子機iPhoneが必要ですが、OSペア済みiPhoneのアプリによる中継は不要です。
+
+子機のTLS証明書と秘密鍵は、その端末だけで利用できるKeychainに保存し、再起動後の初回ロック解除後に利用可能です。証明書の有効期間は7日です。期限切れは利用を停止しますが、保存した証明書・秘密鍵を自動削除しません。共有の切断・同意撤回や既存のデータ削除操作でもこの専用Keychain情報は残り、子機で証明書を明示更新すると旧情報を置き換えます。接続先や証明書の変更・期限切れ時には明示的に更新し、Watchで再登録してください。子機のアクセスキーはメモリ内だけに保持し、HTTPS共有の手動切断・アプリ終了で失われます。子機を再起動した後は再登録が必要です。Watchの接続先・指紋・アクセスキーは、その端末のロック解除中だけ利用できるKeychainに保存します。バックグラウンド移行だけでは登録を削除せず、アプリを前面に戻すと再接続を試みます。手動切断・方式変更・同意撤回・購入権失効ではWatchの登録の利用を無効にして削除を試み、子機にも登録解除を要求します。削除に失敗した場合はエラーを表示し、ロック解除後に再試行できます。無効化記録により自動再接続を防ぎます。ただし通信できない場合、その要求は届きません。離れた端末からの停止は保証されないため、必要なときは子機を直接操作して停止してください。
+
+任意で、親機iPhoneが受信した状態・集計をOSペア済みWatchへWatchConnectivityで補助表示できます。iPadは中継できず、Watchの直接接続と補助表示は同時に使いません。参加する各端末で共有同意と購入権を確認します。既存購入権は維持され、追加購入は不要です。遠隔開始には接続時の同意が適用され、開始ごとの確認はありません。終了要求は子機で確認します。到達可能で状態が新しい場合のみ操作を送り、子機が発行した期限付き要求を子機側で検証します。
+
+音声とHealthKit値は送りません。当社サーバーや新しいクラウドへ記録を送信しません。OSの背景実行・ロック・ネットワーク制限により更新は遅延・中断し、常時接続は保証されません。一時的な通信断中も子機の記録は続きます。子機でHTTPS共有を新しく開始すると、受信先を区別するUUIDが変わります。Watchで同じ接続情報を再入力するだけでは変わりません。以前保存した履歴は別に保持し、自動統合や旧受信先向けの未送信集計すべての再送は保証しません。現在の状態と保存済み履歴を区別してください。同期集計は各端末で送信用・受信用それぞれ最大180件で、親機やWatchのヘルスケアへ自動保存しません。同意撤回では操作した端末内の同期記録を削除します。他の端末のコピーはそれぞれ削除してください。子機を直接切断・役割変更・同意撤回した場合は記録を停止・保存します。強制終了・電源断では最後の保存以降が失われる場合があります。
+
+HTTPSでは子機が作成する端末内の接続用識別子もWatchへ送信します。実際の端末名や購入権ではありません。この識別子は切断・同意撤回後も端末内に残ります。Watchは証明書指紋とこの識別子を組み合わせて履歴の相手を区別します。</p></div></div><div class="faq-item"><div class="faq-question">音声は外部へ送信されますか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>解析は端末内で行い、音声を当社のサーバーやモニタリング相手へ自動送信しません。利用者がクリップの共有操作を行った場合は、選んだアプリや保存先へ音声のコピーを渡します。元のクリップを削除しても、書き出したコピーは削除されません。</p></div></div><div class="faq-item"><div class="faq-question">モニタリングを停止・撤回できますか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>他の人の咳を記録・共有する前に、本人の同意と、必要な場合は保護者の同意を得てください。共有内容と限界を確認して同意してください。iPhone・iPad間では子機のQRまたは32桁のキーを親機に登録し、子機で相手を確認・許可します。Watch直接接続では実物の子機のHTTPS接続先・64桁の証明書指紋・64桁のアクセスキーをWatchへ登録します。遠隔開始には接続時の同意が適用され、開始ごとの確認はありません。終了要求は子機で毎回確認します。設定のモニタリングモードから同意を撤回できます。子機iPhoneで共有を切断・撤回すると記録を停止して保存します。Watchでの切断・撤回ではWatchの接続を無効にし、子機にも解除を要求します。通信できない場合は届かず記録が続くことがあるため、子機で停止・保存を確認してください。相手側の保存済みコピーは、その端末で削除してください。強制終了や電源断では最後の保存以降が失われる場合があります。</p></div></div><div class="faq-item"><div class="faq-question">医療や緊急時に使えますか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>日常のウェルネス記録を目的としています。医療機器、診断、治療、緊急通報、安全の保証には使えません。検出の誤りや見逃し、通信や通知の遅延・中断があり、常時接続は保証しません。更新が古いときは、現在の状態として扱わないでください。</p></div></div><div class="faq-item"><div class="faq-question">対話式設定の入力はどこで処理されますか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>対応端末ではAppleの端末内モデルが設定候補を作ります。会話文は画面を閉じると破棄し、当社や外部AIへ送信しません。確認して適用した設定だけ保存します。AIは診断、感度変更、購入、共有への同意、OS権限やアカウント操作を代行しません。利用不可・エラー・キャンセル時も同じ画面の選択肢で最後まで設定できます。</p></div></div><div class="faq-item"><div class="faq-question">Appleヘルスケアのデータを読み取りますか？<span class="faq-icon">+</span></div><div class="faq-answer"><p>ヘルスケアへの自動記録は任意です。「設定 → 記録とヘルスケア」で自分の保存ルールを確認し、咳の書き込みを許可すると、利用者本人の記録を、選択した保存対象に応じて終了時に自動保存します。記録全体の平均回数を、確認したルールに従ってヘルスケアの「咳」の軽度・中度・重度に変換し、開始・終了時刻を持つ1件として保存します。検出0回は保存しません。平均には休止時間を含み、1秒未満の記録は1秒として計算します。
+
+11回/時・41回/時は編集できる設定例で、医学的基準やAppleの回数基準ではありません。頻度だけで症状の重さは判断できません。利用者が自分の記録の目安として選ぶもので、医学的な重症度判定ではありません。ヘルスケアでは軽度・中度・重度と表示されるため、医療者などに記録を見せる際は自分で設定した目安であることを伝えてください。ルールの変更は次の記録から適用し、過去の記録は変更しません。
+
+初期設定では単体利用の記録が対象です。「モニタリングの記録も保存」を選択し、このiPhoneのヘルスケアを利用する本人の記録であることを確認すると、このiPhoneを子機として記録したモニタリングの記録も保存できます。保存先は記録元のiPhoneのヘルスケアです。親機で受信した情報は保存対象に含まれません。保存対象の変更は次の記録から適用します。読み取り・削除は行いません。回数の一覧や録音はヘルスケアへ書き込みません。確認した保存ルール、確認日時・版、セッション識別子を保存値の由来として保持し、Health記録に付加します。当社への健康データの送信はありません。ヘルスケアのiCloud同期や他のアプリへの共有はAppleの機能と利用者の設定に従います。単体記録はこの連携を有効にしなくても利用できます。
+
+咳がつらい、長引く、眠れないなど気になる症状があるときは、記録の数値やレベルにかかわらず医療機関に相談してください。息苦しさ、血の混じった痰、高熱が続く場合は、速やかに受診してください。</p></div></div><div class="faq-item"><div class="faq-question">記録の保存期間とバックアップは？<span class="faq-icon">+</span></div><div class="faq-answer"><p>履歴は直近180件です。「記録」のセッションを長押しして個別に削除できます。咳の録音は14日を超えると一覧読み込み時に自動削除の対象となり、個別または一括でも削除できます。アプリ独自のバックアップはなく、アプリの削除や端末故障で失われることがあります。書き出したコピーは保存先で別途削除してください。</p></div></div><div class="faq-item"><div class="faq-question">対応するOSは？<span class="faq-icon">+</span></div><div class="faq-answer"><p>バージョン2.0はiOS 27.0以降またはiPadOS 27.0以降が必要です。Apple Intelligenceの可否は端末・言語・地域・設定・モデルの準備状況に依存します。使い方のガイドは設定から再表示できます。</p></div></div></div></section>
+    <section id="faq-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">💡</div><div><div class="section-title">FAQ</div><div class="section-subtitle">Questions about using the app</div></div></div><div class="legal-section"><div class="faq-item open"><div class="faq-question">What is free?<span class="faq-icon">+</span></div><div class="faq-answer"><p>The app is free to download. Parent/child monitoring is a paid one-time option; downloading the app alone does not grant monitoring access. Existing purchase rights and purchase restoration are preserved.Existing free-use allowances and purchase rights for standalone recording still apply. Check the purchase screen for the option price.</p></div></div><div class="faq-item"><div class="faq-question">Can I use one device?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Standalone recording is the default. Setup and a monitoring purchase are optional; existing free uses, standalone purchase rights and saved records remain available.</p></div></div><div class="faq-item"><div class="faq-question">Are monitoring and standalone purchases the same?<span class="faq-icon">+</span></div><div class="faq-answer"><p>They are separate one-time purchases with no recurring charge. Both devices with verified monitoring rights can run monitoring sessions without a legacy purchase or free allowance. Monitoring does not include unlimited standalone recording. Check the purchase screen for the price.</p></div></div><div class="faq-item"><div class="faq-question">How do family members get access?<span class="faq-icon">+</span></div><div class="faq-answer"><p>For an eligible monitoring purchase with Family Sharing enabled, meet Apple&#x27;s family and purchase-sharing conditions, then restore and verify access on each device. Unverified access does not unlock monitoring. Refunds or ended sharing can revoke it. Installing on multiple devices does not mean simultaneous group monitoring: the connection is one recorder and one viewer. Apple purchase sharing requires sharing settings for the organizer, purchaser and receiving family member. The app must not be hidden from purchase history.</p></div></div><div class="faq-item"><div class="faq-question">What is shared with the paired device?<span class="faq-icon">+</span></div><div class="faq-answer"><p>iPhone supports standalone recording, recorder and viewer roles; iPad is viewer-only. Apple Watch can connect directly to the recorder iPhone as a viewer or display information relayed by its OS-paired viewer iPhone. The recorder has one direct recipient. Watch does not use direct connection and companion display at the same time. Background delivery is subject to OS limits.
+
+Share the role label (“Monitoring (recorder)”), recording state, estimated count, elapsed time, record level, latest event time, hourly counts, start/stop request IDs and execution acknowledgements with the selected peer over encryption. The role label is not the device’s actual name. For iPhone/iPad Wi-Fi connections, the app stores a generated connection UUID on this device and uses its first 12 characters as its app identifier for peer confirmation over an encrypted connection. This UUID stays on this device after disconnecting or withdrawing consent.
+
+Monitoring does not automatically send audio. Consent allows the connected viewer to start recording without per-start confirmation. Each stop request requires confirmation on the recorder. Manual disconnection or consent withdrawal on the recorder stops and saves its session. A Watch revocation request cannot arrive during disconnection; stop the recorder directly when necessary. Temporary link loss allows the recorder to continue recording. Withdraw under Settings &gt; Monitoring mode &gt; Withdraw sharing consent. Live snapshots are held in memory and cleared on disconnect. Outgoing and received synchronization aggregates are stored locally in separate journals, each capped at 180 records per device. A device that changes roles can retain both journals. The recorder removes completed aggregates already acknowledged by the viewer when space is needed; if pending records fill the limit, it displays a storage warning. The viewer removes older aggregates at the limit. These records survive normal disconnects and are excluded from device backups. Withdrawing sharing consent or deleting all data deletes synchronization records on that device. It does not remotely delete the other device’s copies; delete those on the other device as well. The consent version, date and agreement status are stored locally and kept after disconnecting. Any recipient label and authority choice retained from an earlier version are removed when you agree again or withdraw consent; withdrawing consent removes these consent records.
+
+The recorder retains up to 180 local sessions; audio older than 14 days is deleted when the list loads. Copies you explicitly share from Saved cough audio to a chosen recipient or destination remain there when you delete the original or withdraw consent. Detection can be wrong or miss events; connections and notifications can be delayed or interrupted. This is not a medical device, diagnosis, emergency alert or safety guarantee.
+
+The recorder iPhone has one direct recipient: a viewer iPhone or iPad, or an Apple Watch, never both routes at once. iPhone and iPad use Apple Network.framework Bonjour, TLS and WebSocket. Scan the recorder QR on the viewer and approve the peer on the recorder. Enter the 32-character connection key if the camera is unavailable. Do not share the QR or key with others. This Wi-Fi key stays only in memory; set up again after manual disconnection or app termination.
+
+For direct Watch connection, connect the recorder iPhone and Watch to the same LAN. In the Watch app, enter the HTTPS endpoint, all 64 characters of the certificate fingerprint, and the 64-character access key displayed on the physical recorder. A partial fingerprint is insufficient. Register the access key only on the intended Watch; do not share it in images or messages. Apple Foundation URLSession, Security, OS TLS and Apple NIO HTTP handling verify the registered certificate and viewer authorization. There is no Bluetooth or older-version fallback. Viewing, synchronization and remote controls all require compatible updated recorder and Watch apps; update each through the App Store. Direct mode needs the recorder iPhone, but does not need relay through an app on the OS-paired iPhone.
+
+The recorder TLS certificate and private key are stored in device-only Keychain storage, available after the first unlock following restart. The certificate is valid for seven days. Expiry prevents use but does not automatically erase its certificate or private key. Disconnecting, withdrawing consent and the existing data-reset operation retain this dedicated Keychain entry; explicit certificate renewal on the recorder replaces the old entry. Endpoint or certificate changes and expiry require explicit renewal and Watch re-enrollment. The recorder access key remains only in memory and is lost on manual disconnection of HTTPS sharing or app termination; re-enroll after restarting the recorder. Watch stores the endpoint, fingerprint and access key in device-only Keychain storage available only while unlocked. Backgrounding alone retains enrollment; returning to the foreground attempts reconnection. Manual disconnection, mode changes, consent withdrawal or loss of purchase rights disable Watch enrollment, attempt its deletion, and request recorder revocation. A deletion failure is shown for retry after unlocking. A local tombstone prevents automatic reconnection. That request cannot arrive while disconnected. Remote stopping is not guaranteed: operate the recorder directly whenever stopping is necessary.
+
+Optionally, a viewer iPhone relays received state and aggregates to its OS-paired Watch through WatchConnectivity. iPad cannot relay, and Watch direct and companion modes are mutually exclusive. Participating devices check sharing consent and purchase rights. Existing purchases remain valid; no additional purchase is required. Connection consent permits remote starts without per-start confirmation. Stop requests need confirmation on the recorder. Commands are sent only when reachable with fresh state; the recorder validates recorder-issued, expiring requests.
+
+No audio or HealthKit values are transmitted, and records are not sent to our servers or a new cloud service. OS background, lock and network restrictions can delay or interrupt updates; continuous connectivity is not guaranteed. Recording continues during temporary link loss. Starting a new HTTPS sharing session on the recorder changes the viewer routing UUID. Re-entering the same enrollment on Watch does not change it. Previously saved history remains separate; automatic merging and retransmission of all pending aggregates for an old recipient are not guaranteed. Distinguish saved history from current state. Outgoing and received synchronization aggregates are each limited to 180 per device and are not automatically written to Health on viewers or Watch. Consent withdrawal deletes synchronization records on the device where performed; delete other devices&#x27; copies separately. Directly disconnecting, changing roles or withdrawing consent on the recorder stops and saves its recording. Force quit or power loss may lose data since the last save.
+
+HTTPS also sends the recorder-generated local identifier to Watch. It is not the actual device name or proof of purchase. It remains locally after disconnect or consent withdrawal. Watch identifies the history source using this identifier together with the certificate fingerprint.</p></div></div><div class="faq-item"><div class="faq-question">Is audio sent off device?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Audio is analyzed on device and is not automatically sent to our servers or the monitoring peer. If you explicitly share a clip, a copy goes to the app or destination you select. Deleting the original does not delete exported copies.</p></div></div><div class="faq-item"><div class="faq-question">Can I stop sharing or withdraw consent?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Before recording or sharing another person’s coughs, obtain their consent and guardian consent where needed. Review and agree to the sharing and limitations. For iPhone/iPad, register the recorder QR or 32-character key on the viewer and approve the peer on the recorder. For direct Watch, register the physical recorder’s HTTPS endpoint, full 64-character certificate fingerprint and 64-character access key on Watch. Connection consent permits remote starts without per-start confirmation; each stop request needs recorder confirmation. Withdraw consent in Monitoring mode settings. Disconnecting or withdrawing on the recorder iPhone stops and saves recording. On Watch it disables the local connection and attempts recorder revocation. If communication is unavailable, recording may continue; verify stopping and saving on the recorder. Delete other devices’ saved copies on those devices. Force quit or power loss may lose data since the last save.</p></div></div><div class="faq-item"><div class="faq-question">Can I rely on it for medical or emergency use?<span class="faq-icon">+</span></div><div class="faq-answer"><p>It supports everyday wellness records. It is not a medical device, diagnosis, treatment, emergency alert or safety guarantee. Detection may be wrong or miss events; communication and notifications may be delayed or interrupted. Continuous connectivity is not guaranteed. An old update is not the current state.</p></div></div><div class="faq-item"><div class="faq-question">Where is assisted setup text processed?<span class="faq-icon">+</span></div><div class="faq-answer"><p>On supported devices, Apple&#x27;s on-device model proposes settings. Conversation text is discarded when the screen closes and is not sent to us or an external AI. Only settings you review and apply are saved. AI cannot diagnose, change sensitivity, approve purchases or sharing, grant OS permissions or operate accounts. Choices in the same screen complete setup when AI is unavailable, fails or is cancelled.</p></div></div><div class="faq-item"><div class="faq-question">Does the app read Apple Health?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Automatic saving to Health is optional. In Settings → Recording and Health, confirm your personal rule and allow coughing writes. The app then saves the device user&#x27;s recording when it ends according to the selected recording scope. It converts the whole-session hourly average to Health&#x27;s mild, moderate or severe coughing value using your confirmed rule, saving one sample with the recording start and end times. Zero detections are not saved. The average includes pauses; intervals shorter than one second count as one second.
+
+11/hour and 41/hour are editable examples, not medical standards or Apple-defined count thresholds. Frequency alone cannot determine symptom severity. The values are your personal recording guide, not a clinical severity assessment. Health displays Mild, Moderate or Severe; when showing these records to a healthcare professional or others, explain that they use your personal rule. Changes apply to the next recording and do not change earlier records.
+
+Standalone recordings are included by default. Selecting Include monitoring recordings and confirming that the recordings belong to the person who uses Health on this iPhone also includes monitoring recordings captured by this iPhone as the recorder. They are saved to Health on the recording iPhone. Information received by the parent device is not included. Scope changes apply to the next recording. The app does not read or delete Health data. Count series and audio are not written to Health. The confirmed rule, confirmation date and version, and session identifier are retained and added to the Health sample as provenance. Health data is not sent to us. Health iCloud sync and sharing with other apps follow Apple&#x27;s features and your settings. Standalone recording works without enabling this integration.
+
+If your cough is troubling, persistent or disrupts sleep, consult a healthcare professional regardless of count or level. Seek prompt medical care for breathlessness, blood in sputum or persistent high fever.</p></div></div><div class="faq-item"><div class="faq-question">How long are records kept and is there a backup?<span class="faq-icon">+</span></div><div class="faq-answer"><p>History keeps the latest 180 sessions. Long-press a session under Records → Sessions to delete it individually. Saved cough audio older than 14 days becomes eligible for deletion when the list loads, and can also be deleted individually or together. There is no app-specific backup. App deletion or device failure can lose local records. Delete exported copies separately at their destination.</p></div></div><div class="faq-item"><div class="faq-question">Which OS is required?<span class="faq-icon">+</span></div><div class="faq-answer"><p>Version 2.0 requires iOS 27.0 or iPadOS 27.0 or later. Apple Intelligence availability depends on the device, language, region, settings and model readiness. Reopen the usage guide in Settings.</p></div></div></div></section>
+    <section id="privacy-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">プライバシーポリシー</div><div class="section-subtitle">データの取り扱い</div></div></div><div class="legal-section"><p>最終更新日: 2026-10-01</p>
+<p>重要: 本ポリシーを必ずお読みください。</p>
+<p>合同会社AllNew（以下「当社」）は、正式名称「CoughWav」、日本語のApp Store表示名「CoughWav 咳（せき）ノート」（以下「本アプリ」）におけるユーザー情報の取り扱いについて本ポリシーを定めます。当社の名称、住所、代表者等の事業者情報は、特定商取引法に基づく表示をご確認ください。</p>
+<h3>1. 取り扱う情報</h3>
+<p>以下では、当社が受領する情報（お問い合わせ等）、アプリが端末内で処理する情報、Appleまたはユーザーが選んだ共有先で処理される情報を区別して説明します。端末内の情報すべてを当社が受領するわけではありません。</p>
+<h3>(A) ヘルスケア（Apple Health）データ</h3>
+<ul><li>本アプリは、ユーザーの許可に基づき、咳の症状の書き込みをヘルスケアへ行います。</li><li>本アプリは、ヘルスケア上のデータを読み取りません。</li><li>当社は、ヘルスケアデータを当社が運用する外部サーバー、当社管理のiCloud、またはCloudKitへ送信・保存しません。</li><li>Apple Health上のデータは、ユーザーの端末設定またはApple側の同期設定に従ってAppleにより処理される場合があります。当社はその同期を管理しません。</li></ul>
+<h3>(B) 写真・カメラ入力</h3>
+<ul><li>本アプリはカメラまたは写真ライブラリを、ユーザーが明示的に選択した撮影、読み取り、記録補助のためにのみ使用します。撮影画像や選択画像は端末内で扱われ、プライバシーポリシーに明記した場合を除き、当社サーバーへ送信・保存しません。</li></ul>
+<h3>(C) お問い合わせ情報（サポート）</h3>
+<ul><li>ユーザーがメール等で問い合わせを行う場合、メールアドレス、問い合わせ内容、ユーザーが任意で提供した情報（端末情報等）を受領します。</li></ul>
+<h3>(D) 購入に関する情報</h3>
+<ul><li>買い切り解除の購入処理はAppleのStoreKit/App Store決済により行われます。当社はユーザーのクレジットカード番号を取得しません。本アプリの解除は非消耗型アプリ内課金であり、定期購読ではありません。</li></ul>
+<h3>2. 利用目的</h3>
+<p>当社は、上記情報を以下の目的で利用します。</p>
+<ul><li>本アプリの機能提供（咳を端末内で数える単体利用と、選んだ端末への任意のモニタリング共有）</li><li>サポート対応、問い合わせへの返信</li><li>不具合調査・品質改善（ユーザーが提供した範囲に限る）</li><li>法令遵守・紛争対応</li></ul>
+<h3>3. 第三者提供・外部送信</h3>
+<ul><li>端末内処理、Appleの処理、利用者が選ぶ端末・共有先への送信は、プライバシーポリシーの機能別説明に従います。当社の処理基盤への自動送信とは区別されます。</li><li>当社は、お問い合わせ情報等を、サポート対応、不具合調査、法令遵守・紛争対応のために必要な範囲でのみ取り扱います。</li><li>当社は、お問い合わせ情報等を、ユーザーの同意なく第三者へ提供しません。ただし、法令に基づく場合等を除きます。</li><li>当社は、本アプリに関連して取り扱う情報を広告・マーケティング・プロファイリング目的で利用せず、第三者へ販売・貸与等もしません。</li><li>当社は、ヘルスケアデータを広告・マーケティング・プロファイリング目的で利用せず、第三者へ販売・貸与等もしません。</li><li>ヘルスケアデータの保存およびApple側処理の挙動は、ユーザーの端末設定およびAppleの仕様に従います。当社はAppleの挙動を制御できません。</li><li>当社はiOSアプリ内に利用状況解析のための外部プログラム（アナリティクスSDK）を導入していません。</li><li>本サポートサイトはVercel Inc.のサービスで運営しています。閲覧時にCloudflareのWeb Analytics（RUM）スクリプトが配信される場合があり、その際はページのURL・参照元・読み込み時間等のブラウザ性能情報がCloudflareへ送信され、サイトの性能と利用状況の測定に使用されます。Cloudflareによると、このスクリプトはCookieやブラウザの保存データを読み書きせず、通常の通信処理で受け取るIPアドレスは近くのデータセンターで破棄されます。処理される国・地域は通信経路によって異なる場合があります。</li></ul>
+<h3>4. 保管期間</h3>
+<p>保存期間・削除方法は、機能ごとのデータの取り扱いの説明をご確認ください。</p>
+<ul><li>お問い合わせ情報は、原則として対応完了後12か月以内に削除します。</li><li>ただし、未解決の問い合わせ、紛争対応、法令上の保存義務がある場合は、必要な期間保管する場合があります。</li></ul>
+<h3>5. セキュリティ</h3>
+<p>当社は、お問い合わせ対応等で実際に受領する情報について、必要かつ適切な安全管理措置を講じます。具体的な措置については、本人からのお問い合わせに対し、法令に従い遅滞なく回答します。データの保護方法は、機能ごとのデータの取り扱いの説明をご確認ください。</p>
+<h3>6. ユーザーの権利</h3>
+<p>当社が保有するお問い合わせ情報等について、ユーザーは、適用法令の範囲で、開示・訂正・利用停止・削除等を求めることができます。本人または代理人であることを確認した上で対応します。受付方法、開示方法、手数料の有無については、本ページ下部の「お問い合わせ」セクションからご確認ください。</p>
+<p>データの管理・削除・書き出し方法は、機能ごとのデータの取り扱いの説明をご確認ください。</p>
+<ul><li>EU/EEA居住者（General Data Protection Regulation、以下「GDPR」）: 苦情申立て権、同意の撤回権。</li><li>カリフォルニア州居住者（California Consumer Privacy Act / California Privacy Rights Act、以下「CCPA/CPRA」）: 知る権利、削除権、オプトアウト権。</li><li>中国居住者（PIPL）: 知る権利、閲覧・複製権、削除権。Apple側の同期サービスをユーザーが有効にした場合、Appleの仕様に従ってユーザーの国・地域外で処理／保存される可能性があります。</li><li>韓国居住者（PIPA）: 処理中止要求権。</li><li>ブラジル居住者（LGPD）: データ移行要求権。</li></ul>
+<h3>7. 子どものプライバシー</h3>
+<p>本アプリを操作する人、購入する人、記録の対象となる人は異なる場合があります。未成年者による操作や購入には、年齢・判断能力・適用法令に応じて親権者または法定代理人の関与が必要となることがあります。未成年者を記録する場合は、本人の意思を尊重し、必要な親権者・法定代理人の同意と権限を確認してください。端末の操作者や購入者の同意だけで、別の被記録者の同意や代理権限があるとは扱いません。</p>
+<h3>8. 改定</h3>
+<p>当社は必要に応じて本ポリシーを改定します。改定後は当社サイト等で公表します。</p>
+<h3>9. お問い合わせ</h3>
+<p>お問い合わせ、開示・訂正・削除等のご請求は、本ページ下部の「お問い合わせ」セクションからご連絡ください。</p>
+<h3>10. 準拠法と管轄</h3>
+<p>本ポリシーは日本法を準拠法とします。各地域の法令（GDPR、CCPA/CPRA、PIPL、LGPD、PIPA等）の適用要件を満たす場合は、その適用範囲で当該法令に従います。</p>
+<h3>11. 多言語版について</h3>
+<p>本プライバシーポリシーは日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p>
+<p>---</p>
+<p>運営: 合同会社AllNew</p>
+<p>Apple、iPhone、iOS、Apple Health、HealthKitは、米国およびその他の国で登録されたApple Inc.の商標です。その他の会社名・製品名は各社の商標または登録商標です。</p>
+<p>© 2026 合同会社AllNew</p>
+<h3>機能ごとのデータの取り扱い</h3>
+<ul><li>マイクからの一時的な音声, 咳の検出結果, 任意で保存する咳の録音 — この端末で処理 (利用端末の所在国・地域). 目的: 端末内で咳を数え、希望する場合に検出前後の短い音声を保存します。 / 保持: 録音用の一時バッファは約2秒です。保存クリップは14日経過後、一覧の読み込み時に自動削除の対象になります。14日ちょうどでの削除を保証するものではありません。 / 削除: 録音を止めると一時バッファを解放します。保存クリップはアプリで個別または一括削除できます。 / 書き出し: 自動送信しません。クリップの共有ボタンによる書き出しは、下記の音声共有の扱いに従います。 / 保護: 音声の解析・保存は端末内で行い、アプリの保存領域はOSにより他のアプリから分離されます。 / 同意・操作: マイクのOS権限が必要です。咳の録音の保存は設定で選択でき、録音は利用者が開始・停止します。</li><li>推定回数, 記録全体の平均頻度（回/時、一時停止を含む開始から終了まで）, 記録時間, 開始・終了日時, 時間別回数, 記録全体の平均頻度に基づくアプリ独自の区分, ヘルスケアへの保存済み表示 — この端末で処理 (利用端末の所在国・地域). 目的: 記録の振り返りと、ウィジェット・Siri向けの最新記録の表示に使います。 / 保持: 直近180件の履歴を保持します。最新記録の要点は、履歴の追加・削除時に更新されます。 / 削除: 「記録」のセッションを長押しして個別に削除できます。履歴全件を一括削除する画面はありません。ヘルスケアの記録と書き出した録音は別途管理してください。 / 書き出し: 履歴を自動で外部へ送信する機能はありません。 / 保護: 端末内のアプリ領域に保存し、最新記録の要点は本アプリのウィジェット等と共有します。 / 同意・操作: 記録終了時に保存します。履歴は利用者が削除でき、Siri等の利用設定は変更できます。</li><li>記録内の回数, 記録時間, 時間別の分布, 前回の回数, 表示言語 — この端末で処理 (利用端末の所在国・地域). 目的: 保存履歴の数値を端末内で短い文章にします。現在の要約は定型文による数値表示で、診断や医療助言は行いません。 / 保持: 表示のために都度生成し、要約文を独立した記録として永続保存しません。元の履歴は直近180件です。 / 削除: 表示を終了し、必要に応じて元の履歴を削除してください。 / 書き出し: 要約文を外部AIや当社サーバーへ送信しません。 / 保護: 端末内の保存履歴を参照して処理します。 / 同意・操作: 要約機能は設定で選択できます。数値表示を医療上の判断に使用しないでください。</li><li>役割名「モニタリング（子機）」, 記録状態（記録中・一時停止・停止）, 推定回数, 経過時間, 記録レベル, 直近の検出日時, 時間別回数, 開始・終了の要求IDと実行結果, 接続確認用のアプリ内識別名, 同期記録ID・更新番号・開始時刻・計測時刻・終了状態, 同期記録の保存確認ID・更新番号, Wi-Fi接続のための一時的な識別名と暗号鍵（QRまたは手入力で設定）, 状態更新の順序を確認する一時ID・連番, 時間別集計の各時間帯の開始日時, 実物の子機から登録するHTTPS接続先・証明書指紋・アクセスキー（通信にはアクセスキーを使用）, HTTPS履歴の接続相手を区別する子機生成の識別子 — 利用者が選ぶ端末・共有先へ送信 (利用端末の所在国・地域。送信先の保存場所は、選択した端末・サービスの管理によります). 目的: 役割名（「モニタリング（子機）」）、記録中の状態、推定回数、経過時間、記録レベル、直近の検出時刻、時間別回数、開始・終了の要求IDと実行結果を、選んだ相手と暗号化して共有します。役割名は端末の実際の名前ではありません。iPhone・iPadのWi-Fi接続では、アプリが生成する接続用UUIDを端末内に保存し、先頭12文字を暗号化された接続内で相手を確認するアプリ内識別名として使います。このUUIDは切断や同意撤回後も端末内に残ります。 HTTPSでは子機が作成する端末内の接続用識別子もWatchへ送信します。実際の端末名や購入権ではありません。この識別子は切断・同意撤回後も端末内に残ります。Watchは証明書指紋とこの識別子を組み合わせて履歴の相手を区別します。 / 保持: 受信した最新状態はメモリ内だけに保持します。受信後15秒以上更新がなければ古い状態として扱います。Wi-Fi接続用UUIDは切断や同意撤回後も端末内に残ります。同意の版・日時・同意済みの状態を端末内に保存し、通常の切断後も保持します。旧版で入力した相手の呼び名・権限の選択が残っている場合は、再同意または撤回時に削除します。Wi-Fiの確認済み相手と接続キーは再接続のためメモリ内だけに保持します。子機のTLS証明書と秘密鍵は、その端末だけで利用できるKeychainに保存し、再起動後の初回ロック解除後に利用可能です。証明書の有効期間は7日です。期限切れは利用を停止しますが、保存した証明書・秘密鍵を自動削除しません。共有の切断・同意撤回や既存のデータ削除操作でもこの専用Keychain情報は残り、子機で証明書を明示更新すると旧情報を置き換えます。接続先や証明書の変更・期限切れ時には明示的に更新し、Watchで再登録してください。子機のアクセスキーはメモリ内だけに保持し、HTTPS共有の手動切断・アプリ終了で失われます。子機を再起動した後は再登録が必要です。Watchの接続先・指紋・アクセスキーは、その端末のロック解除中だけ利用できるKeychainに保存します。バックグラウンド移行だけでは登録を削除せず、アプリを前面に戻すと再接続を試みます。手動切断・方式変更・同意撤回・購入権失効ではWatchの登録の利用を無効にして削除を試み、子機にも登録解除を要求します。削除に失敗した場合はエラーを表示し、ロック解除後に再試行できます。無効化記録により自動再接続を防ぎます。ただし通信できない場合、その要求は届きません。離れた端末からの停止は保証されないため、必要なときは子機を直接操作して停止してください。 同期用の送信集計と受信集計は、各端末でそれぞれ最大180件保存します。役割を変えた端末には両方の記録が残る場合があります。子機は親機から保存確認を受けた終了済みの集計から整理し、未同期分で上限に達した場合は追加の同期保存ができないことを表示します。親機は上限に達すると古い集計から整理します。これらの同期記録は通常の切断後も残り、端末バックアップの対象外です。共有への同意撤回または全データ削除で、その操作を行った端末内の同期記録を削除します。相手側のコピーは遠隔削除されないため、相手の端末でも削除してください。 HTTPSでは子機が作成する端末内の接続用識別子もWatchへ送信します。実際の端末名や購入権ではありません。この識別子は切断・同意撤回後も端末内に残ります。Watchは証明書指紋とこの識別子を組み合わせて履歴の相手を区別します。 / 削除: 切断、共有同意の撤回、購入権の喪失や新しい接続時に受信状態を消去します。撤回では同意の版・日時・同意済みの状態と、旧版の権限の選択・共有相手の呼び名を削除しますが、Wi-Fi接続用UUIDは残ります。子機自身の通常の保存済み履歴、以前のヘルスケア記録、書き出したコピーは削除しません。手動切断・役割変更・同意撤回・権利失効では、その端末のWi-Fi再接続用メモリ情報を消去します。Watchの直接接続は直ちに利用を無効にし、保存した登録情報の削除を試みます。削除できない場合はエラーを表示し、ロック解除後の再試行を案内します。削除に失敗しても自動再接続を防ぐ無効化記録を残します。子機のTLS証明書・秘密鍵は残り、証明書の明示更新で置き換えます。 同期用の送信集計と受信集計は、各端末でそれぞれ最大180件保存します。役割を変えた端末には両方の記録が残る場合があります。子機は親機から保存確認を受けた終了済みの集計から整理し、未同期分で上限に達した場合は追加の同期保存ができないことを表示します。親機は上限に達すると古い集計から整理します。これらの同期記録は通常の切断後も残り、端末バックアップの対象外です。共有への同意撤回または全データ削除で、その操作を行った端末内の同期記録を削除します。相手側のコピーは遠隔削除されないため、相手の端末でも削除してください。 / 書き出し: 選択した相手への集計・状態共有だけです。音声の共有は利用者が別途操作した場合に限ります。 / 保護: Wi-FiはQRまたは手入力の32桁の一時的な接続キーを用い、TLSで暗号化・認証します。Bonjour広告にはランダムな接続名だけを使い、健康記録や鍵を掲載しません。Watchの直接接続では、子機iPhoneとWatchを同じLANにつなぎます。Watchのアプリで、実物の子機画面に表示されたHTTPS接続先、64桁すべての証明書指紋、64桁のアクセスキーを入力してください。指紋の一部だけでは確認できません。アクセスキーは許可するWatchだけに登録し、画像やメッセージで他人へ共有しないでください。AppleのFoundation URLSession・Security・OSのTLSとApple NIOのHTTP処理を使い、登録した証明書と相手の利用許可を確認します。Bluetoothや旧版への自動切替はありません。閲覧・同期・遠隔操作のすべてに、子機とWatchの対応新版が必要です。各端末のApp Storeで更新してください。直接接続には記録する子機iPhoneが必要ですが、OSペア済みiPhoneのアプリによる中継は不要です。両端末で購入権と共有同意を確認します。子機の送信処理の状態は受信確認ではありません。接続の継続、検出や通知の正確さ・即時性は保証しません。 / 同意・操作: 他の人の咳を記録・共有する場合は、事前に本人の同意と、必要な場合は保護者の同意を得てください。共有内容と利用上の限界に同意し、選んだ方式の接続情報を実物の子機で確認してください。接続中の遠隔開始をまとめて許可し、開始ごとの確認はしません。終了要求は子機で毎回確認します。共有への同意は設定のモニタリングモードから撤回できます。</li></ul>
+<p>子機iPhoneの直接の受信先は、親機iPhone・iPadまたはApple Watchの1台で、両経路を同時に使いません。iPhone・iPad間はAppleのNetwork.frameworkによるBonjour・TLS・WebSocketを使います。親機で子機のQRを読み取り、子機でも相手を確認してください。カメラを使えない場合は32桁の接続キーを入力できます。QRやキーを他人へ共有しないでください。このWi-Fiキーはメモリだけに保持し、手動切断・アプリ終了後は再設定します。</p>
+<p>Watchの直接接続では、子機iPhoneとWatchを同じLANにつなぎます。Watchのアプリで、実物の子機画面に表示されたHTTPS接続先、64桁すべての証明書指紋、64桁のアクセスキーを入力してください。指紋の一部だけでは確認できません。アクセスキーは許可するWatchだけに登録し、画像やメッセージで他人へ共有しないでください。AppleのFoundation URLSession・Security・OSのTLSとApple NIOのHTTP処理を使い、登録した証明書と相手の利用許可を確認します。Bluetoothや旧版への自動切替はありません。閲覧・同期・遠隔操作のすべてに、子機とWatchの対応新版が必要です。各端末のApp Storeで更新してください。直接接続には記録する子機iPhoneが必要ですが、OSペア済みiPhoneのアプリによる中継は不要です。</p>
+<p>子機のTLS証明書と秘密鍵は、その端末だけで利用できるKeychainに保存し、再起動後の初回ロック解除後に利用可能です。証明書の有効期間は7日です。期限切れは利用を停止しますが、保存した証明書・秘密鍵を自動削除しません。共有の切断・同意撤回や既存のデータ削除操作でもこの専用Keychain情報は残り、子機で証明書を明示更新すると旧情報を置き換えます。接続先や証明書の変更・期限切れ時には明示的に更新し、Watchで再登録してください。子機のアクセスキーはメモリ内だけに保持し、HTTPS共有の手動切断・アプリ終了で失われます。子機を再起動した後は再登録が必要です。Watchの接続先・指紋・アクセスキーは、その端末のロック解除中だけ利用できるKeychainに保存します。バックグラウンド移行だけでは登録を削除せず、アプリを前面に戻すと再接続を試みます。手動切断・方式変更・同意撤回・購入権失効ではWatchの登録の利用を無効にして削除を試み、子機にも登録解除を要求します。削除に失敗した場合はエラーを表示し、ロック解除後に再試行できます。無効化記録により自動再接続を防ぎます。ただし通信できない場合、その要求は届きません。離れた端末からの停止は保証されないため、必要なときは子機を直接操作して停止してください。</p>
+<p>任意で、親機iPhoneが受信した状態・集計をOSペア済みWatchへWatchConnectivityで補助表示できます。iPadは中継できず、Watchの直接接続と補助表示は同時に使いません。参加する各端末で共有同意と購入権を確認します。既存購入権は維持され、追加購入は不要です。遠隔開始には接続時の同意が適用され、開始ごとの確認はありません。終了要求は子機で確認します。到達可能で状態が新しい場合のみ操作を送り、子機が発行した期限付き要求を子機側で検証します。</p>
+<p>音声とHealthKit値は送りません。当社サーバーや新しいクラウドへ記録を送信しません。OSの背景実行・ロック・ネットワーク制限により更新は遅延・中断し、常時接続は保証されません。一時的な通信断中も子機の記録は続きます。子機でHTTPS共有を新しく開始すると、受信先を区別するUUIDが変わります。Watchで同じ接続情報を再入力するだけでは変わりません。以前保存した履歴は別に保持し、自動統合や旧受信先向けの未送信集計すべての再送は保証しません。現在の状態と保存済み履歴を区別してください。同期集計は各端末で送信用・受信用それぞれ最大180件で、親機やWatchのヘルスケアへ自動保存しません。同意撤回では操作した端末内の同期記録を削除します。他の端末のコピーはそれぞれ削除してください。子機を直接切断・役割変更・同意撤回した場合は記録を停止・保存します。強制終了・電源断では最後の保存以降が失われる場合があります。</p>
+<ul><li>利用者が選んだ咳の録音 — 利用者が選ぶ端末・共有先へ送信 (利用端末の所在国・地域。送信先の保存場所は、選択した端末・サービスの管理によります). 目的: 利用者が共有ボタンで選んだアプリや保存先へ音声のコピーを渡します。 / 保持: 共有先の保持期間はその共有先によります。元のクリップは端末内に残り、14日経過後の一覧読み込み時に自動削除の対象です。 / 削除: 元のクリップと共有先のコピーをそれぞれ削除してください。元の削除や共有同意の撤回で、書き出したコピーは削除されません。 / 書き出し: 利用者が個別に選んだクリップをOSの共有画面から書き出します。 / 保護: 共有後の保護は選択したアプリ・保存先の仕組みによります。周囲の会話等が含まれていないか確認してください。 / 同意・操作: 共有は任意で、利用者がクリップと共有先を選ぶ操作が必要です。自動送信はしません。</li><li>購入商品の識別情報, 検証済みの購入権, 本人購入・家族共有の区分, 権利の失効情報, モニタリング商品の識別情報 — Appleのシステム・サービスで処理 (利用端末の所在国・地域。送信先の保存場所は、選択した端末・サービスの管理によります). 目的: アプリ本体のダウンロードは無料です。親機・子機の連携（モニタリング）は有料の買い切りオプションで、アプリのダウンロードだけでは利用権は付与されません。既存の購入権と購入の復元を維持します。 単体記録の無制限利用とモニタリングは別々の買い切り商品です。以前の単体購入と保存データは維持されます。モニタリングの購入権が確認された両端末では、モニタリング中に旧単体購入や無料回数は不要です。単体の無制限利用は含みません。ファミリー共有には対象商品の共有設定とAppleの家族・購入共有条件を満たし、各端末で購入を復元・検証する必要があります。返金や共有終了でモニタリング権利が失われると、その端末の共有を停止します。子機iPhoneでは記録を停止・保存します。Watch側から子機への解除通知は通信できない場合には届かないため、子機で停止・保存を確認してください。継続課金はありません。無制限とは記録の作成回数であり、履歴は最新180件、録音は14日を超えると一覧読込時に削除します。Appleの返金手続きの案内は法令上の権利を制限しません。 / 保持: 取引の保持はAppleアカウントの管理に従います。アプリは利用権の確認結果を使用し、更新や失効を反映します。 / 削除: Appleアカウントの購入・返金手続きを利用してください。アプリの削除でAppleの取引記録は削除されません。 / 書き出し: 購入情報をモニタリング相手へ送って権利を解放する仕組みはありません。 / 保護: Appleの検証済み取引を使用します。当社は決済カード番号を保管しません。 / 同意・操作: 購入・復元は「設定 → このアプリについて → 購入と復元」から利用者が操作します。ファミリー共有は対象商品とAppleの共有条件を満たし、各端末で権利を確認する必要があります。</li><li>利用者が開いた公開ページのURL, 任意で送る問い合わせ・メール本文 — 利用者が選ぶ端末・共有先へ送信 (利用端末の所在国・地域。送信先の保存場所は、選択した端末・サービスの管理によります). 目的: 法務・サポートページを表示し、任意に送られた問い合わせに対応します。記録や音声を自動で添付しません。 / 保持: ブラウザ・メールサービスの保存方針が適用されます。送信した問い合わせは送受信側に残るため、アプリの履歴保持期間とは異なります。 / 削除: 送信済みの問い合わせの削除はサポートへ依頼してください。アプリ内の履歴削除では、メールや閲覧先の記録は削除されません。 / 書き出し: 利用者が作成・選択して送る内容だけです。アプリの音声や履歴は自動送信しません。 / 保護: 公開ページはHTTPSで開きます。メール等の保護は利用する通信サービスによります。不要な健康情報を送らないでください。 / 同意・操作: ページの閲覧や問い合わせの送信は任意です。送信内容は利用者が確認してください。</li><li>公開アプリの識別情報, 検索先ストアの国指定（日本固定）, 公開アイコン画像 — Appleのシステム・サービスで処理 (利用端末の所在国・地域。送信先の保存場所は、選択した端末・サービスの管理によります). 目的: 関連アプリの公開情報・アイコンをAppleから取得し、選択時にApp Storeを開きます。咳の記録を検索条件に含めません。 / 保持: 表示用に一時保持し、画像等のキャッシュはアプリ・OSの管理に従います。 / 削除: 一時データはアプリ・OSのキャッシュ管理に従います。Apple側の記録はAppleの管理に従います。 / 書き出し: 健康記録や音声をAppleのアプリ検索に書き出しません。 / 保護: Appleの公開情報をHTTPSで取得します。 / 同意・操作: 設定の関連アプリ欄で表示し、App Storeへの移動は利用者の選択によります。</li><li>設定中の会話と訂正内容, 利用モードの希望, テーマの希望, 咳の録音を保存する設定, 夜間の減光設定, 操作ロック設定, 端末内要約の設定, Siriの設定, Live Activityの設定, ヘルスケア自動保存の希望（保存ルールの確認とOS許可は別操作）, 設定後のガイド表示 — この端末で処理 (利用端末の所在国・地域). 目的: 対応端末ではAppleの端末内モデルで使い方、テーマ、クリップ保存、減光、ロック、要約、Siri、Live Activity、ガイド表示を候補にします。会話文は画面を閉じると破棄し、当社や外部AIへ送信しません。確認して適用した設定だけ保存します。AIは診断や助言、感度変更、購入承認、共有同意、OS権限、アカウント操作を行いません。利用不可・失敗・キャンセル時も同じ画面の選択式で設定できます。 ヘルスケア自動保存の希望も候補にできますが、保存ルールの確認とOS書き込み許可は利用者が別画面で行います。AIは保存ルールの変更・確認を行いません。 / 保持: 会話は画面を閉じるまでメモリ内に保持し、閉じると破棄します。確認して適用した設定だけ保存します。 / 削除: 画面を閉じると会話と未適用の候補を破棄します。適用済みの設定は通常の設定画面から変更できます。 / 書き出し: 会話を当社サーバーや外部AIへ送信せず、クラウドAIへの自動切り替えもしません。 / 保護: 端末内で許可された設定項目だけを扱います。診断、医療助言、感度変更、購入承認、共有同意、OS権限やアカウント操作をAIは行いません。 / 同意・操作: 対話式設定は任意です。適用前に利用者が候補を確認します。購入・共有同意・OS権限は、それぞれ別の明示的な操作が必要です。</li><li>個人のルールによる咳の症状区分, 記録の開始・終了時刻, 確認済みの保存ルール・確認日時・版, セッション識別子 — Appleのシステム・サービスで処理 (利用端末の所在国・地域（Appleの同期・共有は利用者の設定による）). 目的: ヘルスケアへの自動記録は任意です。「設定 → 記録とヘルスケア」で自分の保存ルールを確認し、咳の書き込みを許可すると、利用者本人の記録を、選択した保存対象に応じて終了時に自動保存します。記録全体の平均回数を、確認したルールに従ってヘルスケアの「咳」の軽度・中度・重度に変換し、開始・終了時刻を持つ1件として保存します。検出0回は保存しません。平均には休止時間を含み、1秒未満の記録は1秒として計算します。</li></ul>
+<p>11回/時・41回/時は編集できる設定例で、医学的基準やAppleの回数基準ではありません。頻度だけで症状の重さは判断できません。利用者が自分の記録の目安として選ぶもので、医学的な重症度判定ではありません。ヘルスケアでは軽度・中度・重度と表示されるため、医療者などに記録を見せる際は自分で設定した目安であることを伝えてください。ルールの変更は次の記録から適用し、過去の記録は変更しません。</p>
+<p>初期設定では単体利用の記録が対象です。「モニタリングの記録も保存」を選択し、このiPhoneのヘルスケアを利用する本人の記録であることを確認すると、このiPhoneを子機として記録したモニタリングの記録も保存できます。保存先は記録元のiPhoneのヘルスケアです。親機で受信した情報は保存対象に含まれません。保存対象の変更は次の記録から適用します。読み取り・削除は行いません。回数の一覧や録音はヘルスケアへ書き込みません。確認した保存ルール、確認日時・版、セッション識別子を保存値の由来として保持し、Health記録に付加します。当社への健康データの送信はありません。ヘルスケアのiCloud同期や他のアプリへの共有はAppleの機能と利用者の設定に従います。単体記録はこの連携を有効にしなくても利用できます。</p>
+<p>咳がつらい、長引く、眠れないなど気になる症状があるときは、記録の数値やレベルにかかわらず医療機関に相談してください。息苦しさ、血の混じった痰、高熱が続く場合は、速やかに受診してください。 / 保持: ヘルスケア記録の保持はAppleの機能と利用者の設定に従います。確認したルールは変更まで端末に保持し、履歴のルールは該当履歴とともに保持します。 / 削除: ヘルスケアAppで管理してください。このアプリの削除操作はHealth記録を削除しません。 / 書き出し: OSのヘルスケア機能と利用者が選ぶ共有設定に従います。 / 保護: Health記録はOSが管理します。当社へ送信しません。 / 同意・操作: ルールを明示的に確認し、自動記録をオンにして、OSの咳の書き込みを許可します。オフにしても過去の記録は残ります。</p></div></section>
+    <section id="privacy-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">🔒</div><div><div class="section-title">Privacy Policy</div><div class="section-subtitle">Data handling</div></div></div><div class="legal-section"><p>Last Updated: 2026-10-01</p>
+<p>Important: Please read this policy carefully.</p>
+<p>This Privacy Policy explains how AllNew LLC (&quot;we&quot;) handles information in the CoughWav app (Japanese App Store display name: CoughWav 咳（せき）ノート; the &quot;App&quot;). For our company name, address, and representative details, please refer to our Legal Notice (Specified Commercial Transactions Act disclosure).</p>
+<h3>1. Information We Handle</h3>
+<p>The sections below distinguish information we receive (such as support requests), information processed on your device by the App, and information handled by Apple or a recipient you choose. We do not receive all information processed on your device.</p>
+<h3>(A) Apple Health data</h3>
+<ul><li>With your permission, the App performs writes for coughing symptoms to the Apple Health app (via HealthKit).</li><li>The App does not read Apple Health data.</li><li>We do not transmit or store Apple Health data on servers operated by us, app-owned iCloud storage, or CloudKit.</li><li>Apple Health data may be processed by Apple according to your device settings or Apple&#x27;s sync settings. We do not manage that Apple-controlled sync.</li></ul>
+<h3>(B) Photo and camera input</h3>
+<ul><li>The App uses the camera or photo library only when you explicitly choose to capture, read, or attach records. Captured or selected images are handled on device and are not transmitted to or stored on our servers unless expressly described in this Privacy Policy.</li></ul>
+<h3>(C) Support communications</h3>
+<ul><li>If you email us, we may receive your email address, message content, and any information you include (e.g., device details), and use it to respond.</li></ul>
+<h3>(D) Purchases</h3>
+<ul><li>The one-time unlock purchase is processed through Apple&#x27;s StoreKit/App Store payment system. We do not receive your card numbers or similar payment credentials. The unlock is a non-consumable in-app purchase and is not a subscription.</li></ul>
+<h3>2. Purposes</h3>
+<p>We use information only to:</p>
+<ul><li>Provide app functionality (On-device cough recording and optional monitoring with a selected nearby device)</li><li>Respond to support requests</li><li>Troubleshoot issues (based on what you provide)</li><li>Comply with law</li></ul>
+<h3>3. Sharing and External Transmission</h3>
+<ul><li>On-device processing, Apple services, and transfers to user-selected devices or destinations follow the feature-specific data handling described in this Privacy Policy. These differ from automatic transmission to our processing infrastructure.</li><li>We handle support communications only as necessary to respond, troubleshoot, comply with law, or address disputes.</li><li>We do not provide support communications to third parties without your consent, except where required by law.</li><li>We do not use Apple Health data for advertising, marketing profiling, or data brokerage, and we do not sell such data.</li><li>Apple Health storage and Apple-side processing depend on your device settings and Apple&#x27;s system behavior. We do not control Apple&#x27;s behavior.</li><li>We do not use any external analytics software development kit (SDK) in the iOS App.</li><li>This support website is hosted using Vercel Inc. services. Cloudflare Web Analytics (RUM) may run when you visit; when active, it sends the page URL, referrer, loading times and other browser performance data to Cloudflare to measure site performance and usage. According to Cloudflare, its script does not read or write cookies or browser storage; the source IP address received during ordinary request handling is discarded at a nearby data center. Processing may occur in a different country or region depending on network routing.</li></ul>
+<h3>4. Retention</h3>
+<p>See Data handling by feature for retention and deletion details.</p>
+<ul><li>Support emails are retained for up to 12 months after resolution, unless longer retention is required for disputes or legal obligations.</li></ul>
+<h3>5. Security</h3>
+<p>We take necessary and appropriate measures to secure support information we actually receive. We respond without undue delay to requests from individuals for details of applicable measures as required by law. See Data handling by feature for data protection details.</p>
+<h3>6. Your Rights</h3>
+<p>Where applicable, you may request access, correction, suspension of use, or deletion of support information we hold. We verify that the requester is the person concerned or an authorized representative. Ask through the Contact section below about the request and disclosure procedures and any applicable fees.</p>
+<p>See Data handling by feature for data management, deletion and export details.</p>
+<ul><li>EU/EEA (General Data Protection Regulation, &quot;GDPR&quot;): Right to lodge complaints, withdraw consent.</li><li>California (California Consumer Privacy Act / California Privacy Rights Act, &quot;CCPA/CPRA&quot;): Right to know, delete, opt-out. We don&#x27;t sell personal information.</li><li>China (PIPL): Right to know, access, correct, delete. If you enable Apple services enabled in system settings, Apple&#x27;s systems may process or store data outside your country/region according to Apple&#x27;s specifications.</li><li>South Korea (PIPA): Right to request processing suspension.</li><li>Brazil (LGPD): Right to data portability.</li></ul>
+<h3>7. Children&#x27;s Privacy</h3>
+<p>The person operating the App, the purchaser, and the person whose information is recorded may differ. A minor&#x27;s use or purchase may require a parent or legal guardian&#x27;s involvement, depending on age, capacity, and applicable law. If a minor is recorded, respect that person&#x27;s wishes and confirm any required consent and authority of a parent or legal guardian. Consent by the device operator or purchaser alone does not establish consent or authority for a different recorded person.</p>
+<h3>8. Changes to This Policy</h3>
+<p>We may update this Privacy Policy as needed. Changes will be posted on our website.</p>
+<h3>9. Contact</h3>
+<p>For support requests or privacy-related requests, please contact us from the Contact section at the bottom of this page.</p>
+<h3>10. Governing Law</h3>
+<p>This policy is governed by Japanese law. Regional laws (including GDPR, CCPA/CPRA, PIPL, LGPD, and PIPA) apply only when their requirements for application are met, and only to the extent applicable.</p>
+<h3>11. Translations</h3>
+<p>The Japanese version of this Privacy Policy is the authoritative text. In case of any conflict between translated versions and the Japanese version, the Japanese version shall prevail. However, this does not limit your rights under mandatory consumer protection laws or other applicable regulations in your country or region of residence.</p>
+<p>---</p>
+<p>Operator: AllNew LLC</p>
+<p>Apple, iPhone, iOS, Apple Health, and HealthKit are trademarks of Apple Inc., registered in the U.S. and other countries. Other company and product names may be trademarks of their respective owners.</p>
+<p>© 2026 AllNew LLC</p>
+<h3>Data handling by feature</h3>
+<ul><li>Temporary microphone audio, Detected cough-like sounds, Optional saved audio clips — Processed on this device (Country or region where the device is used). Purpose: Count cough-like sounds on the device and optionally save short clips around a detection. / Retention: The temporary recording buffer holds about two seconds. Saved clips become eligible for automatic deletion after 14 days when the list is loaded; deletion at the exact 14-day point is not guaranteed. / Deletion: Stopping capture releases the buffer. Delete saved clips individually or together in the app. / Export: No automatic transmission. Export through a clip share button follows the audio-sharing description below. / Protection: Audio analysis and storage take place on the device in an app storage area isolated by the OS. / Consent and controls: OS microphone permission is required. Choose clip saving in Settings and start or stop recording yourself.</li><li>Estimated event count, Whole-session average frequency per hour over the start-to-end interval, including pauses, Session duration, Start and end times, Hourly counts, App-defined group based on whole-session average frequency, Health-save status — Processed on this device (Country or region where the device is used). Purpose: Review recordings and show the latest record through widgets and Siri. / Retention: The latest 180 sessions are retained. The latest-record summary is refreshed when history is added or deleted. / Deletion: Long-press a session under Records → Sessions to delete it individually. There is no screen for deleting all history at once. Manage Health records and exported audio separately. / Export: History is not automatically transmitted off device. / Protection: Records stay in local app storage; the latest-record summary is shared with this app’s widget and related features. / Consent and controls: Sessions are saved when recording ends. You can delete history and change settings for Siri and related features.</li><li>Session count, Session duration, Hourly distribution, Previous count, Display language — Processed on this device (Country or region where the device is used). Purpose: Turn recorded numbers into short on-device text. Current summaries use fixed numeric wording and do not diagnose or provide medical advice. / Retention: Text is generated for display and is not separately persisted. Source history retains the latest 180 sessions. / Deletion: Close the display and delete source history if needed. / Export: Summaries are not sent to an external AI or our servers. / Protection: Processing uses history stored on the device. / Consent and controls: Choose summaries in Settings. Do not use these numeric descriptions for medical decisions.</li><li>Role label “Monitoring (recorder)”, Recording state: active, paused or stopped, Estimated count, Elapsed time, Record level, Latest detection time, Hourly counts, Start/stop request IDs and execution acknowledgements, App identifier for connection confirmation, Sync session ID, revision, start and measurement times and completion state, Durable storage receipt ID and revision, Ephemeral Wi-Fi identity and key, set up using QR or manual entry, Temporary stream identifier and sequence number for ordering live updates, Start timestamps for hourly count buckets, HTTPS endpoint, certificate fingerprint and access key registered from the physical recorder; the access key authorizes requests, Recorder-generated identifier for the HTTPS history source — Sent to a device or destination selected by the user (Country or region where the device is used; destination storage is controlled by the selected device or service). Purpose: Share the role label (“Monitoring (recorder)”), recording state, estimated count, elapsed time, record level, latest event time, hourly counts, start/stop request IDs and execution acknowledgements with the selected peer over encryption. The role label is not the device’s actual name. For iPhone/iPad Wi-Fi connections, the app stores a generated connection UUID on this device and uses its first 12 characters as its app identifier for peer confirmation over an encrypted connection. This UUID stays on this device after disconnecting or withdrawing consent. HTTPS also sends the recorder-generated local identifier to Watch. It is not the actual device name or proof of purchase. It remains locally after disconnect or consent withdrawal. Watch identifies the history source using this identifier together with the certificate fingerprint. / Retention: Latest received state is held only in memory and is stale after 15 seconds without updates. The Wi-Fi connection UUID remains locally after disconnect or withdrawal. The consent version, date and agreement status are stored locally and retained after ordinary disconnection. Any authority choice and recipient label from an earlier version are removed when agreeing again or withdrawing consent. Approved Wi-Fi peer identity and the connection key are held only in memory for reconnection. The recorder TLS certificate and private key are stored in device-only Keychain storage, available after the first unlock following restart. The certificate is valid for seven days. Expiry prevents use but does not automatically erase its certificate or private key. Disconnecting, withdrawing consent and the existing data-reset operation retain this dedicated Keychain entry; explicit certificate renewal on the recorder replaces the old entry. Endpoint or certificate changes and expiry require explicit renewal and Watch re-enrollment. The recorder access key remains only in memory and is lost on manual disconnection of HTTPS sharing or app termination; re-enroll after restarting the recorder. Watch stores the endpoint, fingerprint and access key in device-only Keychain storage available only while unlocked. Backgrounding alone retains enrollment; returning to the foreground attempts reconnection. Manual disconnection, mode changes, consent withdrawal or loss of purchase rights disable Watch enrollment, attempt its deletion, and request recorder revocation. A deletion failure is shown for retry after unlocking. A local tombstone prevents automatic reconnection. That request cannot arrive while disconnected. Remote stopping is not guaranteed: operate the recorder directly whenever stopping is necessary. Outgoing and received synchronization aggregates are stored locally in separate journals, each capped at 180 records per device. A device that changes roles can retain both journals. The recorder removes completed aggregates already acknowledged by the viewer when space is needed; if pending records fill the limit, it displays a storage warning. The viewer removes older aggregates at the limit. These records survive normal disconnects and are excluded from device backups. Withdrawing sharing consent or deleting all data deletes synchronization records on that device. It does not remotely delete the other device’s copies; delete those on the other device as well. HTTPS also sends the recorder-generated local identifier to Watch. It is not the actual device name or proof of purchase. It remains locally after disconnect or consent withdrawal. Watch identifies the history source using this identifier together with the certificate fingerprint. / Deletion: Disconnect, consent withdrawal, loss of purchase rights or a new connection clears received state. Withdrawal deletes the consent version, date, agreement status and any legacy authority choice and recipient label but leaves the Wi-Fi connection UUID. The recorder’s regular saved history, previous Health records and exported copies are not deleted. Manual disconnection, role changes, withdrawal or entitlement revocation clear that device’s Wi-Fi reconnection information in memory. Watch immediately disables direct access and attempts to delete stored enrollment. A failure is shown for retry after unlocking; a local tombstone prevents automatic reconnection even if deletion fails. The recorder TLS certificate and private key remain until explicit certificate renewal replaces them. Outgoing and received synchronization aggregates are stored locally in separate journals, each capped at 180 records per device. A device that changes roles can retain both journals. The recorder removes completed aggregates already acknowledged by the viewer when space is needed; if pending records fill the limit, it displays a storage warning. The viewer removes older aggregates at the limit. These records survive normal disconnects and are excluded from device backups. Withdrawing sharing consent or deleting all data deletes synchronization records on that device. It does not remotely delete the other device’s copies; delete those on the other device as well. / Export: Only summaries and state are shared with the selected peer. Audio sharing requires a separate user action. / Protection: Wi-Fi uses an ephemeral 32-character QR or manually entered connection key with TLS encryption and authentication. Bonjour advertises a random connection name, not health records or keys. For direct Watch connection, connect the recorder iPhone and Watch to the same LAN. In the Watch app, enter the HTTPS endpoint, all 64 characters of the certificate fingerprint, and the 64-character access key displayed on the physical recorder. A partial fingerprint is insufficient. Register the access key only on the intended Watch; do not share it in images or messages. Apple Foundation URLSession, Security, OS TLS and Apple NIO HTTP handling verify the registered certificate and viewer authorization. There is no Bluetooth or older-version fallback. Viewing, synchronization and remote controls all require compatible updated recorder and Watch apps; update each through the App Store. Direct mode needs the recorder iPhone, but does not need relay through an app on the OS-paired iPhone. Both devices check purchase rights and sharing consent. Recorder-side transmission progress is not confirmation of receipt. Continuous connectivity and accurate or immediate detection and notifications are not guaranteed. / Consent and controls: Before recording or sharing another person’s coughs, obtain their consent and guardian consent where needed. Agree to sharing and its limitations, then verify the selected connection method’s details on the physical recorder. Consent authorizes remote starts during the connection without per-start confirmation; each stop request requires recorder confirmation. Withdraw sharing consent in Monitoring mode settings.</li></ul>
+<p>The recorder iPhone has one direct recipient: a viewer iPhone or iPad, or an Apple Watch, never both routes at once. iPhone and iPad use Apple Network.framework Bonjour, TLS and WebSocket. Scan the recorder QR on the viewer and approve the peer on the recorder. Enter the 32-character connection key if the camera is unavailable. Do not share the QR or key with others. This Wi-Fi key stays only in memory; set up again after manual disconnection or app termination.</p>
+<p>For direct Watch connection, connect the recorder iPhone and Watch to the same LAN. In the Watch app, enter the HTTPS endpoint, all 64 characters of the certificate fingerprint, and the 64-character access key displayed on the physical recorder. A partial fingerprint is insufficient. Register the access key only on the intended Watch; do not share it in images or messages. Apple Foundation URLSession, Security, OS TLS and Apple NIO HTTP handling verify the registered certificate and viewer authorization. There is no Bluetooth or older-version fallback. Viewing, synchronization and remote controls all require compatible updated recorder and Watch apps; update each through the App Store. Direct mode needs the recorder iPhone, but does not need relay through an app on the OS-paired iPhone.</p>
+<p>The recorder TLS certificate and private key are stored in device-only Keychain storage, available after the first unlock following restart. The certificate is valid for seven days. Expiry prevents use but does not automatically erase its certificate or private key. Disconnecting, withdrawing consent and the existing data-reset operation retain this dedicated Keychain entry; explicit certificate renewal on the recorder replaces the old entry. Endpoint or certificate changes and expiry require explicit renewal and Watch re-enrollment. The recorder access key remains only in memory and is lost on manual disconnection of HTTPS sharing or app termination; re-enroll after restarting the recorder. Watch stores the endpoint, fingerprint and access key in device-only Keychain storage available only while unlocked. Backgrounding alone retains enrollment; returning to the foreground attempts reconnection. Manual disconnection, mode changes, consent withdrawal or loss of purchase rights disable Watch enrollment, attempt its deletion, and request recorder revocation. A deletion failure is shown for retry after unlocking. A local tombstone prevents automatic reconnection. That request cannot arrive while disconnected. Remote stopping is not guaranteed: operate the recorder directly whenever stopping is necessary.</p>
+<p>Optionally, a viewer iPhone relays received state and aggregates to its OS-paired Watch through WatchConnectivity. iPad cannot relay, and Watch direct and companion modes are mutually exclusive. Participating devices check sharing consent and purchase rights. Existing purchases remain valid; no additional purchase is required. Connection consent permits remote starts without per-start confirmation. Stop requests need confirmation on the recorder. Commands are sent only when reachable with fresh state; the recorder validates recorder-issued, expiring requests.</p>
+<p>No audio or HealthKit values are transmitted, and records are not sent to our servers or a new cloud service. OS background, lock and network restrictions can delay or interrupt updates; continuous connectivity is not guaranteed. Recording continues during temporary link loss. Starting a new HTTPS sharing session on the recorder changes the viewer routing UUID. Re-entering the same enrollment on Watch does not change it. Previously saved history remains separate; automatic merging and retransmission of all pending aggregates for an old recipient are not guaranteed. Distinguish saved history from current state. Outgoing and received synchronization aggregates are each limited to 180 per device and are not automatically written to Health on viewers or Watch. Consent withdrawal deletes synchronization records on the device where performed; delete other devices&#x27; copies separately. Directly disconnecting, changing roles or withdrawing consent on the recorder stops and saves its recording. Force quit or power loss may lose data since the last save.</p>
+<ul><li>Audio clip selected by the user — Sent to a device or destination selected by the user (Country or region where the device is used; destination storage is controlled by the selected device or service). Purpose: Give an audio copy to the app or destination you select through the share button. / Retention: The destination controls its retention. The original remains on device and becomes eligible for deletion after 14 days when the list is loaded. / Deletion: Delete originals and destination copies separately. Deleting the original or withdrawing monitoring consent does not delete exported copies. / Export: Export an individually selected clip using the OS share sheet. / Protection: Protection after export depends on the selected app or destination. Check whether a clip includes nearby conversation before sharing. / Consent and controls: Sharing is optional and requires you to select a clip and destination. No automatic transmission occurs.</li><li>Purchased product identifier, Verified purchase access, Direct-purchase or family-shared ownership, Revocation information, Monitoring product identifier — Processed by Apple systems or services (Country or region where the device is used; destination storage is controlled by the selected device or service). Purpose: The app is free to download. Parent/child monitoring is a paid one-time option; downloading the app alone does not grant monitoring access. Existing purchase rights and purchase restoration are preserved. Unlimited standalone recording and monitoring are separate one-time purchases. Prior standalone purchases and saved data are preserved. Both devices with verified monitoring rights need no legacy purchase or free allowance during monitoring sessions. Unlimited standalone use is not included. Family Sharing requires an eligible shareable product and Apple&#x27;s family and purchase-sharing conditions; restore and verify on each device. Refunds or ended sharing can revoke monitoring access on that device. On the recorder iPhone this stops and saves recording. Watch can only attempt recorder revocation; verify stopping and saving on the recorder if communication is unavailable. There is no recurring charge. Unlimited refers to session creation: history keeps the latest 180 sessions and audio older than 14 days is deleted when the list loads. Apple refund procedures do not limit statutory rights. / Retention: Apple account controls govern transaction retention. The app uses entitlement results and handles updates and revocation. / Deletion: Use Apple account purchase and refund controls. Deleting the app does not delete Apple transaction records. / Export: Sending a purchase flag to a monitoring peer cannot unlock access. / Protection: The app uses transactions verified by Apple. We do not store payment-card numbers. / Consent and controls: You initiate purchase or restoration in Settings → About this app → Purchase and restore. Family Sharing requires an eligible product, Apple sharing conditions and verified access on each device.</li><li>Public-page URL opened by the user, Optional feedback or email composed by the user — Sent to a device or destination selected by the user (Country or region where the device is used; destination storage is controlled by the selected device or service). Purpose: Display legal/support pages and respond to voluntarily sent inquiries. The app does not automatically attach recordings or audio. / Retention: Browser and email service policies apply. Sent inquiries can remain with sender and recipient, separately from app-history retention. / Deletion: Contact support to request deletion of correspondence. Deleting app history does not delete email or records at the visited service. / Export: Only content you compose or select for sending is shared. Audio and history are not automatically sent. / Protection: Public pages use HTTPS. Email protection depends on the communication service. Avoid sending unnecessary health information. / Consent and controls: Opening pages and sending inquiries are optional. Review the content before sending.</li><li>Public app identifiers, Lookup store country parameter (fixed to Japan), Public icon images — Processed by Apple systems or services (Country or region where the device is used; destination storage is controlled by the selected device or service). Purpose: Fetch public related-app information and icons from Apple, and open the App Store when selected. Cough records are not part of the lookup. / Retention: Listings are held temporarily for display; image caches follow app and OS management. / Deletion: App and OS cache management controls temporary data. Apple controls records on its services. / Export: Health records and audio are not exported in app lookups. / Protection: Public Apple information is fetched over HTTPS. / Consent and controls: Related apps appear in Settings. You choose whether to open their App Store pages.</li><li>Temporary setup conversation and corrections, Preferred usage mode, Theme preference, Clip-saving preference, Night dimming preference, Control-lock preference, On-device summary preference, Siri preference, Live Activity preference, Automatic Health preference (rule review and OS access are separate actions), Guide visibility after setup — Processed on this device (Country or region where the device is used). Purpose: On supported devices, Apple&#x27;s on-device model proposes usage, theme, clip saving, dimming, control lock, summaries, Siri, Live Activity and guide visibility. Conversation text is discarded when the screen closes and is not sent to us or an external AI. Only explicitly applied settings are saved. AI does not diagnose, advise, change sensitivity, approve purchases or sharing, grant OS permissions or operate accounts. Use choices in the same screen when unavailable, failed or cancelled. Automatic Health saving can also be proposed, but the user must separately review the saving rule and grant OS write access. AI cannot change or confirm the rule. / Retention: Conversation stays in memory until the screen closes and is then discarded. Only reviewed and applied preferences persist. / Deletion: Closing the screen discards conversation and unapplied proposals. Change applied preferences in the normal settings screens. / Export: Conversation is not sent to our servers or an external AI. There is no automatic cloud-AI fallback. / Protection: Only allowed on-device settings are handled. AI cannot diagnose, give medical advice, change sensitivity, approve purchases or sharing, grant OS permissions or operate accounts. / Consent and controls: Assisted setup is optional. Review proposals before applying. Purchases, sharing consent and OS permissions each require separate explicit actions.</li><li>Coughing symptom value from the personal rule, Recording start and end timestamps, Confirmed rule, confirmation date and version, Session identifier — Processed by Apple systems or services (Device country or region; Apple sync and sharing depend on user settings). Purpose: Automatic saving to Health is optional. In Settings → Recording and Health, confirm your personal rule and allow coughing writes. The app then saves the device user&#x27;s recording when it ends according to the selected recording scope. It converts the whole-session hourly average to Health&#x27;s mild, moderate or severe coughing value using your confirmed rule, saving one sample with the recording start and end times. Zero detections are not saved. The average includes pauses; intervals shorter than one second count as one second.</li></ul>
+<p>11/hour and 41/hour are editable examples, not medical standards or Apple-defined count thresholds. Frequency alone cannot determine symptom severity. The values are your personal recording guide, not a clinical severity assessment. Health displays Mild, Moderate or Severe; when showing these records to a healthcare professional or others, explain that they use your personal rule. Changes apply to the next recording and do not change earlier records.</p>
+<p>Standalone recordings are included by default. Selecting Include monitoring recordings and confirming that the recordings belong to the person who uses Health on this iPhone also includes monitoring recordings captured by this iPhone as the recorder. They are saved to Health on the recording iPhone. Information received by the parent device is not included. Scope changes apply to the next recording. The app does not read or delete Health data. Count series and audio are not written to Health. The confirmed rule, confirmation date and version, and session identifier are retained and added to the Health sample as provenance. Health data is not sent to us. Health iCloud sync and sharing with other apps follow Apple&#x27;s features and your settings. Standalone recording works without enabling this integration.</p>
+<p>If your cough is troubling, persistent or disrupts sleep, consult a healthcare professional regardless of count or level. Seek prompt medical care for breathlessness, blood in sputum or persistent high fever. / Retention: Health retention follows Apple features and user settings. The confirmed rule remains locally until changed; a history entry retains its rule with that entry. / Deletion: Manage samples in Health. Deleting records in this app does not delete Health samples. / Export: Health sharing and export follow OS features and user settings. / Protection: Health records are managed by the OS and are not sent to us. / Consent and controls: Explicitly confirm the rule, enable automatic saving and authorize OS coughing writes. Turning it off keeps previous records.</p></div></section>
+    <section id="terms-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">利用規約</div><div class="section-subtitle">サービスのご利用条件</div></div></div><div class="legal-section"><p>最終更新日: 2026-10-01</p>
+<h3>1. 規約の適用</h3>
+<p>本利用規約（以下「本規約」といいます）は、合同会社AllNew（以下「当社」といいます）が提供するアプリケーション「CoughWav」（日本語のApp Store表示名「CoughWav 咳（せき）ノート」、以下「本アプリ」といいます）の利用条件を定めるものです。ユーザーは本規約に同意した上で本アプリを利用するものとします。</p>
+<h3>2. 利用開始と同意</h3>
+<p>本アプリの利用条件として本規約を事前に表示し、ユーザーが同意した場合に本規約が適用されます。本規約に同意しない場合、本アプリをご利用いただくことはできません。ダウンロードまたはインストールだけをもって同意したものとは扱いません。</p>
+<h3>3. 本アプリの概要と対応機器</h3>
+<p>本アプリは、App Store記載内容およびアプリ内説明に基づき、咳を端末内で数える単体利用と、選んだ端末への任意のモニタリング共有を提供するアプリケーションです。カメラまたは写真ライブラリを、ユーザーが明示的に選択した撮影、読み取り、記録補助のためにのみ使用します。撮影画像や選択画像は端末内で扱われ、プライバシーポリシーに明記した場合を除き、当社サーバーへ送信・保存しません。</p>
+<ul><li>対応端末: iPhone (iOS 27.0以降), iPad (iPadOS 27.0以降), Apple Watch (watchOS 27.0以降)</li><li>対応OSや提供機能は、端末環境、地域、権限設定、プラットフォームポリシー等により異なる場合があります</li><li>本アプリは、ユーザーが自ら入力、記録、保存、管理する内容を補助するものであり、当社が当該内容の正確性や完全性を保証するものではありません</li></ul>
+<h3>4. プライバシーポリシーおよびデータの取り扱い</h3>
+<p>当社は、本アプリの利用に関連して取り扱う情報を別途定めるプライバシーポリシーに従って取り扱います。</p>
+<p>ユーザーが本アプリで作成、記録、保存、管理するデータについて、当社は以下を遵守します。</p>
+<ul><li>ユーザーのデータを広告、マーケティング、または大量のデータを自動的に分析して傾向を見つける目的で使用しません</li><li>ユーザーのデータをデータブローカーや第三者に販売・提供しません</li><li>端末内処理を前提とする機能について、ユーザーのデータを当社が運用するサーバーへ送信・保存しません</li><li>端末内処理、Appleの処理、利用者が選ぶ端末・共有先への送信は、プライバシーポリシーの機能別説明に従います。当社の処理基盤への自動送信とは区別されます。</li></ul>
+<h3>5. 有料機能</h3>
+<p>2.0.2向けの文書です。新版がApp Storeで公開された時点から適用します。公開前の現行版には現行ページの文書が適用されます。</p>
+<p>アプリ本体のダウンロードは無料です。親機・子機の連携（モニタリング）は有料の買い切りオプションで、アプリのダウンロードだけでは利用権は付与されません。既存の購入権と購入の復元を維持します。</p>
+<p>単体記録の無制限利用とモニタリングモードは別々の買い切り商品で、継続課金はありません。以前の単体購入権と保存データは維持されます。</p>
+<ul><li>価格はApp Storeの購入画面に表示されます。Appleアカウントの支払方法で購入確定時に決済され、有効な購入権を確認した後に利用できます。通信費は利用者の負担です。</li><li>モニタリングは各端末で購入権を確認し、共有への同意を得た後に利用できます。モニタリング中は単体購入や無料回数を必要としませんが、単体記録の無制限利用は別商品です。</li><li>ファミリー共有には対象商品の共有設定、Appleの家族・購入共有条件、端末ごとの購入権の復元・検証が必要です。返金や共有終了で権利を失うとモニタリングを停止します。</li><li>返金はAppleの返金手続きに従います。未成年者が購入する場合は親権者の同意が必要です。</li></ul>
+<h3>モニタリングの利用条件</h3>
+<p>モニタリングモードでは、近くのモニタリング（子機）1台とモニタリング（親機）1台を接続します。複数台にインストールしても、複数の子機を同時に確認する機能にはなりません。共有への同意は「設定 → モニタリングモード → 共有への同意を撤回」で撤回できます。子機iPhoneで手動切断・同意撤回・購入権失効が起きた場合は、子機の記録を停止して保存します。Watch側の操作や権利失効ではWatchの接続を無効にして子機へ解除を要求します。通信できない場合は子機の記録が続くため、子機で停止・保存を確認してください。一時的な通信断では子機の記録を継続します。単体記録は従来の利用条件で継続できます。</p>
+<p>本アプリは日常のウェルネス記録用です。医療機器、診断、治療、緊急通報、安全の保証を目的としていません。検出の誤り・見逃し、通信・通知の遅延や中断があり、常時接続を保証しません。古い更新を現在の状態として扱わないでください。</p>
+<h3>記録と共有の詳細</h3>
+<p>役割名（「モニタリング（子機）」）、記録中の状態、推定回数、経過時間、記録レベル、直近の検出時刻、時間別回数、開始・終了の要求IDと実行結果を、選んだ相手と暗号化して共有します。役割名は端末の実際の名前ではありません。iPhone・iPadのWi-Fi接続では、アプリが生成する接続用UUIDを端末内に保存し、先頭12文字を暗号化された接続内で相手を確認するアプリ内識別名として使います。このUUIDは切断や同意撤回後も端末内に残ります。</p>
+<p>モニタリングで音声を自動送信しません。接続時の同意で相手からの遠隔開始を許可します。開始ごとの確認はありません。終了には子機で毎回確認が必要です。子機での手動切断や同意撤回時はモニタリングの記録を停止・保存します。Watchからの解除要求は通信断中に届かないため、必要なときは子機を直接停止してください。一時的な通信断では子機の記録を継続します。設定 ＞ モニタリングモード ＞「共有への同意を撤回」で取り消せます。受信した現在の状態はメモリに保持し、切断時に消去します。同期用の送信集計と受信集計は、各端末でそれぞれ最大180件保存します。役割を変えた端末には両方の記録が残る場合があります。子機は親機から保存確認を受けた終了済みの集計から整理し、未同期分で上限に達した場合は追加の同期保存ができないことを表示します。親機は上限に達すると古い集計から整理します。これらの同期記録は通常の切断後も残り、端末バックアップの対象外です。共有への同意撤回または全データ削除で、その操作を行った端末内の同期記録を削除します。相手側のコピーは遠隔削除されないため、相手の端末でも削除してください。同意した版・日時・同意済みの状態は端末内に保存し、切断後も保持します。旧版で入力した相手の呼び名・権限の選択が残っている場合は、再同意または同意撤回時に削除します。同意を撤回すると、それらの同意記録を削除します。</p>
+<p>子機の記録は最新180件、録音は14日を超えると一覧読込時に削除します。録音一覧の共有操作で選んだ相手や保存先へ渡したコピーは、元の録音の削除や同意撤回では削除されません。検出の誤り・見逃し、通信や通知の遅延・中断があります。医療機器・診断・緊急通報・安全保証には使えません。</p>
+<p>単体記録の無制限利用とモニタリングは別々の買い切り商品です。以前の単体購入と保存データは維持されます。モニタリングの購入権が確認された両端末では、モニタリング中に旧単体購入や無料回数は不要です。単体の無制限利用は含みません。ファミリー共有には対象商品の共有設定とAppleの家族・購入共有条件を満たし、各端末で購入を復元・検証する必要があります。返金や共有終了でモニタリング権利が失われると、その端末の共有を停止します。子機iPhoneでは記録を停止・保存します。Watch側から子機への解除通知は通信できない場合には届かないため、子機で停止・保存を確認してください。継続課金はありません。無制限とは記録の作成回数であり、履歴は最新180件、録音は14日を超えると一覧読込時に削除します。Appleの返金手続きの案内は法令上の権利を制限しません。</p>
+<p>他の人の咳を記録・共有する場合は、事前に本人の同意と、必要な場合は保護者の同意を得てください。共有内容と利用上の限界を確認して同意した後、2台でコードを確認します。子機は接続相手の識別名を確認して許可します。接続中の遠隔開始をまとめて許可し、開始ごとの確認はしません。終了要求は子機で毎回確認します。共有への同意は設定のモニタリングモードから撤回できます。</p>
+<p>ヘルスケアへの自動記録は任意です。「設定 → 記録とヘルスケア」で自分の保存ルールを確認し、咳の書き込みを許可すると、利用者本人の記録を、選択した保存対象に応じて終了時に自動保存します。記録全体の平均回数を、確認したルールに従ってヘルスケアの「咳」の軽度・中度・重度に変換し、開始・終了時刻を持つ1件として保存します。検出0回は保存しません。平均には休止時間を含み、1秒未満の記録は1秒として計算します。</p>
+<p>11回/時・41回/時は編集できる設定例で、医学的基準やAppleの回数基準ではありません。頻度だけで症状の重さは判断できません。利用者が自分の記録の目安として選ぶもので、医学的な重症度判定ではありません。ヘルスケアでは軽度・中度・重度と表示されるため、医療者などに記録を見せる際は自分で設定した目安であることを伝えてください。ルールの変更は次の記録から適用し、過去の記録は変更しません。</p>
+<p>初期設定では単体利用の記録が対象です。「モニタリングの記録も保存」を選択し、このiPhoneのヘルスケアを利用する本人の記録であることを確認すると、このiPhoneを子機として記録したモニタリングの記録も保存できます。保存先は記録元のiPhoneのヘルスケアです。親機で受信した情報は保存対象に含まれません。保存対象の変更は次の記録から適用します。読み取り・削除は行いません。回数の一覧や録音はヘルスケアへ書き込みません。確認した保存ルール、確認日時・版、セッション識別子を保存値の由来として保持し、Health記録に付加します。当社への健康データの送信はありません。ヘルスケアのiCloud同期や他のアプリへの共有はAppleの機能と利用者の設定に従います。単体記録はこの連携を有効にしなくても利用できます。</p>
+<p>咳がつらい、長引く、眠れないなど気になる症状があるときは、記録の数値やレベルにかかわらず医療機関に相談してください。息苦しさ、血の混じった痰、高熱が続く場合は、速やかに受診してください。</p>
+<p>子機iPhoneの直接の受信先は、親機iPhone・iPadまたはApple Watchの1台で、両経路を同時に使いません。iPhone・iPad間はAppleのNetwork.frameworkによるBonjour・TLS・WebSocketを使います。親機で子機のQRを読み取り、子機でも相手を確認してください。カメラを使えない場合は32桁の接続キーを入力できます。QRやキーを他人へ共有しないでください。このWi-Fiキーはメモリだけに保持し、手動切断・アプリ終了後は再設定します。</p>
+<p>Watchの直接接続では、子機iPhoneとWatchを同じLANにつなぎます。Watchのアプリで、実物の子機画面に表示されたHTTPS接続先、64桁すべての証明書指紋、64桁のアクセスキーを入力してください。指紋の一部だけでは確認できません。アクセスキーは許可するWatchだけに登録し、画像やメッセージで他人へ共有しないでください。AppleのFoundation URLSession・Security・OSのTLSとApple NIOのHTTP処理を使い、登録した証明書と相手の利用許可を確認します。Bluetoothや旧版への自動切替はありません。閲覧・同期・遠隔操作のすべてに、子機とWatchの対応新版が必要です。各端末のApp Storeで更新してください。直接接続には記録する子機iPhoneが必要ですが、OSペア済みiPhoneのアプリによる中継は不要です。</p>
+<p>子機のTLS証明書と秘密鍵は、その端末だけで利用できるKeychainに保存し、再起動後の初回ロック解除後に利用可能です。証明書の有効期間は7日です。期限切れは利用を停止しますが、保存した証明書・秘密鍵を自動削除しません。共有の切断・同意撤回や既存のデータ削除操作でもこの専用Keychain情報は残り、子機で証明書を明示更新すると旧情報を置き換えます。接続先や証明書の変更・期限切れ時には明示的に更新し、Watchで再登録してください。子機のアクセスキーはメモリ内だけに保持し、HTTPS共有の手動切断・アプリ終了で失われます。子機を再起動した後は再登録が必要です。Watchの接続先・指紋・アクセスキーは、その端末のロック解除中だけ利用できるKeychainに保存します。バックグラウンド移行だけでは登録を削除せず、アプリを前面に戻すと再接続を試みます。手動切断・方式変更・同意撤回・購入権失効ではWatchの登録の利用を無効にして削除を試み、子機にも登録解除を要求します。削除に失敗した場合はエラーを表示し、ロック解除後に再試行できます。無効化記録により自動再接続を防ぎます。ただし通信できない場合、その要求は届きません。離れた端末からの停止は保証されないため、必要なときは子機を直接操作して停止してください。</p>
+<p>任意で、親機iPhoneが受信した状態・集計をOSペア済みWatchへWatchConnectivityで補助表示できます。iPadは中継できず、Watchの直接接続と補助表示は同時に使いません。参加する各端末で共有同意と購入権を確認します。既存購入権は維持され、追加購入は不要です。遠隔開始には接続時の同意が適用され、開始ごとの確認はありません。終了要求は子機で確認します。到達可能で状態が新しい場合のみ操作を送り、子機が発行した期限付き要求を子機側で検証します。</p>
+<p>音声とHealthKit値は送りません。当社サーバーや新しいクラウドへ記録を送信しません。OSの背景実行・ロック・ネットワーク制限により更新は遅延・中断し、常時接続は保証されません。一時的な通信断中も子機の記録は続きます。子機でHTTPS共有を新しく開始すると、受信先を区別するUUIDが変わります。Watchで同じ接続情報を再入力するだけでは変わりません。以前保存した履歴は別に保持し、自動統合や旧受信先向けの未送信集計すべての再送は保証しません。現在の状態と保存済み履歴を区別してください。同期集計は各端末で送信用・受信用それぞれ最大180件で、親機やWatchのヘルスケアへ自動保存しません。同意撤回では操作した端末内の同期記録を削除します。他の端末のコピーはそれぞれ削除してください。子機を直接切断・役割変更・同意撤回した場合は記録を停止・保存します。強制終了・電源断では最後の保存以降が失われる場合があります。</p>
+<p>iPadはモニタリングの親機、Apple Watchは子機iPhoneに直接接続する親機またはOSペア済み親機iPhoneの補助表示です。単体記録の無制限商品は対象外です。</p>
+<p>HTTPSでは子機が作成する端末内の接続用識別子もWatchへ送信します。実際の端末名や購入権ではありません。この識別子は切断・同意撤回後も端末内に残ります。Watchは証明書指紋とこの識別子を組み合わせて履歴の相手を区別します。</p>
+<h3>6. 禁止事項</h3>
+<p>ユーザーは、以下の行為をしてはなりません。</p>
+<ul><li>本アプリの目的と異なる利用</li><li>法令または公序良俗に反する行為</li><li>第三者の権利、プライバシー、名誉、信用を侵害する行為</li><li>リバースエンジニアリング、解析、改変、複製、再配布</li><li>第三者の情報、記録、その他データを無断で取得・記録・公開する行為</li><li>前各号に準じ、本アプリの提供または第三者の権利を害するおそれがあると合理的に判断される行為</li></ul>
+<h3>7. 重要情報に関する注意</h3>
+<p>本アプリは、ユーザーの日常的な記録、確認、整理、創作、または利便性向上を支援することを目的としたものです。専門的判断が必要な事項については、各分野の専門家にご相談ください。</p>
+<h3>8. 処理結果について</h3>
+<p>本アプリが入力、記録、分類、集計、表示、同期、またはその他の自動処理を行う場合、その結果が常に完全または正確であることを保証しません。ユーザーは、処理結果を必要に応じて確認し、誤りがある場合は修正、削除、再実行等を行ってください。</p>
+<ul><li>処理結果は、端末、OS、設定、権限、通信状態、入力内容、利用環境等により変動します</li><li>本アプリの表示や処理結果は、最終判断の代替となるものではありません</li><li>不具合について当社に責任がある場合の取扱いは、第10条と適用法令に従います</li></ul>
+<h3>9. 知的財産権</h3>
+<p>本アプリに関する著作権その他の知的財産権は、当社または正当な権利を有する第三者に帰属します。本規約により、ユーザーへ本アプリまたは関連資料に関する権利が移転するものではありません。</p>
+<h3>10. 免責事項</h3>
+<p>当社は、本アプリの機能が中断なく動作すること、処理結果、表示内容、保存結果、同期結果等が常に正確であることを保証しません。</p>
+<p>当社の責めに帰すべき事由によりユーザーに損害が生じた場合、当社は適用法令に従い責任を負います。端末、OS、Appleのサービス、通信環境、外部サービス、権限設定またはユーザーの操作に起因する損害であっても、当社の責めに帰すべき事由がある場合は、この責任を免れるものではありません。</p>
+<p>当社の軽過失による場合に限り、法令上許される範囲で賠償の対象を通常かつ直接生じた損害に限定します。当社、その代表者または使用人の故意または重過失による場合、この限定は適用しません。本規約は、消費者契約法その他の強行法規に基づくユーザーの権利を制限しません。</p>
+<h3>11. 規約の変更</h3>
+<p>当社は、民法第548条の4に定める要件を満たす場合に本規約を変更することがあります。変更内容と効力発生日を定め、本アプリ内または当社ウェブサイトその他適切な方法により周知します。法令上、効力発生日までの周知が必要な変更については、その日までに周知を行います。同条による変更の要件を満たさない変更は、ユーザーの同意を得るものとします。</p>
+<h3>12. 準拠法・管轄</h3>
+<p>本規約は日本法に準拠します。本アプリまたは本規約に関して紛争が生じた場合、法令に別段の定めがある場合を除き、東京地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
+<h3>13. 多言語版について</h3>
+<p>本利用規約は日本語を正文とします。他言語版との間に矛盾がある場合、日本語版を優先します。ただし、この規定は各居住国・地域の消費者保護法その他の強行法規に基づくユーザーの権利を制限するものではありません。</p></div></section>
+    <section id="terms-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">📜</div><div><div class="section-title">Terms of Service</div><div class="section-subtitle">Conditions for using the app</div></div></div><div class="legal-section"><p>Last Updated: 2026-10-01</p>
+<h3>1. Acceptance of Terms</h3>
+<p>These Terms of Service (&quot;Terms&quot;) govern your use of the application &quot;CoughWav&quot; (Japanese App Store display name: &quot;CoughWav 咳（せき）ノート&quot;; the &quot;App&quot;) provided by AllNew LLC (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;). By using the App, you agree to these Terms.</p>
+<h3>2. Agreement to Terms</h3>
+<p>We present these Terms before use and they apply when you agree to them. Downloading or installing the App alone does not constitute agreement. If you do not agree, do not use the App.</p>
+<h3>3. App Description and Compatibility</h3>
+<p>The App provides On-device cough recording and optional monitoring with a selected nearby device as described in the App Store listing and in-app documentation. The App uses the camera or photo library only when you explicitly choose to capture, read, or attach records. Captured or selected images are handled on device and are not transmitted to or stored on our servers unless expressly described in this Privacy Policy.</p>
+<ul><li>Supported devices: iPhone (iOS 27.0 or later), iPad (iPadOS 27.0 or later), Apple Watch (watchOS 27.0 or later)</li><li>Supported OS versions and available features may vary depending on device environment, region, permissions, and platform policies</li><li>The App assists content, records, review, organization, creation, or convenience based on user input, and we do not guarantee the accuracy or completeness of user-provided content</li></ul>
+<h3>4. Privacy Policy and Data Handling</h3>
+<p>Your use of the App is also governed by our Privacy Policy.</p>
+<p>For data you create, capture, save, or manage in the App, we commit to the following:</p>
+<ul><li>We do not use your data for advertising, marketing, or data mining purposes</li><li>We do not sell or provide your data to data brokers or third parties</li><li>For features designed to work on device, we do not transmit or store your data on servers operated by us</li><li>On-device processing, Apple services, and transfers to user-selected devices or destinations follow the feature-specific data handling described in this Privacy Policy. These differ from automatic transmission to our processing infrastructure.</li></ul>
+<h3>5. Paid Features</h3>
+<p>This document is for version 2.0.2 and takes effect when that version is publicly released on the App Store. Until then, the current page applies to the currently released version.</p>
+<p>The app is free to download. Parent/child monitoring is a paid one-time option; downloading the app alone does not grant monitoring access. Existing purchase rights and purchase restoration are preserved.</p>
+<p>Unlimited standalone recording and the monitoring option are separate one-time purchases with no recurring charge. Prior standalone rights and saved data are preserved.</p>
+<ul><li>The App Store purchase screen displays the price. Apple charges your Apple Account payment method when you confirm; access follows verification of a valid entitlement. Connectivity charges are your responsibility.</li><li>Monitoring requires verified rights on each device and explicit sharing consent. Monitoring sessions need no legacy purchase or free allowance; unlimited standalone recording is a separate product.</li><li>Family Sharing requires a shareable product, Apple&#x27;s family and purchase-sharing conditions, and restored and verified access on each device. Refunds or ended sharing may revoke access and stop monitoring.</li><li>Use Apple&#x27;s refund process. Minors require a parent or guardian&#x27;s consent to purchase.</li></ul>
+<h3>Conditions for monitoring</h3>
+<p>Monitoring connects one nearby recorder and one viewer. Installing on multiple devices does not enable simultaneous viewing of several recorders. Withdraw sharing consent under Settings → Monitoring mode → Withdraw sharing consent. Manual disconnection, withdrawal or loss of monitoring access on the recorder iPhone stops and saves its recording. An action or access loss on Watch disables its local connection and attempts recorder revocation. When communication is unavailable recording may continue; verify stopping and saving on the recorder. During temporary link loss, the recorder continues recording. Standalone recording remains available under its existing terms.</p>
+<p>The app is for everyday wellness records. It is not a medical device and does not provide diagnosis, treatment, emergency alerts or a safety guarantee. Detection may be wrong or miss events; communication and notifications may be delayed or interrupted. Continuous connectivity is not guaranteed. Do not treat old updates as current state.</p>
+<h3>Recording and sharing details</h3>
+<p>Share the role label (“Monitoring (recorder)”), recording state, estimated count, elapsed time, record level, latest event time, hourly counts, start/stop request IDs and execution acknowledgements with the selected peer over encryption. The role label is not the device’s actual name. For iPhone/iPad Wi-Fi connections, the app stores a generated connection UUID on this device and uses its first 12 characters as its app identifier for peer confirmation over an encrypted connection. This UUID stays on this device after disconnecting or withdrawing consent.</p>
+<p>Monitoring does not automatically send audio. Consent allows the connected viewer to start recording without per-start confirmation. Each stop request requires confirmation on the recorder. Manual disconnection or consent withdrawal on the recorder stops and saves its session. A Watch revocation request cannot arrive during disconnection; stop the recorder directly when necessary. Temporary link loss allows the recorder to continue recording. Withdraw under Settings &gt; Monitoring mode &gt; Withdraw sharing consent. Live snapshots are held in memory and cleared on disconnect. Outgoing and received synchronization aggregates are stored locally in separate journals, each capped at 180 records per device. A device that changes roles can retain both journals. The recorder removes completed aggregates already acknowledged by the viewer when space is needed; if pending records fill the limit, it displays a storage warning. The viewer removes older aggregates at the limit. These records survive normal disconnects and are excluded from device backups. Withdrawing sharing consent or deleting all data deletes synchronization records on that device. It does not remotely delete the other device’s copies; delete those on the other device as well. The consent version, date and agreement status are stored locally and kept after disconnecting. Any recipient label and authority choice retained from an earlier version are removed when you agree again or withdraw consent; withdrawing consent removes these consent records.</p>
+<p>The recorder retains up to 180 local sessions; audio older than 14 days is deleted when the list loads. Copies you explicitly share from Saved cough audio to a chosen recipient or destination remain there when you delete the original or withdraw consent. Detection can be wrong or miss events; connections and notifications can be delayed or interrupted. This is not a medical device, diagnosis, emergency alert or safety guarantee.</p>
+<p>Unlimited standalone recording and monitoring are separate one-time purchases. Prior standalone purchases and saved data are preserved. Both devices with verified monitoring rights need no legacy purchase or free allowance during monitoring sessions. Unlimited standalone use is not included. Family Sharing requires an eligible shareable product and Apple&#x27;s family and purchase-sharing conditions; restore and verify on each device. Refunds or ended sharing can revoke monitoring access on that device. On the recorder iPhone this stops and saves recording. Watch can only attempt recorder revocation; verify stopping and saving on the recorder if communication is unavailable. There is no recurring charge. Unlimited refers to session creation: history keeps the latest 180 sessions and audio older than 14 days is deleted when the list loads. Apple refund procedures do not limit statutory rights.</p>
+<p>Before recording or sharing another person’s coughs, obtain their consent and guardian consent where needed. Review and agree to the sharing and limitations, then check the code on both devices. The recorder checks and approves the peer identifier. Consent authorizes remote starts during the connection without per-start confirmation; each stop request requires recorder confirmation. Withdraw sharing consent in Monitoring mode settings.</p>
+<p>Automatic saving to Health is optional. In Settings → Recording and Health, confirm your personal rule and allow coughing writes. The app then saves the device user&#x27;s recording when it ends according to the selected recording scope. It converts the whole-session hourly average to Health&#x27;s mild, moderate or severe coughing value using your confirmed rule, saving one sample with the recording start and end times. Zero detections are not saved. The average includes pauses; intervals shorter than one second count as one second.</p>
+<p>11/hour and 41/hour are editable examples, not medical standards or Apple-defined count thresholds. Frequency alone cannot determine symptom severity. The values are your personal recording guide, not a clinical severity assessment. Health displays Mild, Moderate or Severe; when showing these records to a healthcare professional or others, explain that they use your personal rule. Changes apply to the next recording and do not change earlier records.</p>
+<p>Standalone recordings are included by default. Selecting Include monitoring recordings and confirming that the recordings belong to the person who uses Health on this iPhone also includes monitoring recordings captured by this iPhone as the recorder. They are saved to Health on the recording iPhone. Information received by the parent device is not included. Scope changes apply to the next recording. The app does not read or delete Health data. Count series and audio are not written to Health. The confirmed rule, confirmation date and version, and session identifier are retained and added to the Health sample as provenance. Health data is not sent to us. Health iCloud sync and sharing with other apps follow Apple&#x27;s features and your settings. Standalone recording works without enabling this integration.</p>
+<p>If your cough is troubling, persistent or disrupts sleep, consult a healthcare professional regardless of count or level. Seek prompt medical care for breathlessness, blood in sputum or persistent high fever.</p>
+<p>The recorder iPhone has one direct recipient: a viewer iPhone or iPad, or an Apple Watch, never both routes at once. iPhone and iPad use Apple Network.framework Bonjour, TLS and WebSocket. Scan the recorder QR on the viewer and approve the peer on the recorder. Enter the 32-character connection key if the camera is unavailable. Do not share the QR or key with others. This Wi-Fi key stays only in memory; set up again after manual disconnection or app termination.</p>
+<p>For direct Watch connection, connect the recorder iPhone and Watch to the same LAN. In the Watch app, enter the HTTPS endpoint, all 64 characters of the certificate fingerprint, and the 64-character access key displayed on the physical recorder. A partial fingerprint is insufficient. Register the access key only on the intended Watch; do not share it in images or messages. Apple Foundation URLSession, Security, OS TLS and Apple NIO HTTP handling verify the registered certificate and viewer authorization. There is no Bluetooth or older-version fallback. Viewing, synchronization and remote controls all require compatible updated recorder and Watch apps; update each through the App Store. Direct mode needs the recorder iPhone, but does not need relay through an app on the OS-paired iPhone.</p>
+<p>The recorder TLS certificate and private key are stored in device-only Keychain storage, available after the first unlock following restart. The certificate is valid for seven days. Expiry prevents use but does not automatically erase its certificate or private key. Disconnecting, withdrawing consent and the existing data-reset operation retain this dedicated Keychain entry; explicit certificate renewal on the recorder replaces the old entry. Endpoint or certificate changes and expiry require explicit renewal and Watch re-enrollment. The recorder access key remains only in memory and is lost on manual disconnection of HTTPS sharing or app termination; re-enroll after restarting the recorder. Watch stores the endpoint, fingerprint and access key in device-only Keychain storage available only while unlocked. Backgrounding alone retains enrollment; returning to the foreground attempts reconnection. Manual disconnection, mode changes, consent withdrawal or loss of purchase rights disable Watch enrollment, attempt its deletion, and request recorder revocation. A deletion failure is shown for retry after unlocking. A local tombstone prevents automatic reconnection. That request cannot arrive while disconnected. Remote stopping is not guaranteed: operate the recorder directly whenever stopping is necessary.</p>
+<p>Optionally, a viewer iPhone relays received state and aggregates to its OS-paired Watch through WatchConnectivity. iPad cannot relay, and Watch direct and companion modes are mutually exclusive. Participating devices check sharing consent and purchase rights. Existing purchases remain valid; no additional purchase is required. Connection consent permits remote starts without per-start confirmation. Stop requests need confirmation on the recorder. Commands are sent only when reachable with fresh state; the recorder validates recorder-issued, expiring requests.</p>
+<p>No audio or HealthKit values are transmitted, and records are not sent to our servers or a new cloud service. OS background, lock and network restrictions can delay or interrupt updates; continuous connectivity is not guaranteed. Recording continues during temporary link loss. Starting a new HTTPS sharing session on the recorder changes the viewer routing UUID. Re-entering the same enrollment on Watch does not change it. Previously saved history remains separate; automatic merging and retransmission of all pending aggregates for an old recipient are not guaranteed. Distinguish saved history from current state. Outgoing and received synchronization aggregates are each limited to 180 per device and are not automatically written to Health on viewers or Watch. Consent withdrawal deletes synchronization records on the device where performed; delete other devices&#x27; copies separately. Directly disconnecting, changing roles or withdrawing consent on the recorder stops and saves its recording. Force quit or power loss may lose data since the last save.</p>
+<p>iPad is a monitoring viewer. Apple Watch is a direct viewer for the recorder iPhone or a companion display for its OS-paired viewer iPhone. Unlimited standalone recording does not apply to them.</p>
+<p>HTTPS also sends the recorder-generated local identifier to Watch. It is not the actual device name or proof of purchase. It remains locally after disconnect or consent withdrawal. Watch identifies the history source using this identifier together with the certificate fingerprint.</p>
+<h3>6. Prohibited Activities</h3>
+<p>You must not:</p>
+<ul><li>Use the App for purposes other than its intended purpose</li><li>Violate any laws or third-party rights</li><li>Infringe any third party&#x27;s privacy, reputation, credit, or intellectual property rights</li><li>Reverse engineer, decompile, modify, copy, or redistribute the App</li><li>Collect, record, publish, or otherwise use another person&#x27;s information, records, or other data without permission</li><li>Engage in conduct comparable to the above that we reasonably determine risks harming the provision of the App or third-party rights</li></ul>
+<h3>7. Important Information Disclaimer</h3>
+<p>The App is intended to support everyday records, review, organization, creation, or convenience. Please consult an appropriate professional for matters requiring expert judgment.</p>
+<h3>8. Processing Results</h3>
+<p>If the App performs input, recording, categorization, aggregation, display, syncing, or other automated processing, results may not always be complete or accurate. You should review the results where necessary and correct, delete, or rerun processing if results are inaccurate.</p>
+<ul><li>Processing results may vary depending on device, OS, settings, permissions, network conditions, input content, and usage environment</li><li>App outputs and processing results are not a substitute for final human judgment</li><li>Liability for defects attributable to us is governed by Section 10 and applicable law</li></ul>
+<h3>9. Intellectual Property</h3>
+<p>All intellectual property rights in the App and related materials belong to us or our licensors. These Terms do not transfer any rights in the App or related materials to you.</p>
+<h3>10. Disclaimer of Warranties</h3>
+<p>We do not guarantee that the App will operate without interruption, or that processing results, displayed content, saved content, syncing, or any other App output will always be accurate.</p>
+<p>We are liable under applicable law for damage attributable to us. Device, OS, Apple service, network, external service, permission, or user-operation issues do not excuse us where the damage is attributable to us.</p>
+<p>Only for our ordinary negligence, and to the extent permitted by law, liability is limited to ordinary and direct damages. This limit does not apply to intentional misconduct or gross negligence by us, our representatives, or employees. Nothing in these Terms restricts rights under the Consumer Contract Act or other mandatory laws.</p>
+<h3>11. Changes to Terms</h3>
+<p>We may change these Terms when the requirements of Article 548-4 of the Japanese Civil Code are met. We will specify the changes and effective date and make them known in the App, on our website, or by other appropriate means. Where the law requires notice by the effective date, we will give it by that date. Changes that do not meet those requirements require your agreement.</p>
+<h3>12. Governing Law and Jurisdiction</h3>
+<p>These Terms are governed by the laws of Japan. Unless mandatory local law provides otherwise, disputes related to the App or these Terms are subject to the exclusive jurisdiction of the Tokyo District Court as the court of first instance.</p>
+<h3>13. Translations</h3>
+<p>The Japanese version of these Terms is the authoritative text. If any translated version conflicts with the Japanese version, the Japanese version prevails. This does not limit rights granted to users under mandatory consumer-protection laws or other non-waivable regulations in their jurisdiction.</p></div></section>
+    <section id="oss-ja" class="section" data-lang="ja"><div class="section-header"><div class="section-icon">📦</div><div><div class="section-title">3rd Party Licensing Notice</div><div class="section-subtitle">Open Source Software notices</div></div></div><div class="legal-section"><h3>3rd Party Licensing Notice</h3><h4>オープンソースソフトウェアに関するお知らせ</h4><p>本製品には、オープンソースライセンスに基づき提供されるソフトウェアが含まれる場合があります。本製品に適用される利用規約と、当該Open Source Softwareに適用されるオープンソースライセンスの内容が矛盾する場合、当該Open Source Softwareについてはオープンソースライセンスが優先します。</p><p>一部のオープンソースライセンスでは、ソースコードの写しを入手する権利が認められています。適用ライセンス上必要な場合、AllNewはこのページまたはこのページに記載されたサポート窓口を通じて、対応するソースコードの入手方法を提供します。</p><h4>現在の確認結果</h4><p>このバージョンの現在の確認では、第三者のOpen Source Softwareパッケージは検出されていません。将来のバージョンでOpen Source Softwareを含める場合、該当する著作権表示、ライセンス、ソースコード提供方法をこのセクションに掲載します。</p><p>Apple SDK（Appleが提供する開発用プログラム部品）およびApple純正フレームワークは本表示の第三者OSSには含めず、Appleの各規約に従います。</p><p class="muted">確認日: 2026-10-01</p></div></section>
+    <section id="oss-en" class="section" data-lang="en"><div class="section-header"><div class="section-icon">📦</div><div><div class="section-title">3rd Party Licensing Notice</div><div class="section-subtitle">Open Source Software notices</div></div></div><div class="legal-section"><h3>3rd Party Licensing Notice</h3><h4>Open Source Software Notice</h4><p>This product may include software provided under open source licenses. If the terms for this product conflict with the applicable open source license for such software, the open source license controls for that software.</p><p>If a license requires source code availability, contact the support address listed on this page and identify the product name and version where possible.</p><h4>Current Review Result</h4><p>No third-party Open Source Software package is currently detected for this version. If future versions include Open Source Software, applicable copyright notices, licenses, and source-code access instructions will be posted in this section.</p><p>Apple SDKs (Apple-provided development toolkits) and Apple-provided frameworks are not included in this third-party OSS notice and are governed by Apple's terms.</p><p class="muted">Review date: 2026-10-01</p></div></section>
+    <section id="commercial-ja" class="section" data-lang="ja"><div class="commercial-accordion"><button class="commercial-header" type="button" aria-expanded="false"><div class="section-header"><div class="section-icon">🏢</div><div><div class="section-title">特定商取引法に基づく表記</div><div class="section-subtitle">販売事業者情報</div></div></div><span class="commercial-toggle" aria-hidden="true">+</span></button><div class="commercial-content"><dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div><div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div><div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div><div class="contact-item"><dt>電話番号</dt><dd>請求があれば遅滞なく開示します（特定商取引法第11条ただし書に基づく省略表示）</dd></div><div class="contact-item"><dt>取引条件</dt><dd>単体記録の無料利用回数終了後は、買い切りで無制限に利用できます。モニタリングモードは別の買い切り商品です。価格はApp Storeの購入画面に表示されます。販売価格の詳細は、請求があれば遅滞なくメールでも開示します。購入確定時にAppleアカウントへ課金され、購入権の確認後に対象機能を利用できます。定期課金はありません。返金はAppleの手続きに従います。通信費は利用者負担です。
+単体記録の無制限利用とモニタリングは別々の買い切り商品です。以前の単体購入と保存データは維持されます。モニタリングの購入権が確認された両端末では、モニタリング中に旧単体購入や無料回数は不要です。単体の無制限利用は含みません。ファミリー共有には対象商品の共有設定とAppleの家族・購入共有条件を満たし、各端末で購入を復元・検証する必要があります。返金や共有終了でモニタリング権利が失われると、その端末の共有を停止します。子機iPhoneでは記録を停止・保存します。Watch側から子機への解除通知は通信できない場合には届かないため、子機で停止・保存を確認してください。継続課金はありません。無制限とは記録の作成回数であり、履歴は最新180件、録音は14日を超えると一覧読込時に削除します。Appleの返金手続きの案内は法令上の権利を制限しません。</dd></div></dl></div></div></section>
+    <section id="commercial-en" class="section" data-lang="en"><div class="commercial-accordion"><button class="commercial-header" type="button" aria-expanded="false"><div class="section-header"><div class="section-icon">🏢</div><div><div class="section-title">Seller Information</div><div class="section-subtitle">Specified Commercial Transactions Act (Japan)</div></div></div><span class="commercial-toggle" aria-hidden="true">+</span></button><div class="commercial-content"><dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>Seller</dt><dd>AllNew LLC</dd></div><div class="contact-item"><dt>Representative</dt><dd>Masanori Ueno</dd></div><div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div><div class="contact-item"><dt>Phone</dt><dd>Disclosed without delay upon request where omission is permitted under the proviso to Article 11 of the Japanese Specified Commercial Transactions Act.</dd></div><div class="contact-item"><dt>Transaction Terms</dt><dd>After the free recording allowance, unlimited standalone recording is a one-time purchase. Monitoring Mode is a separate one-time purchase. The price shown on the App Store purchase sheet applies. We also disclose price details by email without delay on request. Apple charges your Apple Account when you confirm the purchase; access begins after entitlement verification. No recurring subscription is added. Refund requests follow Apple’s process. Network charges are your responsibility.
+Unlimited standalone recording and monitoring are separate one-time purchases. Prior standalone purchases and saved data are preserved. Both devices with verified monitoring rights need no legacy purchase or free allowance during monitoring sessions. Unlimited standalone use is not included. Family Sharing requires an eligible shareable product and Apple&#x27;s family and purchase-sharing conditions; restore and verify on each device. Refunds or ended sharing can revoke monitoring access on that device. On the recorder iPhone this stops and saves recording. Watch can only attempt recorder revocation; verify stopping and saving on the recorder if communication is unavailable. There is no recurring charge. Unlimited refers to session creation: history keeps the latest 180 sessions and audio older than 14 days is deleted when the list loads. Apple refund procedures do not limit statutory rights.</dd></div></dl></div></div></section>
+    <section id="contact-ja" class="section" data-lang="ja"><div class="contact-card"><h2>お問い合わせ</h2><!--email_off--><a href="mailto:app-support@allnew.work?subject=CoughWav%20%E5%92%B3%EF%BC%88%E3%81%9B%E3%81%8D%EF%BC%89%E3%83%8E%E3%83%BC%E3%83%88%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off--><a href="https://apps.allnew.work/feedback/?app=coughwav" class="contact-email" style="margin:12px 0 0 12px">💬 CoughWavへのご意見・ご要望を送る</a><dl class="contact-details contact-details-top" style="border-bottom: none;"><div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div><div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div></dl></div></section>
+    <section id="contact-en" class="section" data-lang="en"><div class="contact-card"><h2>Contact Us</h2><!--email_off--><a href="mailto:app-support@allnew.work?subject=CoughWav%20-%20Cough%20Tracker%20%26%20Log%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off--><a href="https://apps.allnew.work/feedback/?app=coughwav" class="contact-email" style="margin:12px 0 0 12px">💬 Send feedback about CoughWav</a><dl class="contact-details contact-details-top" style="border-bottom: none;"><div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div><div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div></dl></div></section>
+  </main>
+
+  <script>
+    function toggleLangMenu() {
+      const dropdown = document.getElementById('langDropdown');
+      dropdown.classList.toggle('open');
+      const button = dropdown.querySelector('.lang-btn');
+      button.setAttribute('aria-expanded', dropdown.classList.contains('open') ? 'true' : 'false');
+    }
+    function setLang(lang) {
+      document.body.classList.toggle('lang-en', lang === 'en');
+      document.documentElement.lang = lang;
+      document.getElementById('currentLang').textContent = lang === 'ja' ? '日本語' : 'English';
+      document.querySelectorAll('.lang-option').forEach(function(option) {
+        option.classList.toggle('active', option.dataset.langOption === lang);
+      });
+      const dropdown = document.getElementById('langDropdown');
+      dropdown.classList.remove('open');
+      dropdown.querySelector('.lang-btn').setAttribute('aria-expanded', 'false');
+      try { localStorage.setItem('allnewLegalLang', lang); } catch (_) {}
+    }
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('langDropdown');
+      if (dropdown && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('open');
+        dropdown.querySelector('.lang-btn').setAttribute('aria-expanded', 'false');
+      }
+      const faq = event.target.closest('.faq-question');
+      if (faq) {
+        faq.closest('.faq-item').classList.toggle('open');
+        return;
+      }
+      const header = event.target.closest('.commercial-header');
+      if (!header) return;
+      const accordion = header.closest('.commercial-accordion');
+      const isOpen = accordion.classList.toggle('open');
+      header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    function checkCommercialAnchor() {
+      if (!location.hash || !location.hash.includes('commercial')) return;
+      document.querySelectorAll('.commercial-accordion').forEach(function(accordion) {
+        accordion.classList.add('open');
+        const header = accordion.querySelector('.commercial-header');
+        if (header) header.setAttribute('aria-expanded', 'true');
+      });
+    }
+    const params = new URLSearchParams(location.search);
+    const fragmentLocale = /^#(?:faq|privacy|terms|commercial|contact|oss)-(ja|en)$/.exec(location.hash)?.[1];
+    const requested = params.get('lang') || fragmentLocale || (navigator.language || '').slice(0, 2);
+    setLang(requested === 'ja' ? 'ja' : 'en');
+    checkCommercialAnchor();
+    function restoreHashAnchor() {
+      if (!location.hash) return;
+      const target = document.getElementById(location.hash.slice(1));
+      if (target) target.scrollIntoView();
+    }
+    requestAnimationFrame(function() { requestAnimationFrame(restoreHashAnchor); });
+    window.addEventListener('hashchange', function() {
+      const nextLocale = /^#(?:faq|privacy|terms|commercial|contact|oss)-(ja|en)$/.exec(location.hash)?.[1];
+      if (!params.get('lang') && nextLocale) setLang(nextLocale);
+      checkCommercialAnchor();
+      requestAnimationFrame(restoreHashAnchor);
+    });
+  </script>
+</body>
+</html>
