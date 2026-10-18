@@ -1,5 +1,18 @@
 # AllNew.work ドメイン監査レポート（再監査・是正）
 
+## 2026-10-18 追記（Cloudflare 404 フォローアップ）
+
+**結論**: PR #105 で `_redirects` に追加した `404` ルール（例: `/internal/* 404`）は **Cloudflare Pages では無効**だったため、Cloudflare Pages Function（`functions/_middleware.js`）に置き換えた。Vercel 側（`dist/` 除外）は変更なし。
+
+**理由**: Cloudflare Pages の `_redirects` は `[source] [destination] [status]` のみを解釈し、`status` の既定は 302、かつ 404 等の非リダイレクトステータスへの rewrite は非対応（[公式ドキュメント](https://developers.cloudflare.com/pages/configuration/redirects/)）。`/internal/* 404` は `404` を「転送先」と解釈して破棄され、何も遮断していなかった。PR #105 のレビュー（Codex P2）と本番確認で `https://apps.allnew.work/test-results/.last-run.json` が **200** を返すことが確認済み。Cloudflare はリポジトリツリーを配信し、未知パスは index.html に 200 でフォールバックするため、攻撃パス（WP/PHP・ドットファイル）も素の 404 にはならない。
+
+**対応**:
+- `functions/_middleware.js` を追加。内部文書（`/internal/*`・任意の `*.md`）・実行時除外パス（`/.planning/*`・`/test-results/*`・`/scripts/*`・runtime 以外の `/landing-automation/*`）・攻撃パス（`/wp-*`・`*.php`・ドットファイル）を **実 404 + `X-Robots-Tag: noindex, nofollow`** で遮断。公開 runtime スクリプト `/landing-automation/runtime/landing-runtime.js` のみ allowlist。
+- `_redirects` から無効な `404` 行を全削除し、正当なリダイレクト（MeishiBridge 301）のみ残置。`_headers`（CSP/HSTS 等）は通常ページでそのまま適用されることを `wrangler pages dev` で実機確認。
+- `scripts/public_surface.py` / `scripts/check_public_exposure.py` を拡張し、node で Middleware の遮断リストと Vercel 側遮断リストの一致を検証。
+
+**検証**: `wrangler pages dev`（workerd 実機）で、遮断パスが 404+noindex、通常ページが 200+CSP、runtime が 200、MeishiBridge が 301 を返すことを確認。live URL は本実行環境の egress 遮断により未到達のため、デプロイ後に本番再確認を推奨。→ 下記「3. 残課題」の「攻撃パスの 404 化は `_redirects` 依存」は解消済み。
+
 ## 2026-10-18 追記（PR #105 完了）
 
 2026-09-04 の是正は `.vercelignore` / `_redirects` / `robots.txt` で配信を隠すだけだった。main 取り込み後の完了版では、内部 Markdown を `internal/` へ移し、`dist/` の公開ビルドから除外する。`vercel.json` の `routes` は同じパスを 404 + `X-Robots-Tag: noindex` にする。

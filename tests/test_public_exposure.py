@@ -79,18 +79,46 @@ def test_vercel_headers_noindex_without_legacy_routes() -> None:
     assert "Strict-Transport-Security" in joined
 
 
-def test_cloudflare_and_robots_cover_internal_paths() -> None:
+SUPPORTED_REDIRECT_STATUSES = {"200", "301", "302", "303", "307", "308"}
+
+
+def test_redirects_has_only_cloudflare_supported_rules() -> None:
+    """Every _redirects rule must be `source destination status`.
+
+    Cloudflare Pages treats a bare status such as `/internal/* 404` as a rewrite
+    to a destination named "404" (default status 302) and documents non-redirect
+    rewrite statuses as unsupported, so those lines never blocked anything. The
+    real 404s now come from functions/_middleware.js; this file keeps only
+    genuine redirects.
+    """
     redirects = (ROOT / "_redirects").read_text(encoding="utf-8")
+    for raw in redirects.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        fields = line.split()
+        assert len(fields) == 3, f"not `source destination status`: {raw!r}"
+        _source, destination, status = fields
+        assert status in SUPPORTED_REDIRECT_STATUSES, f"unsupported status: {raw!r}"
+        # A bare-status block rule has a numeric "destination"; reject it.
+        assert not destination.isdigit(), f"bare-status rule: {raw!r}"
+
+
+def test_cloudflare_middleware_covers_internal_paths() -> None:
+    """The Pages Function is the Cloudflare-side block mechanism."""
+    middleware = (ROOT / "functions" / "_middleware.js").read_text(encoding="utf-8")
+    assert "export function isBlockedPath" in middleware
+    assert "export async function onRequest" in middleware
+    assert "X-Robots-Tag" in middleware and "noindex" in middleware
+    # The one public landing-automation asset stays allowlisted.
+    assert "/landing-automation/runtime/landing-runtime.js" in middleware
+    for token in ("/internal", "/test-results", "/.planning", "/scripts", ".md", ".php"):
+        assert token in middleware, token
+
+
+def test_headers_and_robots_still_cover_internal_paths() -> None:
     headers = (ROOT / "_headers").read_text(encoding="utf-8")
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
-    for line in (
-        "/feedback/*.md 404",
-        "/*.md 404",
-        "/internal/* 404",
-        "/scripts/* 404",
-        "/TECHBLOG_DRAFT_ZENN.md 404",
-    ):
-        assert line in redirects
     assert "Strict-Transport-Security:" in headers
     assert "X-Robots-Tag: noindex, nofollow" in headers
     for group in ("User-agent: *", "User-agent: Googlebot", "User-agent: Bingbot"):

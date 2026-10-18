@@ -10,15 +10,23 @@ the output is not served.
 
 from __future__ import annotations
 
+import json
 import os
 import posixpath
 import shutil
+import subprocess
+import tempfile
 import urllib.parse
 from collections.abc import Iterator
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
+
+# Cloudflare Pages Function that returns a real 404 (+ noindex) for the block
+# list at the edge. Cloudflare serves the repo tree, so unlike Vercel it cannot
+# rely on the file simply being absent from dist/.
+MIDDLEWARE_JS = ROOT / "functions" / "_middleware.js"
 
 # Only this landing-automation file is referenced by the public catalog.
 PUBLIC_LANDING_RUNTIME = "landing-automation/runtime/landing-runtime.js"
@@ -27,11 +35,14 @@ PUBLIC_LANDING_RUNTIME = "landing-automation/runtime/landing-runtime.js"
 EXCLUDED_DIR_NAMES = {
     ".git",
     ".github",
+    ".mypy_cache",
     ".planning",
     ".pytest_cache",
+    ".ruff_cache",
     ".vercel",
     ".wrangler",
     "__pycache__",
+    "functions",
     "internal",
     "node_modules",
     "scripts",
@@ -111,6 +122,27 @@ REMOVED_PUBLIC_PATHS = (
     "/.planning/domain-audit-2026-06-13.md",
     "/landing-automation/README.md",
     "/scripts/build_public_site.py",
+)
+
+# Attack-path probes. No such files exist, so Vercel 404s them (not in dist/).
+# Cloudflare serves the repo tree behind an index.html SPA fallback that would
+# answer 200, so functions/_middleware.js blocks them explicitly with a 404.
+# These are not in BLOCK_ROUTE_SOURCES because the Vercel side needs no rule.
+ATTACK_PROBE_PATHS = (
+    "/wp-login.php",
+    "/wp-admin/setup-config.php",
+    "/wp-includes/load.php",
+    "/wp-config.php",
+    "/xmlrpc.php",
+    "/index.php",
+    "/.env",
+    "/.env.production",
+    "/.git/config",
+    "/.svn/entries",
+    "/.aws/credentials",
+    "/.ssh/id_rsa",
+    "/config.json",
+    "/credentials.json",
 )
 
 # Public pages and assets that must keep working.
@@ -210,3 +242,51 @@ def build_public_site(root: Path = ROOT, dest: Path = DIST) -> list[str]:
     if leaked:
         raise SystemExit("public build leaked internal files: " + ", ".join(leaked))
     return written
+
+
+_MIDDLEWARE_RUNNER = (
+    'import { isBlockedPath } from "./_middleware.mjs";\n'
+    'import { readFileSync } from "node:fs";\n'
+    "const paths = JSON.parse(readFileSync(process.argv[2], 'utf8'));\n"
+    "const out = {};\n"
+    "for (const p of paths) out[p] = isBlockedPath(p);\n"
+    "process.stdout.write(JSON.stringify(out));\n"
+)
+
+
+def node_executable() -> str | None:
+    """Return the node binary path, or None when node is unavailable."""
+    return shutil.which("node")
+
+
+def run_middleware_matcher(paths: list[str]) -> dict[str, bool] | None:
+    """Evaluate ``isBlockedPath`` from functions/_middleware.js over ``paths``.
+
+    Returns ``{path: blocked}`` using the real Cloudflare middleware source, or
+    ``None`` when node (or the middleware file) is unavailable so callers can
+    skip the cross-check. This proves the Cloudflare edge block list and the
+    Python/Vercel block list stay in agreement.
+    """
+    node = node_executable()
+    if node is None or not MIDDLEWARE_JS.is_file():
+        return None
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        # Copy to a .mjs sibling so node always parses it as an ES module,
+        # independent of any package.json "type" in the repo.
+        (tmp_path / "_middleware.mjs").write_text(
+            MIDDLEWARE_JS.read_text(encoding="utf-8"), encoding="utf-8"
+        )
+        runner = tmp_path / "run.mjs"
+        runner.write_text(_MIDDLEWARE_RUNNER, encoding="utf-8")
+        paths_file = tmp_path / "paths.json"
+        paths_file.write_text(json.dumps(paths), encoding="utf-8")
+        result = subprocess.run(
+            [node, str(runner), str(paths_file)],
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=True,
+        )
+    parsed = json.loads(result.stdout)
+    return {str(key): bool(value) for key, value in parsed.items()}
