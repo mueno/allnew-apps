@@ -1,9 +1,11 @@
 """Rules for the public static site.
 
 Internal drafts stay in the git tree under ``internal/`` and are omitted from
-``dist/``. Vercel publishes ``dist/`` (see ``vercel.json``). The same path
-rules are mirrored in ``vercel.json`` routes so a file that slips back into
-the output still responds 404 with ``X-Robots-Tag: noindex``.
+``dist/``. Vercel publishes only ``dist/`` (see ``vercel.json``), so those
+files 404 because they are not in the output. ``X-Robots-Tag: noindex`` is
+applied with ``headers`` path-to-regexp ``source`` patterns (no inline flags).
+The local checker still 404s the block list, so a file that slips back into
+the output is not served.
 """
 
 from __future__ import annotations
@@ -44,8 +46,10 @@ EXCLUDED_FILE_NAMES = {
     "vercel.json",
 }
 
-# PCRE-style sources copied into vercel.json ``routes``.
-# ``re.search`` against the URL path is the intended match.
+# PCRE-style patterns for the local exposure checker. ``re.search`` against
+# the URL path is the intended match. These are not copied into vercel.json:
+# Vercel rejects inline flags such as ``(?i)`` and ``routes`` cannot sit next
+# to ``redirects`` / ``headers``.
 BLOCK_ROUTE_SOURCES = (
     "(?i)/.*\\.md$",
     "(?i)/internal(/.*)?$",
@@ -53,6 +57,20 @@ BLOCK_ROUTE_SOURCES = (
     "(?i)/test-results(/.*)?$",
     "(?i)/scripts(/.*)?$",
     "(?i)/landing-automation/(?!runtime/landing-runtime\\.js$).*$",
+)
+
+# path-to-regexp ``source`` values for the X-Robots-Tag headers in vercel.json.
+# Matching is case-sensitive, so markdown extensions are listed explicitly.
+NOINDEX_HEADER_SOURCES = (
+    "/(.*)\\.md",
+    "/(.*)\\.MD",
+    "/(.*)\\.Md",
+    "/(.*)\\.mD",
+    "/internal/(.*)",
+    "/.planning/(.*)",
+    "/test-results/(.*)",
+    "/scripts/(.*)",
+    "/landing-automation/(.*)",
 )
 
 REQUIRED_OUTPUTS = (

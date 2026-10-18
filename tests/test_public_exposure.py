@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from public_surface import (
-    BLOCK_ROUTE_SOURCES,
+    NOINDEX_HEADER_SOURCES,
     PUBLIC_LANDING_RUNTIME,
     PUBLIC_PATHS,
     REMOVED_PUBLIC_PATHS,
@@ -57,17 +57,25 @@ def test_source_markdown_is_excluded_from_the_public_tree() -> None:
     assert not (ROOT / "TECHBLOG_DRAFT_ZENN.md").exists()
 
 
-def test_vercel_routes_match_the_block_list() -> None:
+def test_vercel_headers_noindex_without_legacy_routes() -> None:
     config = json.loads((ROOT / "vercel.json").read_text(encoding="utf-8"))
-    sources = [route["src"] for route in config["routes"]]
-    assert sources == list(BLOCK_ROUTE_SOURCES)
-    for route in config["routes"]:
-        assert route["status"] == 404
-        assert "noindex" in route["headers"]["X-Robots-Tag"]
+    assert "routes" not in config
     assert config["outputDirectory"] == "dist"
     assert "build_public_site.py" in config["buildCommand"]
+    noindex_sources = []
+    for rule in config["headers"]:
+        source = rule["source"]
+        # path-to-regexp only: reject inline flags, lookahead, and lookbehind
+        assert "(?" not in source, source
+        robots = next(
+            (item["value"] for item in rule["headers"] if item["key"] == "X-Robots-Tag"),
+            "",
+        )
+        if robots:
+            assert "noindex" in robots
+            noindex_sources.append(source)
+    assert noindex_sources == list(NOINDEX_HEADER_SOURCES)
     joined = json.dumps(config["headers"])
-    assert "X-Robots-Tag" in joined
     assert "Strict-Transport-Security" in joined
 
 

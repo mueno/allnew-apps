@@ -89,7 +89,28 @@
       ]
     },
     {
-      "source": "/(.*\\.md)",
+      "source": "/(.*)\\.md",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.MD",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.Md",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.mD",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
         { "key": "Cache-Control", "value": "no-store" }
@@ -128,38 +149,6 @@
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
-    }
-  ],
-  "routes": [
-    {
-      "src": "(?i)/.*\\.md$",
-      "status": 404,
-      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
-    },
-    {
-      "src": "(?i)/internal(/.*)?$",
-      "status": 404,
-      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
-    },
-    {
-      "src": "(?i)/\\.planning(/.*)?$",
-      "status": 404,
-      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
-    },
-    {
-      "src": "(?i)/test-results(/.*)?$",
-      "status": 404,
-      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
-    },
-    {
-      "src": "(?i)/scripts(/.*)?$",
-      "status": 404,
-      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
-    },
-    {
-      "src": "(?i)/landing-automation/(?!runtime/landing-runtime\\.js$).*$",
-      "status": 404,
-      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
     }
   ]
 }
