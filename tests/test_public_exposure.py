@@ -79,18 +79,32 @@ def test_vercel_headers_noindex_without_legacy_routes() -> None:
     assert "Strict-Transport-Security" in joined
 
 
-def test_cloudflare_and_robots_cover_internal_paths() -> None:
+def test_cloudflare_redirects_use_only_supported_rules() -> None:
+    # Cloudflare Pages `_redirects` supports only 200 rewrites and 3xx
+    # redirects. A bare `<path> 404` rule is unsupported and silently
+    # ineffective (parsed as a 302 to a path named "404", or dropped), so
+    # none may remain: internal paths are blocked by source-removal in the
+    # dist build, not here. This also locks out regressing to that form.
     redirects = (ROOT / "_redirects").read_text(encoding="utf-8")
+    allowed_status = {"200", "301", "302", "303", "307", "308"}
+    saw_rule = False
+    for raw in redirects.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        tokens = line.split()
+        if tokens[-1].isdigit():
+            saw_rule = True
+            assert tokens[-1] in allowed_status, f"unsupported _redirects status: {line}"
+    assert saw_rule, "expected at least one valid redirect rule in _redirects"
+
+
+def test_headers_and_robots_cover_internal_paths() -> None:
     headers = (ROOT / "_headers").read_text(encoding="utf-8")
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
-    for line in (
-        "/feedback/*.md 404",
-        "/*.md 404",
-        "/internal/* 404",
-        "/scripts/* 404",
-        "/TECHBLOG_DRAFT_ZENN.md 404",
-    ):
-        assert line in redirects
+    # The real block: internal/doc/script paths are removed from the build.
+    for path in ("/internal/x.md", "/feedback/deployment-security.md", "/scripts/x.py"):
+        assert is_blocked_path(path), path
     assert "Strict-Transport-Security:" in headers
     assert "X-Robots-Tag: noindex, nofollow" in headers
     for group in ("User-agent: *", "User-agent: Googlebot", "User-agent: Bingbot"):
