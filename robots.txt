@@ -27,48 +27,95 @@ Disallow: /debug/
 Disallow: /test-results/
 Disallow: /.planning/
 Disallow: /assets/raw/
-# Internal working docs (draft/spec/audit/security notes), not public pages.
-Disallow: /feedback/*.md$
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
 Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 Crawl-delay: 10
 
 # --- Major search engines: allow ---
 User-agent: Googlebot
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 User-agent: Bingbot
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 User-agent: Applebot
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 # --- AI search/citation bots: ALLOW (link us in AI answers) ---
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 User-agent: Perplexity-User
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 User-agent: Claude-SearchBot
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 User-agent: Claude-User
 Allow: /
 Disallow: /landing-automation/
+Disallow: /*.md$
+Disallow: /internal/
+Disallow: /feedback/*.md
+Disallow: /TECHBLOG_DRAFT_ZENN.md
+Disallow: /scripts/
 
 # --- AI training bots: BLOCK ---
 User-agent: GPTBot

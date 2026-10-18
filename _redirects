@@ -31,9 +31,12 @@
 /config.json 404
 /credentials.json 404
 
-# Internal working docs accidentally colocated in served dirs.
-# These are draft/spec/audit/security notes, not published pages — 404 them.
-# (Also excluded from Vercel via .vercelignore and from crawlers via robots.txt.)
+# Internal working docs. The files are removed from the publish tree;
+# these rules 404 them if a host still has the old paths or /internal.
+/internal/* 404
+/scripts/* 404
+/feedback/*.md 404
+/*.md 404
 /TECHBLOG_DRAFT_ZENN.md 404
 /feedback/README.md 404
 /feedback/audit-report.md 404

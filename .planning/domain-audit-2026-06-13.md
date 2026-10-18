@@ -1,5 +1,11 @@
 # AllNew.work ドメイン監査レポート（再監査・是正）
 
+## 2026-10-18 追記（PR #105 完了）
+
+2026-09-04 の是正は `.vercelignore` / `_redirects` / `robots.txt` で配信を隠すだけだった。main 取り込み後の完了版では、内部 Markdown を `internal/` へ移し、`dist/` の公開ビルドから除外する。`vercel.json` の `routes` は同じパスを 404 + `X-Robots-Tag: noindex` にする。
+
+sitemap は「全アプリが noindex」という 9 月時点の前提をやめた。`index, follow` かつ `apps.allnew.work` 自己 canonical のアプリは掲載したまま、`noindex` の `/coughwav/` と `/weightsnap/` だけ外し、`/anniversary-2026/` を追加した。公開 feedback ポータル（HTML/JS）は配信を続ける。
+
 - **実施日**: 2026-06-13（再監査）
 - **対象**: `https://www.allnew.work` および `apps.allnew.work` 配下の全公開サイト（本リポジトリ `mueno/allnew-apps` から Cloudflare Pages / Vercel の双方へ配信される静的サイト）
 - **観点**: セキュリティ（HTTPヘッダ / 情報漏えい / 混在コンテンツ / 外部スクリプト / クライアント認証）＋ 法務（プライバシー・利用規約・特定商取引法・医療免責・ドラフト文書の公開）＋ SEO 整合性

@@ -1,4 +1,7 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "python3 scripts/build_public_site.py",
+  "outputDirectory": "dist",
   "redirects": [
     {
       "source": "/pet-health-cards",
@@ -84,6 +87,79 @@
           "value": "unsafe-none"
         }
       ]
+    },
+    {
+      "source": "/(.*\\.md)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/internal/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/.planning/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/test-results/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/scripts/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/landing-automation/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "src": "(?i)/.*\\.md$",
+      "status": 404,
+      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
+    },
+    {
+      "src": "(?i)/internal(/.*)?$",
+      "status": 404,
+      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
+    },
+    {
+      "src": "(?i)/\\.planning(/.*)?$",
+      "status": 404,
+      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
+    },
+    {
+      "src": "(?i)/test-results(/.*)?$",
+      "status": 404,
+      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
+    },
+    {
+      "src": "(?i)/scripts(/.*)?$",
+      "status": 404,
+      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
+    },
+    {
+      "src": "(?i)/landing-automation/(?!runtime/landing-runtime\\.js$).*$",
+      "status": 404,
+      "headers": { "X-Robots-Tag": "noindex, nofollow", "Cache-Control": "no-store" }
     }
   ]
 }
