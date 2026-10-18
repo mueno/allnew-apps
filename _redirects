@@ -1,57 +1,20 @@
 # _redirects — Cloudflare Pages
 #
-# Return 404 for known attack paths and recursive SPA bait so crawlers
-# stop chasing them. Without this, every unknown path falls through to
-# the SPA root and returns 200, which causes:
-#   - GPTBot to chase /landing-automation/runtime/* recursively
-#   - Probing scripts (WP/PHP/git) to think the site is alive
+# Cloudflare Pages only understands `[source] [destination] [status]`. The
+# status is optional and defaults to 302, and Cloudflare documents that
+# rewrites using non-redirect statuses such as 404 are unsupported:
+#   https://developers.cloudflare.com/pages/configuration/redirects/
 #
-# Cloudflare Pages syntax: `<source> <status>` returns that status
-# directly. `<source> <destination> <status>` rewrites first.
+# So the old bare-status lines (`/internal/* 404`, `/*.php 404`, …) never
+# blocked anything — `404` was parsed as the destination and the rule was
+# dropped. A production probe confirmed it: /test-results/.last-run.json
+# returned 200. Real 404s for internal, excluded and attack paths are now
+# returned by the Pages Function in functions/_middleware.js, which is the
+# mechanism Cloudflare recommends for returning a status `_redirects` cannot.
+# On Vercel those paths are simply absent from the built dist/ tree.
+#
+# Only genuine redirects belong in this file.
 
 # Legacy MeishiBridge support URL.
 /meishibridge /meishi-scanner/ 301
 /meishibridge/ /meishi-scanner/ 301
-
-# WordPress / PHP probes (we are pure static, no PHP)
-/wp-login.php 404
-/wp-admin/* 404
-/wp-includes/* 404
-/wp-config.php 404
-/xmlrpc.php 404
-/*.php 404
-
-# Dotfile / VCS / config probes
-/.env 404
-/.env.* 404
-/.git/* 404
-/.svn/* 404
-/.aws/* 404
-/.ssh/* 404
-/config.json 404
-/credentials.json 404
-
-# Internal working docs. The files are removed from the publish tree;
-# these rules 404 them if a host still has the old paths or /internal.
-/internal/* 404
-/scripts/* 404
-/feedback/*.md 404
-/*.md 404
-/TECHBLOG_DRAFT_ZENN.md 404
-/feedback/README.md 404
-/feedback/audit-report.md 404
-/feedback/deployment-security.md 404
-/feedback/legal-draft.md 404
-/feedback/privacy-policy-draft.md 404
-/feedback/product-spec.md 404
-/feedback/ux-concept-2026.md 404
-
-# Hide internal/runtime paths from crawlers (also Disallowed in robots.txt).
-# IMPORTANT: index.html references `landing-automation/runtime/landing-runtime.js`
-# — that exact path must still serve 200. Allowlist it BEFORE the wildcard block
-# (first-match-wins).
-/landing-automation/runtime/landing-runtime.js /landing-automation/runtime/landing-runtime.js 200
-/landing-automation/* 404
-/debug/* 404
-/test-results/* 404
-/.planning/* 404

@@ -4,6 +4,11 @@
 The local server applies the public-surface block list, so a markdown file
 planted back into dist/ still returns 404 with X-Robots-Tag. Vercel itself
 404s those paths because they are omitted from dist/.
+
+Cloudflare Pages serves the repository tree instead of dist/, so it 404s those
+same paths through functions/_middleware.js. When node is available this script
+also runs that middleware's matcher to confirm the Cloudflare and Vercel block
+lists agree, and that the attack-path probes are blocked.
 """
 
 from __future__ import annotations
@@ -22,11 +27,14 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from public_surface import (
+    ATTACK_PROBE_PATHS,
     DIST,
     PUBLIC_PATHS,
     REMOVED_PUBLIC_PATHS,
     build_public_site,
     is_blocked_path,
+    node_executable,
+    run_middleware_matcher,
 )
 
 
@@ -138,10 +146,42 @@ def check(dist: Path = DIST) -> list[str]:
         if needle not in locs:
             failures.append(f"sitemap missing {needle}")
 
+    # Cross-check the Cloudflare Pages Function (functions/_middleware.js) with
+    # node when available. Cloudflare serves the repo tree, so this middleware
+    # is the edge mechanism that returns a real 404; it must block everything
+    # the Vercel dist-filter drops and allow everything the public site needs.
+    middleware_checked = False
+    must_block = list(REMOVED_PUBLIC_PATHS) + list(ATTACK_PROBE_PATHS)
+    must_serve = list(PUBLIC_PATHS)
+    verdicts = run_middleware_matcher(must_block + must_serve)
+    if verdicts is None:
+        if node_executable() is None:
+            print("note: node not found, skipping functions/_middleware.js cross-check")
+        else:
+            failures.append("functions/_middleware.js missing; cannot cross-check")
+    else:
+        middleware_checked = True
+        for path in must_block:
+            if not verdicts.get(path):
+                failures.append(f"middleware does not block {path}")
+        for path in must_serve:
+            if verdicts.get(path):
+                failures.append(f"middleware blocks public path {path}")
+        # The Vercel/Python block list and the Cloudflare block list must agree
+        # on every path except the attack probes (which Vercel 404s by absence).
+        for path in REMOVED_PUBLIC_PATHS:
+            if is_blocked_path(path) != verdicts.get(path):
+                failures.append(f"block-list drift for {path}")
+        for path in PUBLIC_PATHS:
+            if is_blocked_path(path) != verdicts.get(path):
+                failures.append(f"block-list drift for {path}")
+
     summary = {
         "dist_files": sum(1 for _ in dist.rglob("*") if _.is_file()),
         "removed_checked": len(REMOVED_PUBLIC_PATHS),
         "public_checked": len(PUBLIC_PATHS),
+        "attack_probes_checked": len(ATTACK_PROBE_PATHS),
+        "middleware_checked": middleware_checked,
         "failures": failures,
     }
     print(json.dumps(summary, indent=2))
