@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!--
+    apps.allnew.work sitemap.
+
+    Include a URL only when the page is self-canonical on apps.allnew.work
+    and is not marked noindex. Internal drafts (*.md, /internal/) are never
+    listed. Company/legal pages that canonicalize to www.allnew.work stay out.
+
+    noindex support pages currently excluded: /coughwav/, /weightsnap/,
+    plus unpublished or alias stubs. Indexable app landings stay listed.
+  -->
   <url>
     <loc>https://apps.allnew.work/</loc>
     <xhtml:link rel="alternate" hreflang="ja" href="https://apps.allnew.work/?lang=ja"/>
@@ -15,6 +25,24 @@
     <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://apps.allnew.work/anniversary-2026/</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://apps.allnew.work/anniversary-2026/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apps.allnew.work/anniversary-2026/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://apps.allnew.work/anniversary-2026/"/>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://apps.allnew.work/anniversary-2026/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://apps.allnew.work/anniversary-2026/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://apps.allnew.work/anniversary-2026/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://apps.allnew.work/anniversary-2026/"/>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://apps.allnew.work/babyvox/</loc>
@@ -47,12 +75,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://apps.allnew.work/coughwav/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://apps.allnew.work/countsnap/</loc>
     <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
@@ -70,7 +92,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
   <url>
     <loc>https://apps.allnew.work/medreminder/</loc>
     <lastmod>2026-06-13</lastmod>
@@ -83,7 +104,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
   <url>
     <loc>https://apps.allnew.work/oxisnap/</loc>
     <lastmod>2026-06-13</lastmod>
@@ -102,7 +122,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
   <url>
     <loc>https://apps.allnew.work/pupmeds/</loc>
     <lastmod>2026-06-13</lastmod>
@@ -115,14 +134,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
   <url>
     <loc>https://apps.allnew.work/thermosnap/</loc>
     <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  
   <url>
     <loc>https://apps.allnew.work/voicedeal/</loc>
     <lastmod>2026-06-13</lastmod>
@@ -131,12 +148,6 @@
   </url>
   <url>
     <loc>https://apps.allnew.work/waistvox/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://apps.allnew.work/weightsnap/</loc>
     <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

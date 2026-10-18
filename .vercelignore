@@ -6,6 +6,13 @@ landing-automation/*
 landing-automation/runtime/*
 !landing-automation/runtime/landing-runtime.js
 tests/
+test-results/
 **/__pycache__/
 **/.pytest_cache/
 **/*.pyc
+.DS_Store
+
+# Internal drafts are kept in git under internal/ and omitted from upload.
+# **/*.md also drops a file if it is copied back to a public path.
+internal/
+**/*.md
