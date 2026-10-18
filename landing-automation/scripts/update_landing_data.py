@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import ipaddress
 import json
+import math
 import os
 import urllib.error
 import urllib.parse
@@ -659,6 +660,13 @@ def build_entry_from_app_store(
     if existing_entry:
         entry.update(existing_entry)
 
+    # Content sync updates the catalog first. Do not let yesterday's generated
+    # fields override those reviewed/machine-owned catalog changes on reconcile.
+    for field in ("name", "name_ja", "description_ja", "description_en", "category",
+                  "category_label", "is_health_app", "icon_path", "input_methods"):
+        if field in catalog_entry:
+            entry[field] = catalog_entry[field]
+
     entry["status"] = "released"
     entry["published_to_landing"] = True
 
@@ -690,6 +698,17 @@ def build_entry_from_app_store(
         entry["release_date"] = normalize_release_date(lookup_entry.get("releaseDate")) or entry.get("release_date", "")
 
     entry["app_store_lookup_country"] = normalize_lookup_country(country)
+    # This is the download price only; it says nothing about in-app purchases.
+    # Missing or invalid prices must not retain a stale offer or become free.
+    for field in ("app_store_price", "app_store_currency"):
+        entry.pop(field, None)
+    price = lookup_entry.get("price")
+    currency = lookup_entry.get("currency")
+    if (type(price) in (int, float) and math.isfinite(price) and price >= 0
+            and isinstance(currency, str) and len(currency) == 3
+            and currency.isascii() and currency.isalpha() and currency.isupper()):
+        entry["app_store_price"] = price
+        entry["app_store_currency"] = currency
     entry = apply_catalog_defaults(entry, catalog_entry)
     entry["updated_at"] = now_iso()
     return keep_updated_at_if_semantically_same(entry, existing_entry)

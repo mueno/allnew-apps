@@ -70,8 +70,9 @@ def refresh_machine_owned_entry(
     track = track_jp or track_us
     slug = str(entry["slug"])
 
-    product_name = sd.support_page_product_name(root, slug)
-    name, name_ja = sd.split_names(track_jp or track_us, product_name)
+    # A static support-page title can predate a store rename. It is useful for
+    # discovery/slug matching, but must not override the published product name.
+    name, name_ja = sd.split_names(track_jp or track_us, "")
     category = sd.genre_to_category(track_jp or track_us)
     fresh = {
         "name": name,
