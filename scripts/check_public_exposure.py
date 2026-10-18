@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Build dist/ and assert internal documents 404 while public pages still serve.
 
-The local server applies the same block list as vercel.json routes, so a
-markdown file planted back into dist/ still returns 404 with X-Robots-Tag.
+The local server applies the public-surface block list, so a markdown file
+planted back into dist/ still returns 404 with X-Robots-Tag. Vercel itself
+404s those paths because they are omitted from dist/.
 """
 
 from __future__ import annotations
