@@ -767,7 +767,7 @@
                         <p><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、「記録する」ボタンを押すとヘルスケアに保存されます。</p>
                         <ul>
                             <li><strong>通常:</strong> 確認画面で数値を確認し、「記録する」を選択すると保存されます</li>
-                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にヘルスケアに記録されます</li>
+                            <li><strong>自動記録（オプション）:</strong> 設定で「自動記録」をオンにすると、高信頼度の認識結果は確認画面なしで自動的にカレンダーに記録されます</li>
                         </ul>
                         <p>認識精度が低い場合は、自動記録がオンでも確認画面が表示されます。</p>
                     </div>
@@ -777,7 +777,7 @@
                     <div class="faq-question">認識結果が間違っていた場合は？<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
                         <p><strong>保存前の場合:</strong> 確認画面で数値を確認できます。正しくないと思ったら「記録しない」を選択し、再度撮影してください。</p>
-                        <p><strong>保存後の場合:</strong> 誤った数値が保存された場合は、iOSのヘルスケアアプリから削除してください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</p>
+                        <p><strong>保存後の場合:</strong> 誤った数値が保存された場合は、iOSのカレンダーアプリから該当イベントを削除してください。</p>
                     </div>
                 </div>
 
@@ -824,22 +824,22 @@
 
                 <div class="legal-section">
                     <h3>3. 第三者への提供</h3>
-                    <p>当社は音声データやHealthKitデータを第三者に提供、販売、共有しません。</p>
+                    <p>当社は音声データやカレンダーデータを第三者に提供、販売、共有しません。</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. Apple HealthKit特記事項</h3>
+                    <h3>4. カレンダーデータの取り扱い</h3>
                     <ul>
-                        <li>HealthKitデータを広告、マーケティング、データマイニング目的で使用しません</li>
-                        <li>HealthKitデータをデータブローカーに販売しません</li>
+                        <li>カレンダーデータを広告、マーケティング、データマイニング目的で使用しません</li>
+                        <li>カレンダーデータをデータブローカーに販売しません</li>
                         <li>当社はHealthKitデータを当社の外部サーバーに送信・保存しません。HealthKitの保存・同期（iCloud等）の挙動は、ユーザーの端末設定およびAppleの仕様に従います</li>
-                        <li>HealthKitへのアクセスはiOSの設定からいつでも取り消せます</li>
+                        <li>カレンダーへのアクセスはiOSの設定からいつでも取り消せます</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>5. セキュリティ対策</h3>
-                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護、HealthKitの暗号化による保護を採用しています。</p>
+                    <p>データ最小化設計、原則として端末内での処理、Keychainによる機密情報保護を採用しています。</p>
                 </div>
 
                 <div class="legal-section">
@@ -908,13 +908,13 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. プライバシーポリシーおよびHealthKitデータの取り扱い</h3>
+                    <h3>4. プライバシーポリシーおよびカレンダーデータの取り扱い</h3>
                     <p>当社は、本アプリの利用に関連して取り扱う情報を別途定める<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
-                    <p>Apple HealthKitに記録されたデータについて、当社は以下を遵守します:</p>
+                    <p>カレンダー(EventKit)に記録されたデータについて、当社は以下を遵守します:</p>
                     <ul>
-                        <li>HealthKitデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
-                        <li>HealthKitデータをデータブローカーや第三者に販売・提供しません</li>
-                        <li>HealthKitデータを当社が運用するサーバーへ送信・保存しません</li>
+                        <li>カレンダーデータを広告、マーケティング、またはデータマイニング目的で使用しません</li>
+                        <li>カレンダーデータをデータブローカーや第三者に販売・提供しません</li>
+                        <li>カレンダーデータを当社が運用するサーバーへ送信・保存しません</li>
                     </ul>
                 </div>
 
@@ -939,8 +939,8 @@
                     <ul>
                         <li><strong>認識精度の非保証:</strong> 音声認識の精度は100%ではありません。</li>
                         <li><strong>デフォルト動作:</strong> 認識結果は確認画面に表示され、ユーザーが「記録する」を選択した場合にApple HealthKit（ヘルスケア）へ記録されます。</li>
-                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でヘルスケアへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
-                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSの「ヘルスケア」アプリで該当データを削除した上で、本アプリで再度認識・記録を行ってください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</li>
+                        <li><strong>自動記録オプション:</strong> 設定で「自動記録」を有効にした場合、高信頼度の認識結果はユーザーの確認なしに自動でカレンダーへ記録されます。低信頼度の場合は確認画面が表示されます。</li>
+                        <li><strong>記録後の訂正方法:</strong> 誤った値を修正したい場合は、iOSのカレンダーアプリで該当イベントを削除した上で、本アプリで再度認識・記録を行ってください。詳しい操作方法についてはヘルスケアアプリでご確認ください。</li>
                     </ul>
                 </div>
 
@@ -1080,7 +1080,7 @@
                     <div class="faq-answer">
                         <p>The app automatically evaluates voice recognition confidence.</p>
                         <ul>
-                            <li><strong>High confidence:</strong> Automatically saved to HealthKit without confirmation</li>
+                            <li><strong>High confidence:</strong> Automatically saved to Calendar without confirmation</li>
                             <li><strong>Low confidence:</strong> A confirmation screen is shown with the detected value. "Record this value" saves it; "Don't Record" prompts you to retake.</li>
                         </ul>
                         <p>When the app determines confidence is low, data will not be saved unless you explicitly approve it.</p>
@@ -1091,7 +1091,7 @@
                     <div class="faq-question">What if the recognition is wrong?<span class="faq-icon">+</span></div>
                     <div class="faq-answer">
                         <p><strong>Before saving:</strong> If the recognition confidence is low, the app will show a confirmation screen. If the value looks incorrect, choose "Don't Record" and retake the photo.</p>
-                        <p><strong>After saving:</strong> High-confidence readings are automatically saved. If incorrect data was saved, delete it from the iOS Health app. Please refer to the Health app for detailed instructions.</p>
+                        <p><strong>After saving:</strong> High-confidence readings are automatically saved. If incorrect data was saved, delete the event from the iOS Calendar app.</p>
                     </div>
                 </div>
 
@@ -1138,22 +1138,22 @@
 
                 <div class="legal-section">
                     <h3>3. Third-Party Sharing</h3>
-                    <p>We do not provide, sell, or share voice data or HealthKit data with third parties.</p>
+                    <p>We do not provide, sell, or share voice data or calendar data with third parties.</p>
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. Apple HealthKit</h3>
+                    <h3>4. Calendar Data Handling</h3>
                     <ul>
-                        <li>HealthKit data is not used for advertising, marketing, or data mining</li>
-                        <li>HealthKit data is not sold to data brokers</li>
-                        <li>We do not transmit or store HealthKit data on our own external servers. How Health data may be stored or synced (including via iCloud) depends on your device settings and Apple's system behavior</li>
-                        <li>HealthKit access can be revoked anytime in iOS Settings</li>
+                        <li>Calendar data is not used for advertising, marketing, or data mining</li>
+                        <li>Calendar data is not sold to data brokers</li>
+                        <li>We do not transmit or store calendar data on our own external servers</li>
+                        <li>Calendar access can be revoked anytime in iOS Settings</li>
                     </ul>
                 </div>
 
                 <div class="legal-section">
                     <h3>5. Security</h3>
-                    <p>We employ data minimization, on-device processing where possible, Keychain protection, and HealthKit encryption.</p>
+                    <p>We employ data minimization, on-device processing where possible, Keychain protection.</p>
                 </div>
 
                 <div class="legal-section">
@@ -1164,7 +1164,7 @@
                 <div class="legal-section">
                     <h3>7. Your Rights</h3>
                     <ul>
-                        <li><strong>All Users:</strong> You can manage or delete HealthKit data through the iOS Apple Health app. Navigation paths may vary depending on your iOS version. When uninstalling, iOS asks whether to delete health data.</li>
+                        <li><strong>All Users:</strong> You can manage or delete calendar data through the iOS Calendar app. Calendar events remain after app uninstallation.</li>
                         <li><strong>EU/EEA (GDPR):</strong> Right to lodge complaints, withdraw consent.</li>
                         <li><strong>California (CCPA/CPRA):</strong> Right to know, delete, opt-out. We don't sell personal information.</li>
                         <li><strong>China (PIPL):</strong> Right to know, access, correct, delete. We do not transfer your data to servers operated by us outside your country. Note that Apple services (such as iCloud sync) may involve processing outside your region depending on your settings and Apple's system behavior.</li>
@@ -1222,13 +1222,13 @@
                 </div>
 
                 <div class="legal-section">
-                    <h3>4. Privacy Policy and HealthKit Data Handling</h3>
+                    <h3>4. Privacy Policy and Calendar Data Handling</h3>
                     <p>Your use of the App is also governed by our <a href="#privacy-en">Privacy Policy</a>.</p>
-                    <p>Regarding data recorded in Apple HealthKit, we commit to the following:</p>
+                    <p>Regarding data recorded in Calendar \(EventKit\), we commit to the following:</p>
                     <ul>
-                        <li>We do not use HealthKit data for advertising, marketing, or data mining purposes</li>
-                        <li>We do not sell or provide HealthKit data to data brokers or third parties</li>
-                        <li>We do not transmit or store HealthKit data on servers operated by us</li>
+                        <li>We do not use calendar data for advertising, marketing, or data mining purposes</li>
+                        <li>We do not sell or provide calendar data to data brokers or third parties</li>
+                        <li>We do not transmit or store calendar data on servers operated by us</li>
                     </ul>
                 </div>
 
@@ -1252,8 +1252,8 @@
                     <ul>
                         <li><strong>No Guarantee:</strong> Voice recognition accuracy is not 100%.</li>
                         <li><strong>Default Behavior:</strong> Recognition results are shown on a confirmation screen. The data is saved only when you tap "Save".</li>
-                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to HealthKit without confirmation. Low-confidence results will still show a confirmation screen.</li>
-                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect entry in the iOS Health app and then re-scan. Please refer to the Health app for detailed instructions.</li>
+                        <li><strong>Auto-Save Option:</strong> If you enable "Auto-Save" in Settings, high-confidence results will be automatically saved to Calendar without confirmation. Low-confidence results will still show a confirmation screen.</li>
+                        <li><strong>How to Correct Entries:</strong> To correct a value, delete the incorrect event in the iOS Calendar app and then re-record.</li>
                     </ul>
                 </div>
 
@@ -1493,9 +1493,9 @@
     <footer class="trademark-footer">
         <div class="trademark-content">
             <p class="trademark-text">
-                Apple、Appleのロゴ、iPhone、iOS、HealthKit、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                Apple、Appleのロゴ、iPhone、iOS、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
                 <br>
-                Apple, the Apple logo, iPhone, iOS, HealthKit, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+                Apple, the Apple logo, iPhone, iOS, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
             </p>
             <p class="trademark-disclaimer">
                 本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
