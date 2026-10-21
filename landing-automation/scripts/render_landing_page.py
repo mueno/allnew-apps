@@ -137,7 +137,13 @@ def build_json_ld(apps: list[dict]) -> str:
         "numberOfItems": len(apps),
         "itemListElement": items,
     }
-    return json.dumps(payload, ensure_ascii=False, indent=4)
+    # Script data is tokenized as HTML before JSON is parsed. JSON escapes keep
+    # metadata (including end tags and comment openers) inside the data block
+    # while preserving the original values for JSON-LD consumers.
+    return (json.dumps(payload, ensure_ascii=False, indent=4)
+            .replace("<", "\\u003c")
+            .replace(">", "\\u003e")
+            .replace("&", "\\u0026"))
 
 
 def replace_json_ld(page: str, json_ld: str) -> str:
