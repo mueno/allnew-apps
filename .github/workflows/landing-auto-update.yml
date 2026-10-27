@@ -22,9 +22,7 @@ on:
     - cron: "15 */6 * * *"
 
 permissions:
-  contents: write
-  deployments: write
-  issues: write
+  contents: read
 
 concurrency:
   group: landing-auto-update-${{ github.ref }}
@@ -33,6 +31,12 @@ concurrency:
 jobs:
   update-landing:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      deployments: write
+    outputs:
+      sync-outcome: ${{ steps.landing-sync.outcome }}
+      live-outcome: ${{ steps.live-verify.outcome }}
 
     steps:
       - name: Checkout
@@ -201,31 +205,42 @@ jobs:
           ./.github/tools/vercel-cli/node_modules/.bin/vercel deploy --prod --yes --token "${VERCEL_TOKEN}"
           verify --retries 8
 
+  # Fresh runner: no checkout, npm dependency, Vercel process, or workspace
+  # artifact is imported from update-landing. Only outcome enums cross jobs.
+  notify-andon:
+    needs: update-landing
+    if: ${{ always() && needs.update-landing.result == 'failure' && (needs.update-landing.outputs.sync-outcome == 'failure' || needs.update-landing.outputs.live-outcome == 'failure') }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
       - name: ANDON — open issue on gate block or live drift
-        if: ${{ failure() && (steps.landing-sync.outcome == 'failure' || steps.live-verify.outcome == 'failure') }}
         env:
           GH_TOKEN: ${{ github.token }}
-          SYNC_OUTCOME: ${{ steps.landing-sync.outcome }}
-          LIVE_OUTCOME: ${{ steps.live-verify.outcome }}
+          SYNC_OUTCOME: ${{ needs.update-landing.outputs.sync-outcome }}
+          LIVE_OUTCOME: ${{ needs.update-landing.outputs.live-outcome }}
         run: |
           set -euo pipefail
-          gh label create landing-parity-andon --force \
+          # Treat cross-job outputs as untrusted, bounded status values.
+          for outcome in "$SYNC_OUTCOME" "$LIVE_OUTCOME"; do
+            case "$outcome" in
+              success|failure|cancelled|skipped|"") ;;
+              *) echo "::error::Unexpected outcome value"; exit 1 ;;
+            esac
+          done
+          gh label create landing-parity-andon --force --repo "$GITHUB_REPOSITORY" \
             --description "Landing/App Store parity or live drift blocked" --color B60205 || true
           stage="parity gate (repo)"
-          if [ "${LIVE_OUTCOME}" = "failure" ]; then
+          if [ "$LIVE_OUTCOME" = "failure" ]; then
             stage="live verification (production readback)"
           fi
-          report=""
-          if [ -f landing-automation/state/parity_report.json ]; then
-            report=$(cat landing-automation/state/parity_report.json)
-          fi
-          body=$(printf 'The landing pipeline blocked at: %s\n\nRun: %s\n\nLast parity report:\n```json\n%s\n```\n\nResolve by fixing the gap, adding a reasoned exclusion in landing-automation/config/parity_exclusions.json, or (for confirmed false positives under repair) a time-boxed landing-automation/state/parity_circuit_breaker.json.' \
-            "$stage" "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" "$report")
-          existing=$(gh issue list --label landing-parity-andon --state open \
+          body=$(printf 'The landing pipeline blocked at: %s\n\nRun: %s\n\nSync outcome: %s\nLive outcome: %s\n\nInspect the run logs for the parity report. Workspace files from the deploy job are not imported into this token-bearing job.' \
+            "$stage" "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" "$SYNC_OUTCOME" "$LIVE_OUTCOME")
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --label landing-parity-andon --state open \
             --json number --jq '.[0].number' 2>/dev/null || true)
           if [ -n "$existing" ]; then
-            gh issue comment "$existing" --body "$body"
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"
           else
-            gh issue create --title "ANDON: landing pipeline blocked" \
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "ANDON: landing pipeline blocked" \
               --label landing-parity-andon --body "$body"
           fi
