@@ -14,3 +14,6 @@ HANDOFF_*
 # Python
 __pycache__/
 *.pyc
+
+# Integrity-locked deployment CLI installed locally by npm ci
+.github/tools/vercel-cli/node_modules/

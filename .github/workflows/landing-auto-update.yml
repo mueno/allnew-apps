@@ -49,13 +49,6 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install Vercel CLI
-        # Exact pinned version installed WITHOUT the Vercel token in env, so npm
-        # lifecycle scripts cannot read it. Replaces `npx vercel@50` — an
-        # unpinned semver range that fetches and executes new CLI code at deploy
-        # time in the same step that holds VERCEL_TOKEN.
-        run: npm install --global vercel@50.40.0
-
       - name: Write event payload
         run: |
           cat <<'JSON' > /tmp/landing-event.json
@@ -163,6 +156,14 @@ jobs:
             sleep $((attempt * 2))
           done
 
+      # Install only after all Git commits/pushes have finished. No npm code
+      # runs before the step holding GH_TOKEN, and existing Git hooks stay intact.
+      # Lock transitive integrity and suppress lifecycle scripts; invoke the
+      # local executable explicitly rather than trusting a modified PATH.
+      - name: Install Vercel CLI
+        if: ${{ steps.commit-changes.outputs.changed == 'true' || steps.landing-sync.outcome == 'success' }}
+        run: npm ci --prefix .github/tools/vercel-cli --ignore-scripts --no-audit --no-fund
+
       - name: Deploy to Vercel (production)
         if: ${{ steps.commit-changes.outputs.changed == 'true' }}
         env:
@@ -174,7 +175,7 @@ jobs:
             echo "::error::VERCEL_TOKEN secret is not set. apps.allnew.work is served by Vercel; add the secret in repo settings."
             exit 1
           fi
-          vercel deploy --prod --yes --token "${VERCEL_TOKEN}"
+          ./.github/tools/vercel-cli/node_modules/.bin/vercel deploy --prod --yes --token "${VERCEL_TOKEN}"
 
       - name: Live verification (production readback, one self-heal redeploy)
         id: live-verify
@@ -197,7 +198,7 @@ jobs:
             exit 1
           fi
           echo "Live drift detected; redeploying production from committed main HEAD"
-          vercel deploy --prod --yes --token "${VERCEL_TOKEN}"
+          ./.github/tools/vercel-cli/node_modules/.bin/vercel deploy --prod --yes --token "${VERCEL_TOKEN}"
           verify --retries 8
 
       - name: ANDON — open issue on gate block or live drift

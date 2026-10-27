@@ -1,0 +1,8 @@
+{
+  "name": "allnew-landing-deploy-cli",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "vercel": "50.40.0"
+  }
+}
