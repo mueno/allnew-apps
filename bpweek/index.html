@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BPWeek Support</title>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BPWeek Support">
+    <meta property="og:description" content="BPWeek - Home blood pressure log with weekly review. Record by camera, voice or by hand. FAQ, Privacy Policy, Terms of Service.">
+    <meta property="og:url" content="https://apps.allnew.work/bpweek/">
+    <meta property="og:image" content="https://apps.allnew.work/bpsnap-promo.png">
+    <meta property="og:site_name" content="AllNew">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BPWeek Support">
+    <meta name="twitter:description" content="BPWeek - Home blood pressure log with weekly review. Record by camera, voice or by hand. FAQ, Privacy Policy, Terms of Service.">
+    <meta name="twitter:image" content="https://apps.allnew.work/bpsnap-promo.png">
+    <link rel="canonical" href="https://apps.allnew.work/bpweek/">
+    <meta name="description" content="BPWeek - Home blood pressure log with weekly review. Record by camera, voice or by hand. FAQ, Privacy Policy, Terms of Service.">
+    <!-- Security Headers (GitHub Pages cannot set HTTP response headers) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; script-src 'unsafe-inline'; form-action 'none'; base-uri 'self'">
+    <meta name="referrer" content="no-referrer">
+    <!-- Bot/Crawler Protection -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="googlebot" content="index, follow, max-image-preview:large">
+    <meta name="bingbot" content="index, follow">
+    <meta name="GPTBot" content="noindex, nofollow">
+    <meta name="CCBot" content="noindex, nofollow">
+    <meta name="anthropic-ai" content="noindex, nofollow">
+    <meta name="Google-Extended" content="noindex, nofollow">
+    <style>
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --border: rgba(0,0,0,0.08);
+            --glass: rgba(255,255,255,0.72);
+            --shadow-soft: 0 4px 24px rgba(0,0,0,0.06);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #1c1c1e;
+                --bg-tertiary: #2c2c2e;
+                --text-primary: #f5f5f7;
+                --text-secondary: #a1a1a6;
+                --text-tertiary: #6e6e73;
+                --accent: #2997ff;
+                --accent-hover: #4da8ff;
+                --border: rgba(255,255,255,0.1);
+                --glass: rgba(28,28,30,0.72);
+                --shadow-soft: 0 4px 24px rgba(0,0,0,0.3);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Hiragino Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            /* Copy Protection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Sticky Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--border);
+        }
+
+        .app-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Language Dropdown */
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 980px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .lang-btn::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .lang-dropdown.open .lang-btn::after {
+            transform: rotate(180deg);
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            min-width: 160px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-soft);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+            z-index: 200;
+        }
+
+        .lang-dropdown.open .lang-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .lang-option {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .lang-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .lang-option.active {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .lang-option:first-child { border-radius: 11px 11px 0 0; }
+        .lang-option:last-child { border-radius: 0 0 11px 11px; }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation TOC */
+        .toc {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .toc-link {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 980px;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        /* Language Content Containers */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        /* Section */
+        .section {
+            padding: 48px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Updated Badge */
+        .updated-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-tertiary);
+            padding: 6px 12px;
+            border-radius: 980px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .updated-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #34c759;
+            border-radius: 50%;
+        }
+
+        /* Important Box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0,113,227,0.08) 0%, rgba(102,126,234,0.08) 100%);
+            border: 1px solid rgba(0,113,227,0.2);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .highlight-box p {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(0,113,227,0.3);
+        }
+
+        .faq-question {
+            padding: 18px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 18px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 800px;
+            padding: 0 24px 24px;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .faq-answer p:last-child { margin-bottom: 0; }
+
+        .faq-answer ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* Legal Sections */
+        .legal-section {
+            margin-bottom: 28px;
+        }
+
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legal-section h3::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .legal-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .legal-section li {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .legal-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .legal-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Commercial Accordion */
+        .commercial-accordion {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .commercial-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .commercial-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .commercial-toggle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 20px;
+            font-weight: 300;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .commercial-accordion.open .commercial-toggle {
+            background: var(--accent);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .commercial-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .commercial-accordion.open .commercial-content {
+            max-height: 600px;
+            padding: 0 24px 24px;
+        }
+
+        /* Contact Card */
+        .contact-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .contact-card h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .contact-card > p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .contact-email:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        .contact-details {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .contact-details-top {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            padding-top: 0;
+            padding-bottom: 16px;
+            border-top: none;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contact-item {
+            font-size: 0.85rem;
+        }
+
+        .contact-item dt {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .contact-item dd {
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 32px 20px;
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        /* Translation Notice */
+        .translation-notice {
+            background: #fff3cd;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .translation-notice {
+                background: rgba(255, 193, 7, 0.15);
+                color: #ffc107;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-inner {
+                gap: 12px;
+            }
+
+            .hero { padding: 40px 20px 30px; }
+            .hero h1 { font-size: 1.6rem; }
+
+            .toc { gap: 4px; }
+            .toc-link { padding: 6px 12px; font-size: 0.8rem; }
+
+            .section { padding: 32px 0; }
+            .section-header { flex-direction: column; text-align: center; }
+
+            .contact-card { padding: 28px; }
+            .contact-details { grid-template-columns: 1fr; }
+        }
+
+        /* Scroll offset for anchors */
+        :target {
+            scroll-margin-top: 80px;
+        }
+
+        /* Fun Easter Egg */
+        .hero-icon:hover {
+            animation: wiggle 0.5s ease;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg) scale(1.05); }
+            75% { transform: rotate(5deg) scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="../" class="logo-link">
+                <span class="logo">AllNew</span>
+                <span class="logo-divider"></span>
+                <span class="app-name">BPWeek</span>
+            </a>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-btn" id="langBtn">
+                    <span id="currentLangLabel">日本語</span>
+                </button>
+                <div class="lang-menu" id="langMenu">
+                    <button class="lang-option active" data-lang="ja">日本語</button>
+                    <button class="lang-option" data-lang="en">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <img src="../bpsnap-icon.png" alt="BPWeek" class="hero-icon">
+        <h1 id="heroTitle">BPWeek</h1>
+        <p class="hero-subtitle" id="heroSubtitle">測って、記録して、週ごとにふり返る。<br>家庭血圧の記録アプリ。</p>
+    </section>
+
+    <nav class="toc" id="toc">
+        <a href="#faq" class="toc-link" data-section="faq">FAQ</a>
+        <a href="#privacy" class="toc-link" data-section="privacy">プライバシー</a>
+        <a href="#terms" class="toc-link" data-section="terms">利用規約</a>
+        <a href="#oss" class="toc-link" data-section="oss">3rd Party Licensing Notice</a>
+        <a href="#commercial" class="toc-link" data-section="commercial">特定商取引法</a>
+        <a href="#contact" class="toc-link" data-section="contact">お問い合わせ</a>
+    </nav>
+
+    <main class="main">
+        <!-- ==================== JAPANESE ==================== -->
+        <div class="lang-content active" data-lang="ja">
+            <!-- FAQ -->
+            <section id="faq-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">よくある質問</div>
+                        <div class="section-subtitle">使い方や機能についてお答えします</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">BPWeek はどんなアプリですか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>家庭で測った血圧を記録し、週ごとにふり返るアプリです。記録は、血圧計の表示の撮影、声、手入力のどれでもできます。</p>
+                        <p>「ふり返り」では、7日・14日・30日の平均を朝と夜に分けて表示します。期間の記録は PDF や CSV にまとめ、ご自分で選んだ先に共有できます。</p>
+                        <p>BPSnap から名前が変わりました。購入はそのまま引き継がれます。ヘルスケアに保存した過去の血圧も、許可すれば表示できます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">無料で使えますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>新しい記録の保存<strong>15回まで無料</strong>でお使いいただけます。数えるのは保存が完了した回数で、撮影や入力の回数、記録の編集・削除は数えません。</p>
+                        <p>16回目以降は、App Store に表示される価格の<strong>買い切り</strong>でお使いいただけます。月額や年額の課金（サブスクリプション）はありません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">購入を復元したい<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>アプリの「設定」→「購入・復元」を開き、「購入を復元」をタップしてください。購入したときと同じ Apple アカウントでサインインしている必要があります。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">どんな血圧計に対応していますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>撮影による入力は、数字がデジタル表示される血圧計に対応しています。アナログ表示の血圧計（水銀式・針式など）は撮影では読み取れません。その場合は声か手入力で記録してください。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">記録できる数値の範囲は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <ul>
+                            <li><strong>最高血圧（上）:</strong> 60〜260 mmHg</li>
+                            <li><strong>最低血圧（下）:</strong> 30〜180 mmHg（最高血圧より低い値）</li>
+                            <li><strong>脈拍（任意）:</strong> 20〜300 拍/分</li>
+                        </ul>
+                        <p>この範囲外の値は保存できません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">読み取りが間違っていたら？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>読み取った数字は入力画面に表示されます。保存する前に確認し、違っていたら直してください。</p>
+                        <p>保存したあとでも、アプリの記録から内容を直したり、「この記録を削除」で削除したりできます。ヘルスケアに保存した値は、iOS の「ヘルスケア」アプリから削除できます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>記録はお使いの端末内に保存します。許可した場合は、血圧と脈拍を Apple のヘルスケアにも保存します。タグ・メモ・服薬はヘルスケアには保存しません。</p>
+                        <p>当社のサーバーに記録や画像、音声を送ることはありません。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">PDF やCSVを医療機関に見せたい<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>「ふり返り」で期間を選び、PDF または CSV を開いてください。共有ボタンから、ファイルへの保存、印刷、メールなど、ご自分で選んだ先に渡せます。PDF にタグ・服薬・メモを含めるかどうかは、その画面で選べます。</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">対応している端末は？<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p><strong>iOS 17.6 以降</strong>の iPhone と、<strong>iPadOS 17.6 以降</strong>の iPad で動作します。撮影による入力にはカメラ、声による入力には端末内の音声認識に対応した端末、ヘルスケアへの保存には HealthKit に対応した端末が必要です。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">プライバシーポリシー</div>
+                        <div class="section-subtitle">記録の扱いと保存場所</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">施行日: 【未定】</span>
+
+                <p>合同会社AllNew（以下「当社」）は、iOSアプリ「BPWeek」（以下「本アプリ」）における利用者の情報の取扱いを、次のとおり定めます。</p>
+
+                <div class="highlight-box">
+                    <p><strong>基本方針:</strong> 本アプリは、血圧の記録・撮影画像・音声・メモを当社のサーバーに送信しません。アカウント登録はなく、広告や行動の追跡も行いません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. 本アプリが扱う情報と保存場所</h3>
+                    <ul>
+                        <li><strong>血圧（最高・最低）、脈拍、測定日時・時刻帯:</strong> 端末内の本アプリのデータ領域、および利用者が許可した場合は Apple のヘルスケアに保存します。記録・表示・集計に使います。</li>
+                        <li><strong>タグ、メモ、服薬（服用済み・未服用・記録しない）:</strong> 端末内の本アプリのデータ領域にだけ保存します（ヘルスケアには保存しません）。記録・表示・検索・集計表示に使います。</li>
+                        <li><strong>無料で記録できる残り回数:</strong> 端末のキーチェーンに保存し、無料回数の管理に使います。</li>
+                        <li><strong>購入状態:</strong> Apple（App Store）が管理します。</li>
+                        <li><strong>表示設定・リマインダー時刻・テーマカラー:</strong> 端末内に保存し、設定の保持に使います。</li>
+                    </ul>
+                    <p>端末内の記録ファイルは、iOS のファイル保護（端末のロック中は読み取れない設定）で保存します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. カメラ</h3>
+                    <p>血圧計の表示を撮影し、端末内で数字を読み取るために使います。画像は読み取り後に破棄し、保存・送信しません。読み取った数字は、利用者が確認してから保存します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. マイク・音声認識</h3>
+                    <p>声で数値を入力するために使います。音声認識は端末内で行い、端末内認識に対応していない場合は声による入力を使えません。音声は保存・送信しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. ヘルスケア（HealthKit）</h3>
+                    <ul>
+                        <li>利用者が許可した場合に限り、血圧と脈拍をヘルスケアに保存し、過去の血圧を読み取って表示します。</li>
+                        <li>ヘルスケアのデータを当社のサーバーにコピーすることはありません。ヘルスケアの保存や同期（iCloud など）は、利用者の端末設定と Apple の仕様に従います。</li>
+                        <li>ヘルスケアのデータを広告やマーケティングに使うことはなく、データブローカーに販売することもありません。</li>
+                        <li>ヘルスケアへのアクセスは、iOS の設定からいつでも取り消せます。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 通知</h3>
+                    <p>利用者が設定した時刻に、測定のリマインダーを端末内で通知します。通知に血圧の数値は表示しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. PDF・CSV の共有</h3>
+                    <p>「ふり返り」で PDF・CSV を開くと、共有用のファイルを端末内に一時的に作ります。ファイルは画面を閉じると削除し、次回の起動時にも残りがあれば削除します。ファイルは、利用者が共有シートで選んだ先（ファイルへの保存、印刷、メールなど）にだけ渡ります。本アプリが自動で送信することはありません。PDF にタグ・服薬・メモを含めるのは、利用者が選んだ場合だけです。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. ショートカット・Siri</h3>
+                    <p>「記録を追加」のショートカットは、本アプリの入力画面を開くだけで、健康データを返したり読み上げたりしません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 端末内のAIによる設定の提案</h3>
+                    <p>対応端末では、設定画面の会話で、Apple が端末内で提供する言語モデルを使って表示設定（前回との差・グラフの表示）を提案します。会話の内容は当社に送信しません。対応していない端末では、通常の切り替えで設定します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 外部への通信</h3>
+                    <p>本アプリは次の場合にのみ外部と通信します。いずれも血圧などの記録は含みません。</p>
+                    <ul>
+                        <li>App 内課金と購入の復元（Apple）</li>
+                        <li>設定画面で当社の他のアプリを表示するため、Apple の公開アプリ情報（iTunes Lookup API）にアプリIDと国を照会する場合</li>
+                        <li>利用者が「ご意見・ご要望」を開いた場合、当社のフォームのページを表示します。このとき、アプリの識別名と版数をページのアドレスに含めます</li>
+                        <li>利用者が規約・ポリシーのページを開いた場合、そのページを表示します</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 第三者への提供</h3>
+                    <p>当社は、本アプリで扱う記録・画像・音声・ヘルスケアのデータを第三者に提供・販売・共有しません。広告事業者、分析事業者、データブローカーへの送信も行いません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. データの削除</h3>
+                    <p>記録は、アプリ内の各記録の「この記録を削除」で削除できます。本アプリを削除すると、端末内の本アプリのデータも削除されます。ヘルスケアに保存したデータは、ヘルスケアアプリから削除できます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. 子どものプライバシー</h3>
+                    <p>本アプリは13歳未満のお子さまを対象としていません。本アプリの機能の利用にあたって、当社は個人情報を取得しません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. お問い合わせの際の情報</h3>
+                    <p>当社へお問い合わせいただいた場合、返信のために、メールアドレスとお問い合わせの内容を取得・利用します。これらはサポートの目的にだけ使い、法令に基づく場合を除き第三者に提供しません。対応が終わったあと、合理的な期間で削除または匿名化します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>14. 利用者の権利</h3>
+                    <p>本アプリの記録は端末内とヘルスケアにあり、利用者ご自身で確認・削除できます。お住まいの地域の法令（EU/EEA の GDPR、米国カリフォルニア州の CCPA/CPRA、中国の PIPL、韓国の PIPA、ブラジルの LGPD など）に基づく権利の行使や苦情の申立ては、下記の窓口で受け付けます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>15. 改定・準拠法・多言語版</h3>
+                    <p>本ポリシーを改定する場合は、本ページで告知します。本ポリシーは日本法を準拠法とします。ただし、各地域の居住者には、その地域の法令による保護が適用されます。</p>
+                    <p>本ポリシーは日本語を正文とします。他言語版との間に矛盾がある場合は日本語版を優先します。この定めは、各国・地域の消費者保護法その他の強行法規に基づく利用者の権利を制限するものではありません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>16. 窓口</h3>
+                    <p>合同会社AllNew　<a href="#contact-ja">お問い合わせ</a>をご覧ください。</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">利用規約</div>
+                        <div class="section-subtitle">サービスのご利用条件</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">最終更新日: 【未定】</span>
+
+                <div class="legal-section">
+                    <h3>1. はじめに</h3>
+                    <p>本利用規約（以下「本規約」）は、合同会社AllNew（以下「当社」）が提供するiOSアプリケーション「BPWeek」（以下「本アプリ」）の利用条件を定めるものです。本アプリをダウンロードまたは使用することにより、利用者は本規約に同意したものとみなされます。本規約に同意しない場合、本アプリはご利用いただけません。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. サービスの概要</h3>
+                    <p>本アプリは、次の機能を提供します。</p>
+                    <ul>
+                        <li>血圧計の表示をカメラで撮影し、端末内の文字認識で最高血圧・最低血圧・脈拍を読み取る機能</li>
+                        <li>声で血圧値を入力する機能（端末内の音声認識を使用）</li>
+                        <li>血圧・脈拍・測定日時を手入力する機能</li>
+                        <li>タグ・メモ・服薬（利用者が選んだ内容）を記録に添える機能</li>
+                        <li>血圧と脈拍を Apple のヘルスケアに保存する機能</li>
+                        <li>7日・14日・30日の平均を朝と夜に分けて表示し、期間の記録を PDF・CSV にまとめて画面に表示し、利用者が選んだ先へ共有する機能</li>
+                        <li>測定のリマインダーを通知する機能</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. プライバシーポリシー</h3>
+                    <p>当社は、本アプリの利用に関連して扱う情報を、<a href="#privacy-ja">プライバシーポリシー</a>に従って取り扱います。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. 利用料金</h3>
+                    <ul>
+                        <li><strong>無料:</strong> 新しい記録の保存15回まで無料でご利用いただけます。撮影や入力の回数ではなく、新しい記録の保存が完了した回数で数えます。記録の編集・削除は数えません。</li>
+                        <li><strong>買い切り:</strong> 無料回数を使い切った後は、App Store に表示される価格での買い切りのアプリ内課金で、引き続きご利用いただけます。サブスクリプション（月額・年額の課金）はありません。</li>
+                        <li><strong>支払い:</strong> 支払いは Apple のアプリ内課金で行います。当社がクレジットカード等の支払い情報を取得・保持することはありません。</li>
+                        <li><strong>購入の復元:</strong> 過去に購入された場合は、「購入を復元」により、同じ Apple アカウントで再度購入することなくご利用いただけます。</li>
+                        <li><strong>返金:</strong> 返金には Apple の返金ポリシーが適用されます。返金のご依頼は Apple にお問い合わせください。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. 健康情報に関する注意</h3>
+                    <p>本アプリは日々の健康管理を支える記録のための道具であり、医療機器ではありません。病気の診断・治療・予防や、医学的な助言を行うものではありません。本アプリで記録・表示される値は参考情報です。健康に関する判断や、服薬の変更・中止は、必ず医師などの医療専門家にご相談ください。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. 読み取りの精度</h3>
+                    <ul>
+                        <li>撮影による読み取りと音声認識の精度は100%ではありません。照明・角度・表示の反射、血圧計の種類、周囲の騒音や発話の状態などにより、誤って読み取ることがあります。</li>
+                        <li>読み取った値は入力画面に表示されます。利用者は、保存する前に値が正しいことを確認してください。</li>
+                        <li>誤った値を保存した場合は、アプリの記録から直すか削除してください。ヘルスケアに保存された値は、iOS の「ヘルスケア」アプリから削除できます。</li>
+                        <li>撮影による入力は、数字がデジタル表示される血圧計に対応しています。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. 対応端末</h3>
+                    <p>iOS 17.6 以降の iPhone、iPadOS 17.6 以降の iPad で動作します。撮影による入力にはカメラ、声による入力には端末内の音声認識に対応した端末、ヘルスケアへの保存には HealthKit に対応した端末が必要です。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. 禁止事項</h3>
+                    <ul>
+                        <li>本アプリの改変、リバースエンジニアリング、逆コンパイル</li>
+                        <li>本アプリを不正な目的で使用すること</li>
+                        <li>第三者の血圧などの健康情報を、本人の同意なく撮影・記録すること</li>
+                        <li>本アプリを第三者に再配布・転売すること</li>
+                        <li>法令または公序良俗に反する行為</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. 知的財産権</h3>
+                    <p>本アプリおよびそのコンテンツ（デザイン、ロゴ、テキスト、グラフィックス等）に関する知的財産権は、当社または正当な権利者に帰属します。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. 免責事項</h3>
+                    <p>当社は、本アプリが中断なく動作すること、読み取りの結果が常に正確であること、ヘルスケアへの保存が常に成功することを保証しません。</p>
+                    <p>当社の故意または重過失による場合を除き、当社は本アプリの使用または使用できないことにより生じた損害について責任を負いません。当社が責任を負う場合でも、通常かつ直接の損害に限ります。<strong>本項は、消費者契約法その他の強行法規により無効とされる範囲には適用されません。</strong></p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. サービスの変更・終了</h3>
+                    <p>当社は、本アプリの機能を変更、追加、または削除することがあります。本アプリの提供を終了する場合は、合理的な期間をおいて事前にお知らせします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. 規約の変更</h3>
+                    <p>当社は、必要に応じて本規約を変更することがあります。変更する場合は、本ページ、本アプリ内、またはその他の適切な方法でお知らせします。変更の効力が生じた後も本アプリを使い続けた場合、利用者は変更後の規約に同意したものとみなされます。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. Apple に関する条項</h3>
+                    <ul>
+                        <li>本規約は当社と利用者の間でのみ締結されるものであり、Apple は当事者ではありません。</li>
+                        <li>本アプリの保守とサポートは当社が責任を負います。</li>
+                        <li>本アプリに関する請求には当社が対応します。</li>
+                        <li>Apple および Apple の子会社は、本規約の第三者受益者です。</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>14. 準拠法・管轄</h3>
+                    <p>本規約は日本法に準拠します。本規約に関する紛争については、東京地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>15. 多言語版について</h3>
+                    <p>本規約は日本語を正文とします。他言語版との間に矛盾がある場合は日本語版を優先します。この定めは、各国・地域の消費者保護法その他の強行法規に基づく利用者の権利を制限するものではありません。</p>
+                </div>
+            </section>
+
+            <!-- OSS Notices -->
+            <section id="oss-ja" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <div>
+                        <div class="section-title">3rd Party Licensing Notice</div>
+                        <div class="section-subtitle">オープンソースソフトウェアに関するお知らせ</div>
+                    </div>
+                </div>
+                <div class="legal-section">
+                    <p>このバージョンの確認では、本アプリに第三者のオープンソースソフトウェアは含まれていません。将来のバージョンで含める場合は、著作権表示、ライセンス、ソースコードの入手方法をこの欄に掲載します。</p>
+                    <p>Apple が提供する SDK とフレームワークは、ここでいう第三者のオープンソースソフトウェアに含めず、Apple の各規約に従います。</p>
+                    <p class="muted">確認日: 2026-10-31</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-ja" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">特定商取引法に基づく表記</div>
+                                <div class="section-subtitle">販売事業者情報</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div><div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div><div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div><div class="contact-item"><dt>電話番号</dt><dd>請求があれば遅滞なく開示します</dd></div><div class="contact-item"><dt>メール</dt><dd>bpweek-support@allnew.work</dd></div><div class="contact-item"><dt>販売価格</dt><dd>App Store の購入画面に表示する価格（買い切り）</dd></div><div class="contact-item"><dt>支払方法</dt><dd>Apple のアプリ内課金</dd></div><div class="contact-item"><dt>提供時期</dt><dd>購入手続きの完了後すぐ</dd></div><div class="contact-item"><dt>返品・返金</dt><dd>Apple の返金ポリシーに従います。</dd></div><div class="contact-item"><dt>動作環境</dt><dd>iOS 17.6 以降の iPhone、iPadOS 17.6 以降の iPad</dd></div></dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-ja" class="section">
+                <div class="contact-card">
+                    <h2>お問い合わせ</h2>
+                    <!--email_off--><a href="mailto:bpweek-support@allnew.work?subject=BPWeek%20%3A%20" class="contact-email">✉️ メールを送る</a><!--/email_off--><a href="https://apps.allnew.work/feedback/?app=bpsnap" class="contact-email" style="margin:12px 0 0 12px">💬 ご意見・ご要望を送る（POIPOI-STUDIO）</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>メール</dt><dd>bpweek-support@allnew.work</dd></div>
+                        <div class="contact-item"><dt>受付時間</dt><dd>平日 11:00〜15:00</dd></div>
+                        <div class="contact-item"><dt>対応言語</dt><dd>日本語・英語</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== ENGLISH ==================== -->
+        <div class="lang-content" data-lang="en">
+            <!-- FAQ -->
+            <section id="faq-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">💡</div>
+                    <div>
+                        <div class="section-title">Frequently Asked Questions</div>
+                        <div class="section-subtitle">Answers about features and usage</div>
+                    </div>
+                </div>
+
+                <div class="faq-item open">
+                    <div class="faq-question">What is BPWeek?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>BPWeek records the blood pressure you measure at home and helps you look back week by week. You can log a reading by photographing the monitor's display, by voice, or by hand.</p>
+                        <p>The review tab shows 7-, 14- and 30-day averages split into morning and evening. You can put a period's records into a PDF or CSV and share it to a destination you choose.</p>
+                        <p>BPWeek was previously called BPSnap. Your purchase carries over, and past blood pressure saved in Health can be shown if you allow it.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is it free?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>You can save up to <strong>15 new records for free</strong>. Only completed saves of new records count; photos, entry attempts, edits and deletions do not.</p>
+                        <p>From the 16th record, you can keep using the app with a <strong>one-time purchase</strong> at the price shown on the App Store. There is no subscription.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>In the app, open Settings → 購入・復元 (Purchase &amp; Restore) and tap Restore Purchase. You need to be signed in with the same Apple Account you used to buy.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which monitors are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Camera entry works with monitors that show the numbers on a digital display. Analog monitors (mercury or dial gauges) cannot be read by the camera; please log those readings by voice or by hand.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What values can I record?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <ul>
+                            <li><strong>Systolic:</strong> 60–260 mmHg</li>
+                            <li><strong>Diastolic:</strong> 30–180 mmHg (lower than systolic)</li>
+                            <li><strong>Pulse (optional):</strong> 20–300 bpm</li>
+                        </ul>
+                        <p>Values outside these ranges cannot be saved.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What if a reading is wrong?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>The values read by the app appear on the entry screen. Check them before saving and correct anything that is wrong.</p>
+                        <p>After saving, you can still edit a record in the app or remove it with "Delete this record". Values saved to Health can be deleted in the iOS Health app.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Records are stored on your device. If you allow it, blood pressure and pulse are also saved to Apple Health. Tags, notes and medication status are not saved to Health.</p>
+                        <p>We never send your records, photos or audio to our servers.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Can I show a PDF or CSV to my doctor?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>Choose a period in the review tab and open the PDF or CSV. With the share button you can save it to Files, print it, mail it, or send it anywhere you choose. On that screen you decide whether the PDF includes tags, medication and notes.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Which devices are supported?<span class="faq-icon">+</span></div>
+                    <div class="faq-answer">
+                        <p>iPhone with <strong>iOS 17.6 or later</strong> and iPad with <strong>iPadOS 17.6 or later</strong>. Camera entry needs a camera, voice entry needs on-device speech recognition support, and saving to Health needs HealthKit support.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Privacy Policy -->
+            <section id="privacy-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔒</div>
+                    <div>
+                        <div class="section-title">Privacy Policy</div>
+                        <div class="section-subtitle">How your records are handled and where they are stored</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Effective date: [TBD]</span>
+
+                <div class="translation-notice">This is a translation. The Japanese version is the governing text.</div>
+
+                <p>This policy describes how AllNew LLC (合同会社AllNew, "we") handles information in the iOS app "BPWeek" (the "App").</p>
+
+                <div class="highlight-box">
+                    <p><strong>Basic policy:</strong> The App does not send blood pressure records, camera images, audio or notes to our servers. There is no account registration, no advertising and no tracking.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>1. Information the App handles and where it is stored</h3>
+                    <ul>
+                        <li><strong>Blood pressure (systolic/diastolic), pulse, measurement date and time zone:</strong> stored in the App's storage on the device, and in Apple Health if you allow it. Used for recording, display and summaries.</li>
+                        <li><strong>Tags, notes, medication status (taken / not taken / not recorded):</strong> stored only in the App's storage on the device (not written to Health). Used for recording, display, search and summaries.</li>
+                        <li><strong>Remaining free records:</strong> stored in the device keychain to manage the free allowance.</li>
+                        <li><strong>Purchase status:</strong> managed by Apple (App Store).</li>
+                        <li><strong>Display settings, reminder times, theme color:</strong> stored on the device to keep your settings.</li>
+                    </ul>
+                    <p>The record file on the device is stored with iOS file protection (it cannot be read while the device is locked).</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Camera</h3>
+                    <p>The camera is used to photograph a blood pressure monitor and read the digits on the device. Images are discarded after reading and are not stored or sent. You check the values before saving.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. Microphone and speech recognition</h3>
+                    <p>The microphone is used to enter values by voice. Speech is recognized on the device; voice entry is unavailable on devices that do not support on-device recognition. Audio is not stored or sent.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Health (HealthKit)</h3>
+                    <ul>
+                        <li>Only if you allow it, the App saves blood pressure and pulse to Health and reads past blood pressure readings for display.</li>
+                        <li>We do not copy Health data to our servers. Storage and syncing of Health data (such as iCloud) follow your device settings and Apple's specifications.</li>
+                        <li>Health data is not used for advertising or marketing and is not sold to data brokers.</li>
+                        <li>You can revoke access to Health at any time in iOS Settings.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Notifications</h3>
+                    <p>The App can send measurement reminders from the device at times you choose. Notifications do not show blood pressure values.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Sharing PDF and CSV</h3>
+                    <p>When you open a PDF or CSV in the review tab, the App creates a temporary file on the device for sharing. The file is deleted when you close the screen, and any leftover is deleted at the next launch. The file goes only to the destination you pick in the share sheet (such as Files, printing or mail); the App never sends it on its own. Tags, medication and notes are included in the PDF only if you choose to include them.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Shortcuts and Siri</h3>
+                    <p>The "Add record" shortcut only opens the App's entry screen. It does not return or read out health data.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. On-device AI for settings suggestions</h3>
+                    <p>On supported devices, a conversation in Settings uses the language model Apple provides on the device to suggest display settings (showing the change from the previous reading and the chart). The conversation is not sent to us. On other devices you change these settings with the regular switches.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Network communication</h3>
+                    <p>The App communicates externally only in the following cases. None of them include your records.</p>
+                    <ul>
+                        <li>In-app purchase and restore (Apple)</li>
+                        <li>Looking up our other apps' public information from Apple's iTunes Lookup API (app IDs and country) to show them in Settings</li>
+                        <li>When you open "Feedback", our form page is shown; the App's identifier and version are included in the page address</li>
+                        <li>When you open the terms or policy pages, those pages are shown</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Sharing with third parties</h3>
+                    <p>We do not provide, sell or share the records, images, audio or Health data handled by the App with third parties, and we do not send them to advertisers, analytics providers or data brokers.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Deleting data</h3>
+                    <p>You can delete a record with "Delete this record" in the App. Deleting the App removes its data on the device. Data saved to Health can be deleted in the Health app.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. Children's privacy</h3>
+                    <p>The App is not directed at children under 13. We do not collect personal information through the App's features.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. Information you send when contacting us</h3>
+                    <p>If you contact us, we use your email address and the content of your message to reply. We use them only for support and do not provide them to third parties except as required by law. We delete or anonymize them within a reasonable period after the matter is closed.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>14. Your rights</h3>
+                    <p>Your records are on your device and in Health, where you can review and delete them yourself. Requests to exercise your rights or complaints under the laws of your region (such as the GDPR in the EU/EEA, the CCPA/CPRA in California, the PIPL in China, the PIPA in Korea and the LGPD in Brazil) are accepted at the contact below.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>15. Changes, governing law and translations</h3>
+                    <p>If we change this policy, we will announce it on this page. This policy is governed by the laws of Japan; residents of each region keep the protection of their local laws.</p>
+                    <p>The Japanese version of this policy is the governing text; if it conflicts with a translation, the Japanese version prevails. This does not limit any rights you have under the consumer protection laws or other mandatory laws of your country or region.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>16. Contact</h3>
+                    <p>AllNew LLC — see <a href="#contact-en">Contact</a>.</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service -->
+            <section id="terms-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📜</div>
+                    <div>
+                        <div class="section-title">Terms of Service</div>
+                        <div class="section-subtitle">Conditions for using the App</div>
+                    </div>
+                </div>
+
+                <span class="updated-badge">Last updated: [TBD]</span>
+
+                <div class="translation-notice">This is a translation. The Japanese version is the governing text.</div>
+
+                <div class="legal-section">
+                    <h3>1. Introduction</h3>
+                    <p>These Terms of Service ("Terms") set the conditions for using the iOS application "BPWeek" (the "App") provided by AllNew LLC (合同会社AllNew, "we"). By downloading or using the App, you are deemed to agree to these Terms. If you do not agree, you may not use the App.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>2. Overview of the service</h3>
+                    <p>The App provides the following features:</p>
+                    <ul>
+                        <li>Reading systolic, diastolic and pulse values from a photo of a blood pressure monitor using on-device text recognition</li>
+                        <li>Entering blood pressure values by voice (on-device speech recognition)</li>
+                        <li>Entering blood pressure, pulse and measurement time by hand</li>
+                        <li>Adding tags, notes and medication status (as you choose) to a record</li>
+                        <li>Saving blood pressure and pulse to Apple Health</li>
+                        <li>Showing 7-, 14- and 30-day averages split into morning and evening, showing a period's records as PDF and CSV on screen, and sharing them to a destination you choose</li>
+                        <li>Measurement reminders</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>3. Privacy Policy</h3>
+                    <p>We handle information related to your use of the App in accordance with our <a href="#privacy-en">Privacy Policy</a>.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>4. Pricing</h3>
+                    <ul>
+                        <li><strong>Free:</strong> You can save up to 15 new records for free. Only completed saves of new records count, not photos or entry attempts; editing and deleting records are not counted.</li>
+                        <li><strong>One-time purchase:</strong> After the free records are used, you can keep using the App with a one-time in-app purchase at the price shown on the App Store. There is no subscription (no monthly or annual billing).</li>
+                        <li><strong>Payment:</strong> Payment is processed through Apple's in-app purchase. We do not obtain or keep your credit card or other payment details.</li>
+                        <li><strong>Restoring purchases:</strong> If you have purchased before, "Restore Purchases" restores access on the same Apple Account without buying again.</li>
+                        <li><strong>Refunds:</strong> Apple's refund policy applies. Please contact Apple to request a refund.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>5. Health information notice</h3>
+                    <p>The App is a record-keeping tool for everyday health management and is not a medical device. It does not diagnose, treat or prevent disease, and it does not give medical advice. Values recorded and shown in the App are for reference. Always consult a physician or other healthcare professional before making health decisions or changing or stopping medication.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>6. Recognition accuracy</h3>
+                    <ul>
+                        <li>Camera reading and speech recognition are not 100% accurate. Lighting, angle, reflections on the display, the type of monitor, background noise and how clearly you speak can cause misreadings.</li>
+                        <li>The values read by the App appear on the entry screen. Please make sure they are correct before saving.</li>
+                        <li>If you saved a wrong value, edit or delete the record in the App. Values saved to Health can be deleted in the iOS Health app.</li>
+                        <li>Camera entry supports monitors that show the numbers on a digital display.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>7. Supported devices</h3>
+                    <p>iPhone with iOS 17.6 or later and iPad with iPadOS 17.6 or later. Camera entry needs a camera, voice entry needs on-device speech recognition support, and saving to Health needs HealthKit support.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>8. Prohibited activities</h3>
+                    <ul>
+                        <li>Modifying, reverse engineering or decompiling the App</li>
+                        <li>Using the App for improper purposes</li>
+                        <li>Photographing or recording another person's blood pressure or other health information without their consent</li>
+                        <li>Redistributing or reselling the App</li>
+                        <li>Any act that violates laws or public order and morals</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>9. Intellectual property</h3>
+                    <p>Intellectual property rights in the App and its content (design, logos, text, graphics, etc.) belong to us or the rightful owners.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>10. Disclaimers</h3>
+                    <p>We do not guarantee that the App will run without interruption, that recognition results will always be accurate, or that saving to Health will always succeed.</p>
+                    <p>Except in cases of our willful misconduct or gross negligence, we are not liable for damages arising from the use of, or inability to use, the App. Where we are liable, our liability is limited to ordinary and direct damages. <strong>This section does not apply to the extent it would be invalid under the Consumer Contract Act of Japan or other mandatory laws.</strong></p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>11. Changes to and end of the service</h3>
+                    <p>We may change, add or remove features of the App. If we end the App's service, we will give notice a reasonable time in advance.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>12. Changes to these Terms</h3>
+                    <p>We may change these Terms as needed. We will announce changes on this page, in the App or by other appropriate means. If you keep using the App after a change takes effect, you are deemed to agree to the changed Terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>13. Apple-related provisions</h3>
+                    <ul>
+                        <li>These Terms are between you and us only; Apple is not a party.</li>
+                        <li>We are responsible for maintenance and support of the App.</li>
+                        <li>We handle any claims relating to the App.</li>
+                        <li>Apple and its subsidiaries are third-party beneficiaries of these Terms.</li>
+                    </ul>
+                </div>
+
+                <div class="legal-section">
+                    <h3>14. Governing law and jurisdiction</h3>
+                    <p>These Terms are governed by the laws of Japan. The Tokyo District Court has exclusive jurisdiction in the first instance over disputes relating to these Terms.</p>
+                </div>
+
+                <div class="legal-section">
+                    <h3>15. Translations</h3>
+                    <p>The Japanese version of these Terms is the governing text; if it conflicts with a translation, the Japanese version prevails. This does not limit any rights you have under the consumer protection laws or other mandatory laws of your country or region.</p>
+                </div>
+            </section>
+
+            <!-- OSS Notices -->
+            <section id="oss-en" class="section">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <div>
+                        <div class="section-title">3rd Party Licensing Notice</div>
+                        <div class="section-subtitle">Open Source Software notices</div>
+                    </div>
+                </div>
+                <div class="legal-section">
+                    <p>As checked for this version, the App contains no third-party open source software. If a future version includes any, we will list the copyright notices, licenses and how to obtain source code in this section.</p>
+                    <p>SDKs and frameworks provided by Apple are not counted as third-party open source software here and are subject to Apple's terms.</p>
+                    <p class="muted">Checked: 2026-10-31</p>
+                </div>
+            </section>
+
+            <!-- Commercial Law -->
+            <section id="commercial-en" class="section">
+                <div class="commercial-accordion">
+                    <div class="commercial-header">
+                        <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
+                            <div class="section-icon">🏢</div>
+                            <div>
+                                <div class="section-title">Seller Information</div>
+                                <div class="section-subtitle">Disclosure under the Act on Specified Commercial Transactions (Japan)</div>
+                            </div>
+                        </div>
+                        <span class="commercial-toggle">+</span>
+                    </div>
+                    <div class="commercial-content">
+                        <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>Seller</dt><dd>AllNew LLC (合同会社AllNew)</dd></div><div class="contact-item"><dt>Responsible person</dt><dd>Masanori Ueno</dd></div><div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div><div class="contact-item"><dt>Phone</dt><dd>Disclosed without delay upon request</dd></div><div class="contact-item"><dt>Email</dt><dd>bpweek-support@allnew.work</dd></div><div class="contact-item"><dt>Price</dt><dd>As shown on the App Store purchase screen (one-time purchase)</dd></div><div class="contact-item"><dt>Payment</dt><dd>Apple in-app purchase</dd></div><div class="contact-item"><dt>Delivery</dt><dd>Immediately after the purchase is completed</dd></div><div class="contact-item"><dt>Refunds</dt><dd>Apple's refund policy applies.</dd></div><div class="contact-item"><dt>Requirements</dt><dd>iPhone with iOS 17.6 or later, iPad with iPadOS 17.6 or later</dd></div></dl>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact -->
+            <section id="contact-en" class="section">
+                <div class="contact-card">
+                    <h2>Contact Us</h2>
+                    <!--email_off--><a href="mailto:bpweek-support@allnew.work?subject=BPWeek%20%3A%20" class="contact-email">✉️ Send Email</a><!--/email_off--><a href="https://apps.allnew.work/feedback/?app=bpsnap" class="contact-email" style="margin:12px 0 0 12px">💬 Share Feedback (POIPOI-STUDIO)</a>
+                    <dl class="contact-details contact-details-top" style="border-bottom: none;">
+                        <div class="contact-item"><dt>Email</dt><dd>bpweek-support@allnew.work</dd></div>
+                        <div class="contact-item"><dt>Hours</dt><dd>Weekdays 11:00-15:00 JST</dd></div>
+                        <div class="contact-item"><dt>Languages</dt><dd>Japanese, English</dd></div>
+                    </dl>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 合同会社AllNew / AllNew LLC</p>
+    </footer>
+
+    <script>
+        // Clickjacking defense (frame-busting fallback for GitHub Pages)
+        if (window.self !== window.top) { document.body.style.display = 'none'; }
+        // Language Data
+        const langData = {
+            ja: { label: '日本語', hero: 'BPWeek', subtitleLine1: '測って、記録して、週ごとにふり返る。', subtitleLine2: '家庭血圧の記録アプリ。', toc: ['FAQ', 'プライバシー', '利用規約', '3rd Party Licensing Notice', '特定商取引法', 'お問い合わせ'] },
+            en: { label: 'English', hero: 'BPWeek', subtitleLine1: 'Measure, log, and look back each week.', subtitleLine2: 'A home blood pressure log.', toc: ['FAQ', 'Privacy', 'Terms', '3rd Party Licensing Notice', 'Seller Info', 'Contact'] }
+        };
+
+        // Get current language from URL hash or default to ja
+        function getLangFromHash() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[0];
+                    if (langData[possibleLang]) return possibleLang;
+                }
+            }
+            // Check URL params
+            const params = new URLSearchParams(window.location.search);
+            const langParam = params.get('lang');
+            if (langParam && langData[langParam]) return langParam;
+            // Default based on browser language
+            const browserLang = navigator.language.split('-')[0];
+            if (langData[browserLang]) return browserLang;
+            return 'ja';
+        }
+
+        let currentLang = getLangFromHash();
+
+        // Switch Language
+        function switchLanguage(lang) {
+            currentLang = lang;
+
+            // Update content visibility
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+
+            // Update dropdown
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+            document.getElementById('currentLangLabel').textContent = langData[lang].label;
+
+            // Update hero
+            document.getElementById('heroTitle').textContent = langData[lang].hero;
+            var subtitleEl = document.getElementById('heroSubtitle');
+            subtitleEl.textContent = '';
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine1));
+            subtitleEl.appendChild(document.createElement('br'));
+            subtitleEl.appendChild(document.createTextNode(langData[lang].subtitleLine2));
+
+            // Update TOC
+            const tocLinks = document.querySelectorAll('.toc-link');
+            const tocLabels = langData[lang].toc;
+            tocLinks.forEach((link, i) => {
+                link.textContent = tocLabels[i];
+                const section = link.dataset.section;
+                link.href = `#${section}-${lang}`;
+            });
+
+            // Update URL
+            const currentHash = window.location.hash;
+            if (currentHash && currentHash.includes('-')) {
+                const section = currentHash.split('-').pop();
+                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(s => currentHash.includes(s))) {
+                    const sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace(`-${getLangFromHash()}`, '');
+                    history.replaceState(null, null, `?lang=${lang}#${sectionName}-${lang}`);
+                }
+            } else {
+                history.replaceState(null, null, `?lang=${lang}`);
+            }
+
+            // Close dropdown
+            document.getElementById('langDropdown').classList.remove('open');
+        }
+
+        // Language Dropdown Toggle
+        const langBtn = document.getElementById('langBtn');
+        const langDropdown = document.getElementById('langDropdown');
+
+        langBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', () => {
+            langDropdown.classList.remove('open');
+        });
+
+        // Language Options
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => switchLanguage(opt.dataset.lang));
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const wasOpen = item.classList.contains('open');
+                // Close all in same lang-content
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!wasOpen) item.classList.add('open');
+            });
+        });
+
+        // Commercial Accordion
+        // Commercial accordion (event delegation — no inline onclick)
+        document.addEventListener('click', function(e) {
+            var header = e.target.closest('.commercial-header');
+            if (!header) return;
+            var accordion = header.closest('.commercial-accordion');
+            accordion.classList.toggle('open');
+        });
+
+        // Auto-expand commercial section if accessed via anchor
+        function checkCommercialAnchor() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('commercial')) {
+                document.querySelectorAll('.commercial-accordion').forEach(acc => {
+                    acc.classList.add('open');
+                });
+            }
+        }
+
+        // Initialize
+        switchLanguage(currentLang);
+        checkCommercialAnchor();
+
+        // Handle hash changes for section navigation
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                // Extract language from hash like "privacy-en"
+                const parts = hash.split('-');
+                if (parts.length >= 2) {
+                    const possibleLang = parts[parts.length - 1];
+                    if (langData[possibleLang]) {
+                        if (currentLang !== possibleLang) {
+                            switchLanguage(possibleLang);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Copy Protection
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C'))) {
+                e.preventDefault();
+            }
+        });
+        document.addEventListener('dragstart', e => e.preventDefault());
+    </script>
+
+    <!-- Trademark Attribution Footer -->
+    <footer class="trademark-footer">
+        <div class="trademark-content">
+            <p class="trademark-text">
+                Apple、Appleのロゴ、iPhone、iOS、HealthKit、App Store、iCloudは、米国およびその他の国で登録されたApple Inc.の商標です。
+                <br>
+                Apple, the Apple logo, iPhone, iOS, HealthKit, App Store, and iCloud are trademarks of Apple Inc., registered in the U.S. and other countries.
+            </p>
+            <p class="trademark-disclaimer">
+                本アプリケーションはApple Inc.が開発または認定したものではありません。<br>
+                This application is not developed or endorsed by Apple Inc.
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        .trademark-footer {
+            margin-top: 60px;
+            padding: 24px 20px 40px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-tertiary);
+        }
+        .trademark-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .trademark-text {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .trademark-disclaimer {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+    </style>
+</body>
+</html>
