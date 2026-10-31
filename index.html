@@ -1469,12 +1469,15 @@
             outline-offset: 2px;
         }
     </style>
+<style>
+.allnew-shared-header{position:sticky;top:0;z-index:150;background:#fff;border-bottom:1px solid #d8e1e7;min-height:82px;padding:18px 32px;display:flex;align-items:center;gap:24px}.allnew-shared-header img{width:128px;height:auto}.allnew-shared-header a,.allnew-shared-footer a{color:#102d4a;text-decoration:none}.allnew-shared-desktop{margin-left:auto;display:flex;gap:20px;align-items:center;font-size:14px}.allnew-shared-mobile{display:none;margin-left:auto}.allnew-shared-footer{display:flex;flex-wrap:wrap;gap:16px 24px;margin:0 auto 30px;max-width:1100px}.nav{top:82px!important}@media(max-width:1400px){.allnew-shared-desktop{display:none}.allnew-shared-mobile{display:block}.allnew-shared-mobile summary{font-size:24px;cursor:pointer;list-style:none}.allnew-shared-mobile nav{position:absolute;top:100%;left:0;right:0;background:white;display:flex;flex-direction:column;padding:12px 24px;max-height:calc(100dvh - 70px);overflow:auto}.allnew-shared-mobile nav a,.allnew-shared-mobile nav span{padding:14px 8px;border-bottom:1px solid #d8e1e7}.allnew-shared-header{min-height:70px;padding:12px 24px}.nav{top:70px!important}}
+</style>
 </head>
 <body>
 
     <!-- Nav -->
+    <header class="allnew-shared-header"><a href="https://www.allnew.work/" aria-label="AllNew"><img src="allnew-logo.png" alt="AllNew"></a><nav class="allnew-shared-desktop" aria-label="AllNew メインメニュー"><a href="https://www.allnew.work/ai" data-shared-ja="AI事例" data-shared-en="AI cases" data-shared-path="/ai">AI事例</a><a href="https://www.allnew.work/method" data-shared-ja="7ステップ" data-shared-en="Seven steps" data-shared-path="/method">7ステップ</a><a href="https://www.allnew.work/ja/services/ai-policy-kit" data-shared-ja="AI利用ルール導入キット" data-shared-en="AI rules kit" data-shared-path="/services/ai-policy-kit">AI利用ルール導入キット</a><a href="https://www.hontonotoko.jp/" data-shared-ja="ほんとのとこ、どう？" data-shared-en="Honto no Toko" data-shared-path="https://www.hontonotoko.jp/">ほんとのとこ、どう？</a><a href="https://apps.allnew.work/" data-shared-ja="App Factory" data-shared-en="App Factory" data-shared-path="https://apps.allnew.work/" aria-current="page">App Factory</a><a href="https://www.allnew.work/ja/company" data-shared-ja="会社概要" data-shared-en="Company profile" data-shared-path="/company">会社概要</a></nav><details class="allnew-shared-mobile"><summary aria-label="メニューを開く">☰</summary><nav aria-label="AllNew メインメニュー"><a href="https://www.allnew.work/ai" data-shared-ja="AI事例" data-shared-en="AI cases" data-shared-path="/ai">AI事例</a><a href="https://www.allnew.work/method" data-shared-ja="7ステップ" data-shared-en="Seven steps" data-shared-path="/method">7ステップ</a><a href="https://www.allnew.work/ja/services/ai-policy-kit" data-shared-ja="AI利用ルール導入キット" data-shared-en="AI rules kit" data-shared-path="/services/ai-policy-kit">AI利用ルール導入キット</a><a href="https://www.hontonotoko.jp/" data-shared-ja="ほんとのとこ、どう？" data-shared-en="Honto no Toko" data-shared-path="https://www.hontonotoko.jp/">ほんとのとこ、どう？</a><a href="https://apps.allnew.work/" data-shared-ja="App Factory" data-shared-en="App Factory" data-shared-path="https://apps.allnew.work/" aria-current="page">App Factory</a><a href="https://www.allnew.work/ja/company" data-shared-ja="会社概要" data-shared-en="Company profile" data-shared-path="/company">会社概要</a></nav></details></header>
     <nav class="nav" id="nav" role="navigation" aria-label="Main">
-        <a href="https://www.allnew.work" class="nav-logo"><img src="allnew-logo.png" alt="AllNew" /></a>
         <div class="nav-right">
             <button type="button" class="nav-link" data-filter="all" id="nav-apps-button">Apps</button>
             <a href="/feedback/" class="nav-link" id="nav-feedback-link">Feedback</a>
@@ -1980,7 +1983,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer" id="contact">
+    <footer class="footer" id="contact"><nav class="allnew-shared-footer" aria-label="AllNew フッター"><a href="https://www.allnew.work/ai" data-shared-ja="AI事例" data-shared-en="AI cases" data-shared-path="/ai">AI事例</a><a href="https://www.allnew.work/method" data-shared-ja="7ステップ" data-shared-en="Seven steps" data-shared-path="/method">7ステップ</a><a href="https://www.allnew.work/ja/services/ai-policy-kit" data-shared-ja="AI利用ルール導入キット" data-shared-en="AI rules kit" data-shared-path="/services/ai-policy-kit">AI利用ルール導入キット</a><a href="https://www.hontonotoko.jp/" data-shared-ja="ほんとのとこ、どう？" data-shared-en="Honto no Toko" data-shared-path="https://www.hontonotoko.jp/">ほんとのとこ、どう？</a><a href="https://apps.allnew.work/" data-shared-ja="App Factory" data-shared-en="App Factory" data-shared-path="https://apps.allnew.work/" aria-current="page">App Factory</a><a href="https://www.allnew.work/ja/company" data-shared-ja="会社概要" data-shared-en="Company profile" data-shared-path="/company">会社概要</a></nav>
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo"><img src="allnew-logo.png" alt="AllNew"></div>
@@ -2251,6 +2254,11 @@
             currentLandingLang = nextLang;
             setLangChipState(nextLang);
             applyI18n(nextLang);
+            document.querySelectorAll('[data-shared-path]').forEach((link) => {
+                const path = link.dataset.sharedPath;
+                link.textContent = link.dataset[nextLang === 'ja' ? 'sharedJa' : 'sharedEn'];
+                if (path.startsWith('/') && path !== '/ai' && path !== '/method') link.href = 'https://www.allnew.work/' + nextLang + path;
+            });
             updateLangParamLinks(nextLang);
             if (updateUrl) setQueryLang(nextLang);
             if (dispatch) {
