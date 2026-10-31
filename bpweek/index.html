@@ -501,6 +501,15 @@
             overflow: hidden;
         }
 
+        .commercial-header, .faq-question {
+            width: 100%;
+            border: none;
+            background: none;
+            font: inherit;
+            color: inherit;
+            text-align: left;
+        }
+
         .commercial-header {
             display: flex;
             align-items: center;
@@ -542,7 +551,7 @@
         }
 
         .commercial-accordion.open .commercial-content {
-            max-height: 600px;
+            max-height: none;
             padding: 0 24px 24px;
         }
 
@@ -731,7 +740,7 @@
                 </div>
 
                 <div class="faq-item open">
-                    <div class="faq-question">BPWeek はどんなアプリですか？<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">BPWeek はどんなアプリですか？<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>家庭で測った血圧を記録し、週ごとにふり返るアプリです。記録は、血圧計の表示の撮影、声、手入力のどれでもできます。</p>
                         <p>「レポート」では、週・月・選んだ期間ごとに、朝と夜の平均と毎日の記録を表示します。期間の記録は PDF や CSV にまとめ、ご自分で選んだ先に共有できます。</p>
@@ -740,7 +749,7 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">無料で使えますか？<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">無料で使えますか？<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>新しい記録の保存<strong>15回まで無料</strong>でお使いいただけます。数えるのは保存が完了した回数で、撮影や入力の回数、記録の編集・削除は数えません。</p>
                         <p>16回目以降は、App Store に表示される価格の<strong>買い切り</strong>でお使いいただけます。月額や年額の課金（サブスクリプション）はありません。</p>
@@ -748,21 +757,21 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">購入を復元したい<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">購入を復元したい<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>アプリの「設定」→「購入・復元」を開き、「購入を復元」をタップしてください。購入したときと同じ Apple アカウントでサインインしている必要があります。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">どんな血圧計に対応していますか？<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">どんな血圧計に対応していますか？<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>撮影による入力は、数字がデジタル表示される血圧計に対応しています。アナログ表示の血圧計（水銀式・針式など）は撮影では読み取れません。その場合は声か手入力で記録してください。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">記録できる数値の範囲は？<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">記録できる数値の範囲は？<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <ul>
                             <li><strong>最高血圧（上）:</strong> 60〜260 mmHg</li>
@@ -774,7 +783,7 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">読み取りが間違っていたら？<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">読み取りが間違っていたら？<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>読み取った数字は入力画面に表示されます。保存する前に確認し、違っていたら直してください。</p>
                         <p>保存したあとでも、アプリの記録から内容を直したり、「この記録を削除」で削除したりできます。ヘルスケアに保存した値は、iOS の「ヘルスケア」アプリから削除できます。</p>
@@ -782,7 +791,7 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">データはどこに保存されますか？<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">データはどこに保存されますか？<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>記録はお使いの端末内に保存します。許可した場合は、血圧と脈拍を Apple のヘルスケアにも保存します。タグ・メモ・服薬はヘルスケアには保存しません。</p>
                         <p>当社のサーバーに記録や画像、音声を送ることはありません。</p>
@@ -790,14 +799,14 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">PDF やCSVを医療機関に見せたい<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">PDF やCSVを医療機関に見せたい<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>「レポート」で期間を選び、「PDFを書き出す」または「CSVで書き出す」を押してください。共有ボタンから、ファイルへの保存、印刷、メールなど、ご自分で選んだ先に渡せます。PDF にタグ・服薬・メモを含めるかどうかは、その画面で選べます。</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">対応している端末は？<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">対応している端末は？<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p><strong>iOS 17.6 以降</strong>の iPhone と、<strong>iPadOS 17.6 以降</strong>の iPad で動作します。撮影による入力にはカメラ、声による入力には端末内の音声認識に対応した端末、ヘルスケアへの保存には HealthKit に対応した端末が必要です。</p>
                     </div>
@@ -978,7 +987,7 @@
                     <h3>6. 読み取りの精度</h3>
                     <ul>
                         <li>撮影による読み取りと音声認識の精度は100%ではありません。照明・角度・表示の反射、血圧計の種類、周囲の騒音や発話の状態などにより、誤って読み取ることがあります。</li>
-                        <li>読み取った値は入力画面に表示されます。利用者は、保存する前に値が正しいことを確認してください。</li>
+                        <li>読み取った値は確認画面に表示されます。利用者は、保存する前に値が正しいことを確認してください。設定の「自動記録」をオンにしている場合は確認を省いて保存されるため、表示された値を確かめ、違うときは「取り消す」を押してください。</li>
                         <li>誤った値を保存した場合は、アプリの記録から直すか削除してください。ヘルスケアに保存された値は、iOS の「ヘルスケア」アプリから削除できます。</li>
                         <li>撮影による入力は、数字がデジタル表示される血圧計に対応しています。</li>
                     </ul>
@@ -1061,7 +1070,7 @@
             <!-- Commercial Law -->
             <section id="commercial-ja" class="section">
                 <div class="commercial-accordion">
-                    <div class="commercial-header">
+                    <button type="button" class="commercial-header" aria-expanded="false">
                         <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
                             <div class="section-icon">🏢</div>
                             <div>
@@ -1070,7 +1079,7 @@
                             </div>
                         </div>
                         <span class="commercial-toggle">+</span>
-                    </div>
+                    </button>
                     <div class="commercial-content">
                         <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>販売事業者</dt><dd>合同会社AllNew</dd></div><div class="contact-item"><dt>運営統括責任者</dt><dd>植野 正徳</dd></div><div class="contact-item"><dt>所在地</dt><dd>〒107-0052 東京都港区赤坂8-4-14 青山タワープレイス8F</dd></div><div class="contact-item"><dt>電話番号</dt><dd>請求があれば遅滞なく開示します</dd></div><div class="contact-item"><dt>メール</dt><dd>bpweek-support@allnew.work</dd></div><div class="contact-item"><dt>販売価格</dt><dd>App Store の購入画面に表示する価格（買い切り）</dd></div><div class="contact-item"><dt>支払方法</dt><dd>Apple のアプリ内課金</dd></div><div class="contact-item"><dt>提供時期</dt><dd>購入手続きの完了後すぐ</dd></div><div class="contact-item"><dt>返品・返金</dt><dd>Apple の返金ポリシーに従います。</dd></div><div class="contact-item"><dt>動作環境</dt><dd>iOS 17.6 以降の iPhone、iPadOS 17.6 以降の iPad</dd></div></dl>
                     </div>
@@ -1104,7 +1113,7 @@
                 </div>
 
                 <div class="faq-item open">
-                    <div class="faq-question">What is BPWeek?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">What is BPWeek?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>BPWeek records the blood pressure you measure at home and helps you look back week by week. You can log a reading by photographing the monitor's display, by voice, or by hand.</p>
                         <p>The Report tab shows morning and evening averages and a daily table for a week, a month or a period you choose. You can put a period's records into a PDF or CSV and share it to a destination you choose.</p>
@@ -1113,7 +1122,7 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Is it free?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">Is it free?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>You can save up to <strong>15 new records for free</strong>. Only completed saves of new records count; photos, entry attempts, edits and deletions do not.</p>
                         <p>From the 16th record, you can keep using the app with a <strong>one-time purchase</strong> at the price shown on the App Store. There is no subscription.</p>
@@ -1121,21 +1130,21 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">How do I restore my purchase?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">How do I restore my purchase?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>In the app, open Settings → 購入・復元 (Purchase &amp; Restore) and tap Restore Purchase. You need to be signed in with the same Apple Account you used to buy.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Which monitors are supported?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">Which monitors are supported?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>Camera entry works with monitors that show the numbers on a digital display. Analog monitors (mercury or dial gauges) cannot be read by the camera; please log those readings by voice or by hand.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">What values can I record?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">What values can I record?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <ul>
                             <li><strong>Systolic:</strong> 60–260 mmHg</li>
@@ -1147,7 +1156,7 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">What if a reading is wrong?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">What if a reading is wrong?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>The values read by the app appear on the entry screen. Check them before saving and correct anything that is wrong.</p>
                         <p>After saving, you can still edit a record in the app or remove it with "Delete this record". Values saved to Health can be deleted in the iOS Health app.</p>
@@ -1155,7 +1164,7 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Where is my data stored?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">Where is my data stored?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>Records are stored on your device. If you allow it, blood pressure and pulse are also saved to Apple Health. Tags, notes and medication status are not saved to Health.</p>
                         <p>We never send your records, photos or audio to our servers.</p>
@@ -1163,14 +1172,14 @@
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Can I show a PDF or CSV to my doctor?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">Can I show a PDF or CSV to my doctor?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>Choose a period in the Report tab and tap “PDFを書き出す” (export PDF) or “CSVで書き出す” (export CSV). With the share button you can save it to Files, print it, mail it, or send it anywhere you choose. On that screen you decide whether the PDF includes tags, medication and notes.</p>
                     </div>
                 </div>
 
                 <div class="faq-item">
-                    <div class="faq-question">Which devices are supported?<span class="faq-icon">+</span></div>
+                    <button type="button" class="faq-question" aria-expanded="false">Which devices are supported?<span class="faq-icon" aria-hidden="true">+</span></button>
                     <div class="faq-answer">
                         <p>iPhone with <strong>iOS 17.6 or later</strong> and iPad with <strong>iPadOS 17.6 or later</strong>. Camera entry needs a camera, voice entry needs on-device speech recognition support, and saving to Health needs HealthKit support.</p>
                     </div>
@@ -1355,7 +1364,7 @@
                     <h3>6. Recognition accuracy</h3>
                     <ul>
                         <li>Camera reading and speech recognition are not 100% accurate. Lighting, angle, reflections on the display, the type of monitor, background noise and how clearly you speak can cause misreadings.</li>
-                        <li>The values read by the App appear on the entry screen. Please make sure they are correct before saving.</li>
+                        <li>The values read by the App appear on a confirmation screen. Please make sure they are correct before saving. With Auto-Record turned on, clear readings are saved without that step; check the values shown and tap Undo if they are wrong.</li>
                         <li>If you saved a wrong value, edit or delete the record in the App. Values saved to Health can be deleted in the iOS Health app.</li>
                         <li>Camera entry supports monitors that show the numbers on a digital display.</li>
                     </ul>
@@ -1438,7 +1447,7 @@
             <!-- Commercial Law -->
             <section id="commercial-en" class="section">
                 <div class="commercial-accordion">
-                    <div class="commercial-header">
+                    <button type="button" class="commercial-header" aria-expanded="false">
                         <div class="section-header" style="margin-bottom: 0; cursor: pointer;">
                             <div class="section-icon">🏢</div>
                             <div>
@@ -1447,7 +1456,7 @@
                             </div>
                         </div>
                         <span class="commercial-toggle">+</span>
-                    </div>
+                    </button>
                     <div class="commercial-content">
                         <dl class="contact-details" style="margin-top: 16px; padding-top: 0; border-top: none;"><div class="contact-item"><dt>Seller</dt><dd>AllNew LLC (合同会社AllNew)</dd></div><div class="contact-item"><dt>Responsible person</dt><dd>Masanori Ueno</dd></div><div class="contact-item"><dt>Address</dt><dd>Aoyama Tower Place 8F, 8-4-14 Akasaka, Minato-ku, Tokyo 107-0052, Japan</dd></div><div class="contact-item"><dt>Phone</dt><dd>Disclosed without delay upon request</dd></div><div class="contact-item"><dt>Email</dt><dd>bpweek-support@allnew.work</dd></div><div class="contact-item"><dt>Price</dt><dd>As shown on the App Store purchase screen (one-time purchase)</dd></div><div class="contact-item"><dt>Payment</dt><dd>Apple in-app purchase</dd></div><div class="contact-item"><dt>Delivery</dt><dd>Immediately after the purchase is completed</dd></div><div class="contact-item"><dt>Refunds</dt><dd>Apple's refund policy applies.</dd></div><div class="contact-item"><dt>Requirements</dt><dd>iPhone with iOS 17.6 or later, iPad with iPadOS 17.6 or later</dd></div></dl>
                     </div>
@@ -1488,7 +1497,8 @@
             if (hash) {
                 const parts = hash.split('-');
                 if (parts.length >= 2) {
-                    const possibleLang = parts[0];
+                    // Section links end with the language: #privacy-en
+                    const possibleLang = parts[parts.length - 1];
                     if (langData[possibleLang]) return possibleLang;
                 }
             }
@@ -1507,6 +1517,7 @@
         // Switch Language
         function switchLanguage(lang) {
             currentLang = lang;
+            document.documentElement.lang = lang;
 
             // Update content visibility
             document.querySelectorAll('.lang-content').forEach(el => {
@@ -1540,7 +1551,7 @@
             const currentHash = window.location.hash;
             if (currentHash && currentHash.includes('-')) {
                 const section = currentHash.split('-').pop();
-                if (['faq', 'privacy', 'terms', 'commercial', 'contact'].some(s => currentHash.includes(s))) {
+                if (['faq', 'privacy', 'terms', 'oss', 'commercial', 'contact'].some(s => currentHash.includes(s))) {
                     const sectionName = currentHash.substring(1).replace(/-[a-z-]+$/, '').replace(`-${getLangFromHash()}`, '');
                     history.replaceState(null, null, `?lang=${lang}#${sectionName}-${lang}`);
                 }
@@ -1576,8 +1587,12 @@
                 const item = q.parentElement;
                 const wasOpen = item.classList.contains('open');
                 // Close all in same lang-content
-                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                item.closest('.lang-content').querySelectorAll('.faq-item').forEach(i => {
+                    i.classList.remove('open');
+                    i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                });
                 if (!wasOpen) item.classList.add('open');
+                q.setAttribute('aria-expanded', String(!wasOpen));
             });
         });
 
@@ -1587,7 +1602,8 @@
             var header = e.target.closest('.commercial-header');
             if (!header) return;
             var accordion = header.closest('.commercial-accordion');
-            accordion.classList.toggle('open');
+            var open = accordion.classList.toggle('open');
+            header.setAttribute('aria-expanded', String(open));
         });
 
         // Auto-expand commercial section if accessed via anchor
@@ -1596,11 +1612,13 @@
             if (hash && hash.includes('commercial')) {
                 document.querySelectorAll('.commercial-accordion').forEach(acc => {
                     acc.classList.add('open');
+                    acc.querySelector('.commercial-header').setAttribute('aria-expanded', 'true');
                 });
             }
         }
 
         // Initialize
+        document.querySelectorAll('.faq-item.open .faq-question').forEach(q => q.setAttribute('aria-expanded', 'true'));
         switchLanguage(currentLang);
         checkCommercialAnchor();
 
